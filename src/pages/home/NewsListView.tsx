@@ -1,18 +1,26 @@
 import * as React from 'react';
-import { List } from 'antd-mobile';
+import { List, ActivityIndicator } from 'antd-mobile';
 
 import { router } from '@/utils/utils';
 import styles from './NewsListView.less';
 
 interface IProps {
-  dataSource: any[],
-
+  dataSource: any[]
+  loading?: boolean
 }
 export default (props: IProps) => {
   const {
     dataSource = [],
+    loading
   } = props;
 
+  if (loading) {
+    return (
+      <div className={styles['loading-container']}>
+        <ActivityIndicator color="#FFBE2D" text="正在加载..." />
+      </div>
+    );
+  }
   return (
     <List className={styles.list}>
       {dataSource.map(e => {
@@ -25,7 +33,9 @@ export default (props: IProps) => {
               <div className={styles.content}>
                 <div className={styles.title}>{e.title}</div>
                 <div className={styles.brief}>{e.brief}</div>
-                <div className={styles.footer}>footer</div>
+                <div className={styles.footer}>
+                  <span>{e.createTime}</span>
+                </div>
               </div>
               {e.url ? (
                 <div className={styles.thumbnail}>

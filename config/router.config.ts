@@ -30,6 +30,26 @@ export default [
       { component: './404' },
     ],
   },
+  {
+    path: '/school',
+    component: '../layouts/BlankLayout',
+    routes: [
+      { path: '/school', name: 'school', title: '孕妇学校', component: './school/index' },
+      {
+        path: '/school/video',
+        name: 'video',
+        title: '视频',
+        // component: './order/MyOrder',
+      },
+      {
+        path: '/school/article',
+        name: 'article',
+        title: '文章',
+        // component: './order/PackageList',
+      },
+      { component: './404' },
+    ],
+  },
   // app
   {
     path: '/',
