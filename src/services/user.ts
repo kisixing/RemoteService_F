@@ -1,0 +1,84 @@
+/*
+ * @Author: ZHONG JUN
+ * @Date: 2020-02-07 23:24:32
+ * @Description: 登录、绑定页面的services api
+ */
+
+import request from '@/utils/request';
+
+export interface authParamsType {
+  code: string;
+}
+/**
+ * 用户oauth授权
+ * 根据页面code换取openid和系统用户唯一id
+ * @param params
+ * true  --> { openid: code/openId }
+ * false --> { id: '系统用户唯一id', name: '姓名',status<array>: [true,true,false], ...rest }
+ */
+export async function mpauth(params: authParamsType) {
+  return request('/api/mpauth', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+export interface bindParamsType {
+  userName?: string;
+  IDNo: string;
+  mobile: string;
+  captcha: string;
+}
+
+/**
+ * 登录页 查询孕妇孕次信息
+ * 根据证件IDNo获取该孕妇在该医院所有的孕次记录<array>
+ * @param params object
+ */
+export async function bindUser(params: bindParamsType) {
+  return request('/api/binduser', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+export interface bindMpParamsType {
+  id: string,
+  openId: string
+}
+/**
+ * 在已经建档的情况下，选择一次孕册信息就行操作
+ * @param params object 孕册id、就诊卡号openId
+ */
+export async function bindUserMp(params: bindMpParamsType) {
+  return request('/api/bindusermp', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+export interface addYcParamsType {
+  userName: string,
+  gesmoc: string,
+  mobile: string,
+  IDNo:string,
+  openId: string
+}
+/**
+ * 新建建档（孕册）
+ * @param params object
+ */
+export async function addYc(params: addYcParamsType) {
+  return request('/api/addyc', {
+    method: 'POST',
+    data: params,
+  });
+}
+
+/**
+ * 获取验证码
+ * @param mobile
+ */
+export async function getCaptcha(mobile: string) {
+  return request(`/api/captcha?mobile=${mobile}`);
+}

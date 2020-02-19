@@ -1,0 +1,58 @@
+export const mainEntrance = [
+  {
+    key: '1',
+    label: '围产档案',
+    icon: '',
+    route: '/perinatal-list',
+    color: 'linear-gradient(-45deg, #FFBFD9 0%, #FF6B70 100%)',
+  },
+  {
+    key: '2',
+    label: '产检记录',
+    icon: '',
+    route: '',
+    color: 'linear-gradient(-45deg, #FFD52B 0%, #FFA002 100%)',
+  },
+  {
+    key: '3',
+    label: '围产档案',
+    icon: '',
+    route: '',
+    color: 'linear-gradient(-45deg, #3BF7FF 0%, #00B9FF 100%)',
+  },
+  {
+    key: '4',
+    label: '远程监护',
+    icon: '',
+    route: '',
+    color: 'linear-gradient(-45deg, #FFBA8D 0%, #FF7D34 100%)',
+  },
+  {
+    key: '5',
+    label: '电子报告',
+    icon: '',
+    route: '',
+    color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
+  },
+  {
+    key: '6',
+    label: '孕妇学校',
+    icon: '',
+    route: '',
+    color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
+  },
+  {
+    key: '7',
+    label: '随访记录',
+    icon: '',
+    route: '',
+    color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
+  },
+  {
+    key: '8',
+    label: '套餐购买',
+    icon: '',
+    route: '',
+    color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
+  },
+];

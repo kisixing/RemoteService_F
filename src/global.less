@@ -1,0 +1,93 @@
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  background-color: #f8f8f8 !important;
+  font-family: 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif,
+    'Droid Sans Fallback';
+  font-size: .28rem;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+canvas {
+  display: block;
+}
+
+ul, ol, dl {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+img {
+  display: inline-block;
+}
+
+// 模块
+.module {
+  background-color: #fff;
+  box-shadow: 0 2px 8px #f0f1f2;
+}
+
+/* iphonex 兼容方案
+https://aotu.io/notes/2017/11/27/iphonex/index.html */
+
+/* iphonex 安全区域 */
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background-color: #fff !important;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* iphonex fix底部元素适配 */
+:global(.fixed_bottom) {
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  position: fixed;
+  z-index: 10;
+  background-color: #fff;
+}
+
+:global(.clearfix:after) {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+// 路由动效
+.fade-enter {
+  opacity: 0;
+  z-index: 1;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 250ms ease-in;
+}
+
+:global {
+  .am-card {
+    border: none !important;
+    box-shadow: 0 2px 8px #f0f1f2;
+
+    .am-card-header {
+      padding-left: 0.3rem;
+      padding-right: 0.3rem;
+    }
+  }
+
+  a:hover {
+    color: rgba(255, 255, 255, 0.65)
+  }
+}

@@ -1,0 +1,47 @@
+@import '../../utils/theme.less';
+
+.banner {
+  padding: 0.3rem;
+  // background-color: @bg-color;
+
+  .innerBanner {
+    position: relative;
+    width: 100%;
+    min-height: 3.5rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .userinfo {
+      position: absolute;
+      top: 0;
+      right: 0;
+      min-width: 2rem;
+      height: 100%;
+      width: 100%;
+      padding: .46rem .54rem .3rem 0;
+      text-align: right;
+      letter-spacing: 2PX;
+      color: #fff;
+
+      .name {
+        font-size: .42rem;
+        font-weight: 600;
+        letter-spacing: 5PX;
+      }
+
+      .gesweek {
+        font-size: .32rem;
+      }
+
+      .hospital {
+        position: absolute;
+        bottom: 0.3rem;
+        right: .54rem;
+        color: #ffaa00;
+      }
+    }
+  }
+}

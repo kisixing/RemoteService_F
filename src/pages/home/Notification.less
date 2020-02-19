@@ -1,0 +1,50 @@
+@import '../../utils/theme.less';
+
+.notification {
+  display: flex;
+  align-items: center;
+  height: 0.8rem;
+  border-top: 0.33PX solid #ddd;
+  .padding-horizontal;
+
+  .left {
+    position: relative;
+    padding-left: .45rem;
+    padding-right: 0.12rem;
+    line-height: .45rem;
+
+
+    &:before {
+      position: absolute;
+      content: '';
+      width: .42rem;
+      height: .36rem;
+      top: 50%;
+      left: 0;
+      margin-top: -0.18rem;
+      background: url(../../assets/icons/voice2.svg) no-repeat center;
+      background-size: 100%;
+    }
+
+    &:after {
+      position: absolute;
+      content: '';
+      width: 2px;
+      height: 0.24rem;
+      top: 50%;
+      right: 0;
+      margin-top: -0.12rem;
+      background-color: @primary-color;
+    }
+  }
+
+  .right {
+    flex: 1;
+    padding-left: 0.1rem;
+    overflow: hidden;
+    font-size: 0.3rem;
+    color: #333;
+    height: .46rem;
+    line-height: .46rem;
+  }
+}
