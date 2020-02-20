@@ -10,14 +10,17 @@ import { WingBlank } from 'antd-mobile';
 import { Touchable } from '@/components/antd-mobile';
 
 import { ConnectState, ConnectProps } from '@/models/connect';
+import { router } from '@/utils/utils';
+import styles from 'MapList.less';
 
-const  NAVIGATION = [
+const  MAPS = [
   {
     title: '基本信息',
     icon: require('../../assets/icons/icon_wc_jiben.png'),
     shadow: '0 12px 19px 0 rgba(255,253,228,0.6)',
     bgcolor: '#FFF6D8',
     finished: true,
+    route: '/perinatal-list/basic-info',
   },
   {
     title: '本孕信息',
@@ -25,6 +28,7 @@ const  NAVIGATION = [
     shadow: '0 12px 19px 0 rgba(255,240,228,0.6)',
     bgcolor: '#FFF0E4',
     finished: true,
+    route: '/perinatal-list/current-pregnancy',
   },
   {
     title: '孕产史信息',
@@ -32,6 +36,7 @@ const  NAVIGATION = [
     shadow: '0 12px 19px 0 rgba(255,122,156,0.12)',
     bgcolor: '#FFECEC',
     finished: false,
+    route: '/perinatal-list/pregnancy-history',
   }
 ];
 
@@ -46,10 +51,15 @@ interface S {
 @connect(({ loading }: ConnectState) => ({
   submitting: loading.effects['form/submitAdvancedForm'],
 }))
-class FormList extends React.Component<P, S> {
-  state = { dataSource: NAVIGATION }
+class MapList extends React.Component<P, S> {
+  state = { dataSource: MAPS }
   componentDidMount() {
     // TODO 处理表单填写情况
+  }
+
+  onPress = (e: any) => {
+    e.stopPropagation();
+    console.log(e.type, e.target.id);
   }
   // TODO 行内样式转样式表引入
   // Touchable组件点击后导致行内样式无法恢复到原来的效果
@@ -58,7 +68,7 @@ class FormList extends React.Component<P, S> {
       <WingBlank style={{ height: '100vh' }}>
         {this.state.dataSource.map(item => {
           return (
-            <Touchable key={item.bgcolor}>
+            <Touchable key={item.title} onPress={() => router(item.route)}>
               <div
                 style={{
                   display: 'flex',
@@ -117,4 +127,4 @@ class FormList extends React.Component<P, S> {
   }
 }
 
-export default FormList;
+export default MapList;
