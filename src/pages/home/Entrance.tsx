@@ -4,12 +4,12 @@ import styles from './Entrance.less';
 
 interface IProps {
   dataSource: any[],
-
 }
 export default (props: IProps) => {
   const {
     dataSource = [],
-  } = props
+  } = props;
+  console.log(dataSource);
   return (
     <div className={styles.entrance}>
       <ul>

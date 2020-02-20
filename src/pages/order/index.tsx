@@ -7,18 +7,22 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import PackageList from './PackageList';
+import Package from './Package';
 import MyOrder from './MyOrder';
+
+import styles from './index.less';
 
 function Order() {
   // 是否已购买
   const isOrder = false;
-  if (isOrder) {
-    return <MyOrder />;
-  }
-  return <PackageList />;
+
+  return (
+    <div className={styles.wapper}>
+      {isOrder ? <MyOrder /> : <Package/>}
+    </div>
+  )
 }
 
-export default connect(({ loading }) => ({
+export default connect(({ loading }:any) => ({
   loading: loading,
 }))(Order);
