@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import Touchable from 'rc-touchable';
+import { Touchable } from '@/components/antd-mobile';
 
 import styles from './Tools.less';
 
