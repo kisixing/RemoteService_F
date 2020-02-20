@@ -25,7 +25,7 @@ export default [
         path: '/order/package-list',
         name: 'package list',
         title: '套餐列表',
-        component: './order/PackageList',
+        component: './order/Package',
       },
       { component: './404' },
     ],
