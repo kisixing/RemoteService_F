@@ -50,6 +50,6 @@ export interface CurrentUser {
  */
 export interface ConnectProps<T = {}> extends Partial<RouterTypes<Route, T>> {
   dispatch?: Dispatch<AnyAction>;
-  location: any
-
+  location: any;
+  isLogin: boolean
 }
