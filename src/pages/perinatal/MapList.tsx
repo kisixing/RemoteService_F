@@ -8,33 +8,31 @@ import React from 'react';
 import { connect } from 'dva';
 import { WingBlank } from 'antd-mobile';
 import { Touchable } from '@/components/antd-mobile';
+import BackButton from '@/components/BackButton';
 
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { router } from '@/utils/utils';
-import styles from 'MapList.less';
+import styles from './MapList.less';
 
-const  MAPS = [
+export const MAPS = [
   {
     title: '基本信息',
+    name: 'basic',
     icon: require('../../assets/icons/icon_wc_jiben.png'),
-    shadow: '0 12px 19px 0 rgba(255,253,228,0.6)',
-    bgcolor: '#FFF6D8',
     finished: true,
     route: '/perinatal-list/basic-info',
   },
   {
     title: '本孕信息',
+    name: 'pregnancy',
     icon: require('../../assets/icons/icon_wc_benyun.png'),
-    shadow: '0 12px 19px 0 rgba(255,240,228,0.6)',
-    bgcolor: '#FFF0E4',
     finished: true,
     route: '/perinatal-list/current-pregnancy',
   },
   {
     title: '孕产史信息',
+    name: 'history',
     icon: require('../../assets/icons/icon_wc_changshi.png'),
-    shadow: '0 12px 19px 0 rgba(255,122,156,0.12)',
-    bgcolor: '#FFECEC',
     finished: false,
     route: '/perinatal-list/pregnancy-history',
   }
@@ -65,63 +63,32 @@ class MapList extends React.Component<P, S> {
   // Touchable组件点击后导致行内样式无法恢复到原来的效果
   render() {
     return (
-      <WingBlank style={{ height: '100vh' }}>
+      <WingBlank className="page">
         {this.state.dataSource.map(item => {
           return (
-            <Touchable key={item.title} onPress={() => router(item.route)}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  height: '2rem',
-                  marginTop: '.4rem',
-                  paddingLeft: '.45rem',
-                  paddingRight: '.4rem',
-                  backgroundColor: item.bgcolor,
-                  boxShadow: item.shadow,
-                  borderRadius: '.2rem',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <img
-                    alt={item.title}
-                    src={item.icon}
-                    style={{
-                      width: '1rem',
-                      height: '1rem',
-                      marginRight: '.24rem',
-                      borderRadius: '50%'
-                    }}
-                  />
+            <Touchable key={item.name} onPress={() => router(item.route)}>
+              <div className={styles.item}>
+                <div className={styles.content}>
+                  <img alt={item.title} src={item.icon} />
                   <div>
-                    <div
-                      style={{
-                        fontSize: '.36rem',
-                        color: '#333',
-                        fontFamily: 'PingFangSC-Medium'
-                      }}
-                    >
-                      {item.title}
-                    </div>
+                    <div className={styles.title}>{item.title}</div>
                     {item.finished ? (
-                      <div style={{ fontSize: '.24rem', color: '#999' }}>资料已完成</div>
+                      <div className={styles.finished}>资料已完成</div>
                     ) : (
-                      <div style={{ fontSize: '.24rem', color: '#FF5858' }}>资料未完善，请立即前往 ></div>
+                      <div className={styles.unfinished}>资料未完善，请立即前往 ></div>
                     )}
                   </div>
                 </div>
-                <div>
-                  <img
-                    alt="arrow"
-                    src={require('../../assets/icons/icon_wc_next.png')}
-                    style={{ width: '.4rem' }}
-                  />
-                </div>
+                <img
+                  alt="arrow"
+                  src={require('../../assets/icons/icon_wc_next.png')}
+                  className={styles.arrow}
+                />
               </div>
             </Touchable>
           );
         })}
+        <BackButton route="/">返回</BackButton>
       </WingBlank>
     );
   }

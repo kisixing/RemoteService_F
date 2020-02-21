@@ -4,12 +4,29 @@
  * @Description: 本孕信息
  */
 
-import React from 'react'
+import React from 'react';
 
-export default function CurrentPregnancy() {
-  return (
-    <div>
-      本孕信息
-    </div>
-  )
+import BackButton from '@/components/BackButton';
+import StepBar from './StepBar';
+
+interface P {
+  loading?: boolean;
 }
+
+interface S {
+
+};
+
+class CurrentPregnancy extends React.Component<P, S> {
+  render() {
+    return (
+      <div className="page">
+        <StepBar current={2} />
+        本孕信息
+        <BackButton route="/perinatal-list">返回</BackButton>
+      </div>
+    );
+  }
+}
+
+export default CurrentPregnancy;

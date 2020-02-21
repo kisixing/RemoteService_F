@@ -2,7 +2,8 @@ import { Reducer } from 'redux';
 import { Subscription } from 'dva';
 import { Effect, ConnectState } from './connect';
 // import { ConnectState } from './connect.d';
-import { mpauth, getNews } from '@/services/global';
+import { getNews } from '@/services/global';
+import { mpauth } from '@/services/user';
 
 export interface CurrentUser {
   avatar?: string;
