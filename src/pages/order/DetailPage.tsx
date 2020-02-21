@@ -1,6 +1,6 @@
 import React,{ReactNode} from 'react';
 import { PACKAGE_CONTENT } from "@/pages/order/config";
-import {Tabs} from "antd-mobile";
+import {Tabs,Button} from "antd-mobile";
 
 import styles from './DetailPage.less'
 
@@ -26,9 +26,17 @@ export default function DetailPage(props: DETAIL_PAGE_PROPS) {
       </div>
       <Tabs tabs={tabs}>
         <div className={styles['tab-item']}>
-          {packageDetail.map(v => (
-            <div className={styles['detail-item']}>
-              {v.serviceName} {v.count} {v.remark}
+          {packageDetail.map((v,index) => (
+            <div className={styles['detail-item']} key={index}>
+              <div className={styles['item-name']}>
+                {v.serviceName}
+              </div>
+              <div className={styles['remark']}>
+                {v.remark}
+              </div>
+              <div className={styles['count']}>
+                {v.count}
+              </div>
             </div>
           ))}
         </div>
@@ -39,6 +47,18 @@ export default function DetailPage(props: DETAIL_PAGE_PROPS) {
           t
         </div>
       </Tabs>
+      <div className={styles['footer']}>
+        <div className={styles['price']}>
+          <h1>￥{detailData.price}</h1>
+        </div>
+        <div className={styles['buy']}>
+          <Button className={styles['button']}>
+            <span  style={{color: '#ffffff', textShadow: '#91959A', width: '128px', textAlign: 'center', lineHeight: 'auto'}}>
+              购买
+            </span>
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }
