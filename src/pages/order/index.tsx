@@ -13,7 +13,7 @@ import MyOrder from './MyOrder';
 import styles from './index.less';
 
 function Order() {
-  // 是否已购买
+  // TODO 判断用户是否已购买
   const isOrder = false;
 
   return (

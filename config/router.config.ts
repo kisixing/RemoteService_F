@@ -30,6 +30,26 @@ export default [
       { component: './404' },
     ],
   },
+  {
+    path: '/school',
+    component: '../layouts/BlankLayout',
+    routes: [
+      { path: '/school', name: 'school', title: '孕妇学校', component: './school/index' },
+      {
+        path: '/school/video',
+        name: 'video',
+        title: '视频',
+        // component: './order/MyOrder',
+      },
+      {
+        path: '/school/article',
+        name: 'article',
+        title: '文章',
+        // component: './order/PackageList',
+      },
+      { component: './404' },
+    ],
+  },
   // app
   {
     path: '/',
@@ -53,7 +73,25 @@ export default [
             path: '/perinatal-list',
             name: 'perinatal-list',
             title: '围产建档',
-            component: './perinatal/FormList',
+            component: './perinatal/MapList',
+          },
+          {
+            path: '/perinatal-list/basic-info',
+            name: 'basic Info',
+            title: '基本信息',
+            component: './perinatal/BasicInfo',
+          },
+          {
+            path: '/perinatal-list/current-pregnancy',
+            name: 'current pregnancy',
+            title: '本孕信息',
+            component: './perinatal/CurrentPregnancy',
+          },
+          {
+            path: '/perinatal-list/pregnancy-history',
+            name: 'pregnancy-history',
+            title: '孕产史信息',
+            component: './perinatal/PregnancyHistory',
           },
         ],
       },
