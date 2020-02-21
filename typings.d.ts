@@ -7,6 +7,7 @@ declare module 'mockjs';
 // declare module 'express';
 declare module 'weixin-js-sdk';
 declare module 'parsec-ls';
+declare module 'react-sticky';
 
 declare module "*.json" {
   const content: object;
