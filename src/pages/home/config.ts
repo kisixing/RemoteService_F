@@ -15,16 +15,16 @@ export const ENTRANCE = [
   },
   {
     key: '3',
-    label: '围产档案',
+    label: '远程监护',
     icon: require('../../assets/icons/i3.png'),
     route: '',
     color: 'linear-gradient(-45deg, #3BF7FF 0%, #00B9FF 100%)',
   },
   {
     key: '4',
-    label: '远程监护',
-    icon: require('../../assets/icons/i4.png'),
-    route: '',
+    label: '套餐服务',
+    icon: require('../../assets/icons/i7.png'),
+    route: '/order',
     color: 'linear-gradient(-45deg, #FFBA8D 0%, #FF7D34 100%)',
   },
   {
@@ -47,14 +47,7 @@ export const ENTRANCE = [
     icon: require('../../assets/icons/i1.png'),
     route: '',
     color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
-  },
-  {
-    key: '8',
-    label: '套餐购买',
-    icon: require('../../assets/icons/i1.png'),
-    route: '/order',
-    color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
-  },
+  }
 ];
 
 export const TOOLS = [

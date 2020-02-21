@@ -4,6 +4,7 @@ import { connect } from 'dva';
 // import { formatMessage } from 'umi-plugin-locale';
 
 import { WhiteSpace } from '@/components/antd-mobile';
+import Footer from '@/components/Footer';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { router } from '@/utils/utils';
 import { ENTRANCE, TOOLS } from './config';
@@ -83,7 +84,7 @@ function Home(props: any) {
         </div> */}
 
       </div>
-      <footer><span /> © 2020 莲孕医疗</footer>
+      <Footer />
     </div>
   );
 }

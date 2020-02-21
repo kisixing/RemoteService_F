@@ -1,0 +1,42 @@
+
+.footer {
+  position: relative;
+  padding: .12rem;
+  text-align: center;
+  color: #999;
+
+  .icon {
+    display: inline-block;
+    width: .78rem;
+    height: .68rem;
+    vertical-align: bottom;
+    background: url('../../assets/icons/company1.png') no-repeat center / contain;
+  }
+
+  .copyright {
+    display: inline-block;
+    margin-bottom: 0.1rem;
+    margin-left: 0.1rem;
+    font-size: .18rem;
+  }
+
+  &:before {
+    position: absolute;
+    left: 0;
+    bottom: 0.35rem;
+    content: '';
+    width: calc((100% - 0.78rem - 1.42rem) / 2);
+    height: 1px;
+    background-color: #e8e8e8;
+  }
+
+  &:after {
+    position: absolute;
+    right: 0;
+    bottom: 0.35rem;
+    content: '';
+    width: calc((100vw - .78rem - 1.52rem) / 2);
+    height: 1px;
+    background-color: #e8e8e8;
+  }
+}

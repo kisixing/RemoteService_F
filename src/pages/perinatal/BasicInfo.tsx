@@ -4,12 +4,29 @@
  * @Description: 基本信息
  */
 
-import React from 'react'
+import React, { Component } from 'react';
 
-export default function BasicInfo() {
-  return (
-    <div>
-      基本信息
-    </div>
-  )
+import BackButton from '@/components/BackButton';
+import StepBar from './StepBar';
+
+interface P {
+  loading?: boolean;
 }
+
+interface S {
+
+};
+
+class BasicInfo extends Component<P, S> {
+  render() {
+    return (
+      <div className="page">
+        <StepBar current={1} />
+        基本信息
+        <BackButton route="/perinatal-list">返回</BackButton>
+      </div>
+    );
+  }
+}
+
+export default BasicInfo;

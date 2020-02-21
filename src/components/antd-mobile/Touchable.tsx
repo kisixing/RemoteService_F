@@ -6,7 +6,7 @@ interface Iprops extends ITouchable {
 }
 
 export default function(props: Iprops) {
-  const { delayPressIn = 60, delayPressOut = 100 } = props;
+  const { delayPressIn = 60, delayPressOut = 60 } = props;
   return (
     <Touchable
       activeStopPropagation

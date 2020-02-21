@@ -1,5 +1,6 @@
 import React from 'react';
 import BasicLayout from './BasicLayout';
+import Footer from '@/components/Footer';
 import styles from './UserLayout.less';
 
 const UserLayout: React.FC<any> = ({ children, location, route }) => {
@@ -14,9 +15,7 @@ const UserLayout: React.FC<any> = ({ children, location, route }) => {
           <h1 className={styles.title}>{title}</h1>
         </header>
         <section>{children}</section>
-        <footer>
-          <span /> © 2020 莲孕医疗
-        </footer>
+        <Footer />
       </div>
     </BasicLayout>
   );

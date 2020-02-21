@@ -1,0 +1,52 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.18rem;
+  padding-top: 0.45rem;
+  padding-bottom: 0.3rem;
+  background-color: #fff;
+
+  .item {
+    flex: 1;
+    text-align: center;
+
+    .dot {
+      display: inline-block;
+      width: 24PX;
+      height: 24PX;
+      border-radius: 50%;
+      background-color: #ccc;
+      position: relative;
+
+      &:after {
+        position: absolute;
+        right: 34PX;
+        bottom: 10PX;
+        content: '';
+        width: calc(100vw / 3 - 44PX);
+        height: 4PX;
+        background-color: #ccc;
+      }
+
+      &.color {
+        background-color: #ff6084;
+
+        &:after {
+          background-color: #ff6084;
+        }
+      }
+    }
+
+    &:nth-of-type(1) {
+      .dot {
+        &:after {
+          display: none;
+        }
+      }
+    }
+
+    .title {
+      line-height: 1;
+    }
+  }
+}
