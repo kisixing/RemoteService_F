@@ -33,6 +33,7 @@
     "src/setupTests.ts",
     "tslint:latest",
     "tslint-config-prettier",
-    "ui"
+    "ui",
+    "public"
   ]
 }

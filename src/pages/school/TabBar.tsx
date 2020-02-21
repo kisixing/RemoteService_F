@@ -9,28 +9,31 @@ import React from 'react';
 import { Tabs, Icon } from 'antd-mobile';
 import { StickyContainer, Sticky } from 'react-sticky';
 
+import BackButton from '@/components/BackButton';
+import { IconFont } from '@/components/antd-mobile';
 import Video from './Video';
 import Article from './Article';
 import styles from './TabBar.less';
 
 const tabs = [
-  { title: <Title text="文章" />, key: 't1' },
-  { title: <Title text="视频" />, key: 't2' },
+  { title: <Title text="文章" icon="icon-article" />, key: 't1' },
+  { title: <Title text="视频" icon="_video" />, key: 't2' },
 ];
 
 function renderTabBar(props) {
   return (
     <Sticky>
-      {({ style }) => <div style={{ ...style, zIndex: 1 }}><Tabs.DefaultTabBar {...props} /></div>}
+      {({ style }) => <div style={{ ...style, zIndex: 1 }}><Tabs.DefaultTabBar {...props} animated={true} /></div>}
     </Sticky>
   );
 }
 
 interface Itext { text: string, icon?: string }
 function Title({ text, icon }: Itext) {
+  // TODO 增加iconfont字体支持
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
-      <Icon type="check-circle" size="xs" />
+      <IconFont type={icon} size="0.3rem" />
       <span style={{ marginLeft: '0.1rem', fontSize: '0.3rem' }}>{text}</span>
     </div>
   );
@@ -48,7 +51,6 @@ const SchoolTabBar = () => {
           renderTabBar={renderTabBar}
           tabBarInactiveTextColor="#787878"
           tabBarUnderlineStyle={{ width: '25%', height: '5px', marginLeft: '12.5%', backgroundColor: '#FFCC4A' }}
-          // prefixCls="11111111111111111"
         >
           <div key="t1" className={styles.content}>
             <Article />
@@ -58,6 +60,7 @@ const SchoolTabBar = () => {
           </div>
         </Tabs>
       </StickyContainer>
+      <BackButton route="/">返回</BackButton>
     </div>
   )
 }

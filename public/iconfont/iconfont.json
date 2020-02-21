@@ -1,0 +1,51 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "350588",
+      "name": "23.Videos",
+      "font_class": "23videos",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "4916787",
+      "name": "23.Videos",
+      "font_class": "Videos",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "8616408",
+      "name": "icon-articles",
+      "font_class": "icon-articles",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "8616415",
+      "name": "icon-article",
+      "font_class": "icon-article",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "10483874",
+      "name": "01_video1",
+      "font_class": "_video",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "12489909",
+      "name": "icon_article_line",
+      "font_class": "icon_article_line",
+      "unicode": "e7b1",
+      "unicode_decimal": 59313
+    }
+  ]
+}
