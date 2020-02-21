@@ -34,18 +34,18 @@ export default [
     path: '/school',
     component: '../layouts/BlankLayout',
     routes: [
-      { path: '/school', name: 'school', title: '孕妇学校', component: './school/index' },
+      { path: '/school', name: 'school', title: '孕妇学校', component: './school/TabBar' },
       {
         path: '/school/video',
         name: 'video',
         title: '视频',
-        // component: './order/MyOrder',
+        component: './school/Video',
       },
       {
         path: '/school/article',
         name: 'article',
         title: '文章',
-        // component: './order/PackageList',
+        component: './school/Article',
       },
       { component: './404' },
     ],

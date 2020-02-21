@@ -38,7 +38,7 @@ export const ENTRANCE = [
     key: '6',
     label: '孕妇学校',
     icon: require('../../assets/icons/i6.png'),
-    route: '',
+    route: '/school',
     color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
   },
   {
