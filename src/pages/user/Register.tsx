@@ -51,7 +51,7 @@ type S = {
   submitting: loading.effects['form/submitAdvancedForm'],
 }))
 @createForm()
-class Login extends Component<P, S> {
+class Register extends Component<P, S> {
   static propTypes = {
     form: formShape,
   };
@@ -143,4 +143,4 @@ class Login extends Component<P, S> {
   }
 }
 
-export default Login;
+export default Register;

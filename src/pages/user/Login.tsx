@@ -13,28 +13,8 @@ import { InputItem, Picker } from 'antd-mobile';
 
 import { Button, List } from '@/components/antd-mobile';
 
-const IDType = [
-  {
-    label: '二代身份证',
-    value: '二代身份证',
-},
-{
-    label: '港澳台居民居住证',
-    value: '港澳台居民居住证',
-},
-{
-    label: '回乡证',
-    value: '回乡证',
-},
-{
-    label: '台胞证',
-    value: '台胞证',
-},
-{
-    label: '护照',
-    value: '护照',
-},
-];
+const IDType =
+  ['二代身份证', '港澳台居民居住证', '回乡证', '台胞证', '护照', '其他'].map(e => ({ label: e, value: e }));
 
 interface P {
   form: any
@@ -48,7 +28,7 @@ interface S {
   submitting: loading.effects['form/submitAdvancedForm'],
 }))
 @createForm()
-class Bind extends Component<P, S> {
+class Login extends Component<P, S> {
   static propTypes = {
     form: formShape,
   };
@@ -136,4 +116,4 @@ class Bind extends Component<P, S> {
   }
 }
 
-export default Bind;
+export default Login;
