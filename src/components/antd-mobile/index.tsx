@@ -3,6 +3,7 @@ import List from './List';
 import WhiteSpace from './WhiteSpace';
 import Touchable from './Touchable';
 import IconFont from './IconFont';
+import CountDown from './CountDown';
 
 export {
   Button,
@@ -10,4 +11,5 @@ export {
   WhiteSpace,
   Touchable,
   IconFont,
+  CountDown,
 }

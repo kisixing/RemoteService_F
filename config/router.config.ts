@@ -2,7 +2,7 @@ export default [
   // user // login
   {
     path: '/user',
-    component: '../layouts/UserLayout',
+    component: '../layouts/BlankLayout',
     routes: [
       { path: '/user', redirect: '/user/login' },
       { path: '/user/login', name: 'login', title: '登录', component: './user/Login' },

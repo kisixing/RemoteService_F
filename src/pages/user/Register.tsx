@@ -13,6 +13,8 @@ import { InputItem, DatePicker, Picker } from 'antd-mobile';
 import zhCN from 'antd-mobile/lib/date-picker/locale/zh_CN';
 
 import { Button, List } from '@/components/antd-mobile';
+import Footer from '@/components/Footer';
+import styles from './Register.less';
 
 
 const nowTimeStamp = Date.now();
@@ -73,72 +75,76 @@ class Register extends Component<P, S> {
     const { getFieldProps } = this.props.form;
 
     return (
-      <form>
-        <List>
-          <InputItem
-            {...getFieldProps('userName', {
-              rules: [{ required: false }],
-            })}
-            clear
-            type="phone"
-            placeholder="输入姓名"
-          >
-            姓名
-          </InputItem>
-          <DatePicker
-            {...getFieldProps('gesmoc', {
-              rules: [{ required: false }],
-            })}
-            clear
-            mode="date"
-            locale={zhCN}
-            title="选择末次月经"
-            extra="请输入末次月经"
-            minDate={minDate}
-            maxDate={maxDate}
-          >
-            <List.Item arrow="horizontal">末次月经</List.Item>
-          </DatePicker>
-          <InputItem
-            {...getFieldProps('mobile', {
-              initialValue: '13657721212',
-              rules: [{ required: false }],
-            })}
-            clear
-            type="phone"
-            placeholder="输入手机号码"
-            disabled={false}
-          >
-            手机号
-          </InputItem>
-          <InputItem
-            {...getFieldProps('IDNo', {
-              initialValue: '450301198709213381',
-              rules: [{ required: false }],
-            })}
-            clear
-            type="digit"
-            placeholder="输入身份证"
-            disabled={false}
-          >
-            证件号码
-          </InputItem>
-          <Picker
-            cols={1}
-            extra="请选择医院"
-            data={hospitals}
-            title="请选择医院"
-            {...getFieldProps('hospital', {
-              rules: [{ required: false }],
-            })}
-          >
-            <List.Item arrow="horizontal">建档医院</List.Item>
-          </Picker>
-          <List.Item>
-            <Button type="primary" style={{ marginTop: '1rem' }}>新建孕册</Button>
-          </List.Item>
-        </List>
-      </form>
+      <div className={styles.wrapper}>
+        <div className={styles.header}>新建孕册</div>
+        <form className={styles.content}>
+          <List>
+            <InputItem
+              {...getFieldProps('userName', {
+                rules: [{ required: false }],
+              })}
+              clear
+              type="phone"
+              placeholder="输入姓名"
+            >
+              姓名
+            </InputItem>
+            <DatePicker
+              {...getFieldProps('gesmoc', {
+                rules: [{ required: false }],
+              })}
+              clear
+              mode="date"
+              locale={zhCN}
+              title="选择末次月经"
+              extra="请输入末次月经"
+              minDate={minDate}
+              maxDate={maxDate}
+            >
+              <List.Item arrow="horizontal">末次月经</List.Item>
+            </DatePicker>
+            <InputItem
+              {...getFieldProps('mobile', {
+                initialValue: '13657721212',
+                rules: [{ required: false }],
+              })}
+              clear
+              type="phone"
+              placeholder="输入手机号码"
+              disabled={false}
+            >
+              手机号
+            </InputItem>
+            <InputItem
+              {...getFieldProps('IDNo', {
+                initialValue: '450301198709213381',
+                rules: [{ required: false }],
+              })}
+              clear
+              type="digit"
+              placeholder="输入身份证"
+              disabled={false}
+            >
+              证件号码
+            </InputItem>
+            <Picker
+              cols={1}
+              extra="请选择医院"
+              data={hospitals}
+              title="请选择医院"
+              {...getFieldProps('hospital', {
+                rules: [{ required: false }],
+              })}
+            >
+              <List.Item arrow="horizontal">建档医院</List.Item>
+            </Picker>
+            <List.Item>
+              <Button type="primary" style={{ marginTop: '1rem' }}>新建孕册</Button>
+            </List.Item>
+          </List>
+        </form>
+        <Footer />
+      </div>
     );
   }
 }

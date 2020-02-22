@@ -48,7 +48,6 @@ const SchoolTabBar = (props: any) => {
   currentKey = type;
 
   const onTabClick = (tab: any, index: number) => {
-    console.log('ppppppppp', tab, index);
     const key = tab.key;
     if (currentKey === key) {
       return;
