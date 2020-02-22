@@ -1,0 +1,55 @@
+.inputItem {
+  position: relative;
+  height: .88rem;
+  margin-bottom: .3rem;
+  display: flex;
+
+  .label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: .88rem;
+    height: .88rem;
+    line-height: .88rem;
+    text-align: center;
+
+  }
+
+  .input {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    padding-left: .12rem;
+    border: 2PX solid #d8d8d8;
+    border-radius: 0.08rem;
+    font-size: 0.34rem;
+    color: #333;
+    caret-color: #FFBE2D;
+
+    &.hasIcon {
+      padding-left: .88rem;
+    }
+
+    &.hasExtra {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:focus {
+      border-color: #FFBE2D;
+    }
+  }
+
+  & > div:not(.extra) {
+    width: 100%;
+  }
+
+  .extra {
+    min-width: .88rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: -2PX;
+    border: 2PX solid #d8d8d8;
+  }
+}
