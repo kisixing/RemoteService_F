@@ -2,11 +2,13 @@
  * @Author: ZHONG JUN
  * @Date: 2020-02-19 22:57:14
  * @Description: 孕妇学校 宣教内容
+ * 需要注意路由入口及tab切换问题，约定入口路由'/school?type=article|video'
  */
 
 import React from 'react';
 
-import { Tabs, Icon } from 'antd-mobile';
+import { Tabs } from 'antd-mobile';
+import Router from 'umi/router';
 import { StickyContainer, Sticky } from 'react-sticky';
 
 import BackButton from '@/components/BackButton';
@@ -16,9 +18,10 @@ import Article from './Article';
 import styles from './TabBar.less';
 
 const tabs = [
-  { title: <Title text="文章" icon="icon-article" />, key: 't1' },
-  { title: <Title text="视频" icon="_video" />, key: 't2' },
+  { title: <Title text="文章" icon="icon-article" />, key: 'article' },
+  { title: <Title text="视频" icon="_video" />, key: 'video' },
 ];
+let currentKey = '';
 
 function renderTabBar(props) {
   return (
@@ -39,25 +42,47 @@ function Title({ text, icon }: Itext) {
   );
 }
 
-const SchoolTabBar = () => {
+const SchoolTabBar = (props: any) => {
+  const { location: { query } } = props;
+  const type = query.type;
+  currentKey = type;
+
+  const onTabClick = (tab: any, index: number) => {
+    console.log('ppppppppp', tab, index);
+    const key = tab.key;
+    if (currentKey === key) {
+      return;
+    }
+    return Router.replace(`/school?type=${key}`);
+  }
+
   return (
     <div className="page">
       <StickyContainer className={styles.wrapper}>
         <Tabs
           tabs={tabs}
-          initialPage={'t1'}
+          initialPage={type}
           swipeable={false}
           animated={false}
           renderTabBar={renderTabBar}
+          onTabClick={onTabClick}
           tabBarInactiveTextColor="#787878"
-          tabBarUnderlineStyle={{ width: '25%', height: '5px', marginLeft: '12.5%', backgroundColor: '#FFCC4A' }}
+          tabBarUnderlineStyle={{
+            width: '25%',
+            height: '5px',
+            marginLeft: '12.5%',
+            backgroundColor: '#FFCC4A'
+          }}
         >
-          <div key="t1" className={styles.content}>
+          <div key={type} className={styles.content}>
+            {type === 'article' ? <Article /> : <Video />}
+          </div>
+          {/* <div key="article" className={styles.content}>
             <Article />
           </div>
-          <div key="t2" className={styles.content}>
+          <div key="video" className={styles.content}>
             <Video />
-          </div>
+          </div> */}
         </Tabs>
       </StickyContainer>
       <BackButton route="/">返回</BackButton>
