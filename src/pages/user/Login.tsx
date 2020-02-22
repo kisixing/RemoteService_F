@@ -1,7 +1,7 @@
 /*
  * @Author: ZHONG JUN
  * @Date: 2020-02-06 22:41:25
- * @Description: 登录页
+ * @Description: 登录页/绑定页面
  */
 
 import React, { Component } from 'react';

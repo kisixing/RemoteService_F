@@ -3,7 +3,7 @@ import { Picker as ANTDPicker } from 'antd-mobile';
 import InputItem from './InputItem';
 import styles from './InputItem.less';
 
-interface Iprops {
+interface IProps {
   cols?: number;
   extra?: string;
   title?: string
@@ -16,34 +16,37 @@ interface Iprops {
   value?: string
 }
 
-export default function Picker(props: Iprops) {
-  const {
-    title,
-    cols = 3,
-    extra,
-    options = [],
-    readOnly = true,
-    icon,
-    value,
-    onChange = () => {}
-  } = props;
+interface IState {}
 
-  const onSelect = (val: any) => {
+export default class Picker extends React.Component<IProps, IState> {
+  onSelect = (val: any) => {
+    const { onChange = () => {} } = this.props;
     const strVal = val.join(',');
     onChange(strVal);
   }
-  return (
-    <ANTDPicker
-      cols={cols}
-      extra={extra}
-      data={options}
-      title={title}
-      value={value && value.split(',')}
-      onChange={onSelect}
-    >
-      <CustomChildren icon={icon} readOnly={readOnly} value={value} />
-    </ANTDPicker>
-  )
+  render () {
+    const {
+      title,
+      cols = 3,
+      extra,
+      options = [],
+      readOnly = true,
+      icon,
+      value,
+    } = this.props;
+    return (
+      <ANTDPicker
+        cols={cols}
+        extra={extra}
+        data={options}
+        title={title}
+        value={value && value.split(',')}
+        onChange={this.onSelect}
+      >
+        <CustomChildren icon={icon} readOnly={readOnly} value={value} />
+      </ANTDPicker>
+    );
+  }
 }
 
 const CustomChildren = (props: any )=> {

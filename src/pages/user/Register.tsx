@@ -1,7 +1,7 @@
 /*
  * @Author: ZHONG JUN
  * @Date: 2020-02-06 22:41:25
- * @Description: 绑定、初始建档页面
+ * @Description: 初始建档页面
  */
 
 import React, { Component } from 'react';
@@ -20,24 +20,7 @@ import styles from './Register.less';
 const nowTimeStamp = Date.now();
 const minDate = new Date(nowTimeStamp - 1000 * 60 * 60 * 24 * 365);
 const maxDate = new Date(nowTimeStamp + 1e7);
-const hospitals = [
-  {
-    label: '华侨医院',
-    value: '华侨医院',
-  },
-  {
-    label: '广东省妇幼',
-    value: '广东省妇幼',
-  },
-  {
-    label: '天河区妇幼',
-    value: '天河区妇幼',
-  },
-  {
-    label: '天河区中医院',
-    value: '天河区中医院',
-  },
-];
+const hospitals = ['暨南大学附属第一医院', '中山大学附属第一医院', '中山大学附属第二医院', '中山大学附属第三医院', '广东省妇幼保健院', '南方医科大学珠江医院', '南方医科大学南方医院'].map(e => ({ label: e, value: e }));
 
 interface P extends ButtonProps {
   location: any,
@@ -62,12 +45,13 @@ class Register extends Component<P, S> {
 
   componentDidMount() {
     const { location: { query }, form } = this.props;
+    console.log('00000000', query)
     form.setFieldsValue({
-      mobile: query.phone,
+      mobile: query.mobile,
       IDNo: query.IDNo,
-      hospital: ['华侨医院'],
-      userName: '李师师',
-      gesmoc: new Date('2019-10-01')
+      // hospital: ['暨南大学附属第一医院'],
+      // userName: '李师师',
+      // gesmoc: new Date('2019-10-01')
     })
   }
 
@@ -111,7 +95,7 @@ class Register extends Component<P, S> {
               clear
               type="phone"
               placeholder="输入手机号码"
-              disabled={false}
+              disabled={true}
             >
               手机号
             </InputItem>
@@ -123,7 +107,7 @@ class Register extends Component<P, S> {
               clear
               type="digit"
               placeholder="输入身份证"
-              disabled={false}
+              disabled={true}
             >
               证件号码
             </InputItem>
