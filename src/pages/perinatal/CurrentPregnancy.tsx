@@ -23,7 +23,7 @@ class CurrentPregnancy extends React.Component<P, S> {
       <div className="page">
         <StepBar current={2} />
         本孕信息
-        <BackButton route="/perinatal-list">返回</BackButton>
+        <BackButton route="/perinatal/list">返回</BackButton>
       </div>
     );
   }

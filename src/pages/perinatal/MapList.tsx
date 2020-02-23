@@ -20,21 +20,21 @@ export const MAPS = [
     name: 'basic',
     icon: require('../../assets/icons/icon_wc_jiben.png'),
     finished: true,
-    route: '/perinatal-list/basic-info',
+    route: '/perinatal/basic-info',
   },
   {
     title: '本孕信息',
     name: 'pregnancy',
     icon: require('../../assets/icons/icon_wc_benyun.png'),
     finished: true,
-    route: '/perinatal-list/current-pregnancy',
+    route: '/perinatal/current-pregnancy',
   },
   {
     title: '孕产史信息',
     name: 'history',
     icon: require('../../assets/icons/icon_wc_changshi.png'),
     finished: false,
-    route: '/perinatal-list/pregnancy-history',
+    route: '/perinatal/pregnancy-history',
   }
 ];
 
