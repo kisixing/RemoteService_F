@@ -10,6 +10,7 @@ declare module 'parsec-ls';
 declare module 'react-sticky';
 declare module 'nprogress';
 declare module 'react-pdf';
+declare module 'react-pdf/dist/entry.webpack';
 
 declare module "*.json" {
   const content: object;

@@ -1,0 +1,39 @@
+.list {
+  min-height: 100vh;
+
+  :global {
+    .am-list-body {
+      background-color: transparent;
+      border-top: none;
+      border-bottom: none;
+    }
+
+    .am-list-item {
+      margin-bottom: 0.2rem;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .am-list-line {
+      border-bottom: none !important;
+    }
+
+    .am-list-content {
+      padding-left: .5rem;
+    }
+  }
+
+  .title {
+    position: relative;
+
+    &:before {
+      position: absolute;
+      top: 0.1rem;
+      left: -0.5rem;
+      content: '';
+      width: 0.3rem;
+      height: 0.3rem;
+      border: 5PX solid #FFCC4A;
+      border-radius: 50%;
+    }
+  }
+}
