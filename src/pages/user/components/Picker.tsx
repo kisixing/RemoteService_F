@@ -1,7 +1,6 @@
 import React from 'react';
 import { Picker as ANTDPicker } from 'antd-mobile';
 import InputItem from './InputItem';
-import styles from './InputItem.less';
 
 interface IProps {
   cols?: number;

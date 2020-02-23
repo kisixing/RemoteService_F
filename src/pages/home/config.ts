@@ -31,7 +31,7 @@ export const ENTRANCE = [
     key: '5',
     label: '电子报告',
     icon: require('../../assets/icons/i5.png'),
-    route: '',
+    route: '/reports/list',
     color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
   },
   {

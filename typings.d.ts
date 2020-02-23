@@ -9,6 +9,7 @@ declare module 'weixin-js-sdk';
 declare module 'parsec-ls';
 declare module 'react-sticky';
 declare module 'nprogress';
+declare module 'react-pdf';
 
 declare module "*.json" {
   const content: object;

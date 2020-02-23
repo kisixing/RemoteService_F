@@ -93,6 +93,29 @@ export default [
             title: '孕产史信息',
             component: './perinatal/PregnancyHistory',
           },
+          {
+            path: '/reports',
+            name: 'reports',
+            title: '产检报告',
+            routes: [
+              {
+                path: '/reports',
+                redirect: '/reports/list',
+              },
+              {
+                path: '/reports/list',
+                name: 'reports list',
+                title: '产检报告',
+                component: './reports/BBSList',
+              },
+              {
+                path: '/reports/preview',
+                name: '预览',
+                title: 'pdf预览',
+                component: './reports/Preview'
+              }
+            ]
+          },
         ],
       },
       { component: './404' },
