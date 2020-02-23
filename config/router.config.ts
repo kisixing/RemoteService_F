@@ -1,5 +1,5 @@
 export default [
-  // user // login
+  // 无用户验证页面
   {
     path: '/user',
     component: '../layouts/BlankLayout',
@@ -50,7 +50,7 @@ export default [
       { component: './404' },
     ],
   },
-  // app
+  // app securit
   {
     path: '/',
     component: '../layouts/SecurityLayout',
@@ -70,28 +70,39 @@ export default [
             component: './home',
           },
           {
-            path: '/perinatal-list',
-            name: 'perinatal-list',
+            path: '/perinatal',
+            name: 'perinatal',
             title: '围产建档',
-            component: './perinatal/MapList',
-          },
-          {
-            path: '/perinatal-list/basic-info',
-            name: 'basic Info',
-            title: '基本信息',
-            component: './perinatal/BasicInfo',
-          },
-          {
-            path: '/perinatal-list/current-pregnancy',
-            name: 'current pregnancy',
-            title: '本孕信息',
-            component: './perinatal/CurrentPregnancy',
-          },
-          {
-            path: '/perinatal-list/pregnancy-history',
-            name: 'pregnancy-history',
-            title: '孕产史信息',
-            component: './perinatal/PregnancyHistory',
+            routes: [
+              {
+                path: '/perinatal',
+                redirect: '/perinatal/list',
+              },
+              {
+                path: '/perinatal/list',
+                name: 'perinatal list',
+                title: '围产建档',
+                component: './perinatal/MapList',
+              },
+              {
+                path: '/perinatal/basic-info',
+                name: 'basic Info',
+                title: '基本信息',
+                component: './perinatal/BasicInfo',
+              },
+              {
+                path: '/perinatal/current-pregnancy',
+                name: 'current pregnancy',
+                title: '本孕信息',
+                component: './perinatal/CurrentPregnancy',
+              },
+              {
+                path: '/perinatal/pregnancy-history',
+                name: 'pregnancy history',
+                title: '孕产史信息',
+                component: './perinatal/PregnancyHistory',
+              },
+            ]
           },
           {
             path: '/reports',
@@ -105,7 +116,7 @@ export default [
               {
                 path: '/reports/list',
                 name: 'reports list',
-                title: '产检报告',
+                title: '报告列表',
                 component: './reports/BBSList',
               },
               {

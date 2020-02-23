@@ -23,7 +23,7 @@ class BasicInfo extends Component<P, S> {
       <div className="page">
         <StepBar current={1} />
         基本信息
-        <BackButton route="/perinatal-list">返回</BackButton>
+        <BackButton route="/perinatal/list">返回</BackButton>
       </div>
     );
   }
