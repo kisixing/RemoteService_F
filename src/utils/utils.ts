@@ -14,7 +14,7 @@ export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
 export function getPageKeyValue(key: string){
   const query = getPageQuery();
-  return query.key;
+  return query[key];
 }
 
 export function getQueryPath(path = '', query = {}) {
