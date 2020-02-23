@@ -56,6 +56,16 @@ const config: IConfig = {
   alias: {
     '@': resolve(__dirname, './src'),
   },
+  copy: [
+    {
+      from: 'node_modules/pdfjs-dist/build/',
+      to: 'public/pdfjs-dist/libs/'
+    },
+    {
+      from: 'node_modules/pdfjs-dist/cmaps/',
+      to: 'public/pdfjs-dist/cmaps/'
+    }
+  ]
 };
 
 export default config;
