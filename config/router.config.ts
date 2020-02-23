@@ -50,7 +50,7 @@ export default [
       { component: './404' },
     ],
   },
-  // app securit
+  // user securit verification
   {
     path: '/',
     component: '../layouts/SecurityLayout',

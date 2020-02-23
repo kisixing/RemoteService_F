@@ -6,9 +6,10 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
+import router from 'umi/router';
 // import { parse } from 'querystring';
-import { createForm, formShape } from 'rc-form';
-import { ButtonProps } from 'antd/es/button';
+import { createForm } from 'rc-form';
+// import { ButtonProps } from 'antd/es/button';
 import { InputItem, DatePicker, Picker } from 'antd-mobile';
 import zhCN from 'antd-mobile/lib/date-picker/locale/zh_CN';
 
@@ -22,25 +23,19 @@ const minDate = new Date(nowTimeStamp - 1000 * 60 * 60 * 24 * 365);
 const maxDate = new Date(nowTimeStamp + 1e7);
 const hospitals = ['暨南大学附属第一医院', '中山大学附属第一医院', '中山大学附属第二医院', '中山大学附属第三医院', '广东省妇幼保健院', '南方医科大学珠江医院', '南方医科大学南方医院'].map(e => ({ label: e, value: e }));
 
-interface P extends ButtonProps {
+interface P {
   location: any,
   circular?: boolean;
   form?: any
 }
 
-type S = {
-
-};
+type S = {}
 
 @connect(({ loading }) => ({
   submitting: loading.effects['form/submitAdvancedForm'],
 }))
 @createForm()
 class Register extends Component<P, S> {
-  static propTypes = {
-    form: formShape,
-  };
-
   state = {  };
 
   componentDidMount() {
@@ -55,75 +50,91 @@ class Register extends Component<P, S> {
     })
   }
 
+  onSubmit = (e: any) => {
+    e.preventDefault();
+    const { form } = this.props;
+    form.validateFields((error: Array<any>, value: object) => {
+      console.log(error, value);
+      if (error) {
+        return;
+      }
+      router.replace('/')
+    });
+  }
+
   render() {
-    const { getFieldProps } = this.props.form;
+    const { getFieldDecorator } = this.props.form;
 
     return (
       <div className={styles.wrapper}>
         <div className={styles.header}>新建孕册</div>
-        <form className={styles.content}>
+        <form className={styles.content} onSubmit={this.onSubmit}>
           <List>
-            <InputItem
-              {...getFieldProps('userName', {
-                rules: [{ required: false }],
-              })}
-              clear
-              type="phone"
-              placeholder="输入姓名"
-            >
-              姓名
-            </InputItem>
-            <DatePicker
-              {...getFieldProps('gesmoc', {
-                rules: [{ required: false }],
-              })}
-              clear
-              mode="date"
-              locale={zhCN}
-              title="选择末次月经"
-              extra="请输入末次月经"
-              minDate={minDate}
-              maxDate={maxDate}
-            >
-              <List.Item arrow="horizontal">末次月经</List.Item>
-            </DatePicker>
-            <InputItem
-              {...getFieldProps('mobile', {
-                initialValue: '13657721212',
-                rules: [{ required: false }],
-              })}
-              clear
-              type="phone"
-              placeholder="输入手机号码"
-              disabled={true}
-            >
-              手机号
-            </InputItem>
-            <InputItem
-              {...getFieldProps('IDNo', {
-                initialValue: '450301198709213381',
-                rules: [{ required: false }],
-              })}
-              clear
-              type="digit"
-              placeholder="输入身份证"
-              disabled={true}
-            >
-              证件号码
-            </InputItem>
-            <Picker
-              cols={1}
-              extra="请选择医院"
-              data={hospitals}
-              title="请选择医院"
-              {...getFieldProps('hospital', {
-                rules: [{ required: false }],
-              })}
-            >
-              <List.Item arrow="horizontal">建档医院</List.Item>
-            </Picker>
+            {getFieldDecorator('userName', {
+              rules: [{ required: true }]
+            })(
+              <InputItem
+                clear
+                type="phone"
+                placeholder="输入姓名"
+              >
+                姓名
+              </InputItem>
+            )}
+            {getFieldDecorator('gesmoc', {
+              rules: [{ required: true }]
+            })(
+              <DatePicker
+                mode="date"
+                locale={zhCN}
+                title="选择末次月经"
+                extra="请输入末次月经"
+                minDate={minDate}
+                maxDate={maxDate}
+              >
+                <List.Item arrow="horizontal">末次月经</List.Item>
+              </DatePicker>
+            )}
+            {getFieldDecorator('mobile', {
+              rules: [{ required: true }]
+            })(
+              <InputItem
+                clear
+                type="phone"
+                placeholder="输入手机号码"
+                disabled={true}
+              >
+                手机号
+              </InputItem>
+            )}
+            {getFieldDecorator('IDNo', {
+              initialValue: '450301198709213381',
+              rules: [{ required: true }]
+            })(
+              <InputItem
+                clear
+                type="digit"
+                placeholder="输入身份证"
+                disabled={true}
+              >
+                证件号码
+              </InputItem>
+            )}
+            {getFieldDecorator('hospital', {
+              initialValue: '',
+              rules: [{ required: true }]
+            })(
+              <Picker
+                cols={1}
+                extra="请选择医院"
+                data={hospitals}
+                title="请选择医院"
+              >
+                <List.Item arrow="horizontal">建档医院</List.Item>
+              </Picker>
+            )}
             <List.Item>
-              <Button type="primary" style={{ marginTop: '1rem' }}>新建孕册</Button>
+              <Button type="primary" onClick={this.onSubmit} style={{ marginTop: '1rem' }}>新建孕册</Button>
             </List.Item>
           </List>
         </form>

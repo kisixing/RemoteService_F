@@ -8,12 +8,12 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 import { stringify } from 'querystring';
-import { createForm, formShape } from 'rc-form';
+import { createForm } from 'rc-form';
+
 import InputItem from './components/InputItem';
 import Picker from './components/Picker';
 import Footer from '@/components/Footer';
-
-import { Button, CountDown, IconFont } from '@/components/antd-mobile';
+import { Button, IconFont } from '@/components/antd-mobile';
 import styles from './Login.less';
 
 const IDType =
@@ -33,15 +33,11 @@ interface S {
 }))
 @createForm()
 class Login extends Component<P, S> {
-  static propTypes = {
-    form: formShape,
-  };
-
+  timer: any = null;
   state = {
     count: 0,
     disabled: false,
   };
-  timer: any = null;
 
   componentDidMount() {
     const { setFieldsValue } = this.props.form;
@@ -72,7 +68,6 @@ class Login extends Component<P, S> {
     });
     this.timer = setInterval(() => {
       let count = this.state.count;
-
       if (count === 1) {
         clearInterval(this.timer);
         this.setState({ disabled: false });
@@ -95,7 +90,7 @@ class Login extends Component<P, S> {
           <span className={styles.logo} />
           <h1>登录</h1>
         </div>
-        <form className={styles.content}>
+        <form className={styles.content} onSubmit={this.onSubmit}>
           {getFieldDecorator('mobile', {
             rules: [{ required: true }]
           })(
@@ -147,7 +142,7 @@ class Login extends Component<P, S> {
               placeholder="请输入证件号码"
             />
           )}
-          <Button type="primary" style={{ margin: '.6rem 0' }} onClick={this.onSubmit}>
+          <Button type="primary" onClick={this.onSubmit} style={{ margin: '.6rem 0' }}>
             登录
           </Button>
         </form>
