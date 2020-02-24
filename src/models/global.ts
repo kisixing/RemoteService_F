@@ -1,8 +1,6 @@
 import { Reducer } from 'redux';
-import { Subscription } from 'dva';
-import { Effect, ConnectState } from './connect';
+import { Effect } from './connect';
 // import { ConnectState } from './connect.d';
-import { getNews } from '@/services/global';
 import { mpauth } from '@/services/user';
 
 export interface CurrentUser {
@@ -25,7 +23,7 @@ export interface GlobalModelType {
   reducers: {
     changeUserStatus: Reducer<GlobalModelState>;
   };
-  subscriptions: { setup: Subscription };
+  subscriptions: { setup: any };
 }
 
 const GlobalModel: GlobalModelType = {
@@ -40,7 +38,7 @@ const GlobalModel: GlobalModelType = {
     *mpauth({ payload }, { call, put }) {
       const response = yield call(mpauth, payload);
       yield put({
-        type: 'changeLoginStatus',
+        type: 'changeUserStatus',
         payload: response,
       });
     },

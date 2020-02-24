@@ -10,6 +10,17 @@ export type Effect = (
   effects: EffectsCommandMap & { select: <T>(func: (state: ConnectState) => T) => T }
 ) => void;
 
+/**
+ * @type P: Type of payload
+ * @type C: Type of callback
+ */
+export type Dispatch = <P = any, C = (payload: P) => void>(action: {
+  type: string;
+  payload?: P;
+  callback?: C;
+  [key: string]: any;
+}) => any;
+
 export interface Loading {
   global: boolean;
   effects: { [key: string]: boolean | undefined };
@@ -24,11 +35,10 @@ export interface Loading {
 }
 
 export interface ConnectState {
-  global: {};
+  global: GlobalModelState;
   loading: Loading;
   user: UserModelState;
-  login: {};
-  news: any
+  news: any;
 }
 
 export interface CurrentUser {

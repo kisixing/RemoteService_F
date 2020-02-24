@@ -6,6 +6,11 @@
 
 import request from '@/utils/request';
 
+// 测试接口
+export async function testApi() {
+  return request('/test/api/users');
+}
+
 export interface authParamsType {
   code: string;
 }
@@ -24,19 +29,19 @@ export async function mpauth(params: authParamsType) {
 }
 
 export interface bindParamsType {
-  userName?: string;
-  IDNo: string;
-  mobile: string;
-  captcha: string;
+  mobile: string | number;
+  captcha: string | number;
+  idType?: string;
+  idNo: string | number;
 }
 
 /**
- * 登录页 查询孕妇孕次信息
+ * 登录页 查询
  * 根据证件IDNo获取该孕妇在该医院所有的孕次记录<array>
- * @param params object
+ * @param params object 返回edd最近的一条记录prengnancy记录
  */
 export async function bindUser(params: bindParamsType) {
-  return request('/api/binduser', {
+  return request('/api/mpbind', {
     method: 'POST',
     data: params,
   });

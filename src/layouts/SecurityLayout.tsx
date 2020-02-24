@@ -33,7 +33,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     // 2、全局isLogin === false，获取url携带的code进行用户校验
     if (!isLogin) {
       dispatch({
-        type: 'user/mpauth',
+        type: 'global/mpauth',
         payload: {
           code: query.code
         },
@@ -70,8 +70,8 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
   }
 }
 
-export default connect(({ user, loading }: ConnectState) => ({
-  currentUser: user.currentUser,
-  isLogin: user.isLogin,
-  loading: loading.models.user,
+export default connect(({ global, loading }: ConnectState) => ({
+  currentUser: global.currentUser,
+  isLogin: global.isLogin,
+  loading: loading.models.global,
 }))(SecurityLayout);
