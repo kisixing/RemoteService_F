@@ -78,6 +78,18 @@ const errorHandler = (error: { response: Response }): Response => {
 const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
+  timeout: 30000,
+});
+
+/**
+ * 响应中间件
+ * response拦截器, 处理response
+ */
+request.interceptors.response.use((response) => {
+  const contentType = response.headers.get('Content-Type');
+  const token = response.headers.get('authorization');
+  console.log('interceptors response', token, contentType)
+  return response;
 });
 
 export default request;
