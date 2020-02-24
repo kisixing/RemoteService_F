@@ -3,6 +3,7 @@
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
 import { extend } from 'umi-request';
+import store from 'store';
 import { notification } from 'antd';
 
 const codeMessage = {
@@ -79,17 +80,40 @@ const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
   timeout: 30000,
+  // getResponse: false,
 });
 
 /**
- * 响应中间件
+ * request interceptor, change url or options.
+ */
+request.interceptors.request.use((url, options) => {
+  const token = store.get('lianmp-token');
+  const headers = {
+    'Content-Type': 'application/json;charset=UTF-8',
+    Accept: 'application/json',
+    authorization: token
+  };
+  return ({
+      url,
+      options: {
+        interceptors: true,
+        headers: { ...headers, ...options.headers },
+        ...options,
+      },
+    }
+  );
+});
+
+/**
+ * response interceptor, chagne response
  * response拦截器, 处理response
  */
-request.interceptors.response.use((response) => {
-  const contentType = response.headers.get('Content-Type');
-  const token = response.headers.get('authorization');
-  console.log('interceptors response', token, contentType)
-  return response;
-});
+// request.interceptors.response.use((response, options) => {
+//   const token = response.headers.get('authorization');
+//   if (token) {
+//     store.set('lianmp-token', token);
+//   }
+//   return response;
+// });
 
 export default request;

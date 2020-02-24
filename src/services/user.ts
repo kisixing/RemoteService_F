@@ -8,7 +8,9 @@ import request from '@/utils/request';
 
 // 测试接口
 export async function testApi() {
-  return request('/test/api/users');
+  return request('/test/api/users', {
+    getResponse: true,
+  });
 }
 
 export interface authParamsType {
@@ -24,6 +26,7 @@ export interface authParamsType {
 export async function mpauth(params: authParamsType) {
   return request('/api/mpauth', {
     method: 'POST',
+    getResponse: true,
     data: params,
   });
 }
