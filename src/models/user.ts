@@ -36,12 +36,15 @@ const Model: LoginModelType = {
 
   effects: {
     *test({ payload }, { call, put }) {
-      const response = yield call(testApi, payload);
+      const { response, data } = yield call(testApi, payload);
+      // 响应体信息
+      const contentType = response.headers.get('Content-Type');
+      console.log('响应体信息', response, contentType);
       yield put({
         type: 'changeTestData',
-        payload: response
+        payload: data
       });
-      return response;
+      return data;
     },
     *bindUser({ payload }, { call, put }) {
       const response = yield call(bindUser, payload);

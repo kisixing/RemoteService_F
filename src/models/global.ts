@@ -1,4 +1,6 @@
 import { Reducer } from 'redux';
+import store from 'store';
+
 import { Effect } from './connect';
 // import { ConnectState } from './connect.d';
 import { mpauth } from '@/services/user';
@@ -36,11 +38,18 @@ const GlobalModel: GlobalModelType = {
 
   effects: {
     *mpauth({ payload }, { call, put }) {
-      const response = yield call(mpauth, payload);
+      const { response, data } = yield call(mpauth, payload);
+      // 响应体信息
+      const token = response.headers.get('authorization');
+      console.log('响应体信息', response, token);
+      if (token) {
+        store.set('lianmp-token', token);
+      }
       yield put({
         type: 'changeUserStatus',
-        payload: response,
+        payload: data,
       });
+      return data;
     },
   },
 
