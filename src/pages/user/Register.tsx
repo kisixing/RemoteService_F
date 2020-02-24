@@ -43,7 +43,7 @@ class Register extends Component<P, S> {
     console.log('00000000', query)
     form.setFieldsValue({
       mobile: query.mobile,
-      IDNo: query.IDNo,
+      idNo: query.IDNo,
       // hospital: ['暨南大学附属第一医院'],
       // userName: '李师师',
       // gesmoc: new Date('2019-10-01')
@@ -107,7 +107,7 @@ class Register extends Component<P, S> {
                 手机号
               </InputItem>
             )}
-            {getFieldDecorator('IDNo', {
+            {getFieldDecorator('idNo', {
               initialValue: '450301198709213381',
               rules: [{ required: true }]
             })(

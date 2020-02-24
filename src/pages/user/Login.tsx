@@ -9,6 +9,7 @@ import { connect } from 'dva';
 import router from 'umi/router';
 import { stringify } from 'querystring';
 import { createForm } from 'rc-form';
+import { ConnectState } from '@/models/connect';
 
 import InputItem from './components/InputItem';
 import Picker from './components/Picker';
@@ -21,6 +22,7 @@ const IDType =
 
 interface P {
   form: any
+  dispatch: any
 }
 
 interface S {
@@ -28,8 +30,8 @@ interface S {
   disabled: boolean
 };
 
-@connect(({ loading }) => ({
-  submitting: loading.effects['form/submitAdvancedForm'],
+@connect(({ loading }: ConnectState) => ({
+  submitting: loading.effects['user/bindUser'],
 }))
 @createForm()
 class Login extends Component<P, S> {
@@ -45,21 +47,34 @@ class Login extends Component<P, S> {
       mobile: '13657721210',
       captcha: '5566',
       // IDType: '二代身份证',
-      IDNo: '110101199003071348',
-    })
+      idNo: '110101199003071348',
+    });
+    // test api测试
+    this.props
+      .dispatch({
+        type: 'user/test',
+        payload: {},
+      })
+      .then((res: any) => console.log('promise-->', res));
   }
 
   onSubmit = () => {
-    const { form } = this.props;
+    const { form, dispatch } = this.props;
     form.validateFields((error: Array<any>, value: object) => {
       console.log(error, value);
       if (error) {
         return;
       }
-      const queryString = stringify({ ...value });
-      router.push(`/user/register?${queryString}`)
+      // TODO 绑定
+      dispatch({
+        type: 'user/bindUser',
+        payload: { ...value },
+      });
+
+      // const queryString = stringify({ ...value });
+      // router.push(`/user/register?${queryString}`);
     });
-  }
+  };
 
   countDown = (second: number) => {
     this.setState({
@@ -92,16 +107,16 @@ class Login extends Component<P, S> {
         </div>
         <form className={styles.content} onSubmit={this.onSubmit}>
           {getFieldDecorator('mobile', {
-            rules: [{ required: true }]
+            rules: [{ required: true }],
           })(
             <InputItem
               icon={<IconFont type="mobile1" size="0.44rem" />}
-              type='number'
+              type="number"
               placeholder="请输入手机号"
-            />
+            />,
           )}
           {getFieldDecorator('captcha', {
-            rules: [{ required: true }]
+            rules: [{ required: true }],
           })(
             <InputItem
               icon={<IconFont type="yanzhengma1" size="0.4rem" />}
@@ -110,19 +125,28 @@ class Login extends Component<P, S> {
                   size="small"
                   type="primary"
                   disabled={disabled}
-                  style={{ width: '1.92rem', height: '100%', lineHeight: '.88rem', borderRadius: 0 }}
+                  style={{
+                    width: '1.92rem',
+                    height: '100%',
+                    lineHeight: '.88rem',
+                    borderRadius: 0,
+                  }}
                   onClick={() => this.countDown(60)}
                 >
-                {disabled ? <b style={{ fontSize: '.34rem', color: '#000' }}>{count}</b> : '获取验证码'}
+                  {disabled ? (
+                    <b style={{ fontSize: '.34rem', color: '#000' }}>{count}</b>
+                  ) : (
+                    '获取验证码'
+                  )}
                 </Button>
-            }
-              type='number'
+              }
+              type="number"
               placeholder="请输入验证码"
-            />
+            />,
           )}
-          {getFieldDecorator('IDType', {
+          {getFieldDecorator('idType', {
             initialValue: '二代身份证',
-            rules: [{ required: true }]
+            rules: [{ required: true }],
           })(
             <Picker
               cols={1}
@@ -131,16 +155,16 @@ class Login extends Component<P, S> {
               title="请选择医院"
               options={IDType}
               icon={<IconFont type="duomeitiicon-" size="0.44rem" />}
-            />
+            />,
           )}
-          {getFieldDecorator('IDNo', {
-            rules: [{ required: true }]
+          {getFieldDecorator('idNo', {
+            rules: [{ required: true }],
           })(
             <InputItem
               icon={<IconFont type="cc-card" size="0.44rem" />}
-              type='number'
+              type="number"
               placeholder="请输入证件号码"
-            />
+            />,
           )}
           <Button type="primary" onClick={this.onSubmit} style={{ margin: '.6rem 0' }}>
             登录

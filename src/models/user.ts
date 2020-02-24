@@ -8,59 +8,54 @@ import { Reducer } from 'redux';
 // import { stringify } from 'querystring';
 // import { router } from 'umi';
 import { Effect } from './connect';
-import { mpauth, bindUser, bindUserMp, addYc, getCaptcha } from '@/services/user';
+import { testApi, bindUser, bindUserMp, addYc, getCaptcha } from '@/services/user';
 // import { getPageQuery } from "@/utils/getPageQuery";
 
-export interface StateType {
-  isLogin?: boolean;
-  currentUser?: any;
-}
+export interface StateType {}
 
 export interface LoginModelType {
   namespace: string;
   state: StateType;
   effects: {
-    mpauth: Effect;
+    test: Effect;
     bindUser: Effect;
     bindUserMp: Effect;
     getCaptcha: Effect;
-    addYc: Effect
+    addYc: Effect;
   };
   reducers: {
-    changeUserStatus: Reducer<StateType>;
+    updateState: Reducer<StateType>;
+    changeTestData: Reducer<StateType>;
   };
 }
 
 const Model: LoginModelType = {
   namespace: 'user',
 
-  state: {
-    isLogin: false,
-    currentUser: {}
-  },
+  state: {},
 
   effects: {
-    *mpauth({ payload, callback }, { call, put }) {
-      const response = yield call(mpauth, payload);
+    *test({ payload }, { call, put }) {
+      const response = yield call(testApi, payload);
       yield put({
-        type: 'changeUserStatus',
-        payload: response,
+        type: 'changeTestData',
+        payload: response
       });
-      if (callback) callback(response)
+      return response;
     },
-
     *bindUser({ payload }, { call, put }) {
       const response = yield call(bindUser, payload);
       yield put({
-        type: 'changeLoginStatus',
+        type: 'updateState',
         payload: response,
       });
+      return response;
     },
 
     *bindUserMp({ payload }, { call, put }) {
       const response = yield call(bindUserMp, payload);
       yield put({
-        type: 'changeLoginStatus',
+        type: 'updateState',
         payload: response,
       });
     },
@@ -71,17 +66,22 @@ const Model: LoginModelType = {
 
     *getCaptcha({ payload }, { call }) {
       yield call(getCaptcha, payload);
-    }
+    },
   },
 
   reducers: {
-    changeUserStatus(state, { payload }) {
+    changeTestData(state, { payload }) {
       return {
         ...state,
-        isLogin: !!payload.id,
-        currentUser: payload,
-      };
+        test: payload
+      }
     },
+    updateState(state, { payload }) {
+      return {
+        ...state,
+        ...payload
+      }
+    }
   },
 };
 

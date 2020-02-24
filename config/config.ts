@@ -44,13 +44,18 @@ const config: IConfig = {
   theme: {
     '@primary-color': '#FFBE2D',
     '@brand-primary': '#FFBE2D',
-    '@brand-primary-tap': '#FFE672'
+    '@brand-primary-tap': '#FFE672',
   },
   proxy: {
-    '/api/v1/weather': {
-      target: 'https://api.seniverse.com/',
+    '/api': {
+      target: 'http://transfer.lian-med.com/',
       changeOrigin: true,
-      pathRewrite: { '^/api/v1/weather': '/v3/weather' },
+      pathRewrite: { '^/api': '/api' },
+    },
+    '/test/api': {
+      target: 'http://jsonplaceholder.typicode.com/',
+      changeOrigin: true,
+      pathRewrite: { '^/test/api': '' },
     },
   },
   alias: {
@@ -59,13 +64,13 @@ const config: IConfig = {
   copy: [
     {
       from: 'node_modules/pdfjs-dist/build/',
-      to: 'public/pdfjs-dist/libs/'
+      to: 'public/pdfjs-dist/libs/',
     },
     {
       from: 'node_modules/pdfjs-dist/cmaps/',
-      to: 'public/pdfjs-dist/cmaps/'
-    }
-  ]
+      to: 'public/pdfjs-dist/cmaps/',
+    },
+  ],
 };
 
 export default config;
