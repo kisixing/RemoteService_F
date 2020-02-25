@@ -95,17 +95,17 @@ const request = extend({
  */
 request.interceptors.request.use((url, options) => {
   const token = store.get('lianmp-token');
-  const headers = {
-    'Content-Type': 'application/json;charset=UTF-8',
+  options.headers = {
     Accept: 'application/json',
+    'Content-Type': 'application/json;charset=UTF-8',
     Authorization: token,
-  };
+    ...options.headers,
+  }
   return ({
       url,
       options: {
-        interceptors: true,
-        headers: { ...headers, ...options.headers },
         ...options,
+        interceptors: true,
       },
     }
   );
@@ -117,11 +117,13 @@ request.interceptors.request.use((url, options) => {
  * 每次请求都更新token信息
  */
 request.interceptors.response.use((response, options) => {
-  const token = response.headers.get('Authorization');
+  let token = response.headers.get('Authorization');
   if (token) {
     // 修改token值
-    const lianmp_token = token.replace(/captcha/, 'Bearer');
-    store.set('lianmp-token', lianmp_token);
+    if (token.includes('captcha')) {
+      token = token.replace(/captcha/, 'Bearer');
+    }
+    store.set('lianmp-token', token);
   }
   return response;
 });
