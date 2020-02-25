@@ -64,33 +64,14 @@ function Home(props: any) {
             <NewsListView dataSource={props.news} loading={props.loading.effects['news/getPersonNews']} />
           </Card.Body>
         </Card>
-        {/* <WhiteSpace size="md" />
-        <div className="module">
-          <WingBlank style={{ paddingTop: '.15rem', paddingBottom: '.15rem' }}>
-            <ul className={styles.list}>
-              <li>
-                To get started, edit <code>src/pages/index.js</code> and save to reload.
-              </li>
-              <li>
-                <a href="https://umijs.org/guide/getting-started.html">
-                  {formatMessage({ id: 'index.start' })}
-                </a>
-              </li>
-            </ul>
-          </WingBlank>
-        </div>
-        <div style={{ padding: '.5rem' }}>
-          <Button type="primary" shadow circular>BUTTON</Button>
-        </div> */}
-
       </div>
       <Footer />
     </div>
   );
 }
 
-export default connect(({ loading, user, news }: ConnectState) => ({
+export default connect(({ loading, global, news }: ConnectState) => ({
   loading: loading,
-  currentUser: user.currentUser,
+  currentUser: global.currentUser,
   news: news.personal,
 }))(Home);

@@ -1,19 +1,13 @@
 import { Reducer } from 'redux';
-import store from 'store';
 
 import { Effect } from './connect';
 // import { ConnectState } from './connect.d';
 import { mpauth } from '@/services/user';
 
-export interface CurrentUser {
-  avatar?: string;
-  name?: string;
-  title?: string;
-  userid?: string;
-}
 export interface GlobalModelState {
-  isLogin: boolean,
-  currentUser?: CurrentUser,
+  mpuid?: string
+  currentUser?: any
+  currentPregnancy?: any
 }
 
 export interface GlobalModelType {
@@ -24,6 +18,7 @@ export interface GlobalModelType {
   };
   reducers: {
     changeUserStatus: Reducer<GlobalModelState>;
+    updateState: Reducer<GlobalModelState>;
   };
   subscriptions: { setup: any };
 }
@@ -32,24 +27,29 @@ const GlobalModel: GlobalModelType = {
   namespace: 'global',
 
   state: {
-    isLogin: false,
+    mpuid: '',
     currentUser: {},
+    currentPregnancy: {},
   },
 
   effects: {
+    // 微信跳转验证
     *mpauth({ payload }, { call, put }) {
-      const { response, data } = yield call(mpauth, payload);
-      // 响应体信息
-      const token = response.headers.get('authorization');
-      console.log('响应体信息', response, token);
-      if (token) {
-        store.set('lianmp-token', token);
+      try {
+        const { response, data } = yield call(mpauth, payload);
+        // 响应体信息
+        const token = response && response.headers.get('Authorization');
+        console.log('响应体信息', response, token);
+        if (data) {
+          yield put({
+            type: 'changeUserStatus',
+            payload: data,
+          });
+          return data;
+        }
+      } catch (error) {
+        console.log('on error', error);
       }
-      yield put({
-        type: 'changeUserStatus',
-        payload: data,
-      });
-      return data;
     },
   },
 
@@ -57,10 +57,16 @@ const GlobalModel: GlobalModelType = {
     changeUserStatus(state, { payload }) {
       return {
         ...state,
-        isLogin: !!payload.id,
+        mpuid: payload.mpuid || payload.openid,
         currentUser: payload,
       };
     },
+    updateState(state, { payload }) {
+      return {
+        ...state,
+        ...payload
+      }
+    }
   },
 
   subscriptions: {

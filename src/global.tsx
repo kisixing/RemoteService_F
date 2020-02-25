@@ -18,15 +18,15 @@ if (!isWeixn()) {
   // alert('请在微信客户端打开');
   // window.location.replace('#/404');
 } else {
-  debug().then(() => {
-    initWx({
-      title: '分享标题',
-      imgUrl: '', // 分享图标
-      isNeedLogin: true,
-      desc: '分享描述',
-      openid: process.env.NODE_ENV === 'development' ? 'oEgayjggrU06oORZJVeFUJ_KF1Mk' : undefined,
-    });
-  });
+  // debug().then(() => {
+  //   initWx({
+  //     title: '分享标题',
+  //     imgUrl: '', // 分享图标
+  //     isNeedLogin: true,
+  //     desc: '分享描述',
+  //     openid: process.env.NODE_ENV === 'development' ? 'oEgayjggrU06oORZJVeFUJ_KF1Mk' : undefined,
+  //   });
+  // });
 }
 
 // Notify user if offline now
