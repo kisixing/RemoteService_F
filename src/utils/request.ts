@@ -6,6 +6,16 @@ import { extend } from 'umi-request';
 import store from 'store';
 import { notification } from 'antd';
 
+declare global {
+  interface Window {
+    g_app: any,
+    baseurl: any
+  }
+}
+
+const custom_url = window.baseurl;
+const base_url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : custom_url;
+
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -24,9 +34,6 @@ const codeMessage = {
   504: '网关超时。',
 };
 
-declare global {
-  interface Window { g_app: any; }
-}
 window.g_app = window.g_app || {};
 
 /**
@@ -80,7 +87,7 @@ const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
   timeout: 30000,
-  // getResponse: false,
+  prefix: base_url,
 });
 
 /**
@@ -91,7 +98,7 @@ request.interceptors.request.use((url, options) => {
   const headers = {
     'Content-Type': 'application/json;charset=UTF-8',
     Accept: 'application/json',
-    authorization: token
+    Authorization: token,
   };
   return ({
       url,
@@ -107,13 +114,16 @@ request.interceptors.request.use((url, options) => {
 /**
  * response interceptor, chagne response
  * response拦截器, 处理response
+ * 每次请求都更新token信息
  */
-// request.interceptors.response.use((response, options) => {
-//   const token = response.headers.get('authorization');
-//   if (token) {
-//     store.set('lianmp-token', token);
-//   }
-//   return response;
-// });
+request.interceptors.response.use((response, options) => {
+  const token = response.headers.get('Authorization');
+  if (token) {
+    // 修改token值
+    const lianmp_token = token.replace(/captcha/, 'Bearer');
+    store.set('lianmp-token', lianmp_token);
+  }
+  return response;
+});
 
 export default request;

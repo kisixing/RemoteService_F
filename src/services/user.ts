@@ -24,7 +24,7 @@ export interface authParamsType {
  * false --> { id: '系统用户唯一id', name: '姓名',status<array>: [true,true,false], ...rest }
  */
 export async function mpauth(params: authParamsType) {
-  return request('/api/mpauth', {
+  return request('/api/mplogin', {
     method: 'POST',
     getResponse: true,
     data: params,
@@ -87,6 +87,9 @@ export async function addYc(params: addYcParamsType) {
  * 获取验证码
  * @param mobile
  */
-export async function getCaptcha(mobile: string) {
-  return request(`/api/captcha?mobile=${mobile}`);
+export async function getCaptcha(params: object) {
+  return request('/api/captcha', {
+    method: 'POST',
+    data: params
+  });
 }
