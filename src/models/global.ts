@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-
+// import store from 'store';
 import { Effect } from './connect';
 // import { ConnectState } from './connect.d';
 import { mpauth } from '@/services/user';
@@ -36,10 +36,13 @@ const GlobalModel: GlobalModelType = {
     // 微信跳转验证
     *mpauth({ payload }, { call, put }) {
       try {
-        const { response, data } = yield call(mpauth, payload);
-        // 响应体信息
-        const token = response && response.headers.get('Authorization');
-        console.log('响应体信息', response, token);
+        const { /* response, */ data } = yield call(mpauth, payload);
+        //  已在request封装处理
+        // let token = response && response.headers.get('Authorization');
+        // if (token) {
+        //   token = token.replace(/captcha/, 'Bearer');
+        //   store.set('lianmp-token', token);
+        // }
         if (data) {
           yield put({
             type: 'changeUserStatus',

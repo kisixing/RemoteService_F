@@ -51,13 +51,13 @@ class Login extends Component<P, S> {
       // idType: '二代身份证',
       idNo: '110101199003071348',
     });
-    // test api测试
-    this.props
-      .dispatch({
-        type: 'user/test',
-        payload: {},
-      })
-      .then((res: any) => console.log('promise-->', res));
+    // // test api测试
+    // this.props
+    //   .dispatch({
+    //     type: 'user/test',
+    //     payload: {},
+    //   })
+    //   .then((res: any) => console.log('promise-->', res));
   }
 
   getCaptcha = () => {
