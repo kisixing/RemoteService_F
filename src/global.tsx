@@ -35,7 +35,7 @@ window.addEventListener('sw.offline', () => {
 });
 
 // Pop up a prompt on the page asking the user if they want to use the latest version
-window.addEventListener('sw.updated', e => {
+window.addEventListener('sw.updated', (e: any) => {
   console.log('sw.updated');
   const reloadSW = async () => {
     // Check if there is sw whose state is waiting in ServiceWorkerRegistration

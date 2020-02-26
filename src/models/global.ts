@@ -70,6 +70,7 @@ const GlobalModel: GlobalModelType = {
     updatePregnancy(state, { payload }) {
       return {
         ...state,
+        mpuid: payload.mpuid || payload.openid,
         currentPregnancy: payload,
       };
     },
