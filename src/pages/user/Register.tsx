@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 // import { parse } from 'querystring';
+import store from 'store';
 import { createForm } from 'rc-form';
 import moment from 'moment';
 import { ConnectState } from '@/models/connect';
@@ -30,12 +31,14 @@ interface P {
   circular?: boolean
   form?: any
   submitting: boolean
+  mpuid: string
 }
 
 type S = {}
 
-@connect(({ loading }: ConnectState) => ({
+@connect(({ loading, global }: ConnectState) => ({
   submitting: loading.effects['user/newPregnancy'],
+  mpuid: global.mpuid
 }))
 @createForm()
 class Register extends Component<P, S> {
@@ -55,6 +58,7 @@ class Register extends Component<P, S> {
   onSubmit = (e: any) => {
     e.preventDefault();
     const {
+      mpuid,
       form,
       location: { query },
     } = this.props;
@@ -65,10 +69,11 @@ class Register extends Component<P, S> {
       }
       const data = {
         name: value.username,
-        mobile: value.mobile,
-        gestationalWeek: moment(value.gestationalWeek).format('YYYY-MM-DD'),
+        telephone: value.mobile,
+        lmp: moment(value.gestationalWeek).format('YYYY-MM-DD'),
         idNO: value.idNo,
         idType: Number(query.idType),
+        mpuid: mpuid || store.get('mpuid'),
       };
       this.createPregnancy(data);
     });

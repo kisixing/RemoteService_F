@@ -25,7 +25,7 @@ const persistEnhancer = () => (createStore: any) => (reducer: any, initialState:
 
 export const dva = {
   config: {
-    onError(err: ErrorEvent) {
+    onError(err: { preventDefault: () => void; message: any; }) {
       err.preventDefault();
       console.error(err.message);
     },
