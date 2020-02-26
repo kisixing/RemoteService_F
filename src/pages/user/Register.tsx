@@ -9,8 +9,9 @@ import { connect } from 'dva';
 import router from 'umi/router';
 // import { parse } from 'querystring';
 import { createForm } from 'rc-form';
-// import { ButtonProps } from 'antd/es/button';
-import { InputItem, DatePicker, Picker } from 'antd-mobile';
+import moment from 'moment';
+import { ConnectState } from '@/models/connect';
+import { InputItem, DatePicker, /* Picker */ } from 'antd-mobile';
 import zhCN from 'antd-mobile/lib/date-picker/locale/zh_CN';
 
 import { Button, List } from '@/components/antd-mobile';
@@ -21,68 +22,88 @@ import styles from './Register.less';
 const nowTimeStamp = Date.now();
 const minDate = new Date(nowTimeStamp - 1000 * 60 * 60 * 24 * 365);
 const maxDate = new Date(nowTimeStamp + 1e7);
-const hospitals = ['暨南大学附属第一医院', '中山大学附属第一医院', '中山大学附属第二医院', '中山大学附属第三医院', '广东省妇幼保健院', '南方医科大学珠江医院', '南方医科大学南方医院'].map(e => ({ label: e, value: e }));
+// const hospitals = ['暨南大学附属第一医院', '中山大学附属第一医院', '中山大学附属第二医院', '中山大学附属第三医院', '广东省妇幼保健院', '南方医科大学珠江医院', '南方医科大学南方医院'].map(e => ({ label: e, value: e }));
 
 interface P {
-  location: any,
-  circular?: boolean;
+  dispatch: any
+  location: any
+  circular?: boolean
   form?: any
+  submitting: boolean
 }
 
 type S = {}
 
-@connect(({ loading }) => ({
-  submitting: loading.effects['form/submitAdvancedForm'],
+@connect(({ loading }: ConnectState) => ({
+  submitting: loading.effects['user/newPregnancy'],
 }))
 @createForm()
 class Register extends Component<P, S> {
-  state = {  };
+  state = {};
 
   componentDidMount() {
-    const { location: { query }, form } = this.props;
-    console.log('00000000', query)
+    const {
+      location: { query },
+      form,
+    } = this.props;
     form.setFieldsValue({
       mobile: query.mobile,
-      idNo: query.IDNo,
-      // hospital: ['暨南大学附属第一医院'],
-      // userName: '李师师',
-      // gesmoc: new Date('2019-10-01')
-    })
+      idNo: query.idNo,
+    });
   }
 
   onSubmit = (e: any) => {
     e.preventDefault();
-    const { form } = this.props;
-    form.validateFields((error: Array<any>, value: object) => {
+    const {
+      form,
+      location: { query },
+    } = this.props;
+    form.validateFields((error: Array<any>, value: any) => {
       console.log(error, value);
       if (error) {
         return;
       }
-      router.replace('/')
+      const data = {
+        name: value.username,
+        mobile: value.mobile,
+        gestationalWeek: moment(value.gestationalWeek).format('YYYY-MM-DD'),
+        idNO: value.idNo,
+        idType: Number(query.idType),
+      };
+      this.createPregnancy(data);
     });
-  }
+  };
+
+  createPregnancy = (data: object) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'user/newPregnancy',
+      payload: data,
+    }).then((res: any) => {
+      // 新建孕册成功
+      if (res && res.id) {
+        router.replace('/');
+      }
+    });
+  };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { form: { getFieldDecorator }, submitting } = this.props;
 
     return (
       <div className={styles.wrapper}>
         <div className={styles.header}>新建孕册</div>
         <form className={styles.content} onSubmit={this.onSubmit}>
           <List>
-            {getFieldDecorator('userName', {
-              rules: [{ required: true }]
+            {getFieldDecorator('username', {
+              rules: [{ required: true }],
             })(
-              <InputItem
-                clear
-                type="phone"
-                placeholder="输入姓名"
-              >
+              <InputItem clear type="text" placeholder="输入姓名">
                 姓名
-              </InputItem>
+              </InputItem>,
             )}
-            {getFieldDecorator('gesmoc', {
-              rules: [{ required: true }]
+            {getFieldDecorator('gestationalWeek', {
+              rules: [{ required: true }],
             })(
               <DatePicker
                 mode="date"
@@ -93,34 +114,23 @@ class Register extends Component<P, S> {
                 maxDate={maxDate}
               >
                 <List.Item arrow="horizontal">末次月经</List.Item>
-              </DatePicker>
+              </DatePicker>,
             )}
             {getFieldDecorator('mobile', {
-              rules: [{ required: true }]
+              rules: [{ required: true }],
             })(
-              <InputItem
-                clear
-                type="phone"
-                placeholder="输入手机号码"
-                disabled={true}
-              >
+              <InputItem clear type="phone" placeholder="输入手机号码" disabled={true}>
                 手机号
-              </InputItem>
+              </InputItem>,
             )}
             {getFieldDecorator('idNo', {
-              initialValue: '450301198709213381',
-              rules: [{ required: true }]
+              rules: [{ required: true }],
             })(
-              <InputItem
-                clear
-                type="digit"
-                placeholder="输入身份证"
-                disabled={true}
-              >
+              <InputItem clear type="digit" placeholder="输入身份证" disabled={true}>
                 证件号码
-              </InputItem>
+              </InputItem>,
             )}
-            {getFieldDecorator('hospital', {
+            {/* {getFieldDecorator('hospital', {
               initialValue: '',
               rules: [{ required: true }]
             })(
@@ -132,9 +142,16 @@ class Register extends Component<P, S> {
               >
                 <List.Item arrow="horizontal">建档医院</List.Item>
               </Picker>
-            )}
+            )} */}
             <List.Item>
-              <Button type="primary" onClick={this.onSubmit} style={{ marginTop: '1rem' }}>新建孕册</Button>
+              <Button
+                type="primary"
+                loading={submitting}
+                onClick={this.onSubmit}
+                style={{ marginTop: '1rem' }}
+              >
+                新建孕册
+              </Button>
             </List.Item>
           </List>
         </form>

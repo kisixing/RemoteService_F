@@ -11,7 +11,7 @@ import { Request, Response } from 'express';
 const { Random } = mockjs;
 
 export default delay({
-  'GET /api/news/personal': (req: Request, res: Response) => {
+  'GET /mock/api/news/personal': (req: Request, res: Response) => {
     return res.json(mockjs.mock({
       'desc': '个性化推送',
       'data|5': [
@@ -30,7 +30,7 @@ export default delay({
       ],
     }));
   },
-  'GET /api/news/article': (req: Request, res: Response) => {
+  'GET /mock/api/news/article': (req: Request, res: Response) => {
     const { query: { page, pageSize } } = req;
     return res.json(mockjs.mock({
       'desc': '文本内容',
@@ -51,7 +51,7 @@ export default delay({
     }));
   },
 
-  'GET /api/news/video': (req: Request, res: Response) => {
+  'GET /mock/api/news/video': (req: Request, res: Response) => {
     return res.json(mockjs.mock({
       'desc': '视频内容',
       'data|2': [

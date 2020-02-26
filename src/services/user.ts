@@ -14,7 +14,7 @@ export async function testApi() {
 }
 
 export interface authParamsType {
-  code: string;
+  code: string
 }
 /**
  * 用户oauth授权
@@ -32,10 +32,10 @@ export async function mpauth(params: authParamsType) {
 }
 
 export interface bindParamsType {
-  mobile: string | number;
-  captcha: string | number;
-  idType?: string;
-  idNo: string | number;
+  mobile: string | number
+  captcha: string | number
+  idType?: string
+  idNo: string | number
 }
 
 /**
@@ -51,7 +51,7 @@ export async function bindUser(params: bindParamsType) {
 }
 
 export interface bindMpParamsType {
-  id: string,
+  id: string
   openId: string
 }
 /**
@@ -59,25 +59,25 @@ export interface bindMpParamsType {
  * @param params object 孕册id、就诊卡号openId
  */
 export async function bindUserMp(params: bindMpParamsType) {
-  return request('/api/bindusermp', {
-    method: 'POST',
+  return request('/api/pregnancies', {
+    method: 'PUT',
     data: params,
   });
 }
 
-export interface addYcParamsType {
-  userName: string,
-  gesmoc: string,
-  mobile: string,
-  IDNo:string,
+export interface newYcParamsType {
+  userName: string
+  gesmoc: string
+  mobile: string
+  IDNo:string
   openId: string
 }
 /**
  * 新建建档（孕册）
  * @param params object
  */
-export async function addYc(params: addYcParamsType) {
-  return request('/api/addyc', {
+export async function newPregnancy(params: newYcParamsType) {
+  return request('/api/pregnancies', {
     method: 'POST',
     data: params,
   });

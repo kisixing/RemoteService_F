@@ -9,7 +9,7 @@ import { Toast } from 'antd-mobile';
 
 interface SecurityLayoutProps extends ConnectProps {
   loading?: boolean;
-  currentUser?: any;
+  currentPregnancy?: any;
 }
 
 interface SecurityLayoutState {
@@ -22,7 +22,11 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
   };
 
   componentDidMount() {
-    const { dispatch, location: { query }, currentUser } = this.props;
+    const {
+      dispatch,
+      location: { query },
+      currentPregnancy,
+    } = this.props;
     const code = query.code;
     // TODO 验证过程 验证全局 sessionStorage isLogin
     // 1、isLogin === true，不再异步验证用户信息
@@ -33,16 +37,16 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     }, 600);
     // 2、url携带code值时就进行校验操作，获取url携带的code进行用户校验
     // 条件 --> 有url携带code，但无孕妇信息临时缓存
-    if (code && !currentUser.id) {
+    if (code && !currentPregnancy.id) {
       dispatch({
         type: 'global/mpauth',
         payload: {
           code: query.code,
         },
-      })
-        .then((res: any) => {
-          if (res && res.id) {}
-        })
+      }).then((res: any) => {
+        if (res && res.id) {
+        }
+      });
     }
     // 3、code/isLogin都不存在，提示并返回登录
     if (!code) {
@@ -53,7 +57,12 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
 
   render() {
     const { isReady } = this.state;
-    const { children, loading, currentUser, location: { query } } = this.props;
+    const {
+      children,
+      loading,
+      currentPregnancy,
+      location: { query },
+    } = this.props;
     // You can replace it to your authentication rule (such as check token exists)
     // 你可以把它替换成你自己的登录认证规则（比如判断 token 是否存在）
 
@@ -62,10 +71,10 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       redirect: window.location.href,
     });
 
-    if (!query.code || loading || !isReady) {
+    if (loading || !isReady) {
       return <PageLoading fullScreen spinning />;
     }
-    if (!currentUser.id) {
+    if (!currentPregnancy.id) {
       return <Redirect to={`/user/login?${queryString}`} />;
     }
     // token、isBind，含有用户权限和已绑定的情况下才会进入主页
@@ -74,6 +83,6 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
 }
 
 export default connect(({ global, loading }: ConnectState) => ({
-  currentUser: global.currentUser,
+  currentPregnancy: global.currentPregnancy,
   loading: loading.models.global,
 }))(SecurityLayout);

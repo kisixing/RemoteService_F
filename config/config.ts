@@ -49,8 +49,13 @@ const config: IConfig = {
   proxy: {
     '/api': {
       target: 'http://transfer.lian-med.com/',
-      changeOrigin: true,
-      pathRewrite: { '^/api': '/api' },
+      changeOrigin: false,
+      // pathRewrite: { '^/api': '/api' },
+    },
+    '/mock/api': {
+      target: 'http://localhost:3001/',
+      changeOrigin: false,
+      // pathRewrite: { '^/mock/api': '' },
     },
     '/test/api': {
       target: 'http://jsonplaceholder.typicode.com/',

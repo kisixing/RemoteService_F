@@ -16,7 +16,7 @@ export interface newsParamsType {
 }
 // type: string, query: newsParamsType
 export async function getNews({ type, query }: newsParamsType) {
-  return request(`/api/news/${type}`, {
+  return request(`/mock/api/news/${type}`, {
     data: query,
   });
 }

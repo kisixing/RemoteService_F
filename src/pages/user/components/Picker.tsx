@@ -19,10 +19,12 @@ interface IState {}
 
 export default class Picker extends React.Component<IProps, IState> {
   onSelect = (val: any) => {
+    console.log('88888888', val)
     const { onChange = () => {} } = this.props;
     const strVal = val.join(',');
     onChange(strVal);
   }
+
   render () {
     const {
       title,
@@ -33,6 +35,7 @@ export default class Picker extends React.Component<IProps, IState> {
       icon,
       value,
     } = this.props;
+    const label = options.filter(e => e.value == value)[0]['label']
     return (
       <ANTDPicker
         cols={cols}
@@ -42,7 +45,7 @@ export default class Picker extends React.Component<IProps, IState> {
         value={value && value.split(',')}
         onChange={this.onSelect}
       >
-        <CustomChildren icon={icon} readOnly={readOnly} value={value} />
+        <CustomChildren icon={icon} readOnly={readOnly} value={label} />
       </ANTDPicker>
     );
   }
