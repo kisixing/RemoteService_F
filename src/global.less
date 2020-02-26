@@ -1,17 +1,11 @@
-html,
-body,
-#root {
-  height: 100%;
-}
-
 body {
+  /* iphonex 安全区域 */
   margin: 0;
   overflow-x: hidden;
   padding-bottom: constant(safe-area-inset-bottom);
   padding-bottom: env(safe-area-inset-bottom);
-  background-color: #f8f8f8 !important;
   font-family: 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif,
-    'Droid Sans Fallback';
+    'Droid Sans Fallback' !important;
   font-size: .28rem;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -24,7 +18,7 @@ canvas {
 
 ul, ol, dl {
   padding-left: 0;
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
   list-style: none;
 }
 
@@ -41,17 +35,6 @@ img {
 .module {
   background-color: #fff;
   box-shadow: 0 2px 8px #f0f1f2;
-}
-
-/* iphonex 兼容方案
-https://aotu.io/notes/2017/11/27/iphonex/index.html */
-
-/* iphonex 安全区域 */
-body {
-  margin: 0;
-  overflow-x: hidden;
-  padding-bottom: constant(safe-area-inset-bottom);
-  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* iphonex fix底部元素适配 */

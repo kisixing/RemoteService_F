@@ -6,13 +6,11 @@ interface IProps {
   dataSource: any[],
 }
 export default (props: IProps) => {
-  const {
-    dataSource = [],
-  } = props;
-  console.log(dataSource);
+  const { dataSource = [] } = props;
+  const width = `${1.62 * dataSource.length - 0.2 }rem`;
   return (
     <div className={styles.entrance}>
-      <ul>
+      <ul style={{ width: width }}>
         {dataSource.map(e => (
           <li key={e.key} onClick={() => router(e.route)}>
             <div className={styles.icon} style={{ backgroundImage: `url(${e.icon})`}} />

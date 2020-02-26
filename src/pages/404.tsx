@@ -1,4 +1,4 @@
-import { Button, Result } from 'antd';
+import { Result } from 'antd-mobile';
 import React from 'react';
 import { router } from 'umi';
 
@@ -7,15 +7,12 @@ import { router } from 'umi';
 
 const NoFoundPage: React.FC<{}> = () => (
   <Result
-    status="404"
+    imgUrl={'https://gw.alipayobjects.com/zos/rmsportal/GIyMDJnuqmcqPLpHCSkj.svg'}
     title="404"
-    subTitle="Sorry, the page you visited does not exist."
-    extra={
-      // tslint:disable-next-line: jsx-no-lambda
-      <Button type="primary" onClick={() => router.push('/')}>
-        Back Home
-      </Button>
-    }
+    message="Sorry, the page you visited does not exist."
+    buttonText="Back Home"
+    buttonType="primary"
+    onButtonClick={() => router.push('/')}
   />
 );
 
