@@ -2,6 +2,7 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { AnyAction } from 'redux';
 import { RouterTypes } from 'umi';
 import { GlobalModelState } from './global';
+import { ComboStateType } from './combo';
 
 export { GlobalModelState };
 
@@ -34,10 +35,13 @@ export interface Loading {
   };
 }
 
+
+
 export interface ConnectState {
   global: GlobalModelState;
   loading: Loading;
   user: UserModelState;
+  combo: ComboStateType;
   news: any;
 }
 
