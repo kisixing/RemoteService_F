@@ -1,9 +1,9 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { Card, WingBlank } from 'antd-mobile';
+import React, { useState, useEffect } from 'react';
+import { Card } from 'antd-mobile';
 import { connect } from 'dva';
 // import { formatMessage } from 'umi-plugin-locale';
 
-import { WhiteSpace } from '@/components/antd-mobile';
+import { WhiteSpace, IconFont } from '@/components/antd-mobile';
 import Footer from '@/components/Footer';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { router } from '@/utils/utils';
@@ -43,8 +43,13 @@ function Home(props: any) {
         <WhiteSpace size="md" />
         <Card full>
           <Card.Header
-            title={<span className={styles.cardTitle}>孕产工具</span>}
-            thumb={require('../../assets/icons/tool.png')}
+            title={
+              <div  className={styles.cardTitle}>
+                <IconFont type="1" />
+                <span>孕产工具</span>
+              </div>
+            }
+            // thumb={require('../../assets/icons/tool.png')}
             thumbStyle={{ width: '.32rem', marginBottom: '.02rem' }}
           />
           <Card.Body>
@@ -55,8 +60,13 @@ function Home(props: any) {
         <WhiteSpace size="md" />
         <Card full>
           <Card.Header
-            title={<span className={styles.cardTitle}>今日知识</span>}
-            thumb={require('../../assets/icons/knowledge.png')}
+            title={
+              <div  className={styles.cardTitle}>
+                <IconFont type="zhishiku" />
+                <span>今日知识</span>
+              </div>
+            }
+            // thumb={require('../../assets/icons/knowledge.png')}
             thumbStyle={{ width: '.36rem' }}
             extra={<span className={styles.more} onClick={() => router('/school')}>更多</span>}
           />

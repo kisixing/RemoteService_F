@@ -9,21 +9,16 @@
 
   .left {
     position: relative;
-    padding-left: .45rem;
     padding-right: 0.12rem;
-    line-height: .45rem;
+    line-height: .46rem;
+    display: flex;
+    justify-content: center;
 
-
-    &:before {
-      position: absolute;
-      content: '';
-      width: .42rem;
-      height: .36rem;
-      top: 50%;
-      left: 0;
-      margin-top: -0.18rem;
-      background: url(../../assets/icons/voice2.svg) no-repeat center;
-      background-size: 100%;
+    i {
+      font-size: .45rem !important;
+      height: .46rem;
+      margin-right: 8px;
+      color: @brand-primary;;
     }
 
     &:after {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'antd-mobile';
-import { ButtonProps } from 'antd/es/button';
+import { ButtonProps } from 'antd-mobile/es/button';
 
 interface IProps extends ButtonProps {
   circular?: boolean

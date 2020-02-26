@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7645",
+      "name": "通知",
+      "font_class": "tongzhi",
+      "unicode": "f001d",
+      "unicode_decimal": 983069
+    },
+    {
       "icon_id": "350588",
       "name": "23.Videos",
       "font_class": "23videos",
@@ -20,11 +27,46 @@
       "unicode_decimal": 59077
     },
     {
+      "icon_id": "380391",
+      "name": "tool",
+      "font_class": "tool",
+      "unicode": "e678",
+      "unicode_decimal": 59000
+    },
+    {
+      "icon_id": "392209",
+      "name": "箱子",
+      "font_class": "1",
+      "unicode": "e6d0",
+      "unicode_decimal": 59088
+    },
+    {
+      "icon_id": "438031",
+      "name": "voice2",
+      "font_class": "voice2",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "438072",
+      "name": "voice2",
+      "font_class": "voice21",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
       "icon_id": "474968",
       "name": "mobile",
       "font_class": "mobile",
-      "unicode": "e624",
-      "unicode_decimal": 58916
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "508271",
+      "name": "医疗器械",
+      "font_class": "yiliaoqixie",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
     },
     {
       "icon_id": "712599",
@@ -32,6 +74,20 @@
       "font_class": "card",
       "unicode": "e605",
       "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "852113",
+      "name": "工具箱",
+      "font_class": "gongjuxiang",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "1001285",
+      "name": "voice2",
+      "font_class": "voice22",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
     },
     {
       "icon_id": "1046777",
@@ -55,11 +111,46 @@
       "unicode_decimal": 58927
     },
     {
+      "icon_id": "1393675",
+      "name": "knowledge_base",
+      "font_class": "knowledge_base",
+      "unicode": "e6fb",
+      "unicode_decimal": 59131
+    },
+    {
+      "icon_id": "1398598",
+      "name": "医疗图标",
+      "font_class": "ambulance__easyiconnet",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
       "icon_id": "2150786",
       "name": "身份证",
       "font_class": "credentials_icon",
       "unicode": "e674",
       "unicode_decimal": 58996
+    },
+    {
+      "icon_id": "2678601",
+      "name": "工具箱",
+      "font_class": "gongjuxiang1",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
+      "icon_id": "3112612",
+      "name": "医疗",
+      "font_class": "yiliao",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "3727760",
+      "name": "医药箱",
+      "font_class": "huahui-",
+      "unicode": "e613",
+      "unicode_decimal": 58899
     },
     {
       "icon_id": "4916787",
@@ -76,11 +167,165 @@
       "unicode_decimal": 58915
     },
     {
+      "icon_id": "5738496",
+      "name": "医疗卫生-3",
+      "font_class": "yiliaoweisheng-",
+      "unicode": "ed50",
+      "unicode_decimal": 60752
+    },
+    {
+      "icon_id": "5738499",
+      "name": "医疗卫生-6",
+      "font_class": "yiliaoweisheng-1",
+      "unicode": "ed51",
+      "unicode_decimal": 60753
+    },
+    {
+      "icon_id": "5738504",
+      "name": "医疗卫生-9",
+      "font_class": "yiliaoweisheng-2",
+      "unicode": "ed52",
+      "unicode_decimal": 60754
+    },
+    {
+      "icon_id": "5738505",
+      "name": "医疗卫生-12",
+      "font_class": "yiliaoweisheng-3",
+      "unicode": "ed53",
+      "unicode_decimal": 60755
+    },
+    {
+      "icon_id": "5738513",
+      "name": "医疗卫生-21",
+      "font_class": "yiliaoweisheng-4",
+      "unicode": "ed55",
+      "unicode_decimal": 60757
+    },
+    {
+      "icon_id": "5738514",
+      "name": "医疗卫生-19",
+      "font_class": "yiliaoweisheng-5",
+      "unicode": "ed56",
+      "unicode_decimal": 60758
+    },
+    {
+      "icon_id": "5738519",
+      "name": "医疗卫生-25",
+      "font_class": "yiliaoweisheng-6",
+      "unicode": "ed57",
+      "unicode_decimal": 60759
+    },
+    {
+      "icon_id": "5738527",
+      "name": "医疗卫生-31",
+      "font_class": "yiliaoweisheng-7",
+      "unicode": "ed5a",
+      "unicode_decimal": 60762
+    },
+    {
+      "icon_id": "5738530",
+      "name": "医疗卫生-37",
+      "font_class": "yiliaoweisheng-8",
+      "unicode": "ed5c",
+      "unicode_decimal": 60764
+    },
+    {
+      "icon_id": "5738540",
+      "name": "医疗卫生-46",
+      "font_class": "yiliaoweisheng-9",
+      "unicode": "ed5f",
+      "unicode_decimal": 60767
+    },
+    {
+      "icon_id": "5738552",
+      "name": "医疗卫生-59",
+      "font_class": "yiliaoweisheng-10",
+      "unicode": "ed66",
+      "unicode_decimal": 60774
+    },
+    {
+      "icon_id": "5738565",
+      "name": "医疗卫生-72",
+      "font_class": "yiliaoweisheng-11",
+      "unicode": "ed6c",
+      "unicode_decimal": 60780
+    },
+    {
+      "icon_id": "5738570",
+      "name": "医疗卫生-78",
+      "font_class": "yiliaoweisheng-12",
+      "unicode": "ed6f",
+      "unicode_decimal": 60783
+    },
+    {
+      "icon_id": "5738578",
+      "name": "医疗卫生-85",
+      "font_class": "yiliaoweisheng-13",
+      "unicode": "ed72",
+      "unicode_decimal": 60786
+    },
+    {
+      "icon_id": "5738590",
+      "name": "医疗卫生-98",
+      "font_class": "yiliaoweisheng-14",
+      "unicode": "ed78",
+      "unicode_decimal": 60792
+    },
+    {
+      "icon_id": "5738591",
+      "name": "医疗卫生-96",
+      "font_class": "yiliaoweisheng-15",
+      "unicode": "ed79",
+      "unicode_decimal": 60793
+    },
+    {
+      "icon_id": "5738592",
+      "name": "医疗卫生-99",
+      "font_class": "yiliaoweisheng-16",
+      "unicode": "ed7a",
+      "unicode_decimal": 60794
+    },
+    {
+      "icon_id": "5738597",
+      "name": "医疗卫生-104",
+      "font_class": "yiliaoweisheng-17",
+      "unicode": "ed7b",
+      "unicode_decimal": 60795
+    },
+    {
+      "icon_id": "6234789",
+      "name": "医疗器械",
+      "font_class": "yiliaoqixie1",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
       "icon_id": "6235457",
       "name": "类型",
       "font_class": "duomeitiicon-",
-      "unicode": "e616",
-      "unicode_decimal": 58902
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "6236760",
+      "name": "book",
+      "font_class": "book",
+      "unicode": "e718",
+      "unicode_decimal": 59160
+    },
+    {
+      "icon_id": "7684789",
+      "name": "knowledge",
+      "font_class": "knowledge",
+      "unicode": "e6a1",
+      "unicode_decimal": 59041
+    },
+    {
+      "icon_id": "8288889",
+      "name": "医疗箱",
+      "font_class": "yiliaoxiang",
+      "unicode": "e858",
+      "unicode_decimal": 59480
     },
     {
       "icon_id": "8616408",
@@ -97,11 +342,25 @@
       "unicode_decimal": 58882
     },
     {
+      "icon_id": "9706086",
+      "name": "医疗",
+      "font_class": "yixue",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
       "icon_id": "10483874",
       "name": "01_video1",
       "font_class": "_video",
-      "unicode": "e607",
-      "unicode_decimal": 58887
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "10593832",
+      "name": "工具箱,辅助工具_jurassic",
+      "font_class": "jurassic_toolkit",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
     },
     {
       "icon_id": "10995776",
@@ -109,6 +368,20 @@
       "font_class": "yanzhengma2",
       "unicode": "e60d",
       "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "11537851",
+      "name": "knowledge base",
+      "font_class": "knowledgebase",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "11836501",
+      "name": "知识库",
+      "font_class": "zhishiku",
+      "unicode": "e621",
+      "unicode_decimal": 58913
     },
     {
       "icon_id": "12489909",
