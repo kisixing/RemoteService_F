@@ -7,15 +7,21 @@ import styles from './DetailPage.less'
 interface TAB {title: string|ReactNode}
 const tabs:Array<TAB> = [
   {title: '套餐详情'},
-  {title: '胎监介绍'},
+  {title: '设备介绍'},
   {title: '设备规格'},
-]
+];
+
+interface INDEX_HANDLER{
+  ():void
+}
+
 interface DETAIL_PAGE_PROPS {
-  detailData: PACKAGE_CONTENT
+  detailData: PACKAGE_CONTENT,
+  indexHandler: INDEX_HANDLER
 }
 
 export default function DetailPage(props: DETAIL_PAGE_PROPS) {
-  const { detailData } = props;
+  const { detailData, indexHandler } = props;
   const { packageDetail } = detailData;
   console.log(detailData);
   return (
@@ -41,10 +47,10 @@ export default function DetailPage(props: DETAIL_PAGE_PROPS) {
           ))}
         </div>
         <div className={styles['tab-item']}>
-          s
+          富文本
         </div>
         <div className={styles['tab-item']}>
-          t
+          UI还没出
         </div>
       </Tabs>
       <div className={styles['footer']}>
@@ -52,7 +58,7 @@ export default function DetailPage(props: DETAIL_PAGE_PROPS) {
           <h1>￥{detailData.price}</h1>
         </div>
         <div className={styles['buy']}>
-          <Button className={styles['button']}>
+          <Button className={styles['button']} onClick={indexHandler}>
             <span  style={{color: '#ffffff', textShadow: '#91959A', width: '128px', textAlign: 'center', lineHeight: 'auto'}}>
               购买
             </span>

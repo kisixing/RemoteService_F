@@ -1,0 +1,92 @@
+.list-flex {
+  display: flex;
+  flex-direction: row;
+  > :nth-child(1) {
+    flex-grow: 2
+  }
+  > :nth-child(2) {
+    flex-grow: 2
+  }
+  > :nth-child(3) {
+    flex-grow: 2
+  }
+}
+
+.package-confirm {
+  width: 100%;
+  .header {
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    padding: 40px;
+    height: 235px;
+    vertical-align: center;
+    letter-spacing: 2px;
+    font-size: 30px;
+
+    > :first-child {
+      margin-bottom: 14px;
+    }
+    > :nth-child(3) span {
+      visibility: hidden;
+    }
+  }
+
+  .list {
+    width: 100%;
+    margin: 50px 0 0 0;
+    // 行
+    > div {
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      // 列
+      > div {
+        .list-flex();
+        width: 100%;
+        margin: 5px auto;
+        padding: 10px;
+        font-size: 28px;
+        font-weight: 400;
+        background-color: white;
+        border:1px;
+        border-radius:8px;
+        box-shadow:0px 13px 10px -10px #d6e2f6;
+      }
+    }
+    .list-header {
+      color:red;
+      width: 80%;
+      margin: 10px auto 0 auto;
+    }
+
+    > :first-child {
+      padding-left: 20px;
+
+    }
+  }
+
+  .footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+
+    > .choice-block {
+
+    }
+
+    > .btn {
+      // Button 在antd-moblie是个a
+      > a {
+        background:linear-gradient(270deg,rgba(255,219,49,1) 0%,rgba(253,184,29,1) 100%);
+        box-shadow:0px 9px 13px -5px rgba(253,203,97,0.25),0px 2px 7px -3px rgba(253,177,97,1);
+        border-radius:24px;
+        width: 50%;
+        margin: 10px auto ;
+      }
+    }
+  }
+}
