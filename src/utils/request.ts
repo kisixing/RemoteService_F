@@ -13,8 +13,10 @@ declare global {
   }
 }
 
+// http://transfer.lian-med.com
 const custom_url = window.baseurl;
-const base_url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : custom_url;
+const base_url =
+  process.env.NODE_ENV === 'development' ? 'http://transfer.lian-med.com' : custom_url;
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -87,7 +89,7 @@ const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
   timeout: 30000,
-  prefix: base_url,
+  // prefix: base_url,
 });
 
 /**

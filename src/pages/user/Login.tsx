@@ -9,7 +9,7 @@ import { connect } from 'dva';
 import router from 'umi/router';
 import { stringify } from 'querystring';
 import { createForm } from 'rc-form';
-import { Toast } from 'antd-mobile';
+import { Toast, Modal } from 'antd-mobile';
 
 import { ConnectState } from '@/models/connect';
 import InputItem from './components/InputItem';
@@ -19,12 +19,20 @@ import { Button, IconFont } from '@/components/antd-mobile';
 import styles from './Login.less';
 
 const reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
-const IDType =
-  ['二代身份证', '港澳台居民居住证', '回乡证', '台胞证', '护照', '其他'].map(e => ({ label: e, value: e }));
+const IDType = [
+  { label: '二代身份证', value: 0 },
+  { label: '港澳台居民居住证', value: 1 },
+  { label: '回乡证', value: 2 },
+  { label: '台胞证', value: 3 },
+  { label: '护照', value: 4 },
+  { label: '其他', value: 5 },
+];
+// ['二代身份证', '港澳台居民居住证', '回乡证', '台胞证', '护照', '其他'].map(e => ({ label: e, value: e }));
 
 interface P {
   form: any
   dispatch: any
+  mpuid?: string
 }
 
 interface S {
@@ -32,8 +40,9 @@ interface S {
   disabled: boolean
 };
 
-@connect(({ loading }: ConnectState) => ({
+@connect(({ loading, global }: ConnectState) => ({
   submitting: loading.effects['user/bindUser'],
+  mpuid: global.mpuid,
 }))
 @createForm()
 class Login extends Component<P, S> {
@@ -46,22 +55,18 @@ class Login extends Component<P, S> {
   componentDidMount() {
     const { setFieldsValue } = this.props.form;
     setFieldsValue({
-      mobile: '13657721210',
-      captcha: '5566',
+      // mobile: '13657721210',
+      // captcha: '5566',
       // idType: '二代身份证',
-      idNo: '110101199003071348',
+      // idNo: '110101199003071348',
     });
-    // // test api测试
-    // this.props
-    //   .dispatch({
-    //     type: 'user/test',
-    //     payload: {},
-    //   })
-    //   .then((res: any) => console.log('promise-->', res));
   }
 
   getCaptcha = () => {
-    const { dispatch, form: { getFieldValue } } = this.props;
+    const {
+      dispatch,
+      form: { getFieldValue },
+    } = this.props;
     const mobile = getFieldValue('mobile');
     if (!reg.test(mobile)) {
       return Toast.info('请输入正确的手机号码!');
@@ -99,13 +104,33 @@ class Login extends Component<P, S> {
         payload: values,
       }).then((res: any) => {
         if (res && res.id) {
-          // 返回最近的一个档案
-        } else {
+          // 有绑定信息，返回最近的一个档案
+          // 弹出alter提示框，1.新建、2.直接进入主页
+          return this.alter(res, values);
+        }
+        if (res && res.status) {
+          // 返回错误信息
+          if (res.status === 400) {
+            return Toast.info('验证码失效');
+          }
+          return;
+        }
+        if (!res) {
+          // TODO 没有返回任何信息
           // 没有任何的个人绑定信息，跳转新建档案页进行新建
           const queryString = stringify({ ...values });
-          router.push(`/user/register?${queryString}`);
+          return router.push(`/user/register?${queryString}`);
         }
       });
+    });
+  };
+
+  // 点击绑定（调用put接口 更新孕册的mpuid）
+  bindUser = (data: object) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'user/bindUserMp',
+      payload: data,
     });
   };
 
@@ -126,6 +151,33 @@ class Login extends Component<P, S> {
         });
       }
     }, 1000);
+  };
+
+  /**
+   * @params {object} result 请求结果
+   * @params {object} query 输入参数
+   * @memberof Login
+   */
+  alter = (result: any = {}, query: object = {}) => {
+    Modal.alert(
+      '绑定信息',
+      // tslint:disable-next-line: jsx-wrap-multiline
+      <div>
+        <p>姓 名：{result.name}</p>
+        <p>末次月经：{result.gesweek}</p>
+      </div>,
+      [
+        {
+          text: '新建孕册',
+          onPress: () => router.replace(`/user/register?${stringify({ ...query })}`),
+          style: 'default',
+        },
+        {
+          text: '确认绑定',
+          onPress: () => this.bindUser({ id: result.id, mpuid: this.props.mpuid }),
+        },
+      ],
+    );
   };
 
   render() {
@@ -165,7 +217,7 @@ class Login extends Component<P, S> {
                   type="primary"
                   disabled={disabled}
                   style={{
-                    width: '1.92rem',
+                    width: '2.2rem',
                     height: '100%',
                     lineHeight: '.84rem',
                     borderRadius: 0,
@@ -173,7 +225,9 @@ class Login extends Component<P, S> {
                   onClick={this.getCaptcha}
                 >
                   {disabled ? (
-                    <b style={{ fontSize: '.34rem', color: '#000' }}>{`重新发送${count}`}</b>
+                    <>
+                      重新发送<b style={{ fontSize: '.30rem', color: '#000' }}>{count}</b>
+                    </>
                   ) : (
                     '获取验证码'
                   )}
@@ -184,7 +238,7 @@ class Login extends Component<P, S> {
             />,
           )}
           {getFieldDecorator('idType', {
-            initialValue: '二代身份证',
+            initialValue: 0,
             rules: [{ required: true }],
           })(
             <Picker

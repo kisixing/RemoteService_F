@@ -8,7 +8,7 @@ import { Reducer } from 'redux';
 // import { stringify } from 'querystring';
 // import { router } from 'umi';
 import { Effect } from './connect';
-import { testApi, bindUser, bindUserMp, addYc, getCaptcha } from '@/services/user';
+import { testApi, bindUser, bindUserMp, newPregnancy, getCaptcha } from '@/services/user';
 // import { getPageQuery } from "@/utils/getPageQuery";
 
 export interface StateType {}
@@ -21,7 +21,7 @@ export interface LoginModelType {
     bindUser: Effect;
     bindUserMp: Effect;
     getCaptcha: Effect;
-    addYc: Effect;
+    newPregnancy: Effect;
   };
   reducers: {
     updateState: Reducer<StateType>;
@@ -39,38 +39,45 @@ const Model: LoginModelType = {
       const { response, data } = yield call(testApi, payload);
       // 响应体信息
       const contentType = response.headers.get('Content-Type');
-      console.log('响应体信息', response, contentType);
+      console.log('响应体信息', response, data, contentType);
       yield put({
         type: 'changeTestData',
-        payload: data
+        payload: data,
       });
       return data;
     },
     *bindUser({ payload }, { call, put }) {
       const response = yield call(bindUser, payload);
+      // console.log('78787878', response);
       // 1.若此接口没有返回值，该用户未曾绑定过
       // 2.如果查到信息，接口返回最近一个档案绑定
-      if (response) {
-        yield put({
-          type: 'global/updateState',
-          payload: {
-            currentPregnancy: response,
-          },
-        });
-      }
+      // if (response) {
+      //   yield put({
+      //     type: 'global/updateState',
+      //     payload: {
+      //       currentPregnancy: response,
+      //     },
+      //   });
+      // }
       return response;
     },
-
     *bindUserMp({ payload }, { call, put }) {
       const response = yield call(bindUserMp, payload);
       yield put({
-        type: 'updateState',
+        type: 'global/updatePregnancy',
         payload: response,
       });
     },
 
-    *addYc({ payload }, { call }) {
-      yield call(addYc, payload);
+    *newPregnancy({ payload }, { call, put }) {
+      const response = yield call(newPregnancy, payload);
+      if (response && response.id) {
+        yield put({
+          type: 'global/updatePregnancy',
+          payload: response,
+        });
+        return response;
+      }
     },
 
     *getCaptcha({ payload }, { call }) {
@@ -83,15 +90,15 @@ const Model: LoginModelType = {
     changeTestData(state, { payload }) {
       return {
         ...state,
-        test: payload
-      }
+        test: payload,
+      };
     },
     updateState(state, { payload }) {
       return {
         ...state,
-        ...payload
-      }
-    }
+        ...payload,
+      };
+    },
   },
 };
 

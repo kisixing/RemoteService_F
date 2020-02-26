@@ -1,8 +1,9 @@
 import { Reducer } from 'redux';
-// import store from 'store';
+import store from 'store';
 import { Effect } from './connect';
 // import { ConnectState } from './connect.d';
 import { mpauth } from '@/services/user';
+
 
 export interface GlobalModelState {
   mpuid?: string
@@ -18,6 +19,7 @@ export interface GlobalModelType {
   };
   reducers: {
     changeUserStatus: Reducer<GlobalModelState>;
+    updatePregnancy: Reducer<GlobalModelState>;
     updateState: Reducer<GlobalModelState>;
   };
   subscriptions: { setup: any };
@@ -44,8 +46,9 @@ const GlobalModel: GlobalModelType = {
         //   store.set('lianmp-token', token);
         // }
         if (data) {
+          store.set('mpuid', data.mpuid);
           yield put({
-            type: 'changeUserStatus',
+            type: 'updatePregnancy',
             payload: data,
           });
           return data;
@@ -64,12 +67,18 @@ const GlobalModel: GlobalModelType = {
         currentUser: payload,
       };
     },
+    updatePregnancy(state, { payload }) {
+      return {
+        ...state,
+        currentPregnancy: payload,
+      };
+    },
     updateState(state, { payload }) {
       return {
         ...state,
-        ...payload
-      }
-    }
+        ...payload,
+      };
+    },
   },
 
   subscriptions: {
