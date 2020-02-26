@@ -34,22 +34,22 @@ function PackageCard(props:CARD_PROPS) {
   )
 }
 
-interface DETAIL_HANDLER{
+interface INDEX_HANDLER{
   (key: string):void
 }
 interface PACKAGE_LIST_PROPS {
   listData: Array<PACKAGE_LIST_ITEM>,
-  detailHandler: DETAIL_HANDLER
+  indexHandler: INDEX_HANDLER
 }
 
 export default function PackageList(props: PACKAGE_LIST_PROPS) {
-  const { listData, detailHandler } = props;
+  const { listData, indexHandler } = props;
   return (
     <div className={styles['package-list']}>
       {listData.map(v => (
         <div className={styles['item-content']} key={v.key}>
           <PackageCard data={v}>
-            <span onClick={() => {detailHandler(v.key)}}>查看详情 <b>></b></span>
+            <span onClick={() => {indexHandler(v.key)}}>查看详情 <b>></b></span>
           </PackageCard>
         </div>
       ))}

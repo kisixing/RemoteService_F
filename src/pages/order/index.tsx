@@ -4,7 +4,7 @@
  * @Date: 2020-02-19 14:48:28
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import { connect } from 'dva';
 
 import Package from './Package';
@@ -14,7 +14,7 @@ import styles from './index.less';
 
 function Order() {
   // TODO 判断用户是否已购买
-  const isOrder = false;
+  const [isOrder, setIsOrder] = useState(true);
 
   return (
     <div className={styles.wapper}>
