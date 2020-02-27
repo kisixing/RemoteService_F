@@ -70,7 +70,7 @@ class Register extends Component<P, S> {
       const data = {
         name: value.username,
         telephone: value.mobile,
-        lmp: moment(value.gestationalWeek).format('YYYY-MM-DD'),
+        lmp: moment(value.LMP).format('YYYY-MM-DD'),
         idNO: value.idNo,
         idType: Number(query.idType),
         mpuid: mpuid || store.get('mpuid'),
@@ -107,7 +107,7 @@ class Register extends Component<P, S> {
                 姓名
               </InputItem>,
             )}
-            {getFieldDecorator('gestationalWeek', {
+            {getFieldDecorator('LMP', {
               rules: [{ required: true }],
             })(
               <DatePicker
