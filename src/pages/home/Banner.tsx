@@ -17,7 +17,7 @@ interface IProps {
 }
 export default (props: IProps) => {
   const {
-    dataSource: { thumbnail = 'default', name, hospital, adjustedEdd, edd, lmp, gestationalWeek },
+    dataSource: { name, hospital, adjustedEdd, edd, lmp, gestationalWeek },
   } = props;
   // 无法取到预产期时，ps:末次月经时间一定存在 ps: 修订预产期 || 孕产期 || 根据末次月经计算的孕产期
   let EDD = adjustedEdd || edd || KG.getEdd(lmp);
@@ -28,6 +28,9 @@ export default (props: IProps) => {
   // banner背景图
   const bannerbg = (gesweek: string) => {
     // gesweek的格式存在可能 1. ’20+1‘ 2. ’20周+1天‘
+    if (!gesweek) {
+      return 'M0'
+    }
     let week: number = parseInt(gesweek);
     if (week < 0) return 'M0';
     if (week < 4) return 'M1';
