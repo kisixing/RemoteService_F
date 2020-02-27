@@ -7,7 +7,10 @@ import routes from './router.config';
 // ref: https://umijs.org/config/
 const config: IConfig = {
   treeShaking: true,
-  history: 'hash', // 部署到非根目录 会有url/#/
+  // history: 'hash', // 部署到非根目录 会有url/#/
+  base: '/dist/',
+  publicPath: '/dist/',
+  hash: true, // 开启 hash 文件后缀
   routes: routes,
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
