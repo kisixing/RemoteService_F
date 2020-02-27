@@ -31,7 +31,7 @@ const GlobalModel: GlobalModelType = {
   state: {
     mpuid: '',
     currentUser: {},
-    currentPregnancy: { id: 'yyyyyy' },
+    currentPregnancy: {},
   },
 
   effects: {
