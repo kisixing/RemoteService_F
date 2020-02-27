@@ -19,7 +19,22 @@ import NewsListView from './NewsListView';
 
 import styles from './index.less';
 
-function Home(props: any) {
+interface IProps {
+  dispatch: any
+  loading: any
+  news: Array<any>
+  currentPregnancy: {
+    name: string
+    lmp: string
+    edd: string
+    gestationalWeek: string
+    hospital: string
+     [propName: string]: any;
+  }
+}
+
+function Home(props: IProps) {
+  const { currentPregnancy, news, loading } = props;
 
   useEffect(() => {
     const { dispatch } = props;
@@ -32,11 +47,19 @@ function Home(props: any) {
     return () => {};
   }, [])
 
+  const bannerProps = {
+    name: currentPregnancy.name,
+    lmp: currentPregnancy.lmp,
+    edd: currentPregnancy.edd,
+    gesweek: currentPregnancy.gestationalWeek,
+    hospital: currentPregnancy.hospital,
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.content}>
         <div className="module">
-          <Banner dataSource={props.currentUser} />
+          <Banner dataSource={bannerProps} />
           <Entrance dataSource={ENTRANCE} />
           <Notification />
         </div>
@@ -71,7 +94,7 @@ function Home(props: any) {
             extra={<span className={styles.more} onClick={() => router('/school')}>更多</span>}
           />
           <Card.Body style={{ paddingTop: 0 }}>
-            <NewsListView dataSource={props.news} loading={props.loading.effects['news/getPersonNews']} />
+            <NewsListView dataSource={news} loading={loading.effects['news/getPersonNews']} />
           </Card.Body>
         </Card>
       </div>
@@ -82,6 +105,6 @@ function Home(props: any) {
 
 export default connect(({ loading, global, news }: ConnectState) => ({
   loading: loading,
-  currentUser: global.currentUser,
+  currentPregnancy: global.currentPregnancy,
   news: news.personal,
 }))(Home);
