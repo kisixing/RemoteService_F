@@ -7,7 +7,7 @@ import { connect } from 'dva';
 import NProgress from 'nprogress';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-import './nprogress.less';
+// import './nprogress.less';
 
 let currentHref = '';
 

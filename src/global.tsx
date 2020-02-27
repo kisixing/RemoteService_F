@@ -7,7 +7,6 @@
 import { Toast, Modal } from 'antd-mobile';
 import initWx from '@/utils/wx-config';
 import debug from '@/utils/debug';
-import './global.less';
 
 function isWeixn() {
   return /micromessenger/.test(navigator.userAgent.toLowerCase());

@@ -4,7 +4,8 @@
  */
 import { extend } from 'umi-request';
 import store from 'store';
-import { notification } from 'antd';
+import notification from 'antd/es/notification';
+import 'antd/lib/notification/style/css';
 
 declare global {
   interface Window {
