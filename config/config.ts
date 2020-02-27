@@ -14,7 +14,7 @@ const config: IConfig = {
     [
       'umi-plugin-react',
       {
-        // antd: true,
+        antd: true,
         dva: true,
         dynamicImport: {
           loadingComponent: './components/Loader/index',
