@@ -7,7 +7,7 @@ import routes from './router.config';
 // ref: https://umijs.org/config/
 const config: IConfig = {
   treeShaking: true,
-  history: 'hash', // 部署 html 到非根目录 会有url/#/
+  history: 'hash', // 部署到非根目录 会有url/#/
   routes: routes,
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
@@ -69,11 +69,11 @@ const config: IConfig = {
   copy: [
     {
       from: 'node_modules/pdfjs-dist/build/',
-      to: 'public/pdfjs-dist/libs/',
+      to: 'pdfjs-dist/libs/',
     },
     {
       from: 'node_modules/pdfjs-dist/cmaps/',
-      to: 'public/pdfjs-dist/cmaps/',
+      to: 'pdfjs-dist/cmaps/',
     },
   ],
 };
