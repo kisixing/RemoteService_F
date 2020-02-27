@@ -47,6 +47,13 @@ export const ENTRANCE = [
     icon: require('../../assets/icons/i1.png'),
     route: '',
     color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
+  },
+  {
+    key: '8',
+    label: '套餐',
+    icon: require('../../assets/icons/i1.png'),
+    route: '/order',
+    color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
   }
 ];
 
