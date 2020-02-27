@@ -1,5 +1,6 @@
 import React,{ReactNode} from 'react';
-import { PACKAGE_CONTENT } from "@/pages/order/config";
+import { CurrentPackageDetail } from './interface';
+
 import {Tabs,Button} from "antd-mobile";
 
 import styles from './DetailPage.less'
@@ -16,14 +17,15 @@ interface INDEX_HANDLER{
 }
 
 interface DETAIL_PAGE_PROPS {
-  detailData: PACKAGE_CONTENT,
+  detailData: CurrentPackageDetail,
   indexHandler: INDEX_HANDLER
 }
 
 export default function DetailPage(props: DETAIL_PAGE_PROPS) {
   const { detailData, indexHandler } = props;
-  const { packageDetail } = detailData;
-  console.log(detailData);
+  // const { packageDetail } = detailData;
+  // console.log(detailData);
+  console.log(props);
   return (
     <div className={styles['detail-page']}>
       <div className={styles['img-block']}>
@@ -31,31 +33,16 @@ export default function DetailPage(props: DETAIL_PAGE_PROPS) {
         </div>
       </div>
       <Tabs tabs={tabs}>
-        <div className={styles['tab-item']}>
-          {packageDetail.map((v,index) => (
-            <div className={styles['detail-item']} key={index}>
-              <div className={styles['item-name']}>
-                {v.serviceName}
-              </div>
-              <div className={styles['remark']}>
-                {v.remark}
-              </div>
-              <div className={styles['count']}>
-                {v.count}
-              </div>
-            </div>
-          ))}
+        {/*<div className={styles['tab-item']} dangerouslySetInnerHTML={{__html: detailData.introduction}} />*/}
+        <div className={styles['tab-item']} >
+          <span>当前套餐id：{detailData.id}</span>
         </div>
-        <div className={styles['tab-item']}>
-          富文本
-        </div>
-        <div className={styles['tab-item']}>
-          UI还没出
-        </div>
+        <div className={styles['tab-item']} dangerouslySetInnerHTML={{__html: detailData.specification}} />
+        <div className={styles['tab-item']} dangerouslySetInnerHTML={{__html: detailData.note}} />
       </Tabs>
       <div className={styles['footer']}>
         <div className={styles['price']}>
-          <h1>￥{detailData.price}</h1>
+          {/*<h1>￥{detailData.price}</h1>*/}
         </div>
         <div className={styles['buy']}>
           <Button className={styles['button']} onClick={indexHandler}>
