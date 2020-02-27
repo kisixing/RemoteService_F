@@ -11,7 +11,6 @@ const config: IConfig = {
   routes: routes,
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
-    ["import", { libraryName: "antd-mobile", style: "css" }],
     [
       'umi-plugin-react',
       {
