@@ -1,18 +1,30 @@
 import React from 'react';
-import { PACKAGE_CONTENT, PACKAGE_DETAIL_OBJ } from "@/pages/order/config";
-import { Button, Radio } from 'antd-mobile';
-import styles from '@/pages/order/PackageConfirm.less';
 
+import { Dispatch } from "redux";
+import { connect } from 'dva';
+
+import { PackageListItem } from './interface';
+// 模拟 先完成支付
+import { PACKAGE_CONTENT, PACKAGE_DETAIL_OBJ, packageContent } from "@/pages/order/config";
+import { Button } from 'antd-mobile';
+
+import { wxpay } from "@/services/pay";
+import styles from '@/pages/order/PackageConfirm.less';
 interface PACKAGE_CONFIRM_PROP {
-  confirmData: PACKAGE_CONTENT
+  confirmData: PackageListItem;
+  dispatch: Dispatch;
 }
 
-const RadioItem = Radio.RadioItem;
+// const RadioItem = Radio.RadioItem;
+console.log(window.sessionStorage['persist:redux-storage']);
+function PackageConfirm(props: PACKAGE_CONFIRM_PROP) {
+  const confirmData: PACKAGE_CONTENT = packageContent[0];
 
-export default function PackageConfirm(props: PACKAGE_CONFIRM_PROP) {
-  const { confirmData } = props;
-  console.log(confirmData);
 
+
+  // const { dispatch } = props;
+  console.log(props);
+  // @ts-ignore
   const renderList = (list: Array<PACKAGE_DETAIL_OBJ>) => list.map((item:PACKAGE_DETAIL_OBJ, index ) => (
     <div key={index}>
       <div>{item.serviceName}</div>
@@ -20,6 +32,37 @@ export default function PackageConfirm(props: PACKAGE_CONFIRM_PROP) {
       <div>{item.count}</div>
     </div>
   ));
+
+  // 暂时先现在这个位置
+  function pay() {
+    const sessionData = window.sessionStorage['persist:redux-storage'];
+    const sessionObj = JSON.parse(sessionData);
+    const PREGNANCY_ID = JSON.parse(sessionObj['global'])['currentPregnancy']['id'];
+    
+    const {confirmData} = props;
+    wxpay({servicepackage: {id: confirmData.id}, pregnancy: {id: PREGNANCY_ID}}).then(payorder => {
+      var wx = window.wx;
+      wx.config({
+        appId: payorder.appId,
+        timestamp: payorder.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+        nonceStr: payorder.nonceStr, // 支付签名随机串，不长于 32 位
+        jsApiList: ['chooseWXPay']
+      });
+      wx.chooseWXPay({
+        timestamp: payorder.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+        nonceStr: payorder.nonceStr, // 支付签名随机串，不长于 32 位
+        package: payorder.packageValue, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+        signType: payorder.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+        paySign: payorder.paySign, // 支付签名
+        success: function (res) {
+          // 支付成功后的回调函数
+          console.log(res);
+          // router.push({ pathname: '/purchase/result'});
+        }
+      });
+    })
+  };
+
   return (
     <div className={styles['package-confirm']}>
       <div className={styles['header']}>
@@ -35,14 +78,13 @@ export default function PackageConfirm(props: PACKAGE_CONFIRM_PROP) {
         </div>
       </div>
       <div className={styles['footer']}>
-        <div><span>支付页面</span></div>
-        <div className={styles['choice-block']}>
-          <RadioItem>微信支付</RadioItem>
-          <RadioItem>支付宝支付</RadioItem>
-        </div>
+        {/*<div className={styles['choice-block']}>*/}
+        {/*  <RadioItem>微信支付</RadioItem>*/}
+        {/*  <RadioItem>支付宝支付</RadioItem>*/}
+        {/*</div>*/}
         <div className={styles['btn']}>
-          <Button>
-            <span>支付</span>
+          <Button onClick={pay}>
+            <span>微信支付</span>
           </Button>
         </div>
       </div>
@@ -50,3 +92,8 @@ export default function PackageConfirm(props: PACKAGE_CONFIRM_PROP) {
     </div>
   );
 }
+
+export default connect(({global}) => {
+  console.log(global);
+  return {}
+})(PackageConfirm);
