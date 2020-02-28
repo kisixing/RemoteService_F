@@ -6,6 +6,7 @@ import withRouter from 'umi/withRouter';
 import { connect } from 'dva';
 import NProgress from 'nprogress';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { ConnectState } from '@/models/connect';
 
 // import './nprogress.less';
 
@@ -36,4 +37,4 @@ const BasicLayout: React.FC<any> = props => {
   );
 };
 
-export default withRouter(connect(({ loading }) => ({ loading }))(BasicLayout));
+export default withRouter(connect(({ loading }: ConnectState) => ({ loading }))(BasicLayout));

@@ -14,7 +14,7 @@ import styles from './BBSList.less';
 const Item = List.Item;
 const Brief = Item.Brief;
 const MAPS = [
-  { key: '001', title: 'B超报告', file: '/pdfjs-dist/eobbook.pdf', time: '2019-10-23 12:03:54' },
+  { key: '001', title: 'B超报告', file: '/eobbook.pdf', time: '2019-10-23 12:03:54' },
   { key: '002', title: '血糖测试报告', file: 'http://storage.xuetangx.com/public_assets/xuetangx/PDF/PlayerAPI_v1.0.61.pdf', time: '2019-10-23 12:54:23' },
   { key: '003', title: '心电报告', file: '', time: '2019-10-23 13:12:34' },
 ];
