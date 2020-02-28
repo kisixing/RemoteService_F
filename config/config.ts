@@ -7,9 +7,9 @@ import routes from './router.config';
 // ref: https://umijs.org/config/
 const config: IConfig = {
   treeShaking: true,
-  // history: 'hash', // 部署到非根目录 会有url/#/
-  base: '/dist/',
-  publicPath: '/dist/',
+  history: 'browser', // 'hash'部署到非根目录 会有url/#/
+  base: '/',
+  publicPath: '/',
   hash: true, // 开启 hash 文件后缀
   routes: routes,
   plugins: [
@@ -26,7 +26,7 @@ const config: IConfig = {
         }, // 按需加载
         hd: true,
         fastClick: true,
-        title: 'Lianmp_FontEnd',
+        title: '围产保健',
         dll: true,
         locale: {
           enable: true,
@@ -79,6 +79,54 @@ const config: IConfig = {
       to: 'pdfjs-dist/cmaps/',
     },
   ],
+  chainWebpack: function(config, { webpack }) {
+    config.merge({
+      optimization: {
+        minimize: true,
+        splitChunks: {
+          chunks: 'async',
+          minSize: 30000,
+          maxSize: 0,
+          minChunks: 3,
+          automaticNameDelimiter: '.',
+          name: true,
+          cacheGroups: {
+            vendors: {
+              name: 'vendors',
+              test: /[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom|lodash|lodash-decorators|redux-saga|re-select|dva|moment)[\\/]/,
+              priority: 20,
+            },
+            'ant-designs': {
+              name: 'ant-designs',
+              test: /[\\/]node_modules[\\/](antd|antd-mobile|@ant-design)[\\/]/,
+              priority: 20,
+            },
+            'react-pdf': {
+              name: 'react-pdf',
+              test: /[\\/]node_modules[\\/](react-pdf\/dist)[\\/]/,
+              priority: 20,
+            },
+            async: {
+              chunks: 'async',
+              minChunks: 2,
+              name: 'async',
+              maxInitialRequests: 1,
+              minSize: 0,
+              priority: 5,
+              reuseExistingChunk: true,
+            },
+          },
+        },
+      },
+    });
+    // 过滤掉momnet的那些不使用的国际化文件
+    config
+      .plugin('replace')
+      .use(require('webpack').ContextReplacementPlugin)
+      .tap(() => {
+        return [/moment[/\\]locale$/, /en_us/];
+      });
+  },
 };
 
 export default config;
