@@ -102,7 +102,33 @@ export default [
                 title: '孕产史信息',
                 component: './perinatal/PregnancyHistory',
               },
-            ]
+            ],
+          },
+          {
+            path: '/order',
+            name: 'order',
+            title: '套餐服务',
+            routes: [
+              {
+                path: '/order',
+                name: 'order',
+                title: '套餐服务',
+                component: './order/index',
+              },
+              {
+                path: '/order/my-order',
+                name: 'my order',
+                title: '我的订单',
+                component: './order/MyOrder',
+              },
+              {
+                path: '/order/package-list',
+                name: 'package list',
+                title: '套餐列表',
+                component: './order/Package',
+              },
+              { component: './404' },
+            ],
           },
           {
             path: '/reports',
@@ -123,9 +149,9 @@ export default [
                 path: '/reports/preview',
                 name: '预览',
                 title: 'pdf预览',
-                component: './reports/Preview'
-              }
-            ]
+                component: './reports/Preview',
+              },
+            ],
           },
         ],
       },
