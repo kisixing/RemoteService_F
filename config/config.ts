@@ -1,6 +1,8 @@
 import { resolve } from 'path';
 import { IConfig } from 'umi-types';
 
+// webpack
+import webpackPlugin from './plugin.config';
 // 配置路由
 import routes from './router.config';
 
@@ -10,7 +12,7 @@ const config: IConfig = {
   history: 'browser', // 'hash'部署到非根目录 会有url/#/
   base: '/',
   publicPath: '/',
-  hash: true, // 开启 hash 文件后缀
+  // hash: true, // 开启 hash 文件后缀
   routes: routes,
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
@@ -79,47 +81,7 @@ const config: IConfig = {
       to: 'pdfjs-dist/cmaps/',
     },
   ],
-  chainWebpack: function(config, { webpack }) {
-    config.merge({
-      optimization: {
-        minimize: true,
-        splitChunks: {
-          chunks: 'all',
-          minSize: 30000,
-          minChunks: 3,
-          automaticNameDelimiter: '.',
-          cacheGroups: {
-            react: {
-              name: 'react',
-              priority: 20,
-              test: /[\\/]node_modules[\\/](react|react-dom|react-dom-router)[\\/]/,
-            },
-            antd: {
-              name: 'antd',
-              priority: 20,
-              test: /[\\/]node_modules[\\/](antd|@ant-design\/icons|@ant-design\/compatible|ant-design-pro)[\\/]/,
-            },
-            async: {
-              chunks: 'async',
-              minChunks: 2,
-              name: 'async',
-              maxInitialRequests: 1,
-              minSize: 0,
-              priority: 5,
-              reuseExistingChunk: true,
-            },
-          },
-        },
-      },
-    });
-    // 过滤掉momnet的那些不使用的国际化文件
-    config
-      .plugin('replace')
-      .use(require('webpack').ContextReplacementPlugin)
-      .tap(() => {
-        return [/moment[/\\]locale$/, /en_us/];
-      });
-  },
+  chainWebpack: webpackPlugin
 };
 
 export default config;
