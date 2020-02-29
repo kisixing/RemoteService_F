@@ -84,27 +84,20 @@ const config: IConfig = {
       optimization: {
         minimize: true,
         splitChunks: {
-          chunks: 'async',
+          chunks: 'all',
           minSize: 30000,
-          maxSize: 0,
           minChunks: 3,
           automaticNameDelimiter: '.',
-          name: true,
           cacheGroups: {
-            vendors: {
-              name: 'vendors',
-              test: /[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom|lodash|lodash-decorators|redux-saga|re-select|dva|moment)[\\/]/,
+            react: {
+              name: 'react',
               priority: 20,
+              test: /[\\/]node_modules[\\/](react|react-dom|react-dom-router)[\\/]/,
             },
-            'ant-designs': {
-              name: 'ant-designs',
-              test: /[\\/]node_modules[\\/](antd|antd-mobile|@ant-design)[\\/]/,
+            antd: {
+              name: 'antd',
               priority: 20,
-            },
-            'react-pdf': {
-              name: 'react-pdf',
-              test: /[\\/]node_modules[\\/](react-pdf\/dist)[\\/]/,
-              priority: 20,
+              test: /[\\/]node_modules[\\/](antd|@ant-design\/icons|@ant-design\/compatible|ant-design-pro)[\\/]/,
             },
             async: {
               chunks: 'async',
