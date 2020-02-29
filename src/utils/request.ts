@@ -17,7 +17,7 @@ declare global {
 // http://transfer.lian-med.com
 const custom_url = window.baseurl;
 const base_url =
-  process.env.NODE_ENV === 'development' ? 'http://transfer.lian-med.com' : custom_url;
+  process.env.NODE_ENV === 'development' ? '' : custom_url;
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',

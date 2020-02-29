@@ -11,26 +11,6 @@ export default [
     ],
   },
   {
-    path: '/order',
-    component: '../layouts/BlankLayout',
-    routes: [
-      { path: '/order', name: 'order', title: '套餐购买', component: './order/index' },
-      {
-        path: '/order/my-order',
-        name: 'my order',
-        title: '我的订单',
-        component: './order/MyOrder',
-      },
-      {
-        path: '/order/package-list',
-        name: 'package list',
-        title: '套餐列表',
-        component: './order/Package',
-      },
-      { component: './404' },
-    ],
-  },
-  {
     path: '/school',
     component: '../layouts/BlankLayout',
     routes: [

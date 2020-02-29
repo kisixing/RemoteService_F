@@ -25,8 +25,15 @@ const options = {
 const SAMPLE = 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
 
 export default function Preview() {
-  const file = getPageKeyValue('file');
+
   const [numPages, setNumPages] = React.useState(null);
+  const [file, setFile] = React.useState();
+
+  React.useEffect(() => {
+    const file = getPageKeyValue('file');
+    const pdf_url = file ? file : SAMPLE;
+    setFile(pdf_url)
+  }, [])
 
   const onDocumentLoadSuccess = ({ numPages }: any) => {
     setNumPages(numPages);
@@ -45,7 +52,7 @@ export default function Preview() {
     <div className={styles.container}>
       <Document
         className={styles.document}
-        file={file || SAMPLE}
+        file={file}
         options={options}
         onLoadSuccess={onDocumentLoadSuccess}
         onLoadError={onDocumentLoadError}
