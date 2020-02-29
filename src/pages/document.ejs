@@ -18,11 +18,19 @@
     content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>围产保健</title>
   <link rel="icon" href="/favicon.png" type="image/x-icon">
+  <link href="/loaders.min.css" rel="stylesheet" />
   <link href="/iconfont/iconfont.css" rel="stylesheet" />
 </head>
 <body>
   <div id="root">
-    <h1>loding...</h1>
+    <div class="loader">
+      <div class="loader-inner square-spin">
+        <div></div>
+      </div>
+      <span class="tooltip">
+        正在加载，请稍等...
+      </span>
+    </div>
   </div>
 </body>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"/>
