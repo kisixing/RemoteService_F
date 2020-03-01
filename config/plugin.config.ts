@@ -6,7 +6,7 @@ const webpackPlugin = (config: IWebpackChainConfig) => {
       minimize: true,
       splitChunks: {
         chunks: 'all',
-        minSize: 30000,
+        minSize: 10000,
         minChunks: 3,
         automaticNameDelimiter: '.',
         cacheGroups: {
@@ -18,15 +18,17 @@ const webpackPlugin = (config: IWebpackChainConfig) => {
           antd: {
             name: 'antd',
             priority: 20,
-            test: /[\\/]node_modules[\\/](antd|@ant-design\/icons|@ant-design\/compatible|antd-mobile\/es)[\\/]/,
+            test: /[\\/]node_modules[\\/](antd|@ant-design|antd-mobile)[\\/]/,
           },
           'react-pdf': {
             name: 'react-pdf',
+            minChunks: 2,
             priority: 20,
-            test: /[\\/]node_modules[\\/](react-pdf\/dist)[\\/]/,
+            test: /[\\/]node_modules[\\/]react-pdf[\\/]/,
           },
           'pdfjs-dist': {
             name: 'pdfjs-dist',
+            minChunks: 2,
             priority: 20,
             test: /[\\/]node_modules[\\/]pdfjs-dist[\\/]/,
           },
@@ -42,7 +44,7 @@ const webpackPlugin = (config: IWebpackChainConfig) => {
         },
       },
     },
-  })
+  });
 };
 
 export default webpackPlugin;

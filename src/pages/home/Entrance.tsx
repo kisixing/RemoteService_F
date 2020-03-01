@@ -13,7 +13,7 @@ export default (props: IProps) => {
       <ul style={{ width: width }}>
         {dataSource.map(e => (
           <li key={e.key} onClick={() => router(e.route)}>
-            <div className={styles.icon} style={{ backgroundImage: `url(${e.icon})`}} />
+            <div className={styles.icon} style={{ backgroundImage: `url(/images/icon/${e.icon})`}} />
             <div className={styles.label}>{e.label}</div>
           </li>
         ))}

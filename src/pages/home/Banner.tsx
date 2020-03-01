@@ -51,7 +51,7 @@ export default (props: IProps) => {
   return (
     <div className={styles.banner}>
       <div className={styles.innerBanner}>
-        <img alt="banner" src={require(`../../assets/baby/${bannerbg(gesweek)}.png`)} />
+        <img alt="banner" src={`/images/banner/${bannerbg(gesweek)}.png`} />
         <div className={styles.userinfo}>
           <div className={styles.name}>{name}</div>
           <div className={styles.gesweek}>孕 {gesweek} 周</div>
