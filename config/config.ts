@@ -12,7 +12,7 @@ const config: IConfig = {
   history: 'browser', // 'hash'部署到非根目录 会有url/#/
   base: '/',
   publicPath: '/',
-  // hash: true, // 开启 hash 文件后缀
+  hash: true, // 开启 hash 文件后缀
   routes: routes,
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
@@ -20,7 +20,9 @@ const config: IConfig = {
       'umi-plugin-react',
       {
         antd: true,
-        dva: true,
+        dva: {
+          hmr: true,
+        },
         dynamicImport: {
           loadingComponent: './components/Loader/index',
           webpackChunkName: true,
@@ -51,6 +53,10 @@ const config: IConfig = {
     '@brand-primary': '#FFBE2D',
     '@brand-primary-tap': '#FFE672',
   },
+  ignoreMomentLocale: true,
+  lessLoaderOptions: {
+    javascriptEnabled: true,
+  },
   proxy: {
     '/api': {
       target: 'http://transfer.lian-med.com/',
@@ -72,10 +78,6 @@ const config: IConfig = {
     '@': resolve(__dirname, './src'),
   },
   copy: [
-    {
-      from: 'node_modules/pdfjs-dist/build/',
-      to: 'pdfjs-dist/libs/',
-    },
     {
       from: 'node_modules/pdfjs-dist/cmaps/',
       to: 'pdfjs-dist/cmaps/',
