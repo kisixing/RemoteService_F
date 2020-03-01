@@ -14,6 +14,7 @@ const config: IConfig = {
   publicPath: '/',
   hash: true, // 开启 hash 文件后缀
   routes: routes,
+  minimizer: 'terserjs',
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     [
@@ -83,7 +84,10 @@ const config: IConfig = {
       to: 'pdfjs-dist/cmaps/',
     },
   ],
-  chainWebpack: webpackPlugin
+  chainWebpack: webpackPlugin,
+  uglifyJSOptions: {
+    parallel: false,
+  },
 };
 
 export default config;
