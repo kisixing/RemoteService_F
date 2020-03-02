@@ -4,6 +4,7 @@
  */
 import { extend } from 'umi-request';
 import store from 'store';
+import Router from 'umi/router';
 import notification from 'antd/es/notification';
 import 'antd/lib/notification/style/css';
 
@@ -14,8 +15,7 @@ declare global {
   }
 }
 
-// http://transfer.lian-med.com
-const custom_url = window.baseurl;
+const custom_url = window.baseurl || 'http://transfer.lian-med.com';
 const base_url =
   process.env.NODE_ENV === 'development' ? '' : custom_url;
 
@@ -36,8 +36,6 @@ const codeMessage = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
-
-window.g_app = window.g_app || {};
 
 /**
  * 异常处理程序
@@ -66,13 +64,13 @@ const errorHandler = (error: { response: Response }): Response => {
 
     // environment should not be used
     if (status === 403) {
-      window.g_app._router.push('/exception/403');
+      // Router.push('/exception/403');
     }
     if (status <= 504 && status >= 500) {
-      window.g_app._router.push('/exception/500');
+      // Router.push('/exception/500');
     }
     if (status >= 404 && status < 422) {
-      window.g_app._router.push('/exception/404');
+      // Router.push('/exception/404');
     }
   } else if (!response) {
     notification.error({
