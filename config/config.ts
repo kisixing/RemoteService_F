@@ -84,7 +84,7 @@ const config: IConfig = {
       to: 'pdfjs-dist/cmaps/',
     },
   ],
-  chainWebpack: webpackPlugin,
+  chainWebpack: process.env.NODE_ENV === 'development' ? undefined : webpackPlugin,
   uglifyJSOptions: {
     parallel: false,
   },
