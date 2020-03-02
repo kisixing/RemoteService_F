@@ -62,7 +62,7 @@ export const TOOLS = [
            key: '1',
            label: '体重管理',
            icon: 'i001.png',
-           route: '',
+           route: '/weight/input',
          },
          {
            key: '2',
