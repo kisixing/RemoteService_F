@@ -14,8 +14,7 @@ declare global {
   }
 }
 
-// http://transfer.lian-med.com
-const custom_url = window.baseurl;
+const custom_url = window.baseurl || 'http://transfer.lian-med.com';
 const base_url =
   process.env.NODE_ENV === 'development' ? '' : custom_url;
 
