@@ -5,9 +5,11 @@
  */
 
 import React, { Component } from 'react';
-
+import { WingBlank } from 'antd-mobile';
+import { Button } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
 import StepBar from './StepBar';
+import styles from './styles.less'
 
 interface P {
   loading?: boolean;
@@ -22,8 +24,11 @@ class BasicInfo extends Component<P, S> {
     return (
       <div className="page">
         <StepBar current={1} />
-        基本信息
-        <BackButton route="/perinatal/list">返回</BackButton>
+        <div className={styles.formContainer}>form</div>
+        <WingBlank>
+          <Button type="primary">保存</Button>
+          <BackButton route="/perinatal/list">返回</BackButton>
+        </WingBlank>
       </div>
     );
   }

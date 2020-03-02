@@ -9,7 +9,7 @@ import classnames from 'classnames';
 
 import { router } from '@/utils/utils';
 import { MAPS } from './MapList';
-import styles from './StepBar.less';
+import styles from './styles.less';
 
 interface Iprops {
   current: number
@@ -17,7 +17,7 @@ interface Iprops {
 
 export default function StepBar({ current }: Iprops) {
   return (
-    <ul className={styles.wrapper}>
+    <ul className={styles.stepContainer}>
       {MAPS.map((e, i) => (
         <li key={e.name} className={styles.item} onClick={() => router(e.route)}>
           <span className={classnames(styles.dot, { [styles.color]: i < current })} />
