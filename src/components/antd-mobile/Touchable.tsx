@@ -10,7 +10,7 @@ export default function(props: Iprops) {
   return (
     <Touchable
       activeStopPropagation
-      activeStyle={{ background: 'rgba(0, 0, 0, 0.012)' }}
+      activeStyle={{ background: 'rgba(0, 0, 0, 0.12)' }}
       delayPressIn={delayPressIn}
       delayPressOut={delayPressOut}
       onPress={props.onPress}

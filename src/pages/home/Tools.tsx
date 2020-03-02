@@ -5,6 +5,7 @@
  */
 
 import * as React from 'react';
+import { router } from '@/utils/utils';
 import { Touchable } from '@/components/antd-mobile';
 
 import styles from './Tools.less';
@@ -27,6 +28,7 @@ function Item({ dataSource, index }: ItemProps) {
   const onPress = (e: any) => {
     e.stopPropagation();
     console.log(e.type, e.target.id);
+    router(dataSource.route)
   }
 
   const onLongPress = (e: any) => {

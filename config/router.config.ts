@@ -133,6 +133,29 @@ export default [
               },
             ],
           },
+          {
+            path: '/weight',
+            name: 'weight',
+            title: '体重管理',
+            routes: [
+              {
+                path: '/weight',
+                redirect: '/weight/input',
+              },
+              {
+                path: '/weight/input',
+                name: 'weight input',
+                title: '体重录入',
+                component: './tools/weight/Input',
+              },
+              {
+                path: '/weight/record',
+                name: 'weight records',
+                title: '体重记录',
+                component: './tools/weight/Record',
+              },
+            ],
+          },
         ],
       },
       { component: './404' },
