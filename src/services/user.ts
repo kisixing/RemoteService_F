@@ -88,7 +88,7 @@ export async function newPregnancy(params: newYcParamsType) {
  * @param mobile
  */
 export async function getCaptcha(params: object) {
-  return request('http://transfer.lian-med.com/api/captcha', {
+  return request('/api/captcha', {
     method: 'POST',
     data: params,
   });

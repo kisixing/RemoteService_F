@@ -5,17 +5,17 @@ import React from 'react';
 import withRouter from 'umi/withRouter';
 import { connect } from 'dva';
 import NProgress from 'nprogress';
+import { LocaleProvider } from 'antd-mobile';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { ConnectState } from '@/models/connect';
-
-// import './nprogress.less';
+import enUS from 'antd-mobile/lib/locale-provider/en_US';
 
 let currentHref = '';
 
 NProgress.configure({ showSpinner: false });
 
 const BasicLayout: React.FC<any> = props => {
-  const { children, loading } = props;
+  const { children, loading, locale } = props;
   const { href } = window.location; // 浏览器地址栏中地址
 
   if (currentHref !== href) {
@@ -31,10 +31,10 @@ const BasicLayout: React.FC<any> = props => {
   return (
     <TransitionGroup>
       <CSSTransition key={props.location.pathname} classNames="fade" timeout={300}>
-        {children}
+        <LocaleProvider locale={locale === 'en' ? enUS : {}}>{children}</LocaleProvider>
       </CSSTransition>
     </TransitionGroup>
   );
 };
 
-export default withRouter(connect(({ loading }: ConnectState) => ({ loading }))(BasicLayout));
+export default withRouter(connect(({ loading, global }: ConnectState) => ({ loading, locale: global.locale }))(BasicLayout));

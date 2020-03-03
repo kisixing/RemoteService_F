@@ -40,8 +40,8 @@ function Item({ dataSource, index }: ItemProps) {
     <Touchable
       activeStopPropagation
       activeStyle={{ background: 'rgba(0, 0, 0, 0.05)' }}
-      delayPressIn={200}
-      delayPressOut={300}
+      delayPressIn={100}
+      delayPressOut={100}
       onPress={onPress}
       onLongPress={onLongPress}
     >

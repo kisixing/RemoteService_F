@@ -4,7 +4,8 @@
  * @Description: 体重记录
  */
 
- import React from 'react'
+ import React from 'react';
+//  import Chart from 'chart.js';
 
  function Record() {
    return (
