@@ -24,23 +24,22 @@ function GaugeInput({ onChange, min, max, id, value }: IProps) {
   }, []);
 
   const draw = (toAngle: number, currentAngle = Math.PI) => {
-    const canvas = document.getElementById('canvas');
-    console.log('78787878', canvas);
+    const canvas: any = document.getElementById('canvas');
     const width = canvas.width;
     const height = canvas.height;
     // 圆点
     const x = width / 2;
-    const y = height - 100;
-    const radius = height * 2 / 3;
+    const y = height / 2;
+    const radius = 150 * window.devicePixelRatio;
     const deg = Math.PI / 7;
-    const innerLineW = 20;
-    console.log('123-->', width, height, x, y);
+    const innerLineW = 28;
+    console.log('123-->', window.devicePixelRatio, width, height, x, y);
 
     const ctx = canvas.getContext('2d');
 
     ctx.save();
     // 设置线宽
-    ctx.lineWidth = 16;
+    ctx.lineWidth = innerLineW;
     // 设置描边样式;
     ctx.strokeStyle = '#ffcc4a';
     //路径开始
@@ -68,9 +67,10 @@ function GaugeInput({ onChange, min, max, id, value }: IProps) {
   };
   return (
     <div className={styles.container}>
-      <canvas id={'canvas'} ref={canvasRef} width="1000" height="600" className={styles.canvas} />
+      <canvas id={'canvas'} ref={canvasRef} className={styles.canvas} width="1000" height="1000" />
       <div className={styles.form}>
         <input />
+        <span>{window.devicePixelRatio}</span>
       </div>
     </div>
   );
