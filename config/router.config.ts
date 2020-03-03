@@ -156,6 +156,12 @@ export default [
               },
             ],
           },
+          {
+            path: '/webtest',
+            name: 'webtest',
+            title: 'h5支付',
+            component: './webtest/index'
+          }
         ],
       },
       { component: './404' },

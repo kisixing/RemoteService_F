@@ -55,6 +55,13 @@ export const ENTRANCE = [
            route: '/order',
            color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
          },
+         {
+          key: '9',
+          label: 'h5支付',
+          icon: 'i1.png',
+          route: '/webtest',
+          color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
+        },
        ];
 
 export const TOOLS = [
