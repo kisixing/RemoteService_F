@@ -6,6 +6,7 @@ import { mpauth } from '@/services/user';
 
 
 export interface GlobalModelState {
+  locale?: string
   mpuid?: string
   currentUser?: any
   currentPregnancy?: any
@@ -29,9 +30,10 @@ const GlobalModel: GlobalModelType = {
   namespace: 'global',
 
   state: {
+    locale: 'cn', // cn/en
     mpuid: '',
     currentUser: {},
-    currentPregnancy: {},
+    currentPregnancy: { id: '888888888888'},
   },
 
   effects: {

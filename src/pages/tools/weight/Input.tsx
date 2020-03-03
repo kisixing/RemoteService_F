@@ -7,110 +7,63 @@
 import React from 'react';
 import { connect } from 'dva';
 import { DatePicker  } from 'antd-mobile';
-import Chart from 'chart.js';
 
-import { router } from '@/utils/utils';
+// import { router } from '@/utils/utils';
 import { ConnectState } from '@/models/connect';
 import BackButton from '@/components/BackButton';
 import { WhiteSpace, IconFont } from '@/components/antd-mobile';
+import GaugeInput from '../components/GaugeInput';
 import styles from './styles.less';
 
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
-
-let minDate = new Date(nowTimeStamp - 1e7);
-const maxDate = new Date(nowTimeStamp + 1e7);
-
-Chart.pluginService.register({
-  beforeDraw: function(chart) {
-    var width = chart.chart.width,
-      height = chart.chart.height,
-      ctx = chart.chart.ctx
-
-    ctx.restore()
-    var fontSize = (height / 114).toFixed(2)
-    ctx.font = fontSize + 'em sans-serif'
-    ctx.textBaseline = 'middle'
-
-    var text = chart.config.data.text,
-      textX = Math.round((width - ctx.measureText(text).width) / 2),
-      textY = height / 2
-
-    ctx.fillText(text, textX, textY)
-    ctx.save()
-  },
-})
+const minDate = new Date(nowTimeStamp - 1000*60*60*24*30);
+const maxDate = new Date(nowTimeStamp);
 
 interface IProps {
-
+  extra?: string
+  onClick?: () => void
 }
 
 // The `onClick / extra` props need to be processed within the component
-const CustomChildren = ({ extra, onClick }) => (
+const CustomChildren = ({ extra, onClick }: IProps) => (
   <div
     onClick={onClick}
-    style={{ backgroundColor: '#fff', height: '64px', lineHeight: '64px', textAlign: 'center' }}
+    className={styles.datePickerList}
   >
     {extra}
   </div>
 );
 
 function WeightInput() {
-  let canvasRef = React.createRef();
+  const [date, setDate] = React.useState(now);
 
   React.useEffect(() => {
-    draw()
-  }, [])
 
-  const draw = () => {
-    const ctx = canvasRef.current.getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ["Yellow", "Green"],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        rotation: 1 * Math.PI,
-        circumference: 1 * Math.PI
-      }
-    });
-  }
+  }, [])
 
   return (
     <div className="page">
       <div className={styles.date}>
         <DatePicker
           mode="date"
-          title="Select Date"
-          extra="Optional"
+          title="选择监测时间"
+          extra="请选择监测时间"
           minDate={minDate}
           maxDate={maxDate}
-          value={now}
-          onChange={date => this.setState({ date })}
+          value={date}
+          onChange={date => setDate(date)}
         >
           <CustomChildren />
         </DatePicker>
       </div>
-      <WhiteSpace />
-      <div>
-        <canvas ref={canvasRef} className={styles.canvas} />
+      <div className={styles.content}>
+        <GaugeInput id="weight" />
       </div>
+
       <BackButton />
     </div>
-  )
+  );
 }
 
 export default connect(({ global, loading }: ConnectState) => ({

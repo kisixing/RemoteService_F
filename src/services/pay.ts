@@ -7,5 +7,5 @@ export async function wxpay(data: object) {
 }
 
 export async function webpay(data: object) {
-  return request.post('http://transfer.lian-med.com/api/serviceorders/wxpay',{data: data});
+  return request.post('/api/serviceorders/wxpay',{data: data});
 }
