@@ -10,14 +10,29 @@ import { TagProps } from 'antd-mobile/es/tag';
 
 interface IProps extends TagProps {
   children: React.ReactNode
+  color?: string
 }
 
-function Tag({ children, style, ...rest }: IProps) {
+function Tag({ children, style, small, color, ...rest }: IProps) {
+  console.log('9999', color)
+  const defaultSize = small ? {} : {
+    height: '.4rem',
+    lineHeight: '.4rem',
+    fontSize: '.24rem',
+  };
+  const colorStyle = color ? {
+    color: '#fff',
+    borderColor: color,
+    backgroundColor: color,
+  } : {};
   return (
     <ANTTag
+      small={small}
       style={{
+        borderRadius: '50px',
+        ...defaultSize,
+        ...colorStyle,
         ...style,
-        borderRadius: '50px'
       }}
       {...rest}
     >

@@ -30,7 +30,7 @@ function DoctorList() {
       <div className={styles.header}>
         <div className={styles.hospital}>
           <div className={styles.name}>
-            <IconFont type="iconhospital" />
+            <IconFont type="hospital" style={{ marginRight: '10px' }} />
             {hospital}
           </div>
           <div className={styles.arrow}>
@@ -45,7 +45,7 @@ function DoctorList() {
         <div className={styles.header}>
           <Tag data-seed="logId">解答快</Tag>
           <div className={styles.title}>
-            快速咨询 <IconFont type="iconback" />
+            快速咨询 <IconFont type="jiantou-right-circle-xian" style={{ marginLeft: '10px' }} />
           </div>
           <div className={styles.subTitle}>快速匹配医生，第一时间解答</div>
         </div>
