@@ -61,7 +61,7 @@ export default [
               {
                 path: '/perinatal/list',
                 name: 'perinatal list',
-                title: '围产建档',
+                title: '列表',
                 component: './perinatal/MapList',
               },
               {
@@ -134,6 +134,19 @@ export default [
             ],
           },
           {
+            path: '/consultation',
+            name: 'online consultation',
+            title: '在线咨询',
+            routes: [
+              {
+                path: '/consultation/',
+                name: 'doctor list',
+                title: '',
+                component: './consultation/DoctorList',
+              },
+            ],
+          },
+          {
             path: '/weight',
             name: 'weight',
             title: '体重管理',
@@ -160,8 +173,8 @@ export default [
             path: '/webtest',
             name: 'webtest',
             title: 'h5支付',
-            component: './webtest/index'
-          }
+            component: './webtest/index',
+          },
         ],
       },
       { component: './404' },

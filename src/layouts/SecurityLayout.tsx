@@ -50,7 +50,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     }
     // 3、code/isLogin都不存在，提示并返回登录
     if (!code) {
-      Toast.info('请携带孕妇code!');
+      // Toast.info('请携带孕妇code!');
       // TODO 返回登录页面
     }
   }

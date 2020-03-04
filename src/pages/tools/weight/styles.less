@@ -1,3 +1,5 @@
+@import '../../../utils/theme.less';
+
 .datePickerList {
   height: 1rem;
   line-height: 1rem;
@@ -9,6 +11,13 @@
 }
 
 .content {
-  padding: .3rem .5rem;
   background-color: #fff;
+
+  .text {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: .15rem .3rem;
+    color: @primary-color;
+  }
 }

@@ -1,0 +1,55 @@
+.card {
+  display: flex;
+  height: 2.36rem;
+  padding: .18rem;
+  margin-bottom: 0.2rem;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px #f0f1f2;
+
+  .thumbnail {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: #ccc;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .content {
+    flex: 1;
+    padding: .1rem 0.16rem;
+    position: relative;
+
+    .name {
+      display: flex;
+      align-items: center;
+      font-size: .34rem;
+      line-height: 1.5;
+      font-family: PingFangSC;
+      color: #333;
+    }
+
+    .extra {
+      font-size: .24rem;
+      color: #999;
+      span {
+        margin-right: .5rem;
+      }
+    }
+
+    .speciality {
+
+    }
+
+    .rates {
+      position: absolute;
+      right: .2rem;
+      bottom: 0;
+    }
+  }
+}
