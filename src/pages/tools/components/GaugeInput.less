@@ -10,7 +10,9 @@
 }
 
 .form {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
@@ -21,4 +23,26 @@
   left: 50%;
   margin-top: -2rem;
   margin-left: -2rem;
+
+  .title {
+    margin-bottom: 0.3rem;
+    font-size: .34rem;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .suffix {
+    margin-top: 0.3rem;
+    font-size: .3rem;
+    color: #999;
+  }
+
+  .input {
+    input {
+      width: 3rem;
+      height: .88rem;
+      text-align: center;
+      font-size: 0.8rem;
+    }
+  }
 }

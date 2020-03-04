@@ -1,0 +1,70 @@
+
+.header {
+  background-color: #F6E9DF;
+  padding: 0 .3rem .3rem .3rem;
+
+  .hospital {
+    height: .88rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .name {
+      font-size: .32rem;
+      color: #0F1232;
+    }
+    .arrow {
+      font-size: .24rem;
+      color: #535881;
+    }
+  }
+
+  :global {
+    .am-search {
+      padding-left: 0;
+      padding-right: 0;
+
+      .am-search-input {
+        height: 100%;
+        line-height: 100%;
+
+        & > div,
+        input {
+          height: .88rem;
+          line-height: .88rem;
+        }
+
+        .am-search-clear {
+          top: .15rem;
+        }
+      }
+
+      .am-search-cancel {
+        padding-right: .15rem;
+      }
+    }
+  }
+}
+
+.content {
+  padding-bottom: .24rem;
+
+  .header {
+    width: 100%;
+    height: 2rem;
+    margin: .48rem 0;
+    padding: .2rem .3rem;
+    border-radius: 4px;
+    background: url('/images/slice/backgruind-card.png') no-repeat center / 100% 100%;
+
+    .title {
+      margin-top: 0.08rem;
+      margin-bottom: 0.08rem;
+      color: #150F55;
+      font-size: .36rem;
+    }
+
+    .subTitle {
+      color: #150F55;
+    }
+  }
+}

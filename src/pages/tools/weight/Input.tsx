@@ -8,10 +8,10 @@ import React from 'react';
 import { connect } from 'dva';
 import { DatePicker  } from 'antd-mobile';
 
-// import { router } from '@/utils/utils';
+import { router } from '@/utils/utils';
 import { ConnectState } from '@/models/connect';
 import BackButton from '@/components/BackButton';
-import { WhiteSpace, IconFont } from '@/components/antd-mobile';
+import { WhiteSpace, IconFont, Button } from '@/components/antd-mobile';
 import GaugeInput from '../components/GaugeInput';
 import styles from './styles.less';
 
@@ -58,10 +58,16 @@ function WeightInput() {
         </DatePicker>
       </div>
       <div className={styles.content}>
-        <GaugeInput id="weight" />
+        <div className={styles.text} onClick={() => router('/weight/record')}>
+          <IconFont type="icon_article_line" size="34px" />
+          历史记录
+        </div>
+        <GaugeInput id="weight" title="体重" suffix="kg" min={30} max={80} />
       </div>
-
-      <BackButton />
+      <div style={{ margin: '.5rem .3rem' }}>
+        <Button type="primary">保存</Button>
+        <BackButton />
+      </div>
     </div>
   );
 }

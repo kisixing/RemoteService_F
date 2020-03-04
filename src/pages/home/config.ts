@@ -16,7 +16,7 @@ export const ENTRANCE = [
          {
            key: '3',
            label: '远程监护',
-           icon: 'i3.png',
+           icon: 'i8.png',
            route: '',
            color: 'linear-gradient(-45deg, #3BF7FF 0%, #00B9FF 100%)',
          },
@@ -50,18 +50,25 @@ export const ENTRANCE = [
          },
          {
            key: '8',
-           label: '套餐',
-           icon: 'i1.png',
-           route: '/order',
-           color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
+           label: '在线咨询',
+           icon: 'i3.png',
+           route: '/consultation',
+           color: '',
          },
          {
-          key: '9',
-          label: 'h5支付',
-          icon: 'i1.png',
-          route: '/webtest',
-          color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
-        },
+           key: '88',
+           label: '我的订单',
+           icon: 'i4.png',
+           route: '/myorder',
+           color: '',
+         },
+         {
+           key: '9',
+           label: 'h5支付',
+           icon: 'i1.png',
+           route: '/webtest',
+           color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
+         },
        ];
 
 export const TOOLS = [
