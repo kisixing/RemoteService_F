@@ -6,9 +6,9 @@
 import React from 'react';
 
 const IconFont = (props: any )=> {
-  const { type, size = 'inherit', } = props;
+  const { type, style, size = 'inherit', } = props;
   // am-icon
-  return <i style={{ fontSize: size }} className={`iconfont icon-${type}`} />;
+  return <i style={{ fontSize: size, ...style }} className={`iconfont icon-${type}`} />;
 };
 
 export default IconFont;

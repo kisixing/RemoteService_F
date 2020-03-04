@@ -39,7 +39,7 @@ function Item({ dataSource, index }: ItemProps) {
   return (
     <Touchable
       activeStopPropagation
-      activeStyle={{ background: 'rgba(0, 0, 0, 0.05)' }}
+      activeStyle={{ background: 'rgba(0, 0, 0, 0.025)' }}
       delayPressIn={100}
       delayPressOut={100}
       onPress={onPress}
