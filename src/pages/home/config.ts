@@ -17,7 +17,7 @@ export const ENTRANCE = [
            key: '3',
            label: '远程监护',
            icon: 'i8.png',
-           route: '',
+           route: '/packages',
            color: 'linear-gradient(-45deg, #3BF7FF 0%, #00B9FF 100%)',
          },
          {
@@ -59,7 +59,7 @@ export const ENTRANCE = [
            key: '88',
            label: '我的订单',
            icon: 'i4.png',
-           route: '/myorder',
+           route: '/orders',
            color: '',
          },
          {
