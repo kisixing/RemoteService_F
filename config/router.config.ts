@@ -85,6 +85,62 @@ export default [
             ],
           },
           {
+            path: '/orders',
+            name: 'my order',
+            title: '',
+            routes: [
+              {
+                path: '/orders',
+                redirect: '/orders/list',
+              },
+              {
+                path: '/orders/list',
+                name: 'order list',
+                title: '我的订单',
+                component: './remote-service/order',
+              },
+              {
+                path: '/orders/detail', // 考虑动态路由
+                name: 'order detail',
+                title: '订单详情',
+                component: './remote-service/order/detail',
+              },
+            ],
+          },
+          {
+            path: '/packages',
+            name: 'packages services',
+            title: '',
+            routes: [
+              {
+                path: '/packages',
+                redirect: '/packages/list',
+              },
+              {
+                path: '/packages/list',
+                name: 'packages list',
+                title: '套餐服务',
+                component: './remote-service/package',
+              },
+              {
+                path: '/packages/detail', // 考虑动态路由
+                name: 'package detail',
+                title: '套餐详情',
+                component: './remote-service/package/detail',
+              },
+            ],
+          },
+          {
+            path: '/packages',
+            name: 'my order',
+            title: '套餐服务',
+            routes: [
+              {
+
+              }
+            ],
+          },
+          {
             path: '/order',
             name: 'order',
             title: '套餐服务',
