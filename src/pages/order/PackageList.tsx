@@ -1,4 +1,5 @@
 import React, {ReactNode} from 'react';
+// interface
 import { PackageListItem } from './interface';
 import styles from "@/pages/order/PackageList.less";
 
@@ -25,7 +26,8 @@ function PackageCard(props:CARD_PROPS) {
           </div>
         </div>
         <div className={styles.second}>
-          <div className={styles.price}>￥{price}</div>
+          <div className={styles.price}><b>￥{price}</b></div>
+          <div className={styles.device}><span>·含设备</span></div>
           <div className={styles.childrenDOM}>
             {children}
           </div>

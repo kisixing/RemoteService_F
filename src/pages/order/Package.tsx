@@ -12,10 +12,9 @@ import { PackageListItem } from './interface';
 import styles from './Package.less';
 
 
-const navTabsTitle = ['套餐列表','套餐详情','确认支付'];
-
+// 修改套装值表单
 class EditForm extends React.Component<any, any>{
-
+  
   submit = () => {
     const { submit } = this.props;
     this.props.form.validateFields((error :any, value :any) => {
@@ -24,49 +23,36 @@ class EditForm extends React.Component<any, any>{
       submit(value);
     })
   }
-
+  
   render() {
     const { getFieldProps } = this.props.form;
     return (
       <List>
-        <InputItem
-          {...getFieldProps('id')}
-        >id</InputItem>
-        <InputItem
-          {...getFieldProps('type')}
-        >type</InputItem>
-        <InputItem
-          {...getFieldProps('name')}
-        >name</InputItem>
-        <InputItem
-          {...getFieldProps('price')}
-        >price</InputItem>
-        <List.Item>
-          <Button
-            onClick={this.submit}
-          >提交</Button>
-        </List.Item>
+        <InputItem {...getFieldProps('id')}>id</InputItem>
+        <InputItem {...getFieldProps('type')}>type</InputItem>
+        <InputItem {...getFieldProps('name')}>name</InputItem>
+        <InputItem {...getFieldProps('price')}>price</InputItem>
+        <List.Item><Button onClick={this.submit}>提交</Button></List.Item>
       </List>
     )
   }
 }
-
 const EditPackageForm = createForm()(EditForm)
 
+const navTabsTitle = ['套餐列表','套餐详情','确认支付'];
 
 function Package(props: any) {
-
+  
   const { dispatch, packageList } = props;
 
-  const [pageIndex, setPageIndex] = useState(0);
-  const [packageId, setPackageId] = useState(-1);
+  const [pageIndex, setPageIndex] = useState(0); // 页码
+  const [packageId, setPackageId] = useState(-1); // 当前套餐id
 
   const [visible, setVisible] = useState(false);
 
   // 0 -> 1
   const getDetail = (id:number):void => {
     setPackageId(id);
-    // TODO 忽略套餐详情页，直接跳到支付页面
     setPageIndex(pageIndex => pageIndex + 1);
   };
   // 1 -> 2
@@ -99,7 +85,7 @@ function Package(props: any) {
   useEffect(() => {dispatch({type: 'combo/getPackageData',payload: {id: packageId}})},[packageId]);
 
   return (
-    <div className={styles['package-list']}>
+    <div className={styles.package}>
       <NavBar
         mode="light"
         icon={pageIndex !== 0 ? <Icon type="left" /> : null}
@@ -108,10 +94,7 @@ function Package(props: any) {
         {navTabsTitle[pageIndex]}
       </NavBar>
       <WhiteSpace/>
-      <Flex
-        direction="column"
-        justify="center"
-      >
+      <Flex direction="column" justify="center" className={styles.flex}>
         {pageRender(pageIndex)}
       </Flex>
       <div>
@@ -135,9 +118,8 @@ function Package(props: any) {
 }
 
 
-export default connect(({loading, combo}: ConnectState) => {
+export default connect(({combo}: ConnectState) => {
   return {
-    // loading
     packageList: combo.packageList,
     currentPackageDetail: combo.currentPackageDetail
   }
