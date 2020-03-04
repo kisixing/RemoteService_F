@@ -1,63 +1,64 @@
 .package-list {
-  width: 95%;
+  width: 98%;
   margin: 0 auto;
+  border: 1px solid #ff2211;
+  // margin: 0 auto;
 }
 .item-content {
-  width: 100%;
-  margin-bottom: 2vh;
+  width: 95%;
+  // height: 2rem;
+  margin: 0.2rem auto;
   background:#ffffff;
-  border-radius:4px;
-  box-shadow:0px 13px 10px -10px #D6E2F603;
+  box-shadow:0 0.1rem 1rem -0.1rem #D6E2F603;
 }
 
 .card {
-  min-width: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
-  height: 250px;
-  position: relative;
+  height: 150px;
+  display: flex;
+  flex-direction: row;
   .left {
-    float: left;
-    width: 47%;
+    height: auto;
+    width: 40%;
     img {
       min-width: 100%;
       min-height: 100%;
     }
   }
+
   .right {
-    margin-left: 48%;
-    width: 50%;
+    width: 60%;
     display: block;
+    justify-content: space-between;
     .first {
-      margin-bottom: 10%;
       display: block;
       .name {
         display: inline-block;
-        width: 80%;
       }
       .marking {
+        float: right;
+        border-radius: 1rem;
+        width: 30%;
         background-color: #d9eef7;
-        display: inline-block;
-        border-radius: 20px;
-        width: 20%;
         text-align: center;
       }
     }
 
-    .second {
-      position: absolute;
-      bottom: 0;
+    .second { 
       width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
       .price{
-        display: inline-block;
-        width: 25%;
-        margin-left: 1vw;
-        font-size: 5vw;
+        width: 0.8rem; 
+      }
+      .device {
+        width: 1rem;
       }
       .childrenDOM {
-        display: inline-block;
-        width: 25%;
-        text-align: right;
+        width: 1.4rem;
       }
     }
   }
