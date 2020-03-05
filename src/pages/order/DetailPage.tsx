@@ -42,7 +42,7 @@ export default function DetailPage(props: DETAIL_PAGE_PROPS) {
       </Tabs>
       <div className={styles['footer']}>
         <div className={styles['price']}>
-          {/*<h1>￥{detailData.price}</h1>*/}
+          <h1>￥5000</h1>
         </div>
         <div className={styles['buy']}>
           <Button className={styles['button']} onClick={indexHandler}>

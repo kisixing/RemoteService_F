@@ -1,0 +1,74 @@
+.container {
+  width: 100%;
+  .img-block {
+    width: 100%;
+    height: 350px;
+    background-size: 100%;
+    background-position: center;
+    background-image: url("../../../assets/order/Card1.png");
+  }
+
+  .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    background-color: #f8f7fc;
+
+    .detail-item {
+      margin: 10px 0;
+      border-radius: 4px;
+      background-color: #ffffff;
+      display: block;
+      width: 90%;
+      height: 60px;
+      line-height: 60px;
+      div {
+        display: inline-block;
+      }
+      .item-name {
+        width: 70%;
+        text-align: left;
+      }
+      .remark {
+        width: 15%;
+        border:1px #8D8DAC;
+        color: #8D8DAC;
+        background-color: white;
+      }
+      .count {
+        width: 15%;
+        text-align: center;
+      }
+    }
+  }
+
+  .footer {
+    position: absolute;
+    height: 120px;
+    line-height: 106px;
+    width: 100%;
+    box-shadow:0 6px 12px 0 #91959A;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .price {
+      height: 80%;
+      margin-left: 20px;
+    }
+    .buy{
+      height: 80%;
+      line-height: 100%;
+      width: 20%;
+      margin-right: 2rem;
+      .button {
+        vertical-align: middle;
+        background:linear-gradient(270deg,rgba(255,219,49,1) 0%,rgba(253,184,29,1) 100%);
+        box-shadow:0 6px 12px 0 rgba(145,149,154,0.12),0 9px 13px -5px rgba(253,203,97,0.25),0px 2px 7px -3px rgba(253,177,97,1);
+        border-radius:24px;
+      }
+    }
+  }
+}

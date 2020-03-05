@@ -14,7 +14,7 @@ import styles from './index.less';
 
 function Order() {
   // TODO 判断用户是否已购买
-  const [isOrder, setIsOrder] = useState(false);
+  const [isOrder, setIsOrder] = useState(true);
 
   return (
     <div className={styles.wapper}>

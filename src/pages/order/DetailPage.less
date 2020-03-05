@@ -46,25 +46,25 @@
 
   .footer {
     position: absolute;
-    height: 106px;
+    height: 120px;
     line-height: 106px;
     width: 100%;
     box-shadow:0 6px 12px 0 #91959A;
     bottom: 0;
-    .div{
-      display: inline-block;
-    }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     .price {
+      height: 80%;
       margin-left: 20px;
-      float: left;
     }
     .buy{
-      height: 100%;
+      height: 80%;
       line-height: 100%;
       width: 20%;
-      float: right;
       margin-right: 20px;
       .button {
+        vertical-align: middle;
         background:linear-gradient(270deg,rgba(255,219,49,1) 0%,rgba(253,184,29,1) 100%);
         box-shadow:0 6px 12px 0 rgba(145,149,154,0.12),0 9px 13px -5px rgba(253,203,97,0.25),0px 2px 7px -3px rgba(253,177,97,1);
         border-radius:24px;
