@@ -3,7 +3,7 @@ export const ENTRANCE = [
            key: '1',
            label: '围产档案',
            icon: 'i1.png',
-           route: '/perinatal/list',
+           route: '/perinatal',
            color: 'linear-gradient(-45deg, #FFBFD9 0%, #FF6B70 100%)',
          },
          {
@@ -31,7 +31,7 @@ export const ENTRANCE = [
            key: '5',
            label: '电子报告',
            icon: 'i5.png',
-           route: '/reports/list',
+           route: '/reports',
            color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
          },
          {

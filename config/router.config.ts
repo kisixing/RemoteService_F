@@ -54,12 +54,12 @@ export default [
             name: 'perinatal',
             title: '围产建档',
             routes: [
+              // {
+              //   path: '/perinatal',
+              //   redirect: '/perinatal/list',
+              // },
               {
                 path: '/perinatal',
-                redirect: '/perinatal/list',
-              },
-              {
-                path: '/perinatal/list',
                 name: 'perinatal list',
                 title: '列表',
                 component: './perinatal/MapList',
@@ -91,10 +91,6 @@ export default [
             routes: [
               {
                 path: '/orders',
-                redirect: '/orders/list',
-              },
-              {
-                path: '/orders/list',
                 name: 'order list',
                 title: '我的订单',
                 component: './remote-service/order',
@@ -114,10 +110,6 @@ export default [
             routes: [
               {
                 path: '/packages',
-                redirect: '/packages/list',
-              },
-              {
-                path: '/packages/list',
                 name: 'packages list',
                 title: '套餐服务',
                 component: './remote-service/package',
@@ -128,16 +120,6 @@ export default [
                 title: '套餐详情',
                 component: './remote-service/package/detail',
               },
-            ],
-          },
-          {
-            path: '/packages',
-            name: 'my order',
-            title: '套餐服务',
-            routes: [
-              {
-
-              }
             ],
           },
           {
@@ -171,14 +153,14 @@ export default [
             name: 'reports',
             title: '产检报告',
             routes: [
+              // {
+              //   path: '/reports',
+              //   redirect: '/reports/list',
+              // },
               {
                 path: '/reports',
-                redirect: '/reports/list',
-              },
-              {
-                path: '/reports/list',
                 name: 'reports list',
-                title: '报告列表',
+                title: '列表',
                 component: './reports/BBSList',
               },
               {
