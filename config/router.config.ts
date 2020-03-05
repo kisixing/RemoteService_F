@@ -124,6 +124,31 @@ export default [
             ],
           },
           {
+            path: '/apply',
+            name: 'Apply',
+            title: '胎监判图',
+            routes: [
+              {
+                path: '/apply',
+                name: 'Apply',
+                title: '胎监判图',
+                component: './remote-service/Apply'
+              },
+              {
+                path: '/apply/useable',
+                name: 'useable Apply',
+                title: '可用胎监判图',
+                // component: './remote-service/Apply'
+              },
+              {
+                path: '/apply/unuseable',
+                name: 'useable Apply',
+                title: '过期胎监判图',
+                // component: './remote-service/Apply'
+              }
+            ]
+          },
+          {
             path: '/pay',
             name: 'pay',
             title: '支付页',
