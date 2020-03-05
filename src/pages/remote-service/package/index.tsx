@@ -4,29 +4,53 @@
  * @Description: 套餐列表
  */
 
-import React from 'react';
-import Router from 'umi/router';
+import React,{useEffect} from 'react';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
+import { router } from '@/utils/utils';
 import { WingBlank } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
 import { IconFont, Touchable } from '@/components/antd-mobile';
+
+import { ConnectState } from '@/models/connect';
+import { PackageListItem } from './interface';
+
 import styles from './index.less';
 
-function Packages() {
+interface PackageProps{
+  packageList: Array<PackageListItem>,
+  dispatch: Dispatch
+}
 
-  const onClick = () => {
-    Router.push('/packages/detail');
+function Packages(props: PackageProps) {
+
+  const onClick = (id: number|string):void => {
+    props.dispatch({type: 'combo/setPackageId', payload: id});
+    router('/packages/detail');
   }
+
+  // 获取套餐列表
+  useEffect(() => {props.dispatch({type: 'combo/getPackage'})},[]);
+  console.log(props.packageList);
   return (
     <WingBlank className={styles.container}>
-      {[1, 2, 3, 4, 5, 6, 7].map(e => {
+      {props.packageList.map((item: PackageListItem) => {
         return (
-          <Touchable key={e} onPress={onClick}>
+          <Touchable key={item.id} onPress={() => onClick(item.id)}>
             <div className={styles.card}>
               <div className={styles.thumbnail}>
                 <img src="/images/slice/pic.png" />
               </div>
               <div className={styles.content}>
-                <div>{e}</div>
+                <div>
+                  <div><b>{item.name}</b></div>
+                  <div className={styles.marking}>单胎</div>
+                </div>
+                <div>
+                  <div>￥<b>{item.price}</b></div>
+                  <div><small>·含设备</small></div>
+                  <div>查看详情></div>
+                </div>
               </div>
             </div>
           </Touchable>
@@ -37,4 +61,6 @@ function Packages() {
   );
 }
 
-export default Packages;
+export default connect(({combo}: ConnectState) => ({
+  packageList: combo.packageList
+}))(Packages);

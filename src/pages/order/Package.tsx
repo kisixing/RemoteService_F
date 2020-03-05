@@ -60,6 +60,14 @@ function Package(props: any) {
     setPageIndex(pageIndex => pageIndex + 1);
   };
 
+  const handleNavLeftClick = () => {
+    if(pageIndex !== 0){
+      setPageIndex(pageIndex => pageIndex - 1);
+    }else {
+
+    }
+  }
+
   const pageRender = (pageIndex:number):ReactNode => {
     switch (pageIndex) {
       case 0:
@@ -89,7 +97,7 @@ function Package(props: any) {
       <NavBar
         mode="light"
         icon={pageIndex !== 0 ? <Icon type="left" /> : null}
-        onLeftClick={() => {let nextIndex = pageIndex - 1; setPageIndex(nextIndex)}}
+        onLeftClick={handleNavLeftClick}
       >
         {navTabsTitle[pageIndex]}
       </NavBar>

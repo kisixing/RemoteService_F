@@ -93,7 +93,7 @@ export default [
                 path: '/orders',
                 name: 'order list',
                 title: '我的订单',
-                component: './remote-service/order',
+                component: './remote-service/order/index',
               },
               {
                 path: '/orders/detail', // 考虑动态路由
@@ -118,7 +118,7 @@ export default [
                 path: '/packages/detail', // 考虑动态路由
                 name: 'package detail',
                 title: '套餐详情',
-                component: './remote-service/package/detail',
+                component: './remote-service/package/Detail',
               },
             ],
           },

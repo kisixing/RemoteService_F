@@ -1,6 +1,6 @@
 import { PackageListItem } from '@/pages/order/interface';
 // 模拟数据
-import { myOrderList, MyOrderPackage } from '../pages/order/config';
+import { MyOrderPackage } from '../pages/order/config';
 /**
  * package重名报错，所有名命为combo
  */
@@ -10,25 +10,24 @@ import { Effect } from "@/models/connect";
 import { getPackage, getPackageData, setPackage } from "@/services/package";
 
 export interface ComboStateType {
-  myOrderList: Array<MyOrderPackage>;
   currentPackageDetail: object;
   packageList: Array<PackageListItem>;
+  currentPackageId: string|number;
 }
 
 
 export interface ComboModelType {
-  namespace: string;
+  namespace: string,
   state: ComboStateType,
   effects: {
     getPackage: Effect,
     getPackageData: Effect,
-    getMyOrder: Effect,
     setPackage: Effect
   };
   reducers: {
-    setMyOrderList: Reducer,
     setCurrentPackageDetail: Reducer,
-    setPackageList: Reducer
+    setPackageList: Reducer,
+    setPackageId: Reducer
   };
 }
 
@@ -37,7 +36,7 @@ const Model: ComboModelType = {
   state: {
     packageList: [],
     currentPackageDetail: {},
-    myOrderList: []
+    currentPackageId: -1    // -1是为空值
   },
   effects: {
     // 获取套餐
@@ -47,10 +46,8 @@ const Model: ComboModelType = {
       yield put({type: 'setPackageList', payload: data})
     },
     /**
-     * 获取套餐
+     * 获取套餐详细信息
      * @param payload : {id: number} - 传入id用于辨别需要的数据
-     * @param call
-     * @param put
      */
     *getPackageData({payload}, {call, put}) {
       const { data } = yield call(getPackageData);
@@ -62,25 +59,22 @@ const Model: ComboModelType = {
         }
       }
     },
-    *getMyOrder({payload}, {call,put}) {
-      console.log('出发');
-      yield put({type: 'setMyOrderList', payload: myOrderList})
-    },
     *setPackage({payload}, { call}) {
       yield call(setPackage, payload);
     }
   },
   reducers: {
-    setMyOrderList(state,{payload}) {
-      state.myOrderList = payload;
-      return state;
-    },
     setCurrentPackageDetail(state, {payload}) {
       state.currentPackageDetail = payload;
       return state;
     },
     setPackageList(state,{payload}) {
       state.packageList = payload;
+      return state
+    },
+    // payload 传入id:number|string
+    setPackageId(state, {payload}) {
+      state.currentPackageId = payload;
       return state
     }
   }

@@ -7,6 +7,7 @@ export async function getPackage() {
   })
 };
 
+// 获取套餐详情
 export async function getPackageData() {
   return request('/api/products', {
     method: 'GET',
@@ -14,6 +15,7 @@ export async function getPackageData() {
   })
 };
 
+// 修改套餐 - 仅在调试时使用
 export async function setPackage(data:any) {
   return request('/api/servicepackages',{
     method: 'PUT',
