@@ -7,6 +7,7 @@
 import React,{ ReactNode, useEffect } from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
+import { router } from '@/utils/utils';
 import dynamic from 'umi/dynamic';
 import { Tabs, Button, WingBlank } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
@@ -33,7 +34,11 @@ function Details(props: DETAIL_PAGE_PROPS) {
   const { packageDetail } = props;
 
 
-
+  const toPay = () => {
+    // 可以动态路由携带信息
+    router('/pay');
+  }
+ 
   useEffect(() => {
     if(props.packageId !== -1) {
       props.dispatch({type: 'combo/getPackageData', payload: {id: props.packageId}});
@@ -53,7 +58,7 @@ function Details(props: DETAIL_PAGE_PROPS) {
       <div className={styles.footer}>
         <div className={styles.price}>￥5000</div>
         <div className={styles.buy}>
-          <Button className={styles.button}>购买</Button>
+          <Button className={styles.button} onClick={toPay}>购买</Button>
         </div>
       </div>
       <BackButton />

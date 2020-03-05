@@ -123,30 +123,10 @@ export default [
             ],
           },
           {
-            path: '/order',
-            name: 'order',
-            title: '套餐服务',
-            routes: [
-              {
-                path: '/order',
-                name: 'order',
-                title: '套餐服务',
-                component: './order/index',
-              },
-              {
-                path: '/order/my-order',
-                name: 'my order',
-                title: '我的订单',
-                component: './order/MyOrder',
-              },
-              {
-                path: '/order/package-list',
-                name: 'package list',
-                title: '套餐列表',
-                component: './order/Package',
-              },
-              { component: './404' },
-            ],
+            path: '/pay',
+            name: 'pay',
+            title: '支付页',
+            component: './remote-service/pay/index'
           },
           {
             path: '/reports',
