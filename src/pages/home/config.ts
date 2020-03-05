@@ -24,7 +24,7 @@ export const ENTRANCE = [
            key: '4',
            label: '套餐服务',
            icon: 'i7.png',
-           route: '/order',
+           route: '',
            color: 'linear-gradient(-45deg, #FFBA8D 0%, #FF7D34 100%)',
          },
          {

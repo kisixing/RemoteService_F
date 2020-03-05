@@ -1,3 +1,74 @@
 .container {
-  
+  .header {
+    padding: 0.4rem;
+    height: 2.8rem;
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    vertical-align: center;
+    font-size: 0.3rem;
+    > :first-child {
+      margin-bottom: 0.2rem;
+    }
+    > :nth-child(3) span {
+      visibility: hidden;
+    }
+  }
+
+  .content {
+    margin-top: 0.8rem;
+    font-size: 0.3rem;
+  }
+
+
+  .footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+    height: 3rem;
+    display: flex;
+    flex-direction: column;
+    > .choice {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 0.3rem;
+      .choice-item {
+        margin-bottom: 0.2rem;
+        height: 0.4rem;
+        line-height: 0.4rem;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        .text {
+          width: 50%;
+          text-align: left;
+          height: 0.4rem;
+          line-height: 0.4rem;
+          font-size: 0.3rem;
+          font-weight: 600;
+          embed {
+            height: 0.4rem;
+            position: relative;
+            top: 0.1rem;
+          }
+        }
+        .checkbox {
+          width: 50%;
+          text-align: right;
+        }
+      }
+    }
+    > .btn {
+      // Button 在antd-moblie是个a
+      > a {
+        background:linear-gradient(270deg,rgba(255,219,49,1) 0%,rgba(253,184,29,1) 100%);
+        box-shadow:0px 9px 13px -5px rgba(253,203,97,0.25),0px 2px 7px -3px rgba(253,177,97,1);
+        border-radius:24px;
+        width: 50%;
+        margin: 10px auto ;
+      }
+    }
+  }
 }
