@@ -23,7 +23,7 @@ class PregnancyHistory extends React.Component<P, S> {
       <div className="page">
         <StepBar current={3} />
         孕产史信息
-        <BackButton route="/perinatal/list">返回</BackButton>
+        <BackButton route="/perinatal">返回</BackButton>
       </div>
     );
   }
