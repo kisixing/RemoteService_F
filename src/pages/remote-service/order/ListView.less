@@ -1,5 +1,5 @@
 .listView {
-  padding: .48rem .3rem;
+  padding: .3rem .3rem 1rem .3rem;
 
   .item {
     margin-bottom: .3rem;
@@ -8,18 +8,43 @@
     box-shadow: 0 2px 8px #f0f1f2;
 
     .header {
+      padding-bottom: .2rem;
       .title {
-        height: 1rem;
+        height: .72rem;
         display: flex;
         align-items: center;
-        padding: 0.16rem;
+        padding: 0.16rem .3rem .16rem .2rem;
+        position: relative;
 
         .name {
-          margin-left: .08rem;
+          margin-right: .16rem;
           font-family:PingFangSC-Medium,PingFang SC;
           font-weight:500;
           color:rgba(15,18,50,1);
         }
+
+        .icon {
+          width: .48rem;
+        }
+
+        .extra {
+          position: absolute;
+          top: 50%;
+          margin-top: -0.12rem;
+          right: .3rem;
+          font-size: .24rem;
+          line-height: 1;
+        }
+
+        :global {
+          .am-tag {
+            margin-right: .16rem;
+          }
+        }
+      }
+
+      .content {
+        padding-left: .68rem;
       }
     }
 

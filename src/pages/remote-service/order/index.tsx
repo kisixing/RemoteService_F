@@ -19,6 +19,7 @@ let currentKey = '';
 const tabs = [
   { title: <Title text="全部订单" />, key: 'all' },
   { title: <Title text="远程监护" />, key: 'monitoring' },
+  { title: <Title text="胎监判图" />, key: 'apply' },
   { title: <Title text="在线咨询" />, key: 'consult' },
 ];
 
@@ -37,7 +38,7 @@ function renderTabBar(props) {
   return (
     <Sticky>
       {({ style }: any) => (
-        <div style={{ ...style, paddingLeft: '1rem', paddingRight: '1rem', backgroundColor: '#fff', zIndex: 1 }}>
+        <div style={{ ...style, backgroundColor: '#fff', zIndex: 1 }}>
           <Tabs.DefaultTabBar {...props} animated={true} />
         </div>
       )}
@@ -65,7 +66,10 @@ function Oders(props: any) {
     if (currentKey === 'consult') {
       return ['在线咨询1', '在线咨询2', '在线咨询3', '在线咨询4', '在线咨询5', '在线咨询6'];
     }
-    return ['一个月胎监服务', '二个月胎监服务', '在线咨询1', '在线咨询2', '在线咨询3', '在线咨询4', '在线咨询5', '在线咨询6'];
+    if (currentKey === 'apply') {
+      return ['胎监判图1', '胎监判图2', '胎监判图3', '胎监判图4'];
+    }
+    return ['一个月胎监服务', '二个月胎监服务', '在线咨询1', '在线咨询2', '在线咨询3', '在线咨询4', '在线咨询5', '在线咨询6', '胎监判图1', '胎监判图2', '胎监判图3', '胎监判图4'];
   };
 
   const onClick = () => {
@@ -87,9 +91,7 @@ function Oders(props: any) {
           onTabClick={onTabClick}
           tabBarInactiveTextColor="#787878"
           tabBarUnderlineStyle={{
-            width: '25%',
             height: '6px',
-            marginLeft: '5%',
             backgroundColor: '#FFCC4A',
           }}
         >
