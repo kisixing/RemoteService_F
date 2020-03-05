@@ -118,6 +118,6 @@ export const TOOLS = [
            key: '8',
            label: '其他',
            icon: 'i008.png',
-           route: '',
+           route: '/example',
          },
        ];

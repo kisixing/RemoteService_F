@@ -30,6 +30,7 @@ export default [
       { component: './404' },
     ],
   },
+  { path: '/example', title: '组件示例', component: './example' },
   // user securit verification
   {
     path: '/',
