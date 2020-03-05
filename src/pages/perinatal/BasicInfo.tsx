@@ -27,7 +27,7 @@ class BasicInfo extends Component<P, S> {
         <div className={styles.formContainer}>form</div>
         <WingBlank>
           <Button type="primary">保存</Button>
-          <BackButton route="/perinatal/list">返回</BackButton>
+          <BackButton route="/perinatal">返回</BackButton>
         </WingBlank>
       </div>
     );

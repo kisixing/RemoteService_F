@@ -14,12 +14,7 @@ interface IProps extends TagProps {
 }
 
 function Tag({ children, style, small, color, ...rest }: IProps) {
-  console.log('9999', color)
-  const defaultSize = small ? {} : {
-    height: '.4rem',
-    lineHeight: '.4rem',
-    fontSize: '.24rem',
-  };
+  const defaultSize = small ? { lineHeight: '0.28rem' } : { lineHeight: '0.48rem', fontSize: '.24rem' };
   const colorStyle = color ? {
     color: '#fff',
     borderColor: color,
