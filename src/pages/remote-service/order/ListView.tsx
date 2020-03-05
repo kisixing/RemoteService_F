@@ -25,14 +25,20 @@ function ListView({ dataSource = [] }: IProps) {
           <div key={e} onClick={onClick} className={styles.item}>
             <div className={styles.header}>
               <div className={styles.title}>
-                <IconFont type="order" size="44px" />
+                <div className={styles.icon}><IconFont type="order" size="48px" /></div>
                 <span className={styles.name}>{e}</span>
-                <Tag>单胎</Tag>
-                <Tag>多胎</Tag>
-                <span>已支付</span>
+                <Tag size="middle" bgcolor="#D9F0F8" color="#3FB6DC">单胎</Tag>
+                <Tag size="middle" bgcolor="#E3D9FC" color="#7540EE">多胎</Tag>
+                <span className={styles.extra}>已支付</span>
+              </div>
+              <div className={styles.content}>
+                <div>订单号：</div>
+                <div>设备有效期：</div>
               </div>
             </div>
-            <div className={styles.detail}></div>
+            <div className={styles.detail}>
+
+            </div>
           </div>
         );
       })}
