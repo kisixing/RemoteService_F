@@ -214,6 +214,35 @@ export default [
             ],
           },
           {
+            path: '/signs',
+            name: 'signs',
+            title: '体征管理',
+            routes: [
+              {
+                path: '/signs/input',
+                component: './tools/signs/InputTabBar',
+                routes: [
+                  {
+                    path: '/signs/input/blood-pressure',
+                    name: 'blood pressure',
+                    title: '血压',
+                    component: './tools/signs/blood-pressure/Input'
+                  },
+                  {
+                    path: '/signs/input/blood-glucose',
+                    name: 'blood glucose',
+                    title: '血糖',
+                    component: './tools/signs/blood-glucose/Input'
+                  }
+                ]
+              },
+              {
+                path: '/signs/record',
+                component: './tools/signs/RecordsTabBar',
+              }
+            ]
+          },
+          {
             path: '/webtest',
             name: 'webtest',
             title: 'h5支付',
