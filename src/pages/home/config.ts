@@ -72,6 +72,12 @@ export const ENTRANCE = [
        ];
 
 export const TOOLS = [
+          {
+            key: '0',
+            label: '体征管理',
+            icon: 'i000.png',
+            route: '/signs/input/blood-pressure',
+          },
          {
            key: '1',
            label: '体重管理',

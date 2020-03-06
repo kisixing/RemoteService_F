@@ -40,7 +40,6 @@ function Tag({ children, style, size, bgcolor, color, ...rest }: IProps) {
       small={size === 'small' ? true : false}
       style={{
         borderRadius: '50px',
-        color: !!color ? color : '#fff',
         ...sizeStyle,
         ...bgcolorStyle,
         ...colorStyle,

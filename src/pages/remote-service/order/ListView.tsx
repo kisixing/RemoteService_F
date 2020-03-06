@@ -25,7 +25,7 @@ function ListView({ dataSource = [] }: IProps) {
           <div key={e} onClick={onClick} className={styles.item}>
             <div className={styles.header}>
               <div className={styles.title}>
-                <div className={styles.icon}><IconFont type="order" size="48px" /></div>
+                <IconFont type="order" size="0.4rem" />
                 <span className={styles.name}>{e}</span>
                 <Tag size="middle" bgcolor="#D9F0F8" color="#3FB6DC">单胎</Tag>
                 <Tag size="middle" bgcolor="#E3D9FC" color="#7540EE">多胎</Tag>

@@ -6,12 +6,12 @@ function Example() {
   return (
     <div style={{ padding: '0.3rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Tag>default size</Tag>
-        <Tag color="#ddd">default size</Tag>
-        <Tag color="#f00">default size</Tag>
-        <Tag small>tag</Tag>
-        <Tag small color="#ddd">tag</Tag>
-        <Tag small color="#f00">tag</Tag>
+        <Tag>default</Tag>
+        <Tag color="#ddd">default</Tag>
+        <Tag color="#f00">default</Tag>
+        <Tag size="small">tag</Tag>
+        <Tag size="small" color="#ddd">tag</Tag>
+        <Tag size="small" color="#f00">tag</Tag>
       </div>
 
       <p />
