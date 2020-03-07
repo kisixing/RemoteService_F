@@ -58,6 +58,9 @@ const config: IConfig = {
   lessLoaderOptions: {
     javascriptEnabled: true,
   },
+  extraBabelPlugins:[
+    ['import', { libraryName: 'antd-mobile', style: true }]  //按需加载antd-mobile样式文件
+  ],
   proxy: {
     '/api': {
       target: 'http://transfer.lian-med.com/',

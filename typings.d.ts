@@ -13,6 +13,7 @@ declare module 'react-pdf';
 declare module 'store';
 declare module 'react-pdf/dist/entry.webpack';
 declare module 'chart.js';
+declare module 'numeral';
 
 declare module "*.json" {
   const content: object;

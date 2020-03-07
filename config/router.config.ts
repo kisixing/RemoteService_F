@@ -183,33 +183,22 @@ export default [
             title: '在线咨询',
             routes: [
               {
-                path: '/consultation/',
+                path: '/consultation',
+                name: 'consultation home',
+                title: ' ',
+                component: './consultation',
+              },
+              {
+                path: '/consultation/doctor',
                 name: 'doctor list',
-                title: '',
-                component: './consultation/DoctorList',
-              },
-            ],
-          },
-          {
-            path: '/weight',
-            name: 'weight',
-            title: '体重管理',
-            routes: [
-              {
-                path: '/weight',
-                redirect: '/weight/input',
+                title: '专家咨询', // 在线复诊
+                component: './consultation/doctors/list',
               },
               {
-                path: '/weight/input',
-                name: 'weight input',
-                title: '体重录入',
-                component: './tools/weight/Input',
-              },
-              {
-                path: '/weight/record',
-                name: 'weight records',
-                title: '体重记录',
-                component: './tools/weight/Record',
+                path: '/consultation/team',
+                name: 'doctor team',
+                title: '团队',
+                component: './consultation/team',
               },
             ],
           },
@@ -220,26 +209,75 @@ export default [
             routes: [
               {
                 path: '/signs/input',
+                title: '体征数据录入',
                 component: './tools/signs/InputTabBar',
-                routes: [
-                  {
-                    path: '/signs/input/blood-pressure',
-                    name: 'blood pressure',
-                    title: '血压',
-                    component: './tools/signs/blood-pressure/Input'
-                  },
-                  {
-                    path: '/signs/input/blood-glucose',
-                    name: 'blood glucose',
-                    title: '血糖',
-                    component: './tools/signs/blood-glucose/Input'
-                  }
-                ]
               },
               {
                 path: '/signs/record',
+                title: '体征数据记录',
                 component: './tools/signs/RecordsTabBar',
-              }
+              },
+              // 以下不常用，确保有单独的路由，便于后续扩展
+              {
+                path: '/signs/weight/input',
+                name: 'weight input',
+                title: '体重录入',
+                component: './tools/weight/Input',
+              },
+              {
+                path: '/signs/weight/record',
+                name: 'weight records',
+                title: '体重记录',
+                component: './tools/weight/Record',
+              },
+              {
+                path: '/signs/blood-pressure/input',
+                name: 'blood pressure',
+                title: '血压录入',
+                component: './tools/blood-pressure/Input'
+              },
+              {
+                path: '/signs/blood-pressure/record',
+                name: 'blood pressure',
+                title: '血压记录',
+                component: './tools/blood-pressure/Record'
+              },
+              {
+                path: '/signs/blood-glucose/input',
+                name: 'blood-glucose input',
+                title: '血糖录入',
+                component: './tools/blood-glucose/Input'
+              },
+              {
+                path: '/signs/blood-glucose/record',
+                name: 'blood-glucose record',
+                title: '血压记录',
+                component: './tools/blood-glucose/Record'
+              },
+              {
+                path: '/signs/blood-oxygen/input',
+                name: 'blood-oxygen input',
+                title: '血氧录入',
+                component: './tools/blood-oxygen/Input'
+              },
+              {
+                path: '/signs/blood-oxygen/record',
+                name: 'blood pressure',
+                title: '血氧记录',
+                component: './tools/blood-oxygen/Record'
+              },
+              {
+                path: '/signs/blood-glucose/input',
+                name: 'temperature input',
+                title: '体温录入',
+                component: './tools/temperature/Input'
+              },
+              {
+                path: '/signs/temperature/record',
+                name: 'temperature',
+                title: '体温记录',
+                component: './tools/temperature/Record'
+              },
             ]
           },
           {

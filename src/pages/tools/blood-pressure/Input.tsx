@@ -6,7 +6,7 @@
 
 import React from 'react'
 
-function Input() {
+function BloodPressureInput() {
   return (
     <div>
       血压输入
@@ -14,4 +14,4 @@ function Input() {
   )
 }
 
-export default Input
+export default BloodPressureInput

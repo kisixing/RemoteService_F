@@ -6,7 +6,7 @@
 
 import React from 'react'
 
-function Input() {
+function BloodGlucoseInput() {
   return (
     <div>
       血糖输入
@@ -14,4 +14,4 @@ function Input() {
   )
 }
 
-export default Input
+export default BloodGlucoseInput
