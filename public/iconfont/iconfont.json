@@ -594,6 +594,13 @@
       "unicode_decimal": 58939
     },
     {
+      "icon_id": "2640465",
+      "name": "人民币",
+      "font_class": "fl-renminbi",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
       "icon_id": "6775446",
       "name": "医院",
       "font_class": "yiliaohangyedeICON-",
@@ -606,6 +613,13 @@
       "font_class": "huabankaobei-",
       "unicode": "e66a",
       "unicode_decimal": 58986
+    },
+    {
+      "icon_id": "11641854",
+      "name": "人民币单价 (2)",
+      "font_class": "renminbidanjia",
+      "unicode": "e619",
+      "unicode_decimal": 58905
     },
     {
       "icon_id": "12215196",
