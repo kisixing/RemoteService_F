@@ -587,6 +587,34 @@
       "unicode_decimal": 58996
     },
     {
+      "icon_id": "246144",
+      "name": "editor-line",
+      "font_class": "editor-line",
+      "unicode": "e684",
+      "unicode_decimal": 59012
+    },
+    {
+      "icon_id": "435893",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e795",
+      "unicode_decimal": 59285
+    },
+    {
+      "icon_id": "978322",
+      "name": "编辑",
+      "font_class": "bianji1",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "1240492",
+      "name": "答题记录",
+      "font_class": "datijilu",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
       "icon_id": "1761457",
       "name": "医院",
       "font_class": "yiyuan",
@@ -599,6 +627,20 @@
       "font_class": "fl-renminbi",
       "unicode": "e634",
       "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "2767713",
+      "name": "编辑",
+      "font_class": "icon-",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "5334848",
+      "name": "服务记录",
+      "font_class": "fuwujilu_huaban",
+      "unicode": "e619",
+      "unicode_decimal": 58905
     },
     {
       "icon_id": "6775446",
@@ -615,11 +657,25 @@
       "unicode_decimal": 58986
     },
     {
+      "icon_id": "7817213",
+      "name": "编辑",
+      "font_class": "bianji2",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "10909318",
+      "name": "record",
+      "font_class": "record",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
       "icon_id": "11641854",
       "name": "人民币单价 (2)",
       "font_class": "renminbidanjia",
-      "unicode": "e619",
-      "unicode_decimal": 58905
+      "unicode": "e61b",
+      "unicode_decimal": 58907
     },
     {
       "icon_id": "12215196",
