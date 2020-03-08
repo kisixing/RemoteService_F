@@ -6,13 +6,13 @@
 
 import React from 'react';
 import { connect } from 'dva';
-import { DatePicker  } from 'antd-mobile';
 
-import { router } from '@/utils/utils';
+import DatePicker from '../components/DatePicker';
 import { ConnectState } from '@/models/connect';
 import BackButton from '@/components/BackButton';
-import { WhiteSpace, IconFont, Button } from '@/components/antd-mobile';
+import { IconFont, Button } from '@/components/antd-mobile';
 import GaugeInput from '../components/GaugeInput';
+import { router } from '@/utils/utils';
 import styles from './styles.less';
 
 const nowTimeStamp = Date.now();
@@ -25,16 +25,6 @@ interface IProps {
   onClick?: () => void
 }
 
-// The `onClick / extra` props need to be processed within the component
-const CustomChildren = ({ extra, onClick }: IProps) => (
-  <div
-    onClick={onClick}
-    className={styles.datePickerList}
-  >
-    {extra}
-  </div>
-);
-
 function WeightInput() {
   const [date, setDate] = React.useState(now);
 
@@ -43,20 +33,16 @@ function WeightInput() {
   }, [])
 
   return (
-    <div className="page">
-      <div className={styles.date}>
-        <DatePicker
-          mode="date"
-          title="选择监测时间"
-          extra="请选择监测时间"
-          minDate={minDate}
-          maxDate={maxDate}
-          value={date}
-          onChange={date => setDate(date)}
-        >
-          <CustomChildren />
-        </DatePicker>
-      </div>
+    <div className={styles.container}>
+      <DatePicker
+        mode="date"
+        title="选择日期"
+        extra="请选择日期"
+        minDate={minDate}
+        maxDate={maxDate}
+        value={date}
+        onChange={date => setDate(date)}
+      />
       <div className={styles.content}>
         <div className={styles.text} onClick={() => router('/weight/record')}>
           <IconFont type="icon_article_line" size="34px" />

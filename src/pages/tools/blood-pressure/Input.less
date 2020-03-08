@@ -1,0 +1,103 @@
+@import '../../../utils/theme.less';
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .content {
+    min-height: 4rem;
+    padding-bottom: .64rem;
+    background-color: #fff;
+
+    .text {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: .3rem;
+      color: @primary-color;
+
+      span {
+        margin-left: .1rem;
+      }
+    }
+
+    .circle {
+      width: 4rem;
+      height: 4rem;
+      margin: 0 auto;
+      margin-bottom: .48rem;
+      border-radius: 50%;
+      background-color: #fff;
+      box-shadow: 0 12px 19px 0 rgba(206,201,202,0.25);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .input {
+        font-size: .32rem;
+
+        input {
+          height: .88rem;
+          width: 1.5rem;
+          padding: .1rem .2rem;
+          margin-top: .3rem;
+          margin-bottom: .3rem;
+          border: none;
+          text-align: center;
+          font-size: .35rem;
+        }
+
+        :global(.iconfont) {
+          color: @primary-color;
+        }
+      }
+
+      .unit {
+        font-size: .24rem;
+        color: #999;
+      }
+    }
+
+    .formList {
+      .label {
+        font-size: .3rem;
+
+        .required {
+          display: inline-block;
+          width: .2rem;
+          color: @brand-important;
+        }
+
+        .unit {
+          font-size: .24rem;
+          color: #999;
+        }
+      }
+
+      .checkbox {
+        margin-left: .3rem;
+
+        :global(.am-checkbox-inner) {
+          width: .36rem;
+          height:.36rem;
+          margin-right: 5px;
+        }
+      }
+
+      input,
+      textarea {
+        font-size: .3rem;
+      }
+
+      input {
+        text-align: right;
+      }
+    }
+  }
+
+  .bottom {
+    margin: .5rem .3rem;
+  }
+}
