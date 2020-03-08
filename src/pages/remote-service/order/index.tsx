@@ -10,7 +10,7 @@ import Router from 'umi/router';
 import { StickyContainer, Sticky } from 'react-sticky';
 import BackButton from '@/components/BackButton';
 import ListView from './ListView';
-
+import { OrderState } from './config';
 
 
 import styles from './index.less';
@@ -22,6 +22,7 @@ const tabs = [
   { title: <Title text="胎监判图" />, key: 'apply' },
   { title: <Title text="在线咨询" />, key: 'consult' },
 ];
+
 
 interface Itext { text: string, icon?: string }
 function Title({ text, icon }: Itext) {
@@ -46,6 +47,28 @@ function renderTabBar(props) {
   );
 }
 
+// 根据状态确定 路径|显示字段
+function getTextByState(state: number) {
+  let text:string = '';
+  switch(state){
+    case OrderState.TO_BE_BOUND:
+      text = '未绑定';
+      break;
+    case OrderState.IN_USE:
+      text = '使用中';
+      break;
+    case OrderState.IN_LATE:
+      text = '逾期';
+      break;
+    case OrderState.END:
+      text = '已结束';
+      break;
+    default:
+      text = '状态未知'
+  }
+  return text;
+} 
+
 function Oders(props: any) {
   const { location: { query } } = props;
   const type = query.type || 'all';
@@ -58,18 +81,46 @@ function Oders(props: any) {
     }
     return Router.replace(`/orders?type=${key}`);
   };
-
+  
   const dataSource = () => {
     if (currentKey === 'monitoring') {
-      return ['一个月胎监服务', '二个月胎监服务'];
+      return [
+        {name: '一个月胎监服务', key: 'm-1', state: '',stateText: ''},
+        {name: '二个月胎监服务', key: 'm-2', state: '',stateText: ''}
+      ]
     }
     if (currentKey === 'consult') {
-      return ['在线咨询1', '在线咨询2', '在线咨询3', '在线咨询4', '在线咨询5', '在线咨询6'];
+      return [
+        {name: '在线咨询1', key: 'c-1', state: '',stateText: ''},
+        {name: '在线咨询2', key: 'c-2', state: '',stateText: ''},
+        {name: '在线咨询3', key: 'c-3', state: '',stateText: ''},
+        {name: '在线咨询4', key: 'c-4', state: '',stateText: ''},
+        {name: '在线咨询4', key: 'c-5', state: '',stateText: ''},
+        {name: '在线咨询4', key: 'c-6', state: '',stateText: ''}
+      ]
     }
     if (currentKey === 'apply') {
-      return ['胎监判图1', '胎监判图2', '胎监判图3', '胎监判图4'];
+      return [
+        {name: '胎监判图1', key: 'a-1', state: '',stateText: ''},
+        {name: '胎监判图2', key: 'a-2', state: '',stateText: ''},
+        {name: '胎监判图3', key: 'a-3', state: '',stateText: ''},
+        {name: '胎监判图4', key: 'a-4', state: '',stateText: ''}
+      ]
     }
-    return ['一个月胎监服务', '二个月胎监服务', '在线咨询1', '在线咨询2', '在线咨询3', '在线咨询4', '在线咨询5', '在线咨询6', '胎监判图1', '胎监判图2', '胎监判图3', '胎监判图4'];
+    return [
+      {name: '一个月胎监服务', key: 'm-1', state: OrderState.TO_BE_BOUND,textstateText: ''},
+      {name: '二个月胎监服务', key: 'm-2', state: OrderState.IN_LATE,stateText: ''},
+      {name: '在线咨询1', key: 'c-1', state: OrderState.IN_USE,stateText: ''},
+      {name: '在线咨询2', key: 'c-2', state: OrderState.END,stateText: ''},
+      {name: '在线咨询3', key: 'c-3', state: '',stateText: ''},
+      {name: '在线咨询4', key: 'c-4', state: '',stateText: ''},
+      {name: '在线咨询4', key: 'c-5', state: '',stateText: ''},
+      {name: '在线咨询4', key: 'c-6', state: '',stateText: ''},
+      {name: '胎监判图1', key: 'a-1', state: '',stateText: ''},
+      {name: '胎监判图2', key: 'a-2', state: '',stateText: ''},
+      {name: '胎监判图3', key: 'a-3', state: '',stateText: ''},
+      {name: '胎监判图4', key: 'a-4', state: '',stateText: ''}
+    ]
   };
 
   const onClick = () => {
@@ -96,7 +147,7 @@ function Oders(props: any) {
           }}
         >
           <div key={type} className={styles.content}>
-            <ListView dataSource={dataSource()} />
+            <ListView dataSource={dataSource().map((v:any) => {v.stateText = getTextByState(v.state); return v; })} />
           </div>
         </Tabs>
       </StickyContainer>
