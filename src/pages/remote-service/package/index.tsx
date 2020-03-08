@@ -5,9 +5,9 @@
  */
 
 import React,{useEffect} from 'react';
+import Router from 'umi/Router';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-import { router } from '@/utils/utils';
 import { WingBlank } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
 import { IconFont, Touchable } from '@/components/antd-mobile';
@@ -26,7 +26,7 @@ function Packages(props: PackageProps) {
 
   const onClick = (id: number|string):void => {
     props.dispatch({type: 'combo/setPackageId', payload: id});
-    router('/packages/detail');
+    Router.push('/packages/detail');
   }
 
   // 获取套餐列表

@@ -5,7 +5,7 @@ import { Button, Checkbox, WingBlank } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
 import { wxpay } from '@/services/pay';
 
-import wx from 'weixin-js-sdk'
+// import wx from 'weixin-js-sdk'
 import styles from './index.less';
 
 
@@ -23,12 +23,12 @@ function Pay(props:any) {
   // TODO 支付fn
   const pay = () => {
     console.log('触发支付');
-    return ;
     const sessionData = window.sessionStorage['persist:redux-storage'];
     const sessionObj = JSON.parse(sessionData);
     const PREGNANCY_ID = JSON.parse(sessionObj['global'])['currentPregnancy']['id'];
     
     const {confirmData} = props;
+    const { wx }:any = window;
     wxpay({servicepackage: {id: confirmData.id}, pregnancy: {id: PREGNANCY_ID}}).then(payorder => {
       wx.config({
         appId: payorder.appId,
@@ -42,10 +42,13 @@ function Pay(props:any) {
         package: payorder.packageValue, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
         signType: payorder.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
         paySign: payorder.paySign, // 支付签名
-        success: function (res) {
+        success: function (res:any) {
           // 支付成功后的回调函数
-          console.log(res);
+          alert(res);
           // router.push({ pathname: '/purchase/result'});
+        },
+        error: function (res:any) {
+          alert(res);
         }
       });
     })
@@ -93,6 +96,7 @@ function Pay(props:any) {
           </Button>
         </div>
       </div>
+      <BackButton/>
     </div>
   )
 }

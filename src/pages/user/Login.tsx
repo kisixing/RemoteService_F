@@ -28,7 +28,6 @@ const IDType = [
   { label: '其他', value: 5 },
 ];
 // ['二代身份证', '港澳台居民居住证', '回乡证', '台胞证', '护照', '其他'].map(e => ({ label: e, value: e }));
-
 interface P {
   form: any
   dispatch: any
