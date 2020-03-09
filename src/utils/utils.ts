@@ -234,6 +234,28 @@ export const KG = {
   }
 };
 
+/**
+ * 获取当前HTML的header信息
+ *
+ * @returns
+ */
+export function getHeaders() {
+  var req = new XMLHttpRequest();
+  req.open('GET', 'document.location.href', false);
+  req.send(null);
+  var headerArr = req.getAllResponseHeaders().split('\n');
+  var headers = {};
+  headerArr.forEach(item => {
+    if(item !== '') {
+    var index = item.indexOf(':');
+      var key = item.slice(0,index);
+      var value = item.slice(index+1).trim();
+      headers[key] = value
+    }
+  })
+  return headers
+}
+
 // 跳转
 export function router(type: string) {
   if (!type) {
