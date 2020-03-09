@@ -113,7 +113,7 @@ export default [
                 path: '/packages',
                 name: 'packages list',
                 title: '套餐服务',
-                component: './remote-service/package',
+                component: './remote-service/package/index',
               },
               {
                 path: '/packages/detail', // 考虑动态路由

@@ -1,0 +1,51 @@
+.container {
+  .state {
+    margin: 0.5rem 0.2rem;
+    width: calc(100% - 0.4rem);
+    height: 0.6rem;
+    line-height: 0.6rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 0.3rem;
+    background-color: #f8f8fb;
+    > div {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      > a {
+        width: 2rem;
+        height: 0.6rem;
+        background-color: #ffcc4a;
+        text-align: center;
+        border-radius: 0.4rem;
+        line-height: 0.6rem;
+        font-size: 0.3rem;
+      }
+      > img {
+        width: 0.5rem;
+      }
+    }
+  }
+
+  .page {
+    background-color: #ffffff;
+    .header {
+      padding: 0.2rem;
+
+    }
+    .content {
+      padding: 0.2rem;
+      > div {
+        margin: 0.2rem 0;
+      }
+      .doctor {
+        display: flex;
+        flex-direction: row;
+        img {
+          height: 1.3rem;
+        }
+      }
+    }
+  }
+}
