@@ -20,6 +20,8 @@ const maxDate = new Date(nowTimeStamp);
 function BloodPressureInput() {
   const [date, setDate] = useState(now)
   const [bloodPressure, setBloodPressure] = useState();
+  const [diastolic, setDiastolic] = useState()
+  const [systolic, setSystolic] = useState()
   const [heartRate, setHeartRate] = useState();
 
   const onSubmit = () => {
@@ -54,9 +56,18 @@ function BloodPressureInput() {
           <div className={styles.input}>
             <input
               type="number"
-              placeholder="输入..."
-              value={bloodPressure}
-              onChange={e => setBloodPressure(Number(e.target.value))}
+              placeholder="舒张压"
+              value={diastolic}
+              onChange={e => setDiastolic(Number(e.target.value))}
+              style={{ width: '1.2rem' }}
+            />
+            /
+            <input
+              type="number"
+              placeholder="收缩压"
+              value={systolic}
+              onChange={e => setSystolic(Number(e.target.value))}
+              style={{ width: '1.2rem' }}
             />
             <IconFont type="editor-line" size="0.36rem" />
           </div>
@@ -80,7 +91,9 @@ function BloodPressureInput() {
         </List>
       </div>
       <div className={styles.bottom}>
-        <Button type="primary" onClick={onSubmit}>保存</Button>
+        <Button type="primary" onClick={onSubmit}>
+          保存
+        </Button>
         <BackButton />
       </div>
     </div>

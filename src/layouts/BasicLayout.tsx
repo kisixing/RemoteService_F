@@ -34,10 +34,11 @@ const BasicLayout: React.FC<any> = props => {
     <TransitionGroup>
       <CSSTransition key={props.location.pathname} classNames="fade" timeout={300}>
         <LocaleProvider locale={locale === 'en' ? enUS : {}}>
-          <div>
+          {/* <div>
             {children}
             <span style={{ fontSize: '.12rem' }}>{JSON.stringify(getHeaders())}</span>
-          </div>
+          </div> */}
+          {children}
         </LocaleProvider>
       </CSSTransition>
     </TransitionGroup>
