@@ -8,8 +8,7 @@ import React,{ ReactNode, useEffect } from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { router } from '@/utils/utils';
-import dynamic from 'umi/dynamic';
-import { Tabs, Button, WingBlank } from 'antd-mobile';
+import { Tabs, Button } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
 
 import { CurrentPackageDetail } from './interface';

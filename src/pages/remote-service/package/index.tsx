@@ -5,12 +5,12 @@
  */
 
 import React,{useEffect} from 'react';
-import Router from 'umi/Router';
+import Router from 'umi/router';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { WingBlank } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
-import { IconFont, Touchable } from '@/components/antd-mobile';
+import { Touchable } from '@/components/antd-mobile';
 
 import { ConnectState } from '@/models/connect';
 import { PackageListItem } from './interface';
@@ -31,7 +31,6 @@ function Packages(props: PackageProps) {
 
   // 获取套餐列表
   useEffect(() => {props.dispatch({type: 'combo/getPackage'})},[]);
-  console.log(props.packageList);
   return (
     <WingBlank className={styles.container}>
       {props.packageList.map((item: PackageListItem) => {
