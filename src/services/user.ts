@@ -87,8 +87,9 @@ export async function newPregnancy(params: newYcParamsType) {
  * 获取验证码
  * @param mobile
  */
+const captchaApi = process.env.NODE_ENV === 'development' ? 'http://transfer.lian-med.com/api/captcha' : '/api/captcha';
 export async function getCaptcha(params: object) {
-  return request('/api/captcha', {
+  return request(captchaApi, {
     method: 'POST',
     data: params,
   });
