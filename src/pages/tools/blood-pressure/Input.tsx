@@ -9,6 +9,7 @@ import { InputItem, List, Toast } from 'antd-mobile';
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
+import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
 import styles from './Input.less';
 
@@ -19,20 +20,20 @@ const maxDate = new Date(nowTimeStamp);
 
 function BloodPressureInput() {
   const [date, setDate] = useState(now)
-  const [bloodPressure, setBloodPressure] = useState();
-  const [diastolic, setDiastolic] = useState()
-  const [systolic, setSystolic] = useState()
-  const [heartRate, setHeartRate] = useState();
+  // const [bloodPressure, setBloodPressure] = useState();
+  const [diastolic, setDiastolic] = useState('')
+  const [systolic, setSystolic] = useState('')
+  const [heartRate, setHeartRate] = useState('');
 
   const onSubmit = () => {
     const d = moment(date).format('YYYY-MM-DD');
-    if (!bloodPressure) {
+    if (!diastolic || !systolic) {
       return Toast.info('请输入血压数值...');
     }
     if (!heartRate) {
       return Toast.info('请输入心率数值...');
     }
-    console.log({ d, bloodPressure, heartRate });
+    console.log({ d, diastolic, systolic, heartRate });
   }
   return (
     <div className={styles.container}>
@@ -47,7 +48,7 @@ function BloodPressureInput() {
       />
       <WhiteSpace />
       <div className={styles.content}>
-        <div className={styles.text}>
+        <div className={styles.text} onClick={() => router('/signs/blood-glucose/record')}>
           <IconFont type="record" size="28px" />
           <span>历史记录</span>
         </div>
@@ -58,7 +59,7 @@ function BloodPressureInput() {
               type="number"
               placeholder="舒张压"
               value={diastolic}
-              onChange={e => setDiastolic(Number(e.target.value))}
+              onChange={e => setDiastolic(e.target.value)}
               style={{ width: '1.2rem' }}
             />
             /
@@ -66,7 +67,7 @@ function BloodPressureInput() {
               type="number"
               placeholder="收缩压"
               value={systolic}
-              onChange={e => setSystolic(Number(e.target.value))}
+              onChange={e => setSystolic(e.target.value)}
               style={{ width: '1.2rem' }}
             />
             <IconFont type="editor-line" size="0.36rem" />
@@ -80,7 +81,7 @@ function BloodPressureInput() {
             labelNumber={7}
             placeholder="请输入心率"
             value={heartRate}
-            onChange={v => setHeartRate(Number(v))}
+            onChange={v => setHeartRate(v)}
           >
             <div className={styles.label}>
               <span className={styles.required}>*</span>

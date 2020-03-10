@@ -92,6 +92,19 @@ function BloodGlucoseInput() {
         value={date}
         onChange={date => setDate(date)}
       />
+      <div
+        className={styles.record}
+        style={{ width: '100%', position: 'absolute', top: '1.76rem', zIndex: 9 }}
+        onClick={() => router('/signs/blood-glucose/record')}
+      >
+        <IconFont type="record" size="28px" />
+        <span>历史记录</span>
+      </div>
+      <div style={{ width: '100%', position: 'absolute', bottom: '-1.56rem', padding: '0.3rem' }}>
+        <Button type="primary" onClick={onSubmit}>
+          保存
+        </Button>
+      </div>
       <Tabs
         tabs={tabs}
         page={activatedTab}
@@ -100,11 +113,7 @@ function BloodGlucoseInput() {
         renderTab={tab => <span>{tab.title}</span>}
       >
         <div style={{ height: '100%' }}>
-          <div className={styles.content}>
-            <div className={styles.text} onClick={() => router('/weight/record')}>
-              <IconFont type="record" size="28px" />
-              <span>历史记录</span>
-            </div>
+          <div className={styles.content} style={{ paddingTop: '0.6rem' }}>
             <div className={styles.circle}>
               <span>血糖</span>
               <div className={styles.input}>
@@ -174,11 +183,6 @@ function BloodGlucoseInput() {
                 onChange={e => onChange('dietaryStatus', e)}
               />
             </List>
-          </div>
-          <div className={styles.bottom}>
-            <Button type="primary" onClick={onSubmit}>
-              保存
-            </Button>
           </div>
         </div>
       </Tabs>

@@ -22,11 +22,6 @@ const now = new Date(nowTimeStamp);
 const minDate = new Date(nowTimeStamp - 1000*60*60*24*30);
 const maxDate = new Date(nowTimeStamp);
 
-interface IProps {
-  extra?: string
-  onClick?: () => void
-}
-
 function WeightInput() {
   const [date, setDate] = useState(now);
   const [weight, setWeight] = useState();
@@ -56,7 +51,7 @@ function WeightInput() {
       />
       <WhiteSpace />
       <div className={styles.content}>
-        <div className={styles.text} onClick={() => router('/weight/record')}>
+        <div className={styles.text} onClick={() => router('/signs/weight/record')}>
           <IconFont type="record" size="28px" />
           <span>历史记录</span>
         </div>
@@ -76,7 +71,9 @@ function WeightInput() {
         </div>
       </div>
       <div style={{ margin: '.5rem .3rem' }}>
-        <Button type="primary" onClick={onSubmit}>保存</Button>
+        <Button type="primary" onClick={onSubmit}>
+          保存
+        </Button>
         <BackButton />
       </div>
     </div>

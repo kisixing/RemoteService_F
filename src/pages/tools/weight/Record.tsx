@@ -9,8 +9,8 @@
 
  function Record() {
    return (
-     <div>
-       Record
+     <div className="page">
+       weight Record
      </div>
    )
  }
