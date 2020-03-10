@@ -26,43 +26,48 @@ const tabs = [
 ];
 
 // 数据结构
-const json = {
-  date: '',
-  data: [
-    {
-      key: 'before-breakfast',
-      bloodGlucose: 100,
-      isInsulin: null,
-      quantity: null,
-      dietaryStatus: '',
-    },
-    { key: 'after-breakfast', bloodGlucose: 10 },
-    { key: 'before-lunch', bloodGlucose: 99 },
-    { key: 'after-lunch', bloodGlucose: 69 },
-    { key: 'before-dinner', bloodGlucose: '' },
-    { key: 'after-dinner', bloodGlucose: '' },
-    { key: 'before-sleep', bloodGlucose: '' },
-  ],
-};
+const json = [
+  {
+    key: 'before-breakfast',
+    bloodGlucose: 100,
+    isInsulin: null,
+    quantity: null,
+    dietaryStatus: '',
+  },
+  { key: 'after-breakfast', bloodGlucose: 10 },
+  { key: 'before-lunch', bloodGlucose: 99 },
+  { key: 'after-lunch', bloodGlucose: 69 },
+  { key: 'before-dinner', bloodGlucose: '' },
+  { key: 'after-dinner', bloodGlucose: '' },
+  { key: 'before-sleep', bloodGlucose: '' },
+];
 
 function BloodGlucoseInput() {
   // TODO 根据tab key获取提交的值
   const [date, setDate] = useState(now);
   const [activatedTab, setActivatedTab] = useState('before-breakfast');
-  const [values, setValues] = useState(json.data);
+  const [values, setValues] = useState(json);
+  const [current, setCurrent] = useState({
+    bloodGlucose: '',
+    isInsulin: null,
+    quantity: undefined,
+    dietaryStatus: '',
+  });
 
   useEffect(() => {
+    const index = values.findIndex(e => e.key === activatedTab);
+    setCurrent(values[index.toString()]);
     return () => {};
-  }, [])
+  }, [activatedTab]);
 
   const onSubmit = () => {
     const d = moment(date).format('YYYY-MM-DD');
-    const index = values.findIndex(e => e.key === activatedTab);
-    const current = values[index];
+    // const index = values.findIndex(e => e.key === activatedTab);
+    // const current = values[index];
     if (!current.bloodGlucose) {
       return Toast.info('请输入血糖数值...');
     }
-    if (!current.isInsulin) {
+    if (current.isInsulin === null || current.isInsulin === '' || current.isInsulin === undefined) {
       return Toast.info('请选择是否注射胰岛素...');
     }
     if (current.isInsulin && !current.quantity) {
@@ -71,17 +76,8 @@ function BloodGlucoseInput() {
     console.log({ d, current });
   };
 
-  const getValue = (key: string) => {
-    let current = {};
-    const index = values.findIndex(e => e.key === activatedTab);
-    if (index > -1) {
-      current = values[index];
-    }
-    return current[key];
-  }
-
   const onChange = (key: string, value: any) => {
-    const index = values.findIndex(e => e.key === activatedTab);
+    const index = values.findIndex((e: any) => e.key === activatedTab);
     const newValues = [...values];
     newValues[index][key] = value;
     setValues(newValues);
@@ -100,7 +96,7 @@ function BloodGlucoseInput() {
         tabs={tabs}
         page={activatedTab}
         tabBarPosition="top"
-        onChange={(tab, index) => setActivatedTab(tab.key)}
+        onChange={(tab: any, index) => setActivatedTab(tab.key)}
         renderTab={tab => <span>{tab.title}</span>}
       >
         <div style={{ height: '100%' }}>
@@ -114,7 +110,7 @@ function BloodGlucoseInput() {
               <div className={styles.input}>
                 <input
                   type="number"
-                  value={getValue('bloodGlucose')}
+                  value={current.bloodGlucose}
                   placeholder="输入..."
                   onChange={e => onChange('bloodGlucose', Number(e.target.value))}
                 />
@@ -128,14 +124,14 @@ function BloodGlucoseInput() {
                   <>
                     <Checkbox
                       className={styles.checkbox}
-                      checked={getValue('isInsulin') === true}
+                      checked={current.isInsulin === true}
                       onChange={() => onChange('isInsulin', true)}
                     >
                       是
                     </Checkbox>
                     <Checkbox
                       className={styles.checkbox}
-                      checked={getValue('isInsulin') === false}
+                      checked={current.isInsulin === false}
                       onChange={() => onChange('isInsulin', false)}
                     >
                       否
@@ -148,14 +144,14 @@ function BloodGlucoseInput() {
                   注射胰岛素
                 </div>
               </List.Item>
-              {getValue('isInsulin') ? (
+              {current.isInsulin ? (
                 <InputItem
                   clear
                   type="digit"
                   labelNumber={7}
                   placeholder="请输入测量前的注射量"
-                  value={getValue('quantity')}
-                  onChange={e => onChange('quantity', e)}
+                  value={current.quantity}
+                  onChange={e => onChange('quantity', Number(e))}
                 >
                   <div className={styles.label}>
                     <span className={styles.required}>*</span>
@@ -174,7 +170,7 @@ function BloodGlucoseInput() {
                 }
                 placeholder="请输入测量血糖前饮食内容，方便医生了解的情况..."
                 labelNumber={7}
-                value={getValue('dietaryStatus')}
+                value={current.dietaryStatus}
                 onChange={e => onChange('dietaryStatus', e)}
               />
             </List>

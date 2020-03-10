@@ -84,18 +84,18 @@ export const TOOLS = [
     icon: 'i001.png',
     route: '/signs/weight/input',
   },
-  {
-    key: '2',
-    label: '血糖管理',
-    icon: 'i002.png',
-    route: '',
-  },
-  {
-    key: '3',
-    label: '血压管理',
-    icon: 'i007.png',
-    route: '',
-  },
+  // {
+  //   key: '2',
+  //   label: '血糖管理',
+  //   icon: 'i002.png',
+  //   route: '',
+  // },
+  // {
+  //   key: '3',
+  //   label: '血压管理',
+  //   icon: 'i007.png',
+  //   route: '',
+  // },
   {
     key: '4',
     label: '胎动计数',
