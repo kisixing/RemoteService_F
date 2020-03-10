@@ -9,6 +9,7 @@ import { Toast } from 'antd-mobile';
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
+import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
 import styles from '../blood-pressure/Input.less';
 
@@ -17,7 +18,7 @@ const now = new Date(nowTimeStamp);
 
 function TemperatureInput() {
   const [date, setDate] = useState(now);
-  const [temperature, setTemperature] = useState()
+  const [temperature, setTemperature] = useState('')
 
   const onSubmit = () => {
     const d = moment(date).format('YYYY-MM-DD');
@@ -37,7 +38,7 @@ function TemperatureInput() {
       />
       <WhiteSpace />
       <div className={styles.content}>
-        <div className={styles.text}>
+        <div className={styles.text} onClick={() => router('/signs/temperature/record')}>
           <IconFont type="record" size="28px" />
           <span>历史记录</span>
         </div>
@@ -48,7 +49,7 @@ function TemperatureInput() {
               type="number"
               placeholder="输入..."
               value={temperature}
-              onChange={e => setTemperature(Number(e.target.value))}
+              onChange={e => setTemperature(e.target.value)}
             />
             <IconFont type="editor-line" size="0.36rem" />
           </div>

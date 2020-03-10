@@ -251,7 +251,7 @@ export default [
               {
                 path: '/signs/blood-glucose/record',
                 name: 'blood-glucose record',
-                title: '血压记录',
+                title: '血糖记录',
                 component: './tools/blood-glucose/Record'
               },
               {

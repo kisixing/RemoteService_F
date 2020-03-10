@@ -9,6 +9,7 @@ import { InputItem, List, Toast } from 'antd-mobile';
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
+import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
 import styles from '../blood-pressure/Input.less';
 
@@ -17,8 +18,8 @@ const now = new Date(nowTimeStamp);
 
 function BloodOxygenInput() {
   const [date, setDate] = React.useState(now);
-  const [bloodOxygen, setBloodOxygen] = React.useState();
-  const [pulseRate, setPulseRate] = React.useState();
+  const [bloodOxygen, setBloodOxygen] = React.useState('');
+  const [pulseRate, setPulseRate] = React.useState('');
 
   const onSubmit = () => {
     const d = moment(date).format('YYYY-MM-DD');
@@ -41,7 +42,7 @@ function BloodOxygenInput() {
       />
       <WhiteSpace />
       <div className={styles.content}>
-        <div className={styles.text}>
+        <div className={styles.text} onClick={() => router('/signs/blood-oxygen/record')}>
           <IconFont type="record" size="28px" />
           <span>历史记录</span>
         </div>

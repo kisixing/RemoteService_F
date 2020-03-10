@@ -8,7 +8,7 @@ import React from 'react'
 
 function BloodGlucoseRecord() {
   return (
-    <div>
+    <div className="page">
       血糖记录
     </div>
   )
