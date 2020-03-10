@@ -132,7 +132,7 @@ export default [
                 path: '/apply',
                 name: 'Apply',
                 title: '胎监判图',
-                component: './remote-service/Apply'
+                component: './remote-service/Apply',
               },
               {
                 path: '/apply/useable',
@@ -145,14 +145,14 @@ export default [
                 name: 'useable Apply',
                 title: '过期胎监判图',
                 // component: './remote-service/Apply'
-              }
-            ]
+              },
+            ],
           },
           {
             path: '/pay',
             name: 'pay',
             title: '支付页',
-            component: './remote-service/pay/index'
+            component: './remote-service/pay/index',
           },
           {
             path: '/reports',
@@ -208,13 +208,18 @@ export default [
             title: '体征管理',
             routes: [
               {
+                path: '/signs',
+                title: '',
+                component: './tools/signs',
+              },
+              {
                 path: '/signs/input',
-                title: '体征数据录入',
+                title: '录入',
                 component: './tools/signs/InputTabBar',
               },
               {
                 path: '/signs/record',
-                title: '体征数据记录',
+                title: '记录',
                 component: './tools/signs/RecordsTabBar',
               },
               // 以下不常用，确保有单独的路由，便于后续扩展
@@ -234,51 +239,51 @@ export default [
                 path: '/signs/blood-pressure/input',
                 name: 'blood pressure',
                 title: '血压录入',
-                component: './tools/blood-pressure/Input'
+                component: './tools/blood-pressure/Input',
               },
               {
                 path: '/signs/blood-pressure/record',
                 name: 'blood pressure',
                 title: '血压记录',
-                component: './tools/blood-pressure/Record'
+                component: './tools/blood-pressure/Record',
               },
               {
                 path: '/signs/blood-glucose/input',
                 name: 'blood-glucose input',
                 title: '血糖录入',
-                component: './tools/blood-glucose/Input'
+                component: './tools/blood-glucose/Input',
               },
               {
                 path: '/signs/blood-glucose/record',
                 name: 'blood-glucose record',
                 title: '血糖记录',
-                component: './tools/blood-glucose/Record'
+                component: './tools/blood-glucose/Record',
               },
               {
                 path: '/signs/blood-oxygen/input',
                 name: 'blood-oxygen input',
                 title: '血氧录入',
-                component: './tools/blood-oxygen/Input'
+                component: './tools/blood-oxygen/Input',
               },
               {
                 path: '/signs/blood-oxygen/record',
                 name: 'blood pressure',
                 title: '血氧记录',
-                component: './tools/blood-oxygen/Record'
+                component: './tools/blood-oxygen/Record',
               },
               {
                 path: '/signs/blood-glucose/input',
                 name: 'temperature input',
                 title: '体温录入',
-                component: './tools/temperature/Input'
+                component: './tools/temperature/Input',
               },
               {
                 path: '/signs/temperature/record',
                 name: 'temperature',
                 title: '体温记录',
-                component: './tools/temperature/Record'
+                component: './tools/temperature/Record',
               },
-            ]
+            ],
           },
           {
             path: '/webtest',

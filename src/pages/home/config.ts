@@ -76,7 +76,7 @@ export const TOOLS = [
     key: '0',
     label: '体征管理',
     icon: 'i000.png',
-    route: '/signs/input?type=weight',
+    route: '/signs',
   },
   {
     key: '1',
