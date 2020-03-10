@@ -4,9 +4,14 @@
  * @Date: 2020-03-05 11:42:06
  */
 
-import React from 'react';
+import React, {ReactNode} from 'react';
 import Router from 'umi/router';
-import { IconFont, Tag, Touchable, Button } from '@/components/antd-mobile';
+// import { IconFont, Tag, Touchable, Button } from '@/components/antd-mobile';
+
+import MonitorCard from './MonitorCard';
+import ApplyCard from './ApplyCard';
+import ConsultCard from './ConsultCard';
+
 import styles from './ListView.less';
 
 interface IProps {
@@ -19,26 +24,25 @@ function ListView({ dataSource = [] }: IProps) {
     Router.push('/orders/detail')
   };
 
+  const renderListItem = (data: {type: string, name:string}):ReactNode => {
+    switch(data.type){
+      case 'monitoring':
+        return  <MonitorCard data={data}/>;
+      case 'apply':
+        return <ApplyCard data={data}/>;
+      case 'consult':
+        return <ConsultCard data={data} />
+      default:
+        return <div>未知订单类型</div>
+    }
+  }
+
   return (
     <div className={styles.listView}>
       {dataSource.map(e => {
         return (
           <div key={e.key} onClick={onClick} className={styles.item}>
-            <div className={styles.header}>
-              <div className={styles.title}>
-                <IconFont type="order" size="0.4rem" />
-                <span className={styles.name}>{e.name}</span>
-                <Tag size="middle" bgcolor="#D9F0F8" color="#3FB6DC">单胎</Tag>
-                <Tag size="middle" bgcolor="#E3D9FC" color="#7540EE">多胎</Tag>
-                <span className={styles.extra}>{e.stateText}</span>
-              </div>
-              <div className={styles.content}>
-                <div>订单号：</div>
-                <div>设备有效期：</div>
-              </div>
-            </div>
-              <div className={styles.detail}>
-            </div>
+            {renderListItem(e)}
           </div>
         );
       })}

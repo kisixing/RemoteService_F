@@ -8,7 +8,7 @@ import React,{useEffect} from 'react';
 import Router from 'umi/router';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-import { WingBlank } from 'antd-mobile';
+import { WingBlank, Tag } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
 import { Touchable } from '@/components/antd-mobile';
 
@@ -41,14 +41,17 @@ function Packages(props: PackageProps) {
                 <img src="/images/slice/pic.png" />
               </div>
               <div className={styles.content}>
-                <div>
-                  <div><b>{item.name}</b></div>
-                  <div className={styles.marking}>单胎</div>
+                <div className={styles.first}>
+                  <div className={styles.name}><b>{item.name}</b></div>
+                  <Tag className={styles.marking}>单胎</Tag>
                 </div>
-                <div>
-                  <div>￥<b>{item.price}</b></div>
-                  <div><small>·含设备</small></div>
-                  <div>查看详情></div>
+                <div className={styles.second}>
+                  <div className={styles.price}>￥<b>{item.price}</b></div>
+                  <div className={styles.device}>·含设备</div>
+                  <div className={styles.detail}>
+                    <span>查看详情</span> 
+                    <img src={require('@/assets/icons/icon_wc_next_1@2x.png')} alt=""/>
+                  </div>
                 </div>
               </div>
             </div>
