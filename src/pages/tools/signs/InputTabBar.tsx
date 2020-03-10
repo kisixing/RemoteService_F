@@ -14,16 +14,8 @@ import BloodPressure from '../blood-pressure/Input';
 import BloodGlucose from '../blood-glucose/Input';
 import BloodOxygen from '../blood-oxygen/Input';
 import Temperature from '../temperature/Input';
-
+import { tabs } from './config';
 import styles from './TabBar.less'
-
-const TABS = [
-  { title: '体重', key: 'weight' },
-  { title: '血压', key: 'blood-pressure' },
-  { title: '血糖', key: 'blood-glucose' },
-  { title: '血氧', key: 'blood-oxygen' },
-  { title: '体温', key: 'temperature' },
-];
 
 function InputTabBar(props: any) {
   const { location: { query } } = props;
@@ -73,7 +65,7 @@ function InputTabBar(props: any) {
     <div>
       <StickyContainer className={styles.wrapper}>
         <Tabs
-          tabs={TABS}
+          tabs={tabs}
           initialPage={type}
           swipeable={false}
           animated={false}
@@ -82,7 +74,7 @@ function InputTabBar(props: any) {
           tabBarInactiveTextColor="#787878"
           tabBarUnderlineStyle={{
             height: '6px',
-            backgroundColor: '#FFCC4A'
+            backgroundColor: '#FFCC4A',
           }}
         >
           <div key={type} className={styles.content}>
@@ -91,7 +83,7 @@ function InputTabBar(props: any) {
         </Tabs>
       </StickyContainer>
     </div>
-  )
+  );
 }
 
 export default InputTabBar
