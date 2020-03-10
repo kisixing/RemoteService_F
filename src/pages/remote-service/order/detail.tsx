@@ -9,6 +9,8 @@ import Router from 'umi/router';
 import BackButton from '@/components/BackButton';
 import { NavBar, Button, Icon } from 'antd-mobile';
 
+import MonitorCard from './MonitorCard';
+
 import styles from './Detail.less';
 
 function details(props: any) {
@@ -67,6 +69,7 @@ function details(props: any) {
       >订单详情</NavBar>
         {renderHeader(state)}
       <div className={styles.page}>
+        {state === '3' ? <MonitorCard/> : null}
         <div className={styles.header}>
           <div>
             <img src={require('@/assets/icons/bar-code@3x.png')}/>
@@ -77,32 +80,19 @@ function details(props: any) {
             <span><b>50</b></span>
           </div>
         </div>
-
         <hr/>
-
         <div className={styles.content}>
           <span>订单类型：</span><span><b>图文咨询</b></span>
           <div><span>咨询医生:</span></div>
           <div className={styles.doctor}>
+            <div><img src={require('@/assets/order/doctor.png')} alt=""/></div>
             <div>
-              <img src={require('@/assets/order/doctor.png')} alt=""/>
-            </div>
-            <div>
-              <div>
-                <span>王奕声</span>
-                <span>副主任医师</span>
-              </div>
-              <div>
-                <span>复旦大学附属妇产科医院</span>
-              </div>
+              <div><span>王奕声</span><span>副主任医师</span></div>
+              <div><span>复旦大学附属妇产科医院</span></div>
             </div>
           </div>
-          <div>
-              <span>咨询内容</span>
-            </div>
-            <div>
-              <span>擅长：妊娠高血压疾病和妊娠期糖尿病、双胎、羊水栓塞的处理子宫脱垂、慢性盆腔疼痛等盆底功能障碍性疾病的综... </span>
-            </div>
+          <div><span>咨询内容</span></div>
+          <div><span>擅长：妊娠高血压疾病和妊娠期糖尿病、双胎、羊水栓塞的处理子宫脱垂、慢性盆腔疼痛等盆底功能障碍性疾病的综... </span></div>
         </div>
       </div>
       <br/>

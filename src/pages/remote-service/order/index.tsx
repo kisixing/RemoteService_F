@@ -65,45 +65,45 @@ function Oders(props: any) {
     }
     return Router.replace(`/orders?type=${key}`);
   };
-  
+  // type 之后使用枚举
   const dataSource = () => {
     if (currentKey === 'monitoring') {
       return [
-        {name: '一个月胎监服务', key: 'm-1', state: OrderState.NULL, stateText: ''},
-        {name: '二个月胎监服务', key: 'm-2', state: OrderState.NULL, stateText: ''}
+        {name: '一个月胎监服务', key: 'm-1', state: OrderState.NULL, stateText: '', type: 'monitoring'},
+        {name: '二个月胎监服务', key: 'm-2', state: OrderState.NULL, stateText: '', type: 'monitoring'}
       ]
     }
     if (currentKey === 'consult') {
       return [
-        {name: '在线咨询1', key: 'c-1', state: OrderState.NULL, stateText: ''},
-        {name: '在线咨询2', key: 'c-2', state: OrderState.NULL, stateText: ''},
-        {name: '在线咨询3', key: 'c-3', state: OrderState.NULL, stateText: ''},
-        {name: '在线咨询4', key: 'c-4', state: OrderState.NULL, stateText: ''},
-        {name: '在线咨询4', key: 'c-5', state: OrderState.NULL, stateText: ''},
-        {name: '在线咨询4', key: 'c-6', state: OrderState.NULL, stateText: ''}
+        {name: '在线咨询1', key: 'c-1', state: OrderState.NULL, stateText: '', type: 'consult'},
+        {name: '在线咨询2', key: 'c-2', state: OrderState.NULL, stateText: '',  type: 'consult'},
+        {name: '在线咨询3', key: 'c-3', state: OrderState.NULL, stateText: '', type: 'consult'},
+        {name: '在线咨询4', key: 'c-4', state: OrderState.NULL, stateText: '', type: 'consult'},
+        {name: '在线咨询4', key: 'c-5', state: OrderState.NULL, stateText: '', type: 'consult'},
+        {name: '在线咨询4', key: 'c-6', state: OrderState.NULL, stateText: '', type: 'consult'}
       ]
     }
     if (currentKey === 'apply') {
       return [
-        {name: '胎监判图1', key: 'a-1', state: OrderState.NULL,stateText: ''},
-        {name: '胎监判图2', key: 'a-2', state: OrderState.NULL,stateText: ''},
-        {name: '胎监判图3', key: 'a-3', state: OrderState.NULL,stateText: ''},
-        {name: '胎监判图4', key: 'a-4', state: OrderState.NULL,stateText: ''}
+        {name: '胎监判图1', key: 'a-1', state: OrderState.NULL,stateText: '', type: 'apply'},
+        {name: '胎监判图2', key: 'a-2', state: OrderState.NULL,stateText: '', type: 'apply'},
+        {name: '胎监判图3', key: 'a-3', state: OrderState.NULL,stateText: '', type: 'apply'},
+        {name: '胎监判图4', key: 'a-4', state: OrderState.NULL,stateText: '', type: 'apply'}
       ]
     }
     return [
-      {name: '一个月胎监服务', key: 'm-1', state: OrderState.TO_BE_BOUND,textstateText: ''},
-      {name: '二个月胎监服务', key: 'm-2', state: OrderState.IN_LATE,stateText: ''},
-      {name: '在线咨询1', key: 'c-1', state: OrderState.IN_USE,stateText: ''},
-      {name: '在线咨询2', key: 'c-2', state: OrderState.END,stateText: ''},
-      {name: '在线咨询3', key: 'c-3', state: '',stateText: ''},
-      {name: '在线咨询4', key: 'c-4', state: '',stateText: ''},
-      {name: '在线咨询4', key: 'c-5', state: '',stateText: ''},
-      {name: '在线咨询4', key: 'c-6', state: '',stateText: ''},
-      {name: '胎监判图1', key: 'a-1', state: '',stateText: ''},
-      {name: '胎监判图2', key: 'a-2', state: '',stateText: ''},
-      {name: '胎监判图3', key: 'a-3', state: '',stateText: ''},
-      {name: '胎监判图4', key: 'a-4', state: '',stateText: ''}
+      {name: '一个月胎监服务', key: 'm-1', state: OrderState.NULL, stateText: '', type: 'monitoring'},
+      {name: '二个月胎监服务', key: 'm-2', state: OrderState.NULL, stateText: '', type: 'monitoring'},
+      {name: '在线咨询1', key: 'c-1', state: OrderState.NULL, stateText: '', type: 'consult'},
+      {name: '在线咨询2', key: 'c-2', state: OrderState.NULL, stateText: '',  type: 'consult'},
+      {name: '在线咨询3', key: 'c-3', state: OrderState.NULL, stateText: '', type: 'consult'},
+      {name: '在线咨询4', key: 'c-4', state: OrderState.NULL, stateText: '', type: 'consult'},
+      {name: '在线咨询4', key: 'c-5', state: OrderState.NULL, stateText: '', type: 'consult'},
+      {name: '在线咨询4', key: 'c-6', state: OrderState.NULL, stateText: '', type: 'consult'},
+      {name: '胎监判图1', key: 'a-1', state: OrderState.NULL,stateText: '', type: 'apply'},
+      {name: '胎监判图2', key: 'a-2', state: OrderState.NULL,stateText: '', type: 'apply'},
+      {name: '胎监判图3', key: 'a-3', state: OrderState.NULL,stateText: '', type: 'apply'},
+      {name: '胎监判图4', key: 'a-4', state: OrderState.NULL,stateText: '', type: 'apply'}
     ]
   };
 
