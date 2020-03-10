@@ -35,7 +35,7 @@ function Title({ text, icon }: Itext) {
 }
 
 
-function renderTabBar(props) {
+function renderTabBar(props:any) {
   return (
     <Sticky>
       {({ style }: any) => (
@@ -49,24 +49,8 @@ function renderTabBar(props) {
 
 // 根据状态确定 路径|显示字段
 function getTextByState(state: number) {
-  let text:string = '';
-  switch(state){
-    case OrderState.TO_BE_BOUND:
-      text = '未绑定';
-      break;
-    case OrderState.IN_USE:
-      text = '使用中';
-      break;
-    case OrderState.IN_LATE:
-      text = '逾期';
-      break;
-    case OrderState.END:
-      text = '已结束';
-      break;
-    default:
-      text = '状态未知'
-  }
-  return text;
+  const orderStateArr = ['状态未知','未绑定','使用中','逾期','已结束'];
+  return orderStateArr[state];
 } 
 
 function Oders(props: any) {
@@ -85,26 +69,26 @@ function Oders(props: any) {
   const dataSource = () => {
     if (currentKey === 'monitoring') {
       return [
-        {name: '一个月胎监服务', key: 'm-1', state: '',stateText: ''},
-        {name: '二个月胎监服务', key: 'm-2', state: '',stateText: ''}
+        {name: '一个月胎监服务', key: 'm-1', state: OrderState.NULL, stateText: ''},
+        {name: '二个月胎监服务', key: 'm-2', state: OrderState.NULL, stateText: ''}
       ]
     }
     if (currentKey === 'consult') {
       return [
-        {name: '在线咨询1', key: 'c-1', state: '',stateText: ''},
-        {name: '在线咨询2', key: 'c-2', state: '',stateText: ''},
-        {name: '在线咨询3', key: 'c-3', state: '',stateText: ''},
-        {name: '在线咨询4', key: 'c-4', state: '',stateText: ''},
-        {name: '在线咨询4', key: 'c-5', state: '',stateText: ''},
-        {name: '在线咨询4', key: 'c-6', state: '',stateText: ''}
+        {name: '在线咨询1', key: 'c-1', state: OrderState.NULL, stateText: ''},
+        {name: '在线咨询2', key: 'c-2', state: OrderState.NULL, stateText: ''},
+        {name: '在线咨询3', key: 'c-3', state: OrderState.NULL, stateText: ''},
+        {name: '在线咨询4', key: 'c-4', state: OrderState.NULL, stateText: ''},
+        {name: '在线咨询4', key: 'c-5', state: OrderState.NULL, stateText: ''},
+        {name: '在线咨询4', key: 'c-6', state: OrderState.NULL, stateText: ''}
       ]
     }
     if (currentKey === 'apply') {
       return [
-        {name: '胎监判图1', key: 'a-1', state: '',stateText: ''},
-        {name: '胎监判图2', key: 'a-2', state: '',stateText: ''},
-        {name: '胎监判图3', key: 'a-3', state: '',stateText: ''},
-        {name: '胎监判图4', key: 'a-4', state: '',stateText: ''}
+        {name: '胎监判图1', key: 'a-1', state: OrderState.NULL,stateText: ''},
+        {name: '胎监判图2', key: 'a-2', state: OrderState.NULL,stateText: ''},
+        {name: '胎监判图3', key: 'a-3', state: OrderState.NULL,stateText: ''},
+        {name: '胎监判图4', key: 'a-4', state: OrderState.NULL,stateText: ''}
       ]
     }
     return [

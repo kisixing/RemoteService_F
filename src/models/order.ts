@@ -1,8 +1,9 @@
 import { Reduce } from 'redux';
 import { Effect } from '@/models/connect';
-
+import { OrderState } from '@/pages/remote-service/order/config';
 export interface OrderStateType {
-
+  orderList: Array<any>,
+  currentOrder: number|string
 };
 
 export interface OrderModelType {
@@ -14,7 +15,10 @@ export interface OrderModelType {
 
 const Model: OrderModelType = {
   namespace: 'order',
-  state: {},
+  state: {
+    orderList: [],
+    currentOrder: -1
+  },
   effects: {
     
   },

@@ -27,6 +27,7 @@ export default function WebTest() {
     webpay(reqData).then((res:any) => {
       const { mwebUrl } = res;
       window.location.href = mwebUrl;
+      // 开始轮询 检查用户是否已经支付
     })
   }
   return (
