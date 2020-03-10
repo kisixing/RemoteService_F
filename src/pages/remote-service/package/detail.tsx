@@ -4,11 +4,11 @@
  * @Description: 套餐详情
  */
 
-import React,{ ReactNode, useEffect } from 'react';
+import React,{ ReactNode, useEffect, useState } from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { router } from '@/utils/utils';
-import { Tabs, Button } from 'antd-mobile';
+import { Tabs, Button, Checkbox } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
 
 import { CurrentPackageDetail } from './interface';
@@ -32,12 +32,16 @@ interface DETAIL_PAGE_PROPS {
 function Details(props: DETAIL_PAGE_PROPS) {
   const { packageDetail } = props;
 
+  const [isAgree,setIsAgree] = useState(false);
 
   const toPay = () => {
     // 可以动态路由携带信息
     router('/pay');
   }
- 
+  const handleCheckboxChange = ():void => {
+    setIsAgree(isAgree => !isAgree);
+  }
+
   useEffect(() => {
     if(props.packageId !== -1) {
       props.dispatch({type: 'combo/getPackageData', payload: {id: props.packageId}});
@@ -54,10 +58,16 @@ function Details(props: DETAIL_PAGE_PROPS) {
         <div dangerouslySetInnerHTML={{__html: packageDetail.introduction}} />
         <div dangerouslySetInnerHTML={{__html: packageDetail.specification}} />
       </Tabs>
-      <div className={styles.footer}>
-        <div className={styles.price}>￥5000</div>
-        <div className={styles.buy}>
-          <Button className={styles.button} onClick={toPay}>购买</Button>
+      <div className={styles.bottom}>
+        <div className={styles.agree}>
+          <Checkbox checked={isAgree} onChange={handleCheckboxChange}>我同意<a href="#">《购买协议》</a></Checkbox>
+          <span></span>
+        </div>
+        <div className={styles.footer}>
+          <div className={styles.price}>￥5000</div>
+          <div className={styles.buy}>
+            <Button className={styles.button} onClick={toPay} disabled={!isAgree}>购买</Button>
+          </div>
         </div>
       </div>
       <BackButton />
