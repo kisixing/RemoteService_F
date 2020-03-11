@@ -1,3 +1,5 @@
+@import '../../../utils/utils.less';
+
 .card {
   display: flex;
   height: 2.36rem;
@@ -28,15 +30,14 @@
     .name {
       display: flex;
       align-items: center;
-      margin-bottom: .08rem;
-      font-size: .32rem;
-      line-height: 1.5;
-      font-family: PingFangSC;
-      color: #333;
+      margin-bottom: .16rem;
+      font-size: .3rem;
+      font-weight: 500;
+      color: #0f1232;
     }
 
     .extra {
-      font-size: .24rem;
+      font-size: .2rem;
       color: #999;
       span {
         margin-right: .2rem;
@@ -44,7 +45,10 @@
     }
 
     .speciality {
-      margin: 0.05rem 0;
+      margin: 0.12rem 0;
+      font-size: 0.24rem;
+      color: #25265e;
+      .textOverflowMulti(1, #fff);
     }
 
     .rates {
@@ -52,12 +56,11 @@
       right: .3rem;
       bottom: 0;
       height: .44rem;
-      width: 1.54rem;
+      width: 1.2rem;
       display: flex;
       align-items: center;
       span {
-        color: #ff5a5a;
-        font-size: .3rem;
+        color: #ff5a5a; // #150f55
         font-weight: 500;
       }
     }

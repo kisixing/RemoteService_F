@@ -1,0 +1,162 @@
+@import '../../../utils/utils.less';
+@title-height: 0.54rem;
+
+.card {
+  padding: .3rem;
+  background-color: #dff6e6;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.2rem;
+
+    .title {
+      display: flex;
+      align-items: center;
+
+      .name {
+        margin-right: .2rem;
+        font-size: .32rem;
+        font-weight: bold;
+        color: #333;
+      }
+    }
+
+    .extra {
+      font-size: .2rem;
+      color: #888;
+
+      span {
+        margin-left: 0.2rem;
+      }
+    }
+  }
+
+  .hospital {
+    margin-bottom: 0.15rem;
+    color: #444;
+  }
+
+  .skilled {
+    .textOverflowMulti(2, #dff6e6);
+    font-size: 0.24rem;
+  }
+}
+
+.content {
+  padding: .3rem;
+  background-color: #fff;
+
+  .title {
+    height: @title-height;
+    line-height: @title-height;
+    padding-left: .24rem;
+    position: relative;
+    color: #787993;
+
+    &:before {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background-color: #8d8dac;
+      position: absolute;
+      top: 21px;
+      left: 0;
+      content: '';
+    }
+  }
+
+  .tags {
+    padding-left: .24rem;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+
+    :global(.am-tag) {
+      margin-right: 0.3rem;
+    }
+  }
+
+  .tips {
+    color: #8d8dac;
+    padding-left: .24rem;
+    font-size: .24rem;
+
+    li {
+      padding-left: 0.3rem;
+      position: relative;
+
+      &:before {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #8d8dac;
+        position: absolute;
+        top: 50%;
+        margin-top: -4px;
+        left: 6px;
+      }
+    }
+  }
+}
+
+.comment {
+  padding-top: .3rem;
+  padding-bottom: 1.54rem;
+
+  .header {
+    height: @title-height;
+    line-height: @title-height;
+    padding: 0 0.3rem;
+    display: flex;
+    justify-content: space-between;
+    color: #787993;
+
+    .title {
+      padding-left: .24rem;
+      position: relative;
+
+      &:before {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        background-color: #8d8dac;
+        position: absolute;
+        top: 21px;
+        left: 0;
+        content: '';
+      }
+    }
+
+    .extra {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.bottom {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: .3rem;
+
+  .price {
+    font-size: .32rem;
+    color: #535881;
+
+    span {
+      margin-left: .1rem;
+      margin-right: 0.1rem;
+      font-size: .48rem;
+      font-size: 500;
+      color: #150f55;
+    }
+  }
+}

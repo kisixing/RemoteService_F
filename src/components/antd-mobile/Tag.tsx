@@ -16,12 +16,12 @@ interface IProps extends TagProps {
 }
 
 function Tag({ children, style, size, bgcolor, color, ...rest }: IProps) {
-  let sizeStyle: object = { lineHeight: '0.48rem' };
+  let sizeStyle: object = { fontSize: '0.24rem' };
   if (size === 'small') {
     sizeStyle = { lineHeight: '0.28rem' };
   }
   if (size === 'middle') {
-    sizeStyle = { height: '.4rem', lineHeight: '0.4rem', padding: '0 .24rem', fontSize: '.24rem' };
+    sizeStyle = { height: '.4rem', lineHeight: '0.4rem', padding: '0 .24rem', fontSize: '.2rem' };
   }
   let colorStyle: object = {};
   if (!!bgcolor) {

@@ -42,6 +42,6 @@ function getCaptcha(req: Request, res: Response) {
 }
 
 export default {
-  'POST /api/mpauth': mpauth,
-  'POST /api/captcha': getCaptcha,
+  'POST /mock/api/mpauth': mpauth,
+  'POST /mock/api/captcha': getCaptcha,
 };

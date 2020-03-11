@@ -1,10 +1,4 @@
 /*
- * @Author: ZHONG JUN
- * @Date: 2020-03-07 18:29:02
- * @Description: 医疗团队
- */
-
-/*
  * @Description: 医生详情介绍页面
  * @Author: Zhong Jun
  * @Date: 2020-03-10 17:37:13
@@ -14,31 +8,41 @@ import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { IconFont, Tag, BackButton, Button } from '@/components/antd-mobile';
-import CommentItem from '../doctors/CommentItem';
-import styles from '../doctors/Detail.less';
-import headerStyle from './index.less';
+import CommentItem from './CommentItem';
+import styles from './Detail.less';
 
-function TeamDetail({ dispatch, comments, match, ...rest }: any) {
+function DoctorDetail({ dispatch, comments, match, ...rest }: any) {
   useEffect(() => {
-    const id = match.params.id;
+    const doctorId = match.params.id;
     dispatch({
       type: 'consultation/getComments',
       payload: {
-        teamId: id,
+        doctorId: doctorId,
       },
     });
   }, []);
 
   return (
     <div className="page">
-      <div className={headerStyle.card}>
-        <div className={headerStyle.name}>{'复旦大学附属妇产科医师团队'}</div>
-        <div className={headerStyle.bottom}>
-          快速匹配本院在线医生
-          <br />
-          无需长时间等待
+      <div className={styles.card}>
+        <div className={styles.header}>
+          <div className={styles.title}>
+            <span className={styles.name}>医生姓名</span>
+            <Tag size="middle">主任医师</Tag>
+          </div>
+          <div className={styles.extra}>
+            <span>解答率{'98%'}</span>
+            <span>好评率{'99%'}</span>
+            <span>咨询量{'78'}</span>
+            {/* <span>平均回复{'3小时内'}</span> */}
+          </div>
         </div>
-        <div className={headerStyle.icon} />
+        <div className={styles.hospital}>复旦大学附属妇产科医院</div>
+
+        <div className={styles.skilled}>
+          擅长：妊娠高血压疾病和妊娠期糖尿病、双胎、羊水栓塞的处理子宫脱垂、慢性盆腔疼痛等盆底功能障碍性疾病的综慢性盆腔疼痛等盆底功
+          能障碍性疾病的综慢性盆腔疼痛等盆底功能障碍性疾病的综慢性盆腔疼痛等盆底功能障碍性疾病的综...
+        </div>
       </div>
       <div className={styles.content}>
         <div className={styles.title}>图文咨询</div>
@@ -94,5 +98,4 @@ function TeamDetail({ dispatch, comments, match, ...rest }: any) {
 export default connect(({ loading, consultation }: ConnectState) => ({
   loading: loading,
   comments: consultation.comments,
-}))(TeamDetail);
-
+}))(DoctorDetail);

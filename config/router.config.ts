@@ -192,10 +192,16 @@ export default [
                 path: '/consultation/doctor',
                 name: 'doctor list',
                 title: '专家咨询', // 在线复诊
-                component: './consultation/doctors/list',
+                component: './consultation/doctors/List',
               },
               {
-                path: '/consultation/team',
+                path: '/consultation/doctor/:id',
+                name: 'doctor detail',
+                title: '专家详情', // 在线复诊
+                component: './consultation/doctors/Detail',
+              },
+              {
+                path: '/consultation/team/:id',
                 name: 'doctor team',
                 title: '团队',
                 component: './consultation/team',
