@@ -1,4 +1,5 @@
 import Button from './Button';
+import BackButton from '../BackButton';
 import List from './List';
 import WhiteSpace from './WhiteSpace';
 import Touchable from './Touchable';
@@ -8,6 +9,7 @@ import Tag from './Tag';
 
 export {
   Button,
+  BackButton,
   List,
   WhiteSpace,
   Touchable,

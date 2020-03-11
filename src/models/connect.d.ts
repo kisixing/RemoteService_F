@@ -43,6 +43,7 @@ export interface ConnectState {
   user: UserModelState;
   combo: ComboStateType;
   news: any;
+  consultation: any
 }
 
 export interface CurrentUser {

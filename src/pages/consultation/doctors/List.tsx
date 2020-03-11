@@ -5,11 +5,14 @@
  */
 
 import React, { useState, useEffect, createRef } from 'react';
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect';
 
 import { Picker, WingBlank, SearchBar } from 'antd-mobile';
 import { IconFont, Tag } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
 import DoctorItem from './Item';
+import { router } from '@/utils/utils';
 import styles from './List.less';
 
 const HOSPITALS = ['复旦大学附属妇产科医院', '暨南大学附属第一医院', '中山大学附属第一医院'].map(e => ({ label: e, value: e }));
@@ -20,14 +23,19 @@ const CustomChildren = (props: any) => (
   </div>
 );
 
-function DoctorList() {
+function DoctorList({ dispatch, doctors }: any) {
   const [hospital, setHospital] = useState('复旦大学附属妇产科医院');
 
   useEffect(() => {
+    dispatch({ type: 'consultation/getDoctors' });
+  }, []);
 
-  }, [])
-
+  // 医院设置
   const onOk = (e: any) => setHospital(e);
+
+  const onClick = (id: string) => {
+    router(`/consultation/doctor/${id}`);
+  };
 
   return (
     <div className="page">
@@ -47,23 +55,37 @@ function DoctorList() {
       </div>
       <WingBlank className={styles.content}>
         <div className={styles.header}>
-          <Tag data-seed="logId">解答快</Tag>
+          <Tag data-seed="logId" size="middle" color="#F5897C">解答快</Tag>
           <div className={styles.title}>
             快速咨询 <IconFont type="jiantou-right-circle-xian" style={{ marginLeft: '10px' }} />
           </div>
           <div className={styles.subTitle}>快速匹配医生，第一时间解答</div>
         </div>
         <div style={{ marginBottom: '0.3rem', color: '#25265e' }}>在线医生</div>
-        <DoctorItem />
-        <DoctorItem />
-        <DoctorItem />
-        <DoctorItem />
-        <DoctorItem />
-        <DoctorItem />
+        {doctors.length > 0 &&
+          doctors.map((e: any) => (
+            <DoctorItem
+              key={e.id}
+              id={e.id}
+              name={e.name}
+              thumbnail={e.thumbnail}
+              price={e.price}
+              position={e.position}
+              content={e.content}
+              replytime={e.replytime}
+              answerRate={e.answerRate}
+              favorableRate={e.favorableRate}
+              inquiries={e.inquiries}
+              onPress={onClick}
+            />
+          ))}
       </WingBlank>
       <BackButton />
     </div>
   );
 }
 
-export default DoctorList;
+export default connect(({ loading, consultation }: ConnectState) => ({
+  loading: loading,
+  doctors: consultation.doctors,
+}))(DoctorList);
