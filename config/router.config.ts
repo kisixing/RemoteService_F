@@ -132,19 +132,19 @@ export default [
                 path: '/apply',
                 name: 'Apply',
                 title: '胎监判图',
-                component: './remote-service/Apply',
+                component: './remote-service/apply',
               },
               {
                 path: '/apply/useable',
                 name: 'useable Apply',
                 title: '可用胎监判图',
-                // component: './remote-service/Apply'
+                component: './remote-service/apply/Useable',
               },
               {
                 path: '/apply/unuseable',
                 name: 'useable Apply',
                 title: '过期胎监判图',
-                // component: './remote-service/Apply'
+                component: './remote-service/apply/Unuseable',
               },
             ],
           },

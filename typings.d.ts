@@ -31,7 +31,7 @@ declare module "rc-form" {
   export const formShape: object;
 }
 
-declare global {
-  interface Window { g_app: any }
+declare interface Window {
+  g_app: any
+  baseurl: any
 }
-

@@ -9,19 +9,9 @@ import notification from 'antd/es/notification';
 import { getHeaders } from '@/utils/utils';
 import 'antd/lib/notification/style/css';
 
-declare global {
-  interface Window {
-    g_app: any,
-    baseurl: any
-  }
-}
-
 const custom_url = window.baseurl || 'http://transfer.lian-med.com';
 const base_url =
   process.env.NODE_ENV === 'development' ? '' : custom_url;
-
-// app跳转时，携带的header token
-const third_token = getHeaders()['Authorization']
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -103,7 +93,7 @@ request.interceptors.request.use((url, options) => {
   options.headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json;charset=UTF-8',
-    Authorization: token || third_token,
+    Authorization: token,
     ...options.headers,
   }
   return ({
