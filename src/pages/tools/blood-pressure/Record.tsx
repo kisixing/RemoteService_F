@@ -133,6 +133,7 @@ function BloodPressureRecord() {
         </div>
       </div>
       <BackButton/>
+
     </div>
   )
 }

@@ -1,11 +1,14 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Redirect } from 'umi';
-import { stringify } from 'querystring';
 import store from 'store';
+import { stringify } from 'querystring';
+
+import { Toast } from 'antd-mobile';
+
 import PageLoading from '@/components/Loader';
 import { ConnectState, ConnectProps } from '@/models/connect';
-import { Toast } from 'antd-mobile';
+import { getHeaders } from '@/utils/utils';
 
 interface SecurityLayoutProps extends ConnectProps {
   loading?: boolean;
@@ -27,7 +30,11 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       location: { query },
       currentPregnancy,
     } = this.props;
+<<<<<<< HEAD
     const code = query.code;
+=======
+    const { code, p1, p2, token } = query; // p1 孕册id， p2 监测档案id/判图档案id
+>>>>>>> origin/dev
     // TODO 验证过程 验证全局 sessionStorage isLogin
     // 1、isLogin === true，不再异步验证用户信息
     setTimeout(() => {
@@ -35,6 +42,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
         isReady: true,
       });
     }, 600);
+<<<<<<< HEAD
     // 2、url携带code值时就进行校验操作，获取url携带的code进行用户校验
     // 条件 --> 有url携带code，但无孕妇信息临时缓存
     if (code && !currentPregnancy.id) {
@@ -46,7 +54,34 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       }).then((res: any) => {
         if (res && res.id) {
         }
+=======
+
+    if (p1 && p2) {
+      // p1 p2存在，可知是从app跳转过来，进行判图操作
+      const Authorization = getHeaders()['Authorization'];
+      store.set('lianmp-token', Authorization);
+      dispatch({
+        type: 'global/updatePregnancy',
+        payload: {
+          id: p1
+        },
+>>>>>>> origin/dev
       });
+    } else if (code && !currentPregnancy.id) {
+      // 2、url携带code值时就进行校验操作，获取url携带的code进行用户校验
+      // 条件 --> 有url携带code，但无孕妇信息临时缓存
+      dispatch({
+        type: 'global/mpauth',
+        payload: {
+          code: query.code,
+        },
+      }).then((res: any) => {
+        if (res && res.id) {}
+      });
+    } else if (!code) {
+      // 3、code/isLogin都不存在，提示并返回登录
+      Toast.info('未建档，请先创建孕册在进行相关操作...');
+      // TODO 返回登录页面
     }
     // 3、code/isLogin都不存在，提示并返回登录
     if (!code) {
