@@ -63,7 +63,7 @@ function DoctorDetail({ dispatch, comments, match, ...rest }: any) {
       </div>
       <div className={styles.comment}>
         <div className={styles.header}>
-          <div className={styles.title}>患者评价 (12)</div>
+          <div className={styles.title}>患者评价 12</div>
           <div className={styles.extra}>
             查看全部
             <IconFont type="dropdown" size="0.36rem" />
@@ -86,8 +86,8 @@ function DoctorDetail({ dispatch, comments, match, ...rest }: any) {
           ￥<span>{'30'}</span>
           元/次
         </div>
-        <Button type="primary" size="small" inline>
-          图文咨询
+        <Button type="primary" inline>
+          图文支持
         </Button>
       </div>
       <BackButton />

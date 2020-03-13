@@ -1,12 +1,21 @@
 .container {
   width: 100%;
+  height: 100%;
   .img-block {
     width: 100%;
     height: 350px;
     background-size: 100%;
     background-position: center;
-    background-image: url("../../../assets/order/Card1.png");
+    background-image: url("../../../assets/baby/img_bg_home5@3x.png");
     background-repeat: no-repeat;
+    display: flex;
+    align-items: flex-end;
+    > .title {
+      font-size: .25rem;
+      > div {
+        margin: .2rem 0 .2rem .3rem;
+      }
+    }
   }
 
   .tab-item {
@@ -46,7 +55,7 @@
   }
 
   .bottom {
-    height: 2rem;
+    height: 1.2rem;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -57,7 +66,6 @@
       text-align: center;
     }
     .footer {
-      
       height: 1.2rem;
       line-height: 106px;
       width: 100%;

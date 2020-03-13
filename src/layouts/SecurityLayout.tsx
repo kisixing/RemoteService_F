@@ -3,10 +3,12 @@ import { connect } from 'dva';
 import { Redirect } from 'umi';
 import store from 'store';
 import { stringify } from 'querystring';
+
 import { Toast } from 'antd-mobile';
 
 import PageLoading from '@/components/Loader';
 import { ConnectState, ConnectProps } from '@/models/connect';
+import { getHeaders } from '@/utils/utils';
 
 interface SecurityLayoutProps extends ConnectProps {
   loading?: boolean;
@@ -28,8 +30,8 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       location: { query },
       currentPregnancy,
     } = this.props;
-    const { code, p1, p2, t, access_token, token } = query; // p1 孕册id， p2 监测档案id/判图档案id
 
+    const { code, p1, p2, token } = query; // p1 孕册id， p2 监测档案id/判图档案id
     // TODO 验证过程 验证全局 sessionStorage isLogin
     // 1、isLogin === true，不再异步验证用户信息
     setTimeout(() => {
@@ -38,13 +40,15 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       });
     }, 600);
 
-    if (p1 && p2 && t && access_token) {
+
+    if (p1 && p2) {
       // p1 p2存在，可知是从app跳转过来，进行判图操作
-      store.set('lianmp-token', `Bearer ${access_token}`);
+      const Authorization = getHeaders()['Authorization'];
+      store.set('lianmp-token', Authorization);
       dispatch({
         type: 'global/updatePregnancy',
         payload: {
-          id: p1,
+          id: p1
         },
       });
     } else if (code && !currentPregnancy.id) {
@@ -56,12 +60,16 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
           code: query.code,
         },
       }).then((res: any) => {
-        if (res && res.id) {
-        }
+        if (res && res.id) {}
       });
     } else if (!code) {
       // 3、code/isLogin都不存在，提示并返回登录
-      // Toast.info('未建档，请先创建孕册在进行相关操作...');
+      Toast.info('未建档，请先创建孕册在进行相关操作...');
+      // TODO 返回登录页面
+    }
+    // 3、code/isLogin都不存在，提示并返回登录
+    if (!code) {
+      // Toast.info('请携带孕妇code!');
       // TODO 返回登录页面
     }
   }

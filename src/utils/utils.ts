@@ -241,7 +241,7 @@ export const KG = {
  */
 export function getHeaders() {
   var req = new XMLHttpRequest();
-  req.open('GET', document.location.href, false);
+  req.open('GET', 'document.location.href', false);
   req.send(null);
   var headerArr = req.getAllResponseHeaders().split('\n');
   var headers = {};

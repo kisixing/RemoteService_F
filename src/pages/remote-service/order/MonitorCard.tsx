@@ -20,7 +20,6 @@ export default function MonitorCard(props: MonitorCardProp) {
             <span className={styles.name}>{data.name}</span>
           </div>
           <Tag size="middle" bgcolor="#D9F0F8" color="#3FB6DC">单胎</Tag>
-          {/* <Tag size="middle" bgcolor="#E3D9FC" color="#7540EE">多胎</Tag> */}
           <span className={styles.extra}>
             {/* {e.stateText}   */}
             <img src={require('@/assets/order/statepic.png')} alt=""/>
