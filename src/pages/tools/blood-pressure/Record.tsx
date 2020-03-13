@@ -6,24 +6,22 @@
 
 import React,{ useRef, useEffect } from 'react'
 import Chart from 'chart.js';
-// import { Wing } from '@/components/antd-mobile';
-import { WingBlank } from 'antd-mobile';
+
 import BackButton from '@/components/BackButton';
 import styles from './Record.less'
 
 interface ServiceDataItem {
   date:string, sysion: number, diastou: number
 }
-
 const serviceData:Array<ServiceDataItem> = [
   {date: '2/1', sysion: 110, diastou: 58},
-  // {date: '2/2', sysion: null, diastou: 76},
+  {date: '2/2', sysion: 114, diastou: 76},
   {date: '2/3', sysion: 113, diastou: 72},
   {date: '2/4', sysion: 116, diastou: 80},
   {date: '2/6', sysion: 101, diastou: 77},
   {date: '2/6', sysion: 124, diastou: 83},
   {date: '2/7', sysion: 111, diastou: 71},
-];
+]
 
 function BloodPressureRecord() {
   const bloodPressureChart = useRef(null);
@@ -39,7 +37,7 @@ function BloodPressureRecord() {
         borderColor: '#f5bff0',
         pointBackgroundColor: ['#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#DC143C','#C3C5C6'], 
         pointBorderColor: ['#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#DC143C','#C3C5C6'],
-        pointRadius: [8,0,8,8,8,8,8],
+        pointRadius: 8,
         data: []
       },{
         label: '收缩压',
@@ -49,15 +47,6 @@ function BloodPressureRecord() {
         pointBorderColor: ['#DC143C','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6'],
         pointRadius: 8,
         data: []
-      },{
-        label: '正常',
-        data: [],
-        borderColor: '#C3C5C6'
-      },{
-        label: '异常',
-        data: [],
-        borderColor: '#DC143C',
-        fill: false
       }]
     },
     options: {
@@ -94,13 +83,13 @@ function BloodPressureRecord() {
         intersect: false
       },
       scales: {
-        xAxes: [{
-          scaleLabel: {
-            display: true,
-            labelString: '日期',
-            fontSize:20
-          }
-        }],
+        // xAxes: [{
+        //   scaleLabel: {
+        //     display: true,
+        //     labelString: '日期',
+        //     fontSize:20
+        //   }
+        // }],
         yAxes: [{
           scaleLabel: {
             display: true,
@@ -127,19 +116,21 @@ function BloodPressureRecord() {
     });
     const lineChart = new Chart(ctx,chartOptions)
   }
-
   useEffect(() => newChart());
   return (
     <div className={styles.container}>
-      <WingBlank>
-        <div className={styles.header}>
-          <div><span>You Can Change</span></div>
-          <div><a>历史记录</a></div>
-          <div><a>当天记录</a></div>
-        </div>
-      </WingBlank>
       <div className={styles.chart}>
         <canvas ref={bloodPressureChart} className={styles.canvas}></canvas>
+        <div>
+          <div />
+          <div><span>正常</span></div>
+          <div/>
+          <div><span>异常</span></div>
+          <div/>
+          <div><span>舒张压</span></div>
+          <div/>
+          <div><span>收缩压</span></div>
+        </div>
       </div>
       <BackButton/>
 

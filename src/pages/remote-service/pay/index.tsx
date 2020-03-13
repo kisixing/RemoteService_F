@@ -3,10 +3,7 @@ import React,{useState } from 'react';
 import { connect } from 'dva';
 import { Button, Checkbox, WingBlank } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
-import MonitorCard from '../order/MonitorCard';
 import { wxpay } from '@/services/pay';
-
-import { ConnectState } from '@/models/connect';
 
 var wx =  require('weixin-js-sdk');
 
@@ -20,26 +17,18 @@ function Pay(props:any) {
   // 传入订单header - 订单确认/订单续租
   console.log(props);
   const [payType, setPayType] = useState('');
-  const [isAgree, setIsAgree] = useState(false);
-  
+
   const onSelect = (type: string):void => {
     setPayType(type);
   }
-
-  const handleAgree = ():void => {
-    if(isAgree){
-      setPayType('');
-    }
-    setIsAgree(isAgree => !isAgree);
-  }
-
 
   // TODO 支付fn
   const pay = () => {
     const sessionData = window.sessionStorage['persist:redux-storage'];
     const sessionObj = JSON.parse(sessionData);
     const PREGNANCY_ID = JSON.parse(sessionObj['global'])['currentPregnancy']['id'];
-    const PACKAGE_ID = props.currentPackageId; // 写死套餐id = 1
+    // const {confirmData} = props
+    const PACKAGE_ID = 1; // 写死套餐id = 1
     wxpay({servicepackage: {id: PACKAGE_ID}, pregnancy: {id: PREGNANCY_ID}}).then(payorder => {
       wx.config({
         appId: payorder.appId,
@@ -47,7 +36,6 @@ function Pay(props:any) {
         nonceStr: payorder.nonceStr, // 支付签名随机串，不长于 32 位
         jsApiList: ['chooseWXPay']
       });
-      // checkJsApi暂时不可用
       // wx.checkJsApi({
       //   jsApiList: ['chooseWXPay'],
       //   success: function (res:any) {
@@ -70,7 +58,7 @@ function Pay(props:any) {
       //         }else if(res.err_msg === 'get_brand_wcpay_request:ok') {
       //           alert('支付成功,跳转');
       //         }
-      //       } 
+      //       }
       //     )
       //   },
       //   error: function(err:any) {
@@ -102,52 +90,42 @@ function Pay(props:any) {
       </div>
       <div className={styles.content}>
         <WingBlank>
-          <MonitorCard/>
+          正文内容，富文本返回
         </WingBlank>
       </div>
-      <div className={styles.footer}>
 
-        <div className={styles.agree}>
-          <Checkbox checked={isAgree} onChange={handleAgree}>我同意<a href="#">《购买协议》</a></Checkbox>
-          <span></span>
-        </div>
-        <div className={styles.pay}>
-          <div className={styles.choice}>
-            <div className={styles['choice-item']} onClick={() => onSelect('wx')}>
-              <div className={styles.text}>
-                <img src={require('@/assets/icons/wxpay.png')} alt=""/>
-                &nbsp;
-                <span>微信支付</span>  
-              </div>
-              <div className={styles.checkbox}>
-                <Checkbox checked={payType === "wx"} disabled={!isAgree}/>
-              </div>
+      <div className={styles.footer}>
+        <div className={styles.choice}>
+          <div className={styles['choice-item']} onClick={() => onSelect('wx')}>
+            <div className={styles.text}>
+              <img src={require('@/assets/icons/wxpay.png')} alt=""/>
+              &nbsp;
+              <span>微信支付</span>
             </div>
-            <div className={styles['choice-item']} onClick={() => onSelect('ali')}>
-              <div className={styles.text}>
-              <img src={require('@/assets/icons/alipay.png')} alt=""/>
-                &nbsp;
-                <span>支付宝支付</span>  
-              </div>
-              <div className={styles.checkbox}>
-                <Checkbox checked={payType === "ali"} disabled={!isAgree} />
-              </div>
+            <div className={styles.checkbox}>
+              <Checkbox checked={payType === "wx"}/>
             </div>
           </div>
-          <div className={styles.btn}>
-            <Button disabled={payType === "" || !isAgree} onClick={pay}>
+          <div className={styles['choice-item']} onClick={() => onSelect('ali')}>
+            <div className={styles.text}>
+            <img src={require('@/assets/icons/alipay.png')} alt=""/>
+              &nbsp;
+              <span>支付宝支付</span>
+            </div>
+            <div className={styles.checkbox}>
+              <Checkbox checked={payType === "ali"} />
+            </div>
+          </div>
+        </div>
+        <div className={styles.btn}>
+          <Button disabled={payType === ""} onClick={pay}>
             支付
           </Button>
-          </div>
         </div>
-        
-         
       </div>
       <BackButton/>
     </div>
   )
 }
 
-export default connect(({combo}: ConnectState) => ({
-  currentPackageId: combo.currentPackageId
-}))(Pay);
+export default connect()(Pay);

@@ -113,7 +113,6 @@ export default [
                 path: '/packages',
                 name: 'packages list',
                 title: '套餐服务',
-                extra: true,
                 component: './remote-service/package/index',
               },
               {
@@ -121,7 +120,7 @@ export default [
                 name: 'package detail',
                 title: '套餐详情',
                 component: './remote-service/package/Detail',
-              }
+              },
             ],
           },
           {
@@ -133,19 +132,19 @@ export default [
                 path: '/apply',
                 name: 'Apply',
                 title: '胎监判图',
-                component: './remote-service/Apply',
+                component: './remote-service/apply',
               },
               {
-                path: '/apply/useable',
+                path: '/apply/result',
                 name: 'useable Apply',
-                title: '可用胎监判图',
-                // component: './remote-service/Apply'
+                title: '判图完成',
+                component: './remote-service/apply/Result',
               },
               {
-                path: '/apply/unuseable',
-                name: 'useable Apply',
-                title: '过期胎监判图',
-                // component: './remote-service/Apply'
+                path: '/apply/payResult',
+                name: 'pay result',
+                title: '',
+                component: './remote-service/apply/payResult',
               },
             ],
           },

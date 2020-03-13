@@ -8,7 +8,12 @@ import React from 'react';
 const IconFont = (props: any )=> {
   const { type, style, size = '.44rem', className } = props;
   // am-icon
-  return <i style={{ fontSize: size, ...style }} className={`iconfont icon-${type} ${className}`} />;
+  return (
+    <i
+      style={{ fontSize: size, lineHeight: 1, ...style }}
+      className={`iconfont icon-${type} ${className}`}
+    />
+  );
 };
 
 export default IconFont;

@@ -5,25 +5,12 @@
 import { extend } from 'umi-request';
 import store from 'store';
 import Router from 'umi/router';
-import notification from 'antd/es/notification';
-import { getHeaders } from '@/utils/utils';
-import 'antd/lib/notification/style/css';
-
-declare global {
-  interface Window {
-    g_app: any,
-    baseurl: any
-  }
-}
+import { notification } from 'antd';
+import { Toast } from 'antd-mobile';
 
 const custom_url = window.baseurl || 'http://transfer.lian-med.com';
 const base_url =
   process.env.NODE_ENV === 'development' ? '' : custom_url;
-
-console.log(base_url);
-
-// app跳转时，携带的header token
-const third_token = getHeaders()['Authorization']
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -67,7 +54,6 @@ const errorHandler = (error: { response: Response }): Response => {
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
     });
-
     // environment should not be used
     if (status === 403) {
       // Router.push('/exception/403');
@@ -105,8 +91,7 @@ request.interceptors.request.use((url, options) => {
   options.headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json;charset=UTF-8',
-    // Authorization: token || third_token,
-    Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFXRlFNNXlnS3BWM0FlTDNpa1Byc29VIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU4NjQ4MzQ5OH0.qoM6bvl6kQTuLIFC8vCPadwZfVSikq07_dSB_do5iZ54k36oANca31UExghZd-v-l9IPyl0OFZF4nVaJyFdn0g',
+    Authorization: token,
     ...options.headers,
   }
   return ({
