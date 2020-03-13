@@ -40,7 +40,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
 
     if (p1 && p2 && t && access_token) {
       // p1 p2存在，可知是从app跳转过来，进行判图操作
-      store.set('lianmp-token', access_token);
+      store.set('lianmp-token', `Bearer ${access_token}`);
       dispatch({
         type: 'global/updatePregnancy',
         payload: {
@@ -62,11 +62,6 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     } else if (!code) {
       // 3、code/isLogin都不存在，提示并返回登录
       // Toast.info('未建档，请先创建孕册在进行相关操作...');
-      // TODO 返回登录页面
-    }
-    // 3、code/isLogin都不存在，提示并返回登录
-    if (!code) {
-      // Toast.info('请携带孕妇code!');
       // TODO 返回登录页面
     }
   }
