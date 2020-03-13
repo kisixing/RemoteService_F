@@ -5,9 +5,8 @@
 import { extend } from 'umi-request';
 import store from 'store';
 import Router from 'umi/router';
-import notification from 'antd/es/notification';
-import { getHeaders } from '@/utils/utils';
-import 'antd/lib/notification/style/css';
+import { notification } from 'antd';
+import { Toast } from 'antd-mobile';
 
 const custom_url = window.baseurl || 'http://transfer.lian-med.com';
 const base_url =
@@ -55,7 +54,6 @@ const errorHandler = (error: { response: Response }): Response => {
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
     });
-
     // environment should not be used
     if (status === 403) {
       // Router.push('/exception/403');
