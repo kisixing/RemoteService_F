@@ -149,6 +149,7 @@ function BloodGlucoseRecord() {
   // 将日历按周期展示
   const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>, COUNT_DURATION:number = 5) => {
     let count = 0;
+    const COUNT_PER = (serviceData.length / COUNT_DURATION) | 0 ;
     serviceData.forEach((v: ServiceDataItem, index: number) => {
       // 填入数据
       const len = options.data.datasets.length;
@@ -156,7 +157,7 @@ function BloodGlucoseRecord() {
         // @ts-ignore
         options.data.datasets[i].data.push(v[options.data.datasets[i].key]);
       }
-      if(count === 5){
+      if(count === COUNT_PER){
         // @ts-ignore
         options.data.labels.push(v['date']);
         count = 0;

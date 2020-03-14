@@ -4,12 +4,183 @@
  * @Description: 血氧记录
  */
 
-import React from 'react'
+import React,{ useState, useEffect, useRef} from 'react'
+import Chart from 'chart.js';
+
+import styles from './Record.less';
+interface ServiceDataItem {
+  date: string,
+  hr: number, // 心率
+  bo: number // 血氧
+}
+
+const serviceData:Array<ServiceDataItem> = [
+  {date: '2/1', hr: 99, bo: 30}, 
+  {date: '2/2', hr: 98, bo: 31}, 
+  {date: '2/3', hr: 95, bo: 37}, 
+  {date: '2/4', hr: 94, bo: 41}, 
+  {date: '2/5', hr: 93, bo: 35}, 
+  {date: '2/6', hr: 96, bo: 40}, 
+  {date: '2/7', hr: 99, bo: 48}, 
+];
 
 function BloodOxygenRecord() {
+
+  const BloodOxygenChart = useRef(null);
+  
+  const [isHistory, setIsHistory] = useState(true);
+
+  let chartOptions = {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [
+        {key: 'hr', label: '心率', fill: false, borderColor: '#FFC0CB', pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: []},
+        {key: 'bo', label: '血氧',fill: false, borderColor: '#DDA0DD', pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: []}
+      ]
+    },
+    options: {
+      responsive: true,
+      steppedLine: true,
+      legand: {
+        labels: {
+          fontSize: 25,
+          fontColor: '#000000'
+        }
+      },
+      title: {
+        display: true,
+        fontSize: 28,
+        fontColor: '#000000',
+        FontFamily: 'Arial',
+        text: isHistory ? '历史记录' : '当天记录'
+      },
+      layout: {
+        padding:{
+          top: 0,
+          left: 10,
+          right: 10,
+          bottom :10
+        }
+      },
+      elements:{
+        line:{
+          // tension: 0
+        }
+      },
+      tooltips:{
+        mode: 'index',
+        intersect: false,
+        titleFontSize: 20,
+        bodyFontSize: 20
+      },
+      scales: { 
+        xAxes: [{
+          // 坐标title
+          scaleLabel: {
+            // display: true,
+            // labelString: '时间',
+            // fontSize: 20,
+            // fontStyle: 'italic'
+          },
+          // 网格线
+          gridLines :{
+            display: false
+          },
+          // 坐标轴
+          ticks: {
+            fontSize: 20,
+            fontWeight: 400
+          }
+        }],
+        yAxes: [{ 
+          scaleLabel:{ 
+            display: true, 
+            labelString: '测量值', 
+            fontSize: 20
+          },
+          ticks: {
+            // 幅度
+            max: 110,
+            min: 60,
+            stepSize: 10,
+            // style
+            fontSize: 20,
+            fontWeight: 500
+          }
+        }],
+      }
+    }
+  }
+
+   // 将日历按周期展示
+   const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>, COUNT_DURATION:number = 5) => {
+    let count = 0;
+    const COUNT_PER = (serviceData.length / COUNT_DURATION) | 0;
+
+    const [ defaultColor, errorColor ] = ['#c3c5c6','#dc143c'];
+    const [ defaultPointRadius, errorPointRadius ] = [2,8];
+
+    // 血氧心率 未完成
+    serviceData.forEach((v: ServiceDataItem, index: number) => {
+      // 填入数据
+      const len = options.data.datasets.length;
+      for(let i = 0 ; i < len; i++){
+        const data = v[options.data.datasets[i].key];
+        if(data) {
+          // if(data < 50 || data >= 90) {
+          //   options.data.datasets[i].pointBackgroundColor.push(errorColor);
+          //   options.data.datasets[i].pointBorderColor.push(errorColor);
+          //   options.data.datasets[i].pointRadius.push(errorPointRadius);
+          // }else {
+          options.data.datasets[i].pointBackgroundColor.push(defaultColor);
+          options.data.datasets[i].pointBorderColor.push(defaultColor);
+          options.data.datasets[i].pointRadius.push(defaultPointRadius);
+          // }
+          // @ts-ignore
+          options.data.datasets[i].data.push(data);
+        }
+        // @ts-ignore
+        options.data.datasets[i].data.push(v[options.data.datasets[i].key]);
+      }
+      if(count === COUNT_PER){
+        // @ts-ignore
+        options.data.labels.push(v['date']);
+        count = 0;
+      }else {
+        options.data.labels.push(" ");
+        count++;
+      }
+    });
+    return options;
+  }
+
+  const newChart = () => {
+    //@ts-ignore
+    const ctx = BloodOxygenChart.current.getContext('2d');
+    if(isHistory) {
+      chartOptions = convertChartData(chartOptions,serviceData);
+    }else {
+
+    }
+    const lineChart = new Chart(ctx, chartOptions);
+  }
+
+  useEffect(()=> {
+    newChart();
+    // getBloodGlucose({pregnancyId: '207'}).then(res => {
+    //   console.log(res);
+    // })
+  },['isHistory']);
+
   return (
-    <div>
-      血氧记录
+    <div className={styles.container}>
+      <div className={styles.header}>
+
+      </div>
+      <div className={styles.canvas}>
+        <canvas ref={BloodOxygenChart}></canvas>
+      </div>
     </div>
   )
 }

@@ -7,21 +7,25 @@
 import React,{ useRef, useEffect } from 'react'
 import Chart from 'chart.js';
 
-import { WingBlank } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
+
 import styles from './Record.less'
 
 interface ServiceDataItem {
-  date:string, sysion: number, diastou: number
+  timestamp:string, systolic: number, diastolic: number,
+  map?: number,
+  pregnancy?: {
+    id: number
+  }
 }
 const serviceData:Array<ServiceDataItem> = [
-  {date: '2/1', sysion: 110, diastou: 58},
-  {date: '2/2', sysion: 114, diastou: 76},
-  {date: '2/3', sysion: 113, diastou: 72},
-  {date: '2/4', sysion: 116, diastou: 80},
-  {date: '2/6', sysion: 101, diastou: 77},
-  {date: '2/6', sysion: 124, diastou: 83},
-  {date: '2/7', sysion: 111, diastou: 71},
+  {timestamp: '2/1', systolic: 110, diastolic: 58},
+  {timestamp: '2/2', systolic: 89, diastolic: 76},
+  {timestamp: '2/3', systolic: 113, diastolic: 72},
+  {timestamp: '2/4', systolic: 116, diastolic: 80},
+  {timestamp: '2/6', systolic: 101, diastolic: 77},
+  {timestamp: '2/6', systolic: 124, diastolic: 83},
+  {timestamp: '2/7', systolic: 111, diastolic: 71},
 ]
 
 function BloodPressureRecord() {
@@ -32,32 +36,12 @@ function BloodPressureRecord() {
     type: 'line',
     data: {
       labels: [],
-      datasets: [{
-        label: '收缩压',
-        fill: false,
-        borderColor: '#f5bff0',
-        pointBackgroundColor: ['#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#DC143C','#C3C5C6'], 
-        pointBorderColor: ['#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#DC143C','#C3C5C6'],
-        pointRadius: [8,0,8,8,8,8,8],
-        data: []
-      },{
-        label: '收缩压',
-        fill: false,
-        borderColor: '#fcdebb',
-        pointBackgroundColor: ['#DC143C','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6'],
-        pointBorderColor: ['#DC143C','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6'],
-        pointRadius: 8,
-        data: []
-      },{
-        label: '正常',
-        data: [],
-        borderColor: '#C3C5C6'
-      },{
-        label: '异常',
-        data: [],
-        borderColor: '#DC143C',
-        fill: false
-      }]
+      datasets: [
+        {key: 'systolic',label: '收缩压',fill: false,borderColor: '#f5bff0',pointBackgroundColor: [], pointBorderColor: [],pointRadius: [],data: []},
+        {key: 'diastolic',label: '收缩压',fill: false,borderColor: '#fcdebb',pointBackgroundColor: [],pointBorderColor: [],pointRadius: [],data: []},
+        {label: '正常',data: [],borderColor: '#C3C5C6'},
+        {label: '异常',data: [],borderColor: '#DC143C',fill: false}
+      ]
     },
     options: {
       responsive: true,
@@ -107,26 +91,76 @@ function BloodPressureRecord() {
             fontSize:20
           },
           ticks: {
-            max: 130,
-            min: 50,
-            stepSize: 5
+            max: 150,
+            min: 40,
+            stepSize: 10
           }
         }]
       }
     }
   }
 
+  // 将日历按周期展示
+  const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>, COUNT_DURATION:number = 5) => {
+    let count = 0;
+    const COUNT_PER = (serviceData.length / COUNT_DURATION) | 0 ;
+
+    const [ defaultColor, errorColor ] = ['#c3c5c6','#dc143c'];
+    const [ defaultPointRadius, errorPointRadius ] = [2,8];
+    
+    serviceData.forEach((v: ServiceDataItem, index: number) => {
+      // 填入数据
+      const len = options.data.datasets.length;
+      for(let i = 0 ; i < len; i++){
+        const data = v[options.data.datasets[i].key];
+        if(data) {
+          if(options.data.datasets[i].key === 'systolic') {
+            if(data < 90 || data >= 140) {
+              options.data.datasets[i].pointBackgroundColor.push(errorColor);
+              options.data.datasets[i].pointBorderColor.push(errorColor);
+              options.data.datasets[i].pointRadius.push(errorPointRadius);
+            }else {
+              options.data.datasets[i].pointBackgroundColor.push(defaultColor);
+              options.data.datasets[i].pointBorderColor.push(defaultColor);
+              options.data.datasets[i].pointRadius.push(defaultPointRadius);
+            }
+          }else if(options.data.datasets[i].key === 'diastolic'){
+            if(data < 50 || data >= 90) {
+              options.data.datasets[i].pointBackgroundColor.push(errorColor);
+              options.data.datasets[i].pointBorderColor.push(errorColor);
+              options.data.datasets[i].pointRadius.push(errorPointRadius);
+            }else {
+              options.data.datasets[i].pointBackgroundColor.push(defaultColor);
+              options.data.datasets[i].pointBorderColor.push(defaultColor);
+              options.data.datasets[i].pointRadius.push(defaultPointRadius);
+            }
+          }
+          // @ts-ignore
+          options.data.datasets[i].data.push(data);
+        }
+      }
+      if(count === COUNT_PER){
+        // @ts-ignore
+        options.data.labels.push(v['timestamp']);
+        count = 0;
+      }else {
+        options.data.labels.push(" ");
+        count++;
+      }
+    });
+    return options;
+  }
+
+
   const newChart = () => {
     // @ts-ignore
     const ctx = bloodPressureChart.current.getContext('2d');
-    serviceData.forEach((v:ServiceDataItem) => {
-      chartOptions.data.labels.push(v.date);
-      chartOptions.data.datasets[0].data.push(v.sysion);
-      chartOptions.data.datasets[1].data.push(v.diastou);
-    });
+    chartOptions = convertChartData(chartOptions,serviceData);
     const lineChart = new Chart(ctx,chartOptions)
   }
+  
   useEffect(() => newChart());
+
   return (
     <div className={styles.container}>
       <div className={styles.chart}>

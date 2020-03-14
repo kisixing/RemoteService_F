@@ -36,8 +36,7 @@ function Details(props: DETAIL_PAGE_PROPS) {
 
   const { packageDetail, packageList, currentPackageId } = props;
   const currentPackageData = packageList.find(item => item.id === currentPackageId);
-  console.log(currentPackageData);
-
+  const { price = '无价格信息' } = currentPackageData;
   const toPay = () => {
     // 可以动态路由携带信息
     router('/pay');
@@ -45,7 +44,7 @@ function Details(props: DETAIL_PAGE_PROPS) {
 
   useEffect(() => {
     if(currentPackageId !== -1) {
-      props.dispatch({type: 'combo/getPackageData', payload: {id: props.packageId}});
+      props.dispatch({type: 'combo/getPackageData', payload: {id: currentPackageId}});
     }else {
       console.log('非法套餐id');
     }
