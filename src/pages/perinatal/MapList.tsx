@@ -63,7 +63,7 @@ class MapList extends React.Component<P, S> {
   // Touchable组件点击后导致行内样式无法恢复到原来的效果
   render() {
     return (
-      <WingBlank className="page">
+      <WingBlank className={styles.container}>
         {this.state.dataSource.map(item => {
           return (
             <Touchable key={item.name} onPress={() => router(item.route)}>

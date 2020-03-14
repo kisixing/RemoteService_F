@@ -31,6 +31,8 @@ declare module "rc-form" {
   export const formShape: object;
 }
 
+declare module 'rc-form/lib/createDOMForm'
+
 declare interface Window {
   g_app: any
   baseurl: any

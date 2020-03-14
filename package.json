@@ -21,6 +21,7 @@
     "nprogress": "^0.2.0",
     "numeral": "^2.0.6",
     "parsec-ls": "^0.0.1",
+    "rc-field-form": "^1.1.0",
     "rc-form": "^2.4.11",
     "rc-touchable": "^1.3.2",
     "react": "^16.8.6",
