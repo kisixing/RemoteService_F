@@ -4,10 +4,13 @@ import { connect } from 'dva';
 import { Button, Checkbox, WingBlank } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
 import { wxpay } from '@/services/pay';
+import { ConnectState } from '@/models/connect';
+
 
 var wx =  require('weixin-js-sdk');
 
 import styles from './index.less';
+import MonitorCard from '../order/MonitorCard';
 
 
 
@@ -18,8 +21,17 @@ function Pay(props:any) {
   console.log(props);
   const [payType, setPayType] = useState('');
 
+  const [isAgree, setIsAgree] = useState(false);
+
   const onSelect = (type: string):void => {
     setPayType(type);
+  }
+
+  const handleAgree = ():void => {
+    if(isAgree){
+      setPayType('');
+    }
+    setIsAgree(isAgree => !isAgree);
   }
 
   // TODO 支付fn
@@ -28,7 +40,8 @@ function Pay(props:any) {
     const sessionObj = JSON.parse(sessionData);
     const PREGNANCY_ID = JSON.parse(sessionObj['global'])['currentPregnancy']['id'];
     // const {confirmData} = props
-    const PACKAGE_ID = 1; // 写死套餐id = 1
+    const PACKAGE_ID = props.currentPackageId;
+    console.log(props);
     wxpay({servicepackage: {id: PACKAGE_ID}, pregnancy: {id: PREGNANCY_ID}}).then(payorder => {
       wx.config({
         appId: payorder.appId,
@@ -90,12 +103,17 @@ function Pay(props:any) {
       </div>
       <div className={styles.content}>
         <WingBlank>
-          正文内容，富文本返回
+          <MonitorCard/>
         </WingBlank>
       </div>
 
       <div className={styles.footer}>
-        <div className={styles.choice}>
+
+        <div className={styles.agree}>
+          <Checkbox checked={isAgree} onChange={handleAgree}>我同意<a href="#">《购买协议》</a></Checkbox>
+        </div>
+        <div className={styles.pay}>
+          <div className={styles.choice}>
           <div className={styles['choice-item']} onClick={() => onSelect('wx')}>
             <div className={styles.text}>
               <img src={require('@/assets/icons/wxpay.png')} alt=""/>
@@ -103,7 +121,7 @@ function Pay(props:any) {
               <span>微信支付</span>
             </div>
             <div className={styles.checkbox}>
-              <Checkbox checked={payType === "wx"}/>
+              <Checkbox checked={payType === "wx"} disabled={!isAgree} />
             </div>
           </div>
           <div className={styles['choice-item']} onClick={() => onSelect('ali')}>
@@ -113,12 +131,13 @@ function Pay(props:any) {
               <span>支付宝支付</span>
             </div>
             <div className={styles.checkbox}>
-              <Checkbox checked={payType === "ali"} />
+              <Checkbox checked={payType === "ali"} disabled={!isAgree} />
             </div>
           </div>
         </div>
+        </div>
         <div className={styles.btn}>
-          <Button disabled={payType === ""} onClick={pay}>
+          <Button disabled={payType === "" || !isAgree} onClick={pay}>
             支付
           </Button>
         </div>
@@ -128,4 +147,6 @@ function Pay(props:any) {
   )
 }
 
-export default connect()(Pay);
+export default connect(({combo}: ConnectState) => ({
+  currentPackageId: combo.currentPackageId
+}))(Pay);

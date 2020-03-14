@@ -7,6 +7,7 @@
 import React,{ useRef, useEffect } from 'react'
 import Chart from 'chart.js';
 
+import { WingBlank } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
 import styles from './Record.less'
 
@@ -37,7 +38,7 @@ function BloodPressureRecord() {
         borderColor: '#f5bff0',
         pointBackgroundColor: ['#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#DC143C','#C3C5C6'], 
         pointBorderColor: ['#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#DC143C','#C3C5C6'],
-        pointRadius: 8,
+        pointRadius: [8,0,8,8,8,8,8],
         data: []
       },{
         label: '收缩压',
@@ -47,6 +48,15 @@ function BloodPressureRecord() {
         pointBorderColor: ['#DC143C','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6','#C3C5C6'],
         pointRadius: 8,
         data: []
+      },{
+        label: '正常',
+        data: [],
+        borderColor: '#C3C5C6'
+      },{
+        label: '异常',
+        data: [],
+        borderColor: '#DC143C',
+        fill: false
       }]
     },
     options: {
@@ -121,16 +131,6 @@ function BloodPressureRecord() {
     <div className={styles.container}>
       <div className={styles.chart}>
         <canvas ref={bloodPressureChart} className={styles.canvas}></canvas>
-        <div>
-          <div />
-          <div><span>正常</span></div>
-          <div/>
-          <div><span>异常</span></div>
-          <div/>
-          <div><span>舒张压</span></div>
-          <div/>
-          <div><span>收缩压</span></div>
-        </div>
       </div>
       <BackButton/>
 

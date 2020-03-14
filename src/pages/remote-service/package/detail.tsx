@@ -4,14 +4,15 @@
  * @Description: 套餐详情
  */
 
-import React,{ ReactNode, useEffect, useState } from 'react';
+import React,{ ReactNode, useEffect } from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
+import { Tabs, Button } from 'antd-mobile';
+import { Tag } from '@/components/antd-mobile';
 import { router } from '@/utils/utils';
-import { Tabs, Button, Checkbox } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
 
-import { CurrentPackageDetail } from './interface';
+import { CurrentPackageDetail, PackageListItem } from './interface';
 import { ConnectState } from '@/models/connect';
 import styles from './Detail.less';
 
@@ -25,25 +26,25 @@ const tabs:Array<TAB> = [
 
 interface DETAIL_PAGE_PROPS {
   packageDetail: CurrentPackageDetail,
-  packageId: number|string,
+  currentPackageId: number|string,
+  packageList: Array<PackageListItem>,
   dispatch: Dispatch
 }
 
 function Details(props: DETAIL_PAGE_PROPS) {
-  const { packageDetail } = props;
 
-  const [isAgree,setIsAgree] = useState(false);
+
+  const { packageDetail, packageList, currentPackageId } = props;
+  const currentPackageData = packageList.find(item => item.id === currentPackageId);
+  console.log(currentPackageData);
 
   const toPay = () => {
     // 可以动态路由携带信息
     router('/pay');
   }
-  const handleCheckboxChange = ():void => {
-    setIsAgree(isAgree => !isAgree);
-  }
 
   useEffect(() => {
-    if(props.packageId !== -1) {
+    if(currentPackageId !== -1) {
       props.dispatch({type: 'combo/getPackageData', payload: {id: props.packageId}});
     }else {
       console.log('非法套餐id');
@@ -52,21 +53,28 @@ function Details(props: DETAIL_PAGE_PROPS) {
 
   return (
     <div className={styles.container}>
-      <div className={styles['img-block']} />
+      <div className={styles['img-block']}>
+      <div className={styles.title}>
+          <div>
+            <span>孕期胎监套餐</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span><Tag size="middle" bgcolor="#D9F0F8" color="#3FB6DC">单胎</Tag></span>
+          </div>
+          <div>
+            <span>有效期：截止至本孕分娩时间</span>
+          </div>
+        </div>
+      </div>
       <Tabs tabs={tabs}>
         <div dangerouslySetInnerHTML={{__html: packageDetail.note}} />
         <div dangerouslySetInnerHTML={{__html: packageDetail.introduction}} />
         <div dangerouslySetInnerHTML={{__html: packageDetail.specification}} />
       </Tabs>
       <div className={styles.bottom}>
-        <div className={styles.agree}>
-          <Checkbox checked={isAgree} onChange={handleCheckboxChange}>我同意<a href="#">《购买协议》</a></Checkbox>
-          <span></span>
-        </div>
         <div className={styles.footer}>
-          <div className={styles.price}>￥5000</div>
+          <div className={styles.price}>￥{currentPackageData.price}</div>
           <div className={styles.buy}>
-            <Button className={styles.button} onClick={toPay} disabled={!isAgree}>购买</Button>
+            <Button className={styles.button} onClick={toPay} >购买</Button>
           </div>
         </div>
       </div>
@@ -77,6 +85,7 @@ function Details(props: DETAIL_PAGE_PROPS) {
 
 
 export default connect(({combo}:ConnectState ) => ({
-  packageId: combo.currentPackageId,
-  packageDetail: combo.currentPackageDetail 
+  currentPackageId: combo.currentPackageId,
+  packageDetail: combo.currentPackageDetail,
+  packageList: combo.packageList
 }))(Details);
