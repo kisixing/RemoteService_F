@@ -1,0 +1,44 @@
+@import '../../../utils/theme.less';
+
+.required {
+  display: inline-block;
+  margin-right: 4px;
+  color: #ff6084;
+  font-style: normal;
+}
+
+.label {
+  font-size: 0.3rem;
+  color: #333;
+}
+
+.customList {
+  :global {
+
+    .am-list-content {
+      flex: initial !important;
+    }
+
+    .am-list-extra {
+      flex: 1 !important;
+    }
+  }
+}
+
+.popup {
+  :global {
+    .rmc-picker-popup-item {
+      color: @primary-color;
+      font-size: @font-size-base + 2;
+      padding: 0.18rem 0.3rem;
+      height: 0.84rem;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .rmc-picker-popup-title {
+      color: #666;
+    }
+  }
+}

@@ -4,7 +4,7 @@
  * @Description: 基本信息
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { WingBlank } from 'antd-mobile';
 import createDOMForm from 'rc-form/lib/createDOMForm';
@@ -30,7 +30,18 @@ interface S {
   pregnancy: global.currentPregnancy,
   loading: loading,
 }))
-class BasicInfo extends Component<P, S> {
+class BasicInfo extends PureComponent<P, S> {
+
+  onSubmit = () => {
+    const { form, dispatch } = this.props;
+    form.validateFieldsAndScroll((error: any[], values: any) => {
+      if (error) {
+        return;
+      }
+      console.log('基本信息', values)
+    });
+  }
+
   render() {
     const { form } = this.props;
     return (
@@ -40,7 +51,9 @@ class BasicInfo extends Component<P, S> {
           <FormFields form={form} dataSource={basic.data} />
         </form>
         <div className={styles.buttonView}>
-          <Button type="primary">保存</Button>
+          <Button type="primary" onClick={this.onSubmit}>
+            保存
+          </Button>
           <BackButton route="/perinatal">返回</BackButton>
         </div>
       </div>

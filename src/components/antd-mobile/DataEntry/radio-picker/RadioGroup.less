@@ -1,0 +1,63 @@
+@import '../../../../utils/theme.less';
+
+.group {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.item {
+  padding-left: 16px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.label {
+  display: inline-block;
+  margin-left: 5px;
+  color: #333;
+  font-size: @font-size-base + 2;
+}
+.radio {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  appearance: none;
+  position: relative;
+}
+.radio:before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  content: '';
+  width: 100%;
+  height: 100%;
+  border: 2px solid #333;
+  display: inline-block;
+  border-radius: 50%;
+}
+.radio:checked:before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  border: 2px solid @primary-color;
+  background: @primary-color;
+  display: inline-block;
+  border-radius: 50%;
+}
+.radio:checked:after {
+  content: '';
+  width: 16px;
+  height: 8px;
+  border: 3px solid white;
+  border-top: transparent;
+  border-right: transparent;
+  text-align: center;
+  display: block;
+  position: absolute;
+  top: 11px;
+  left: 9px;
+  transform: rotate(-45deg);
+}
+.radio:checked + label {
+    color: @primary-color;
+}
