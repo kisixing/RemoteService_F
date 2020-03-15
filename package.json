@@ -19,6 +19,7 @@
     "dva": "^2.6.0-beta.6",
     "dva-logger": "^1.0.0",
     "import-cdn-js": "^0.0.2",
+    "moment": "^2.24.0",
     "nprogress": "^0.2.0",
     "numeral": "^2.0.6",
     "parsec-ls": "^0.0.1",
