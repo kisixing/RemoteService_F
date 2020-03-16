@@ -77,13 +77,16 @@ function BloodPressureRecord() {
         intersect: false
       },
       scales: {
-        // xAxes: [{
-        //   scaleLabel: {
-        //     display: true,
-        //     labelString: '日期',
-        //     fontSize:20
-        //   }
-        // }],
+        xAxes: [{
+          // scaleLabel: {
+          //   display: true,
+          //   labelString: '日期',
+          //   fontSize:20
+          // }
+          ticks: {
+            fontSize: 20
+          }
+        }],
         yAxes: [{
           scaleLabel: {
             display: true,
@@ -93,7 +96,8 @@ function BloodPressureRecord() {
           ticks: {
             max: 150,
             min: 40,
-            stepSize: 10
+            stepSize: 10,
+            fontSize: 25
           }
         }]
       }

@@ -8,7 +8,7 @@ import React,{ useRef, useState, useEffect } from 'react'
 import Chart from 'chart.js';
 import { WingBlank } from 'antd-mobile';
 
-// import { getBloodGlucose } from '@/services/tools';
+import { getBloodGlucose } from '@/services/tools';
 
 import styles from './Record.less';
 
@@ -123,7 +123,6 @@ function BloodGlucoseRecord() {
           // 坐标轴
           ticks: {
             fontSize: 20,
-            fontWeight: 400
           }
         }],
         yAxes: [{ 
@@ -138,8 +137,7 @@ function BloodGlucoseRecord() {
             min: 3.5,
             stepSize: 0.5,
             // style
-            fontSize: 20,
-            fontWeight: 500
+            fontSize: 20 
           }
         }],
       }
@@ -183,9 +181,9 @@ function BloodGlucoseRecord() {
 
   useEffect(()=> {
     newChart();
-    // getBloodGlucose({pregnancyId: '207'}).then(res => {
-    //   console.log(res);
-    // })
+    getBloodGlucose({pregnancyId: '207'}).then(res => {
+      console.log(res);
+    })
   },['isHistory']);
 
   return (
