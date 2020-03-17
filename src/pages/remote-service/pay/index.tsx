@@ -53,26 +53,26 @@ function Pay(props:any) {
       //   jsApiList: ['chooseWXPay'],
       //   success: function (res:any) {
       //     // 微信内置浏览器接口 - 判别微信支付信息
-      //     // @ts-ignore
-      //     WeixinJSBridge.invoke(
-      //       "getBrandWCPayRequest", {
-      //         appId: payorder.appId,
-      //         timestamp: payorder.timeStamp,
-      //         nonceStr: payorder.nonceStr,
-      //         package: payorder.packageValue,
-      //         signType: payorder.signType,
-      //         paySign: payorder.paySign
-      //       },
-      //       function (res:any) {
-      //         if(res.err_msg === 'get_brand_wcpay_request:cancel' || res.err_msg === 'get_brand_wcpay_request:fail') {
-      //           alert('支付失败，请重新支付');
-      //         }else if(res.err_msg === '调用支付JSAPI缺少参数：total_fee') {
-      //           alert('请检查下单接口')
-      //         }else if(res.err_msg === 'get_brand_wcpay_request:ok') {
-      //           alert('支付成功,跳转');
-      //         }
-      //       }
-      //     )
+      // @ts-ignore
+      WeixinJSBridge.invoke(
+        "getBrandWCPayRequest", {
+          appId: payorder.appId,
+          timestamp: payorder.timeStamp,
+          nonceStr: payorder.nonceStr,
+          package: payorder.packageValue,
+          signType: payorder.signType,
+          paySign: payorder.paySign
+        },
+        function (res:any) {
+          if(res.err_msg === 'get_brand_wcpay_request:cancel' || res.err_msg === 'get_brand_wcpay_request:fail') {
+            alert('支付失败，请重新支付');
+          }else if(res.err_msg === '调用支付JSAPI缺少参数：total_fee') {
+            alert('请检查下单接口')
+          }else if(res.err_msg === 'get_brand_wcpay_request:ok') {
+            alert('支付成功,跳转');
+          }
+        }
+      )
       //   },
       //   error: function(err:any) {
       //     alert('不可以');

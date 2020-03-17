@@ -25,6 +25,7 @@ interface PackageProps{
 function Packages(props: PackageProps) {
 
   const onClick = (id: number|string):void => {
+    console.log(`C-${id}`);
     props.dispatch({type: 'combo/setPackageId', payload: id});
     Router.push('/packages/detail');
   }
@@ -35,7 +36,7 @@ function Packages(props: PackageProps) {
     <WingBlank className={styles.container}>
       {props.packageList.map((item: PackageListItem) => {
         return (
-          <Touchable key={item.id} onPress={() => onClick(item.id)}>
+          <Touchable key={item.id}>
             <div className={styles.card}>
               <div className={styles.thumbnail}>
                 <img src="/images/slice/pic.png" />
@@ -49,7 +50,7 @@ function Packages(props: PackageProps) {
                   <div className={styles.price}>￥<b>{item.price}</b></div>
                   <div className={styles.device}>·含设备</div>
                   <div className={styles.detail}>
-                    <span>查看详情</span> 
+                    <button onClick={() => onClick(item.id)}>查看详情</button> 
                     <img src={require('@/assets/icons/icon_wc_next_1@2x.png')} alt=""/>
                   </div>
                 </div>
