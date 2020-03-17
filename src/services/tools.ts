@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-import moment,{ Moment } from 'moment';
+import { Moment } from 'moment';
 
 // 适用于 血糖 血氧 体温
 interface SetProp{
@@ -66,14 +66,14 @@ interface SetBloodPressuresProp{
 }
 
 export async function getBloodPressures({pregnancyId}: {pregnancyId:string|number}) {
-  return request(`api/blood-pressures?pregnancyId.equal=${pregnancyId}`,{
+  return request(`/api/blood-pressures?pregnancyId.equal=${pregnancyId}`,{
     method: 'GET',
     getResponse: true
   })
 }
 
 export async function setBloodPressures(data: SetBloodPressuresProp) {
-  return request(`api/blood-pressures`,{
+  return request(`/api/blood-pressures`,{
     method: 'POST',
     data,
     getResponse: true

@@ -7,7 +7,7 @@
 import Router from 'umi/router';
 import { Toast } from 'antd-mobile';
 import { parse, stringify } from 'querystring';
-import moment from 'moment';
+import moment,{ Moment } from 'moment';
 // import pathRegexp from 'path-to-regexp';
 
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
@@ -266,5 +266,45 @@ export function router(type: string) {
     window.location.href = type;
   } else {
     Router.push(type)
+  }
+}
+
+/**
+ * 对日期字符串进行排序
+ * @param arr 需要排序的数组 
+ * @params key 排序的字段，若为空，则代表数组内元素为datestring
+ * 入参形式 
+ */
+
+
+export function sortDate<T>(arr: Array<T>, key: string = ""): Array<T>|false {
+  let formatArr:Array<any> = [];
+  try {
+    if(key !== "") {
+      arr.forEach((v:T) => formatArr.push(Object.assign({_sortDate: moment(v[key])},v)));
+    }else {
+      arr.forEach((v:T) => formatArr.push({_sortDate: moment(v),originalData: v}));
+    }
+  }catch(e) {
+    console.error('对象或对象下字段不可使用moment转换');
+    return false;
+  }
+  // 排序使用 Moment.isAfter 冒泡
+  const len = formatArr.length;
+  let temp;
+  for(let i = 0 ; i < len ; i++){
+    for(let j = i+1; j < len ; j++){
+      if(formatArr[i]['_sortDate'].isAfter(formatArr[j]['_sortDate'])){
+        temp = formatArr[i];
+        formatArr[i] = formatArr[j];
+        formatArr[j] = temp;
+      }
+    }
+  }
+  console.log(formatArr);
+  if(key !== "") {
+    return formatArr.map((v) => {delete v['_sortDate']; return v});
+  }else {
+    return formatArr.map((v) => v.originalData);
   }
 }
