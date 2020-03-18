@@ -9,14 +9,17 @@ import { Redirect } from 'umi';
 import PageLoading from '@/components/Loader';
 
 function index() {
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
   // 是否绑定设备， true已绑定 false未绑定
   const [state, setState] = React.useState(false);
   React.useEffect(() => {
-    setTimeout(() => {
+    let a = setTimeout(() => {
       setState(true);
       setLoading(false);
     }, 600);
+    return function clean(){
+      clearTimeout(a);
+    }
   }, [])
 
   if (state && !loading) {

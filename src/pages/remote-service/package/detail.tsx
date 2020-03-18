@@ -36,8 +36,11 @@ function Details(props: DETAIL_PAGE_PROPS) {
 
   const { packageDetail, packageList, currentPackageId } = props;
   console.log(props);
-  const currentPackageData = packageList.find(item => item.id === currentPackageId);
-  const { price = '无价格信息' } = currentPackageData;
+  let price = "套餐信息有误";
+  const currentPackageData:PackageListItem|undefined = packageList.find(item => item.id === currentPackageId);
+  if(currentPackageData){
+    price = currentPackageData.price.toString();
+  }
   const toPay = () => {
     // 可以动态路由携带信息
     router('/pay');
@@ -72,7 +75,7 @@ function Details(props: DETAIL_PAGE_PROPS) {
       </Tabs>
       <div className={styles.bottom}>
         <div className={styles.footer}>
-          <div className={styles.price}>￥{currentPackageData.price}</div>
+          <div className={styles.price}>￥{price}</div>
           <div className={styles.buy}>
             <Button className={styles.button} onClick={toPay} >购买</Button>
           </div>

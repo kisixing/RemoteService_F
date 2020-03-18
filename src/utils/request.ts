@@ -118,7 +118,6 @@ request.interceptors.response.use((response, options) => {
     }
     store.set('lianmp-token', token);
   }
-  console.log(response);
   return response;
 });
 

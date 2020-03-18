@@ -1,21 +1,22 @@
 import React from 'react';
 import {IconFont, Button} from '@/components/antd-mobile';
 
+import { ServiceOrderItem } from './interface';
+
 import styles from './ConsultCard.less';
 
 interface ConsultCardProps {
-  data: {
-    name: string
-  }
+  data: ServiceOrderItem
 }
 
 export default function ConsultCard(props: ConsultCardProps) {
   const {data} = props;
+  console.log(data);
   return (
     <div>
       <div className={styles.header}>
         <div className={styles.title}>
-          <div><IconFont type='order' size="0.4rem" /><span className={styles.name}>{data.name}</span> </div>
+          <div><IconFont type='order' size="0.4rem" /><span className={styles.name}>图文咨询</span> </div>
           <div><span>咨询结束</span></div>
         </div>
         <div className={styles.info}>
@@ -37,7 +38,7 @@ export default function ConsultCard(props: ConsultCardProps) {
       </div>
       <hr/>
       <div className={styles.footer}>
-        <div className={styles.price}><IconFont type="fetus"/><span>20</span></div>
+        <div className={styles.price}><IconFont type="fetus"/><span>{}</span></div>
         <div className={styles.handler}>
           <Button className={styles.btn}>评价</Button>
           <Button className={styles.btn}>再次咨询</Button>

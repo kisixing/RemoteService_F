@@ -1,28 +1,59 @@
-import { Reduce } from 'redux';
+import { Reducer } from 'redux';
 import { Effect } from '@/models/connect';
-import { OrderState } from '@/pages/remote-service/order/config';
+import { getPackageOrders, getServiceOrders } from '@/services/order';
+import { PackageOrderItem, ServiceOrderItem } from '@/pages/remote-service/order/interface';
 export interface OrderStateType {
-  orderList: Array<any>,
-  currentOrder: number|string
+  serviceOrderList: Array<ServiceOrderItem>,
+  packageOrderList: Array<PackageOrderItem>,
+  currentOrder: number | string
 };
 
 export interface OrderModelType {
   namespace: string,
   state: OrderStateType,
-  effects: {},
-  reducers: {}
+  effects: {
+    getPackageOrders: Effect,
+    getServiceOrders: Effect
+  },
+  reducers: {
+    setPackageOrderList: Reducer,
+    setServiceOrderList: Reducer,
+  }
 }
 
 const Model: OrderModelType = {
   namespace: 'order',
   state: {
-    orderList: [],
+    packageOrderList: [],
+    serviceOrderList: [],
     currentOrder: -1
   },
   effects: {
-    
+    *getPackageOrders({ payload }, { put, call }) {
+      const { data, response } = yield call(getPackageOrders, payload);
+      console.log(data);
+      console.log(response);
+      yield put({ type: 'setPackageOrderList', payload: data });
+    },
+    *getServiceOrders({ payload }, { put, call }) {
+      const { data, response } = yield call(getServiceOrders, payload);
+      console.log(data);
+      console.log(response);
+      yield put({type: 'setServiceOrderList', payload:data});
+    }
   },
-  reducers: {}
+  reducers: {
+    setPackageOrderList(state, { payload }) {
+      let newState = JSON.parse(JSON.stringify(state));
+      newState.packageOrderList = payload;
+      return newState;
+    },
+    setServiceOrderList(state, { payload }) {
+      let newState = JSON.parse(JSON.stringify(state));
+      newState.serviceOrderList = payload;
+      return newState;
+    },
+  }
 }
 
 export default Model;
