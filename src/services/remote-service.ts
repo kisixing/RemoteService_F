@@ -17,3 +17,7 @@ export async function CTGApply(params: object) {
 export async function getPackageOrders(id: string) {
   return request(`/api/packageorders?deviceId.specified=true&pregnancyId.equals=${id}`);
 }
+
+export async function getApplyPrice(type: string) {
+  return request(`/api/ctgapplyfees?type.equals=${type}`);
+}
