@@ -35,6 +35,7 @@ function Details(props: DETAIL_PAGE_PROPS) {
 
 
   const { packageDetail, packageList, currentPackageId } = props;
+  console.log(props);
   const currentPackageData = packageList.find(item => item.id === currentPackageId);
   const { price = '无价格信息' } = currentPackageData;
   const toPay = () => {
