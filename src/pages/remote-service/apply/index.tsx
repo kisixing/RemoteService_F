@@ -8,9 +8,8 @@ import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, Accordion, Checkbox, Toast } from 'antd-mobile';
 import moment from 'moment';
 import classnames from 'classnames';
-import wx from 'weixin-js-sdk';
-import { Button, WhiteSpace, BackButton, Tag, IconFont } from '@/components/antd-mobile';
-import { CTGApply, getPackageOrders } from '@/services/remote-service';
+import { Button, BackButton, Tag, IconFont, WhiteSpace } from '@/components/antd-mobile';
+import { CTGApply, getPackageOrders, getApplyPrice } from '@/services/remote-service';
 import { webpay } from '@/services/pay';
 import { router } from '@/utils/utils';
 import styles from './index.less';
@@ -31,13 +30,14 @@ function Apply(props: any) {
   const { p1, p2, t } = query; // p1 孕册id， p2 监测档案id/判图档案id, t 套餐id
 
   const [packageOrder, setPackageOrder] = useState<IState>({
-    id: undefined,
+    id: '',
     pregnancy: {},
     device: {},
     servicepackage: {},
   });
   const [isReady, setIsReady] = useState(false);
-  const [checked, setChecked] = useState(false)
+  const [checked, setChecked] = useState({});
+  const [prices, setPrices] = useState([]); // 单次判图服务价格列表
 
   useEffect(() => {
     redirection();
@@ -50,25 +50,41 @@ function Apply(props: any) {
         setIsReady(true);
         const object = res.filter((e: any) => !!e.device)[0];
         setPackageOrder(object);
+        if (object.service1amount === 0) {
+          // 套餐服务次数已用完
+          getPrice();
+        }
         // onClick(Number(p1), Number(p2), object.id);
       }
     });
   };
 
+  const getPrice = () => {
+    // 单次判图服务价格
+    const type = 'CTGAPPLY';
+    getApplyPrice(type).then(res => {
+      if (res && res.length) {
+        setPrices(res);
+      }
+    });
+  }
+
   const onClick = (p1: number, p2: number, p3?: number) => {
     if (checked) {
       // 套餐已用完，单次收费
-      const params = { pregnancy: { id: p1 }, prenatalvisit: { id: p2 } };
+      // 单次判图服务类型
+      const type = checked.type;
+      const params = { pregnancy: { id: p1 }, prenatalvisit: { id: p2 }, type };
       webpay(params).then((res: any) => {
-        if (res && res.mwbUrl) {
-          window.location.href = res.mwbUrl;
+        if (res && res.mwebUrl) {
+          window.location.href = res.mwebUrl;
         }
       });
     } else {
-      CTGApply({ pregnancyid: p1, visitid: p2, packageorderid: p3 })
+      CTGApply({ pregnancyid: p1, visitid: p2, packageorderid: p3, type: 'CTGAPPLY' })
         .then(res => {
           if (res && res.sn) {
-            router('/apply/result');
+            router(`/apply/result?pregnancyId=${p1}`);
           } else {
             Toast.info('判图服务扣除失败，请稍后再试...');
           }
@@ -82,12 +98,11 @@ function Apply(props: any) {
   };
 
   const handleCheckbox = (e: any) => {
-    const checked = e.target.checked;
-    setChecked(checked);
+    setChecked({ ...e });
   };
 
   if (isReady) {
-    const { id, sn, service1amount, service2amount, createtime, validdate, servicepackage, device } = packageOrder;
+    const { id, service1amount, service2amount, createtime, validdate, servicepackage } = packageOrder;
     return (
       <div className={styles.container}>
         <div className={styles.card}>
@@ -119,7 +134,18 @@ function Apply(props: any) {
               <span>{service1amount === 0 ? '' : service1amount}</span>
             </div>
           </div>
-          <Accordion className={styles.accordion}>
+          <div className={styles.record}>
+            <div className={styles.title}>
+              <IconFont type="fetus" className={styles.icon} />
+              <span className={styles.name}>{'胎监判图服务'}</span>
+            </div>
+            <div className={styles.extra}>
+              <span>已使用 {service2amount - service1amount} 次 / </span>
+              <span>{service2amount} 次</span>
+            </div>
+          </div>
+          <WhiteSpace />
+          {/* <Accordion className={styles.accordion}>
             <Accordion.Panel
               header={
                 <div className={styles.record}>
@@ -138,9 +164,8 @@ function Apply(props: any) {
                 {service1amount > 0 ? <div>每次使用时间列表</div> : '您还未使用过...'}
               </div>
             </Accordion.Panel>
-            {/* <Accordion.Panel header={<div className={styles.device}></div>}>123</Accordion.Panel> */}
-          </Accordion>
-          <div className={styles.device}>
+          </Accordion> */}
+          {/* <div className={styles.device}>
             <div className={styles.title}>
               <IconFont type="device" className={styles.icon} />
               <span className={styles.name}>{device.devicename}</span>
@@ -149,17 +174,17 @@ function Apply(props: any) {
               <span>租用</span>
               <span>{device.status} 个</span>
             </div>
-          </div>
-          {service1amount === 0 ? (
-            <div className={styles.checkbox}>
-              <Checkbox checked={checked} onChange={handleCheckbox}>
-                单次胎监判图服务费
-              </Checkbox>
-              <div className={styles.extra}>
-                ￥<span>0.01</span>
+          </div> */}
+          {prices.map((e: any) => {
+            return (
+              <div key={e.id} className={styles.checkbox} onClick={() => handleCheckbox(e)}>
+                <Checkbox checked={e.id === checked.id}>{`${e.name}服务费`}</Checkbox>
+                <div className={styles.extra}>
+                  ￥<span>{e.price}</span>
+                </div>
               </div>
-            </div>
-          ) : null}
+            );
+          })}
         </div>
         <div>
           <div></div>
@@ -168,7 +193,7 @@ function Apply(props: any) {
         <div style={{ margin: '.48rem .3rem' }}>
           <Button
             type="primary"
-            disabled={service1amount === 0 && !checked}
+            disabled={service1amount === 0 && !checked.id}
             onClick={() => onClick(Number(p1), Number(p2), packageOrder.id)}
           >
             确定

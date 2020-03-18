@@ -7,7 +7,7 @@
 import React, {ReactNode} from 'react';
 import Router from 'umi/router';
 // import { IconFont, Tag, Touchable, Button } from '@/components/antd-mobile';
-
+import { ServiceOrderItem, PackageOrderItem, ORDER_TYPE } from './interface';
 import MonitorCard from './MonitorCard';
 import ApplyCard from './ApplyCard';
 import ConsultCard from './ConsultCard';
@@ -15,22 +15,29 @@ import ConsultCard from './ConsultCard';
 import styles from './ListView.less';
 
 interface IProps {
-  dataSource?: any[]
+  dataSource?: Array<ServiceOrderItem>
 }
 
 
 function ListView({ dataSource = [] }: IProps) {
-  const onClick = () => {
-    Router.push('/orders/detail')
+  const onClick = (fType:any) => {
+    if(fType === ORDER_TYPE.CONSULT){
+      Router.push('/orders/consultdetail');
+    }else{
+      Router.push('/order/detail');
+    }
   };
 
-  const renderListItem = (data: {type: string, name:string}):ReactNode => {
-    switch(data.type){
-      case 'monitoring':
+  const renderListItem = (data: ServiceOrderItem|PackageOrderItem ):ReactNode => {
+    switch(data.fType){
+      case ORDER_TYPE.PACKAGE:
+        // @ts-ignore
         return  <MonitorCard data={data}/>;
-      case 'apply':
+      case ORDER_TYPE.APPLY:
+        // @ts-ignore
         return <ApplyCard data={data}/>;
-      case 'consult':
+      case ORDER_TYPE.CONSULT:
+        // @ts-ignore
         return <ConsultCard data={data} />
       default:
         return <div>未知订单类型</div>
@@ -41,8 +48,10 @@ function ListView({ dataSource = [] }: IProps) {
     <div className={styles.listView}>
       {dataSource.map(e => {
         return (
-          <div key={e.key} onClick={onClick} className={styles.item}>
-            {renderListItem(e)}
+          <div key={e.id}  className={styles.item}>
+            <div onClick={() => onClick(e.fType)}>
+              {renderListItem(e)}
+            </div>
           </div>
         );
       })}

@@ -4,14 +4,20 @@
  * @Description: 我的订单
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavBar, Tabs } from 'antd-mobile';
 import Router from 'umi/router';
+import { Dispatch } from 'redux';
 import { StickyContainer, Sticky } from 'react-sticky';
 import BackButton from '@/components/BackButton';
 import ListView from './ListView';
-import { OrderState } from './config';
 
+
+import { PackageListItem } from '../package/interface';
+import { ServiceOrderItem, PackageOrderItem, ORDER_TYPE } from './interface';
+
+import { connect } from 'dva';
+import { ConnectState} from '@/models/connect';
 
 import styles from './index.less';
 
@@ -35,6 +41,7 @@ function Title({ text, icon }: Itext) {
 }
 
 
+// 渲染顶部bar
 function renderTabBar(props:any) {
   return (
     <Sticky>
@@ -47,16 +54,24 @@ function renderTabBar(props:any) {
   );
 }
 
-// 根据状态确定 路径|显示字段
-function getTextByState(state: number) {
-  const orderStateArr = ['状态未知','未绑定','使用中','逾期','已结束'];
-  return orderStateArr[state];
-} 
+interface OrderProps{
+  dispatch:Dispatch,
+  userid:number|string,
+  serviceOrderList:Array<ServiceOrderItem>,
+  packageOrderList:Array<PackageOrderItem>,
+  packageList: Array<PackageListItem>,
+  location:{
+    query: {
+      type: string
+    }
+  }
+}
 
-function Oders(props: any) {
-  const { location: { query } } = props;
+function Oders(props: OrderProps) {
+  const { location: { query }, userid } = props;
   const type = query.type || 'all';
   currentKey = type;
+  
 
   const onTabClick = (tab: any, index: number) => {
     const key = tab.key;
@@ -65,51 +80,63 @@ function Oders(props: any) {
     }
     return Router.replace(`/orders?type=${key}`);
   };
-  // type 之后使用枚举
-  const dataSource = () => {
+  /**  
+   * 在订单中加入type用于前端判断类型
+   *  fType 1 代表为远程胎监 套餐订单
+   *  fType 2 代表为胎监判图 服务订单
+   *  fType 3 代表为在线咨询 服务订单
+   * 以 ORDER_TYPE为准
+   */
+  const dataSource = ():Array<ServiceOrderItem|PackageOrderItem> => {
+    const{ packageOrderList,serviceOrderList,packageList } = props;
+    let filterList:Array<ServiceOrderItem|PackageOrderItem> = [];
     if (currentKey === 'monitoring') {
-      return [
-        {name: '一个月胎监服务', key: 'm-1', state: OrderState.NULL, stateText: '', type: 'monitoring'},
-        {name: '二个月胎监服务', key: 'm-2', state: OrderState.NULL, stateText: '', type: 'monitoring'}
-      ]
+      //@ts-ignore
+      filterList = packageOrderList.map((v: PackageOrderItem) => {
+        for(let i = 0; i < packageList.length; i++){
+          if(packageList[i].id === v.servicepackage.id){
+            v.products = packageList[i].products;
+            break;
+          }
+        }
+        v.fType = ORDER_TYPE.PACKAGE;
+        return v;
+      });
+    }else if (currentKey === 'apply') {
+      filterList = serviceOrderList.filter((v:ServiceOrderItem) => v.type === "胎监判图");
+      filterList = serviceOrderList.map(v => {v.fType = ORDER_TYPE.APPLY;return v;});
+    }else if (currentKey === 'consult') {
+      filterList = serviceOrderList.filter((v:ServiceOrderItem) => v.type !== "胎监判图");
+      filterList = serviceOrderList.map(v => {v.fType = ORDER_TYPE.CONSULT;return v;});
+    }else if(currentKey){
+      // @ts-ignore
+      let p = packageOrderList.map((v: PackageOrderItem) => {
+        v.fType = ORDER_TYPE.PACKAGE;
+        return v;
+      });
+      let o = serviceOrderList.map(v => {
+        if(v.type === "胎监判图"){
+          v.fType = ORDER_TYPE.APPLY;
+        }else{
+          v.fType = ORDER_TYPE.CONSULT;
+        }
+        return v;
+      });
+      filterList = p.concat(o);
     }
-    if (currentKey === 'consult') {
-      return [
-        {name: '在线咨询1', key: 'c-1', state: OrderState.NULL, stateText: '', type: 'consult'},
-        {name: '在线咨询2', key: 'c-2', state: OrderState.NULL, stateText: '',  type: 'consult'},
-        {name: '在线咨询3', key: 'c-3', state: OrderState.NULL, stateText: '', type: 'consult'},
-        {name: '在线咨询4', key: 'c-4', state: OrderState.NULL, stateText: '', type: 'consult'},
-        {name: '在线咨询4', key: 'c-5', state: OrderState.NULL, stateText: '', type: 'consult'},
-        {name: '在线咨询4', key: 'c-6', state: OrderState.NULL, stateText: '', type: 'consult'}
-      ]
-    }
-    if (currentKey === 'apply') {
-      return [
-        {name: '胎监判图1', key: 'a-1', state: OrderState.NULL,stateText: '', type: 'apply'},
-        {name: '胎监判图2', key: 'a-2', state: OrderState.NULL,stateText: '', type: 'apply'},
-        {name: '胎监判图3', key: 'a-3', state: OrderState.NULL,stateText: '', type: 'apply'},
-        {name: '胎监判图4', key: 'a-4', state: OrderState.NULL,stateText: '', type: 'apply'}
-      ]
-    }
-    return [
-      {name: '一个月胎监服务', key: 'm-1', state: OrderState.NULL, stateText: '', type: 'monitoring'},
-      {name: '二个月胎监服务', key: 'm-2', state: OrderState.NULL, stateText: '', type: 'monitoring'},
-      {name: '在线咨询1', key: 'c-1', state: OrderState.NULL, stateText: '', type: 'consult'},
-      {name: '在线咨询2', key: 'c-2', state: OrderState.NULL, stateText: '',  type: 'consult'},
-      {name: '在线咨询3', key: 'c-3', state: OrderState.NULL, stateText: '', type: 'consult'},
-      {name: '在线咨询4', key: 'c-4', state: OrderState.NULL, stateText: '', type: 'consult'},
-      {name: '在线咨询4', key: 'c-5', state: OrderState.NULL, stateText: '', type: 'consult'},
-      {name: '在线咨询4', key: 'c-6', state: OrderState.NULL, stateText: '', type: 'consult'},
-      {name: '胎监判图1', key: 'a-1', state: OrderState.NULL,stateText: '', type: 'apply'},
-      {name: '胎监判图2', key: 'a-2', state: OrderState.NULL,stateText: '', type: 'apply'},
-      {name: '胎监判图3', key: 'a-3', state: OrderState.NULL,stateText: '', type: 'apply'},
-      {name: '胎监判图4', key: 'a-4', state: OrderState.NULL,stateText: '', type: 'apply'}
-    ]
+    console.log(filterList);
+    return filterList;
   };
 
   const onClick = () => {
     Router.push('/packages')
   };
+
+  useEffect(() => {
+    props.dispatch({type: 'combo/getPackage'});
+    props.dispatch({type: 'order/getPackageOrders',payload: {pregnancyId: 207}});
+    props.dispatch({type: 'order/getServiceOrders',payload: {pregnancyId: 207}});
+  },[]);
 
   return (
     <div className="page">
@@ -131,14 +158,18 @@ function Oders(props: any) {
           }}
         >
           <div key={type} className={styles.content}>
-            <ListView dataSource={dataSource().map((v:any) => {v.stateText = getTextByState(v.state); return v; })} />
+            <ListView dataSource={dataSource()} />
           </div>
         </Tabs>
       </StickyContainer>
-
       <BackButton />
     </div>
   );
 }
 
-export default Oders;
+export default connect(({global,order,combo}:ConnectState) => ({
+  userid: global.currentPregnancy.id,
+  serviceOrderList:order.serviceOrderList,
+  packageOrderList:order.packageOrderList,
+  packageList:combo.packageList
+}))(Oders);

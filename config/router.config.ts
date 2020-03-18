@@ -97,6 +97,12 @@ export default [
                 component: './remote-service/order/index',
               },
               {
+                path: '/orders/consultdetail',
+                name: 'consultdetail',
+                title: '咨询详情',
+                component: './remote-service/order/ConsultDetail'
+              },
+              {
                 path: '/orders/detail', // 考虑动态路由
                 name: 'order detail',
                 title: '订单详情',
@@ -144,7 +150,7 @@ export default [
                 path: '/apply/payResult',
                 name: 'pay result',
                 title: '',
-                component: './remote-service/apply/payResult',
+                // component: './remote-service/apply/payResult',
               },
             ],
           },
@@ -290,12 +296,6 @@ export default [
                 component: './tools/temperature/Record',
               },
             ],
-          },
-          {
-            path: '/webtest',
-            name: 'webtest',
-            title: 'h5支付',
-            component: './webtest/index',
           },
         ],
       },

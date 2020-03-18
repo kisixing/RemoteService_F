@@ -1,8 +1,6 @@
 import React, { forwardRef, useState, useEffect } from 'react';
 import { List } from 'antd-mobile';
-
 import Popup from 'rmc-picker/lib/Popup';
-
 import PopupContent from './PopupContent';
 
 import styles from '../index.less';

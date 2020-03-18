@@ -1,12 +1,11 @@
 import request from '@/utils/request';
-
+// 获取套餐列表
 export async function getPackage() {
   return request('/api/servicepackages',{
     method: 'GET',
     getResponse: true
   })
 };
-
 // 获取套餐详情
 export async function getPackageData() {
   return request('/api/products', {

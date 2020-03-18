@@ -4,33 +4,41 @@
  * @Description: 血氧记录
  */
 
-import React,{ useRef, useEffect } from 'react'
+import React,{ useRef, useEffect, useState } from 'react'
 import Chart from 'chart.js';
+import {Tabs} from 'antd-mobile';
 
+import {sortDate} from '@/utils/utils';
+import moment from 'moment';
 import BackButton from '@/components/BackButton';
+import { getBloodPressures } from '@/services/tools';
 
 import styles from './Record.less'
 
+
+/**
+ * 数据展示备注
+ *  当用户查看历史记录 需要显示最高压和最低压
+ */
 interface ServiceDataItem {
   timestamp:string, systolic: number, diastolic: number,
   map?: number,
+  id:number,
   pregnancy?: {
     id: number
   }
 }
-const serviceData:Array<ServiceDataItem> = [
-  {timestamp: '2/1', systolic: 110, diastolic: 58},
-  {timestamp: '2/2', systolic: 89, diastolic: 76},
-  {timestamp: '2/3', systolic: 113, diastolic: 72},
-  {timestamp: '2/4', systolic: 116, diastolic: 80},
-  {timestamp: '2/6', systolic: 101, diastolic: 77},
-  {timestamp: '2/6', systolic: 124, diastolic: 83},
-  {timestamp: '2/7', systolic: 111, diastolic: 71},
-]
+
+const SYS_MAX=139,
+SYS_MIN=90,
+DIA_MAX=89,
+DIA_MIN=50;
+
 
 function BloodPressureRecord() {
-  const bloodPressureChart = useRef(null);
-
+  const hChart=useRef(null),tChart=useRef(null);
+  let chartH,chartT;
+  const [listData,setListData] = useState([]);
   // date与日期未填入
   let chartOptions = {
     type: 'line',
@@ -69,21 +77,29 @@ function BloodPressureRecord() {
       },
       elements:{
         line: {
-          tension: 0
+          // tension: 0
         },
       },
       tooltips: {
         mode: 'index',
-        intersect: false
+        intersect: false,
+        titleFontSize: 20,
+        bodyFontSize: 20
       },
       scales: {
-        // xAxes: [{
-        //   scaleLabel: {
-        //     display: true,
-        //     labelString: '日期',
-        //     fontSize:20
-        //   }
-        // }],
+        xAxes: [{
+          // scaleLabel: {
+          //   display: true,
+          //   labelString: '日期',
+          //   fontSize:20
+          // }
+          ticks: {
+            fontSize: 20
+          },
+          gridLines: {
+            display: false
+          },
+        }],
         yAxes: [{
           scaleLabel: {
             display: true,
@@ -92,8 +108,9 @@ function BloodPressureRecord() {
           },
           ticks: {
             max: 150,
-            min: 40,
-            stepSize: 10
+            min: 30,
+            stepSize: 30,
+            fontSize: 20
           }
         }]
       }
@@ -101,71 +118,142 @@ function BloodPressureRecord() {
   }
 
   // 将日历按周期展示
-  const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>, COUNT_DURATION:number = 5) => {
-    let count = 0;
-    const COUNT_PER = (serviceData.length / COUNT_DURATION) | 0 ;
-
+  const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>, isHistory: boolean, COUNT_DURATION:number = 5) => {
+    //
+    let nOptions = JSON.parse(JSON.stringify(options));
+    // 异常|正常 样式
     const [ defaultColor, errorColor ] = ['#c3c5c6','#dc143c'];
     const [ defaultPointRadius, errorPointRadius ] = [2,8];
-    
-    serviceData.forEach((v: ServiceDataItem, index: number) => {
-      // 填入数据
-      const len = options.data.datasets.length;
-      for(let i = 0 ; i < len; i++){
-        const data = v[options.data.datasets[i].key];
-        if(data) {
-          if(options.data.datasets[i].key === 'systolic') {
-            if(data < 90 || data >= 140) {
-              options.data.datasets[i].pointBackgroundColor.push(errorColor);
-              options.data.datasets[i].pointBorderColor.push(errorColor);
-              options.data.datasets[i].pointRadius.push(errorPointRadius);
-            }else {
-              options.data.datasets[i].pointBackgroundColor.push(defaultColor);
-              options.data.datasets[i].pointBorderColor.push(defaultColor);
-              options.data.datasets[i].pointRadius.push(defaultPointRadius);
+    // 定义标准日期
+    const todayStr = moment(new Date()).format('YYYY-MM-DD');
+    // 深拷贝
+    let targetData:Array<ServiceDataItem>|false = serviceData.map(v => v);
+    if(isHistory){
+      // 展示历史数据，将单天最大值保留
+      for(let i=0;i<targetData.length;) {
+        for(let j=1;i+j<targetData.length;){
+          if(targetData[i].timestamp.slice(0,10) === targetData[i+j].timestamp.slice(0,10)){
+            if(targetData[i].systolic < targetData[i+j].systolic){
+              targetData.splice(i,1);
+            }else{
+              targetData.splice(i+j,1);
             }
-          }else if(options.data.datasets[i].key === 'diastolic'){
-            if(data < 50 || data >= 90) {
-              options.data.datasets[i].pointBackgroundColor.push(errorColor);
-              options.data.datasets[i].pointBorderColor.push(errorColor);
-              options.data.datasets[i].pointRadius.push(errorPointRadius);
+          }else{
+            j++;
+          }
+        }
+        i++; 
+      }
+    }else{
+      targetData = sortDate<ServiceDataItem>(targetData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr),"timestamp");
+    }
+    if(!targetData){
+      console.error('timestamp数据格式有问题');
+      return nOptions;
+    }
+     // 分段
+     let count = 1;
+     const COUNT_PER = (targetData.length / COUNT_DURATION) | 0 ;
+    const len = nOptions.data.datasets.length;
+    targetData.forEach((v: ServiceDataItem, index: number) => {
+      // 填入数据
+      for(let i = 0 ; i < len; i++){
+        const data = v[nOptions.data.datasets[i].key];
+        if(data) {
+          if(nOptions.data.datasets[i].key === 'systolic') {
+            if(data < SYS_MIN || data > SYS_MAX) {
+              nOptions.data.datasets[i].pointBackgroundColor.push(errorColor);
+              nOptions.data.datasets[i].pointBorderColor.push(errorColor);
+              nOptions.data.datasets[i].pointRadius.push(errorPointRadius);
             }else {
-              options.data.datasets[i].pointBackgroundColor.push(defaultColor);
-              options.data.datasets[i].pointBorderColor.push(defaultColor);
-              options.data.datasets[i].pointRadius.push(defaultPointRadius);
+              nOptions.data.datasets[i].pointBackgroundColor.push(defaultColor);
+              nOptions.data.datasets[i].pointBorderColor.push(defaultColor);
+              nOptions.data.datasets[i].pointRadius.push(defaultPointRadius);
+            }
+          }else if(nOptions.data.datasets[i].key === 'diastolic'){
+            if(data < DIA_MIN || data > DIA_MAX) {
+              nOptions.data.datasets[i].pointBackgroundColor.push(errorColor);
+              nOptions.data.datasets[i].pointBorderColor.push(errorColor);
+              nOptions.data.datasets[i].pointRadius.push(errorPointRadius);
+            }else {
+              nOptions.data.datasets[i].pointBackgroundColor.push(defaultColor);
+              nOptions.data.datasets[i].pointBorderColor.push(defaultColor);
+              nOptions.data.datasets[i].pointRadius.push(defaultPointRadius);
             }
           }
           // @ts-ignore
-          options.data.datasets[i].data.push(data);
+          nOptions.data.datasets[i].data.push(data);
         }
       }
-      if(count === COUNT_PER){
-        // @ts-ignore
-        options.data.labels.push(v['timestamp']);
-        count = 0;
-      }else {
-        options.data.labels.push(" ");
-        count++;
+      // 填充x轴
+      if(isHistory){
+        if(count === COUNT_PER){
+          // @ts-ignore
+          nOptions.data.labels.push(v.timestamp.slice(5,10));
+          count = 1;
+        }else {
+          nOptions.data.labels.push(" ");
+          count++;
+        }
+      }else{
+        nOptions.data.labels.push(v.timestamp.slice(11, 16));
       }
+      
     });
-    return options;
+    return nOptions;
   }
 
 
-  const newChart = () => {
-    // @ts-ignore
-    const ctx = bloodPressureChart.current.getContext('2d');
-    chartOptions = convertChartData(chartOptions,serviceData);
-    const lineChart = new Chart(ctx,chartOptions)
+  const newChart = (serviceData: Array<ServiceDataItem>) => {
+    try{
+      // @ts-ignore
+      const ctx = hChart.current.getContext('2d');
+      chartH = new Chart(ctx,convertChartData(chartOptions,serviceData, true))
+      // @ts-ignore
+      const ctx1 = tChart.current.getContext('2d');
+      chartT = new Chart(ctx1,convertChartData(chartOptions,serviceData, false))
+    }catch(e){
+
+    }
   }
   
-  useEffect(() => newChart());
+  useEffect(() => {
+    getBloodPressures({pregnancyId: "207"}).then(res => {
+      newChart(res.data);
+      setListData(res.data);
+    })
+  },[]);
 
+  const tab = [
+    {title: '历史记录'},
+    {title: '当天记录'}
+  ]
   return (
     <div className={styles.container}>
-      <div className={styles.chart}>
-        <canvas ref={bloodPressureChart} className={styles.canvas}></canvas>
-      </div>
+      <Tabs tabs={tab}>
+        <div className={styles.canvas}>
+            <canvas ref={hChart}></canvas>
+          </div>
+          <div className={styles.canvas}>
+            <canvas ref={tChart}></canvas>
+          </div>
+      </Tabs>
+      <div>
+        {listData.map((item: ServiceDataItem) => (
+          <div className={styles.card} key={item.id}>
+            <div className={styles.header}>
+              <div><span>{item.timestamp.slice(0, 10)} -- {item.timestamp.slice(11, 19)}</span></div>
+            </div>
+            <hr />
+            <div className={styles.content}>
+              <div><span>收缩压：{item.systolic}</span></div>
+              <div>{(item.systolic < SYS_MIN || item.systolic > SYS_MAX) ? <span>异常</span> : <span>正常</span>}</div>
+              <div><span>舒张压：{item.diastolic}</span></div>
+              <div>{(item.diastolic < DIA_MIN || item.diastolic > DIA_MAX) ? <span>异常</span> : <span>正常</span>}</div>
+            </div>
+          </div>
+        ))}
+      </div>  
       <BackButton/>
 
     </div>

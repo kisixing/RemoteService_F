@@ -1,7 +1,4 @@
-export enum OrderState {
-  NULL = 0,
-  TO_BE_BOUND,
-  IN_USE,
-  IN_LATE,
-  END
+
+enum ORDER_STATE {
+  NEW = 1,PAID,USING,FINISHED,CLOSED,OVERDUE,CANCELED
 }

@@ -6,57 +6,37 @@
 
 import React,{ useRef, useState, useEffect } from 'react'
 import Chart from 'chart.js';
-import { WingBlank } from 'antd-mobile';
-
-// import { getBloodGlucose } from '@/services/tools';
+import { Tabs } from 'antd-mobile';
+import { PERIOD_CODE } from './config';
+import { getBloodGlucose } from '@/services/tools';
 
 import styles from './Record.less';
+import { spawn } from 'child_process';
 
 interface ServiceDataItem {
-  date:string, 
-  empty: number,
-  afterBreakfast: number,
-  beformLunch: number, afterLunch: number,
-  beforeDinner: number, afterDinner: number,
-  beforeSleep: number
+  id:number,
+  timestamp:string,
+  result:number,
+  period:PERIOD_CODE,
+  pregnancyId:{
+    id:number
+  }
 }
-// 历史
-const serviceData:Array<ServiceDataItem> = [
-  {date: '2/1', empty: 4.5,afterBreakfast: 5.1,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/2', empty: 4.2,afterBreakfast: 5.2,beformLunch: 4.2, afterLunch: 5.4, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/3', empty: 4.3,afterBreakfast: 5.4,beformLunch: 4.4, afterLunch: 5.2, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/4', empty: 4.4,afterBreakfast: 5.1,beformLunch: 4.5, afterLunch: 5.3, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/5', empty: 4.6,afterBreakfast: 5.3,beformLunch: 4.2, afterLunch: 5.3, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/6', empty: 4.7,afterBreakfast: 5.0,beformLunch: 4.7, afterLunch: 5.3, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/7', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/8', empty: 4.3,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/9', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/10', empty: 4.2,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/11', empty: 4.5,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/12', empty: 4.2,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/13', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/14', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/15', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/16', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/17', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/18', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/19', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/20', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/21', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/22', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/23', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/24', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/25', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/26', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/27', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/28', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4},
-  {date: '2/29', empty: 4.1,afterBreakfast: 5.6,beformLunch: 4.1, afterLunch: 5.1, beforeDinner: 4.2, afterDinner: 5.2,beforeSleep: 4}
-];
+
+const EMPTY_MIN = 3.9,
+EMPTY_MAX = 6.1,
+EATING_MIN = 3.9,
+EATING_MAX =7.8;
+
+const periodString = ['空腹','早餐后2H','午餐前2H','午餐后2H','晚餐前2H','晚餐后2H','睡前'];
+
 function BloodGlucoseRecord() {
 
-  const bloodGlucoseChart = useRef(null);
+  const hChart = useRef(null),tChart = useRef(null);
+  let chartH,chartT;
 
-  const [isHistory, setIsHistory] = useState(true);
+  const [listData,setListData] = useState([]);
+  
 
   let chartOptions = {
     type: 'line',
@@ -86,7 +66,7 @@ function BloodGlucoseRecord() {
         fontSize: 28,
         fontColor: '#000000',
         FontFamily: 'Arial',
-        text: isHistory ? '历史记录' : '当天记录'
+        text: ''
       },
       layout: {
         padding:{
@@ -123,7 +103,6 @@ function BloodGlucoseRecord() {
           // 坐标轴
           ticks: {
             fontSize: 20,
-            fontWeight: 400
           }
         }],
         yAxes: [{ 
@@ -138,8 +117,7 @@ function BloodGlucoseRecord() {
             min: 3.5,
             stepSize: 0.5,
             // style
-            fontSize: 20,
-            fontWeight: 500
+            fontSize: 20 
           }
         }],
       }
@@ -147,7 +125,7 @@ function BloodGlucoseRecord() {
   }
 
   // 将日历按周期展示
-  const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>, COUNT_DURATION:number = 5) => {
+  const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>,isHistory: boolean, COUNT_DURATION:number = 5) => {
     let count = 0;
     const COUNT_PER = (serviceData.length / COUNT_DURATION) | 0 ;
     serviceData.forEach((v: ServiceDataItem, index: number) => {
@@ -172,29 +150,57 @@ function BloodGlucoseRecord() {
 
   const newChart = () => {
     //@ts-ignore
-    const ctx = bloodGlucoseChart.current.getContext('2d');
-    if(isHistory) {
-      chartOptions = convertChartData(chartOptions,serviceData);
-    }else {
-
-    }
-    const lineChart = new Chart(ctx, chartOptions);
+    const ctx = hChart.current.getContext('2d');
+    chartH = new Chart(ctx, convertChartData(chartOptions,listData,true));
+    //@ts-ignore
+    const ctx1 = tChart.current.getContext('2d');
+    chartT = new Chart(ctx1, convertChartData(chartOptions,listData,false));
   }
 
   useEffect(()=> {
     newChart();
-    // getBloodGlucose({pregnancyId: '207'}).then(res => {
-    //   console.log(res);
-    // })
-  },['isHistory']);
+    getBloodGlucose({pregnancyId: '207'}).then(res => {
+      setListData(res.data);
+    })
+  },[]);
 
+  const tab = [
+    {title: '历史记录'},
+    {title: '当天记录'}
+  ]
+  console.log(listData);
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-
-      </div>
-      <div className={styles.canvas}>
-        <canvas ref={bloodGlucoseChart}></canvas>
+      <Tabs tabs={tab}>
+        <div className={styles.canvas}>
+            <canvas ref={hChart}></canvas>
+        </div>
+        <div className={styles.canvas}>
+          <canvas ref={tChart}></canvas>
+        </div>
+      </Tabs>
+      <div>
+        <span>显示方式待定</span>
+        {listData.map((item: ServiceDataItem) => (
+            <div className={styles.card} key={item.id}>
+              <div className={styles.header}>
+                <div><span>{item.timestamp.slice(0, 10)} -- {item.timestamp.slice(11, 19)} -- {periodString[item.period]}</span></div>
+              </div>
+              <hr />
+              <div className={styles.content}>
+                <div><span>血糖值：{item.result}</span></div>
+                {item.period === PERIOD_CODE.FASTING || item.period === PERIOD_CODE.BEFORE_S ? (
+                  <div>
+                    {item.result < EMPTY_MIN || item.result > EMPTY_MAX ? <span>异常</span> : <span>正常</span>}
+                  </div>
+                ) : (
+                  <div>
+                    {item.result < EATING_MIN || item.result > EATING_MAX ? <span>异常</span> : <span>正常</span>}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
       </div>
     </div>
   )
