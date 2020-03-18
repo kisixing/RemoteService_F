@@ -4,7 +4,7 @@
  * @Description: 血氧记录
  */
 
-import React,{ useRef, useEffect } from 'react'
+import React,{ useRef, useEffect, useState } from 'react'
 import Chart from 'chart.js';
 import {Tabs} from 'antd-mobile';
 
@@ -23,6 +23,7 @@ import styles from './Record.less'
 interface ServiceDataItem {
   timestamp:string, systolic: number, diastolic: number,
   map?: number,
+  id:number,
   pregnancy?: {
     id: number
   }
@@ -37,6 +38,7 @@ DIA_MIN=50;
 function BloodPressureRecord() {
   const hChart=useRef(null),tChart=useRef(null);
   let chartH,chartT;
+  const [listData,setListData] = useState([]);
   // date与日期未填入
   let chartOptions = {
     type: 'line',
@@ -217,8 +219,8 @@ function BloodPressureRecord() {
   
   useEffect(() => {
     getBloodPressures({pregnancyId: "207"}).then(res => {
-      console.log(res.data);
       newChart(res.data);
+      setListData(res.data);
     })
   },[]);
 
@@ -226,7 +228,6 @@ function BloodPressureRecord() {
     {title: '历史记录'},
     {title: '当天记录'}
   ]
-
   return (
     <div className={styles.container}>
       <Tabs tabs={tab}>
@@ -237,6 +238,22 @@ function BloodPressureRecord() {
             <canvas ref={tChart}></canvas>
           </div>
       </Tabs>
+      <div>
+        {listData.map((item: ServiceDataItem) => (
+          <div className={styles.card} key={item.id}>
+            <div className={styles.header}>
+              <div><span>{item.timestamp.slice(0, 10)} -- {item.timestamp.slice(11, 19)}</span></div>
+            </div>
+            <hr />
+            <div className={styles.content}>
+              <div><span>收缩压：{item.systolic}</span></div>
+              <div>{(item.systolic < SYS_MIN || item.systolic > SYS_MAX) ? <span>异常</span> : <span>正常</span>}</div>
+              <div><span>舒张压：{item.diastolic}</span></div>
+              <div>{(item.diastolic < DIA_MIN || item.diastolic > DIA_MAX) ? <span>异常</span> : <span>正常</span>}</div>
+            </div>
+          </div>
+        ))}
+      </div>  
       <BackButton/>
 
     </div>

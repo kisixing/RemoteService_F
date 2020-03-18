@@ -1,4 +1,4 @@
-import { PackageListItem } from '@/pages/order/interface';
+import { PackageOrderItem } from '@/pages/order/interface';
 // 模拟数据
 import { MyOrderPackage } from '../pages/order/config';
 /**
@@ -11,7 +11,7 @@ import { getPackage, getPackageData, setPackage } from "@/services/package";
 
 export interface ComboStateType {
   currentPackageDetail: object;
-  packageList: Array<PackageListItem>;
+  packageList: Array<PackageOrderItem>;
   currentPackageId: string|number;
 }
 
@@ -41,7 +41,7 @@ const Model: ComboModelType = {
   effects: {
     // 获取套餐
     *getPackage({payload}, { call, put}) {
-      const { response, data } = yield call(getPackage);
+      const { response, data } = yield call((getPackage));
       console.log(response);
       yield put({type: 'setPackageList', payload: data})
     },

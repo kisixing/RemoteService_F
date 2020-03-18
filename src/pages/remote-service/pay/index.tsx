@@ -6,16 +6,21 @@ import BackButton from '@/components/BackButton';
 import { wxpay } from '@/services/pay';
 import { ConnectState } from '@/models/connect';
 
+import { PackageListItem } from '@/pages/remote-service/package/interface';
+import { GlobalModelState } from '@/models/global';
 
 var wx =  require('weixin-js-sdk');
 
 import styles from './index.less';
-import MonitorCard from '../order/MonitorCard';
 
-
+interface PayProp{
+  currentPackageId:number,
+  packageList: Array<PackageListItem>,
+  currentPregnancy:GlobalModelState
+}
 
 // props中获取订单信息 | 路由获取
-function Pay(props:any) {
+function Pay(props:PayProp) {
 
   // 传入订单header - 订单确认/订单续租
   console.log(props);
@@ -28,9 +33,7 @@ function Pay(props:any) {
   }
 
   const handleAgree = ():void => {
-    if(isAgree){
-      setPayType('');
-    }
+    if(isAgree){setPayType('');}
     setIsAgree(isAgree => !isAgree);
   }
 
@@ -94,6 +97,9 @@ function Pay(props:any) {
     })
   }
 
+  const currentPackageData = props.packageList.find(v => v.id === props.currentPackageId);
+
+  console.log(currentPackageData);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -103,10 +109,34 @@ function Pay(props:any) {
       </div>
       <div className={styles.content}>
         <WingBlank>
-          <MonitorCard/>
+          {currentPackageData ? (
+            <div className={styles.packageInfo}>
+              <div>
+                <div><span>套餐名称</span></div>
+                <div><span>{currentPackageData.name}</span></div>
+              </div>
+              <div>
+                <div><span>套餐价格</span></div>
+                <div><span>￥{currentPackageData.price}</span></div>
+              </div>
+              <div>
+                <div><span>套餐有效期</span></div>
+                <div><span>{currentPackageData.validdate}天</span></div>
+              </div>
+              <div>
+                <div><span>套餐判图可用次数</span></div>
+                <div><span>{currentPackageData.service1amount}次</span></div>
+              </div>
+              <div>
+                <div><span>套餐咨询可用次数</span></div>
+                <div><span>{currentPackageData.service2amount}次</span></div>
+              </div>
+            </div>
+          ):(
+            <div>无套餐信息请刷新或重新进入</div>
+          )}
         </WingBlank>
       </div>
-
       <div className={styles.footer}>
 
         <div className={styles.agree}>
@@ -147,6 +177,8 @@ function Pay(props:any) {
   )
 }
 
-export default connect(({combo}: ConnectState) => ({
-  currentPackageId: combo.currentPackageId
+export default connect(({combo, global}: ConnectState) => ({
+  currentPackageId: combo.currentPackageId,
+  packageList:combo.packageList,
+  currentPregnancy: global.currentPregnancy
 }))(Pay);

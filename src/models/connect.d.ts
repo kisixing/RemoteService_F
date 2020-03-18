@@ -3,7 +3,7 @@ import { AnyAction } from 'redux';
 import { RouterTypes } from 'umi';
 import { GlobalModelState } from './global';
 import { ComboStateType } from './combo';
-
+import { OrderStateType } from './order';
 export { GlobalModelState };
 
 export type Effect = (
@@ -43,7 +43,8 @@ export interface ConnectState {
   user: UserModelState;
   combo: ComboStateType;
   news: any;
-  consultation: any
+  consultation: any,
+  order: OrderStateType
 }
 
 export interface CurrentUser {

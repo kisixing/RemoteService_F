@@ -97,6 +97,12 @@ export default [
                 component: './remote-service/order/index',
               },
               {
+                path: '/orders/consultdetail',
+                name: 'consultdetail',
+                title: '咨询详情',
+                component: './remote-service/order/ConsultDetail'
+              },
+              {
                 path: '/orders/detail', // 考虑动态路由
                 name: 'order detail',
                 title: '订单详情',

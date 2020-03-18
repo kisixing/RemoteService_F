@@ -20,6 +20,26 @@
   .content {
     margin-top: 0.3rem;
     font-size: 0.3rem;
+    
+    .packageInfo { 
+      display: flex;
+      flex-direction: column;
+      
+      
+      > div {
+        width: 80%;
+        background-color: #ffffff;
+        border: 1px #e3e3e3 solid;
+        border-radius: .1rem;
+        padding: .1rem .4rem;
+        margin: .3rem auto;
+        font-size: .3rem;
+        font-weight: 600;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
   }
 
 
@@ -71,6 +91,7 @@
     }
     > .btn {
       // Button 在antd-moblie是个a
+      background-color: white;
       > a {
         background:linear-gradient(270deg,rgba(255,219,49,1) 0%,rgba(253,184,29,1) 100%);
         box-shadow:0px 9px 13px -5px rgba(253,203,97,0.25),0px 2px 7px -3px rgba(253,177,97,1);

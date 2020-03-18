@@ -301,7 +301,6 @@ export function sortDate<T>(arr: Array<T>, key: string = ""): Array<T>|false {
       }
     }
   }
-  console.log(formatArr);
   if(key !== "") {
     return formatArr.map((v) => {delete v['_sortDate']; return v});
   }else {
