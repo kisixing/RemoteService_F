@@ -8,8 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, Accordion, Checkbox, Toast } from 'antd-mobile';
 import moment from 'moment';
 import classnames from 'classnames';
-import wx from 'weixin-js-sdk';
-import { Button, WhiteSpace, BackButton, Tag, IconFont } from '@/components/antd-mobile';
+import { Button, BackButton, Tag, IconFont } from '@/components/antd-mobile';
 import { CTGApply, getPackageOrders } from '@/services/remote-service';
 import { webpay } from '@/services/pay';
 import { router } from '@/utils/utils';
@@ -31,7 +30,7 @@ function Apply(props: any) {
   const { p1, p2, t } = query; // p1 孕册id， p2 监测档案id/判图档案id, t 套餐id
 
   const [packageOrder, setPackageOrder] = useState<IState>({
-    id: undefined,
+    id: '',
     pregnancy: {},
     device: {},
     servicepackage: {},
@@ -58,17 +57,17 @@ function Apply(props: any) {
   const onClick = (p1: number, p2: number, p3?: number) => {
     if (checked) {
       // 套餐已用完，单次收费
-      const params = { pregnancy: { id: p1 }, prenatalvisit: { id: p2 } };
+      const params = { pregnancy: { id: p1 }, prenatalvisit: { id: p2 }, type: 'CTGAPPLY' };
       webpay(params).then((res: any) => {
-        if (res && res.mwbUrl) {
-          window.location.href = res.mwbUrl;
+        if (res && res.mwebUrl) {
+          window.location.href = res.mwebUrl;
         }
       });
     } else {
-      CTGApply({ pregnancyid: p1, visitid: p2, packageorderid: p3 })
+      CTGApply({ pregnancyid: p1, visitid: p2, packageorderid: p3, type: 'CTGAPPLY' })
         .then(res => {
           if (res && res.sn) {
-            router('/apply/result');
+            router(`/apply/result?pregnancyId=${p1}`);
           } else {
             Toast.info('判图服务扣除失败，请稍后再试...');
           }

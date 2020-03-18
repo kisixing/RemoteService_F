@@ -7,7 +7,7 @@
 
 .container {
   width: 100%;
-  padding: 0 .3rem;
+  // padding: 0 .3rem;
   min-height: 100vh;
 
   .card {
@@ -15,10 +15,40 @@
     background-color: #fff;
   }
 
+  .resultHeader {
+    height: 3.6rem;
+    padding-top: 0.6rem;
+    text-align: center;
+
+    & > div {
+      margin-bottom: .3rem;
+    }
+
+    .bg {
+      display: inline-block;
+      width: 2.8rem;
+      height: 1.2rem;
+      // background-color: #ddd;
+      background-image: url(../../../assets/icons/illustrater@3x.png);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: auto 100%;
+    }
+
+    .title {
+      color: #000;
+      font-size: .36rem;
+    }
+
+    .subTitle {
+      color: #828c99;
+      font-size: 0.24rem;
+    }
+  }
+
   .content {
     position: relative;
     height: 3rem;
-    margin-top: 0.3rem;
     margin-bottom: 0.2rem;
     padding: 0.3rem 0.3rem 0.3rem 0.8rem;
     border-bottom: 12px dotted #f1f1f5;
@@ -79,13 +109,12 @@
       display: inline-block;
       width: 1.6rem;
       height: 1.6rem;
-      border-radius: 50%;
-      background-image: url('../../../assets/icons/rund@2x.png');
+      background-image: url('../../../assets/icons/rund_2@3x.png');
       background-repeat: no-repeat;
-      background-size: cover;
+      background-size: contain;
 
       &.finished {
-        background-image: url('../../../assets/icons/laber@2x.png');
+        background-image: url('../../../assets/icons/laber@3x.png');
       }
 
       span {
