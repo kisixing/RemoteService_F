@@ -6,26 +6,26 @@
 
 import React, {ReactNode} from 'react';
 import Router from 'umi/router';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';;
 // import { IconFont, Tag, Touchable, Button } from '@/components/antd-mobile';
 import { ServiceOrderItem, PackageOrderItem, ORDER_TYPE } from './interface';
-import MonitorCard from './MonitorCard';
-import ApplyCard from './ApplyCard';
-import ConsultCard from './ConsultCard';
+import MonitorCard from './Monitor/MonitorCard';
+import ApplyCard from './Apply/ApplyCard';
+import ConsultCard from './Consult/ConsultCard';
 
 import styles from './ListView.less';
 
 interface IProps {
-  dataSource?: Array<ServiceOrderItem>
+  dataSource?: Array<ServiceOrderItem|PackageOrderItem>,
+  dispatch: Dispatch
 }
 
 
-function ListView({ dataSource = [] }: IProps) {
-  const onClick = (fType:any) => {
-    if(fType === ORDER_TYPE.CONSULT){
-      Router.push('/orders/consultdetail');
-    }else{
-      Router.push('/order/detail');
-    }
+function ListView({ dataSource = [], dispatch }: IProps) {
+  const onClick = (e: ServiceOrderItem|PackageOrderItem) => {
+    dispatch({type: 'order/setCurrentOrder', payload: e})
+    Router.push('/orders/detail');
   };
 
   const renderListItem = (data: ServiceOrderItem|PackageOrderItem ):ReactNode => {
@@ -49,7 +49,7 @@ function ListView({ dataSource = [] }: IProps) {
       {dataSource.map(e => {
         return (
           <div key={e.id}  className={styles.item}>
-            <div onClick={() => onClick(e.fType)}>
+            <div onClick={() => onClick(e)}>
               {renderListItem(e)}
             </div>
           </div>
@@ -59,4 +59,4 @@ function ListView({ dataSource = [] }: IProps) {
   )
 }
 
-export default ListView
+export default connect()(ListView);

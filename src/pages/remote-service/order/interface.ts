@@ -7,7 +7,7 @@ export interface PackageOrderItem{
   paytype:number,
   payment:number|null,
   paystate:number|null,
-  state:number|null,  
+  state: ORDER_STATE|null,  
   validdate:number|null,
   service1amount: number|null,
   service2amount: number|null,
@@ -22,7 +22,7 @@ export interface PackageOrderItem{
   },
   products?: Array<ProductItem>,
   device:any,
-  fType?:ORDER_TYPE
+  fType?:ORDER_TYPE,
 }
 
 interface CTGExamProp{
@@ -80,6 +80,7 @@ export interface ServiceOrderItem{
   id:number,
   type:string,
   sn:string,
+  state: ORDER_STATE|null,
   paytype:string,
   paystate:number,
   result:string|null,
@@ -101,4 +102,16 @@ export enum ORDER_TYPE{
   PACKAGE = 0,
   APPLY,
   CONSULT
+}
+/**
+ * 订单状态
+ */
+export enum ORDER_STATE{
+  NEW = 0,
+  PAID,
+  USING,
+  FINISHED,
+  CLOSED,
+  OVERDUE,
+  CANCELED
 }

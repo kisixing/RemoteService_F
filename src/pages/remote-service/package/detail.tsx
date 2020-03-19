@@ -35,9 +35,9 @@ function Details(props: DETAIL_PAGE_PROPS) {
 
 
   const { packageDetail, packageList, currentPackageId } = props;
-  console.log(props);
   let price = "套餐信息有误";
   const currentPackageData:PackageListItem|undefined = packageList.find(item => item.id === currentPackageId);
+  console.log(currentPackageData);
   if(currentPackageData){
     price = currentPackageData.price.toString();
   }
@@ -69,7 +69,11 @@ function Details(props: DETAIL_PAGE_PROPS) {
         </div>
       </div>
       <Tabs tabs={tabs}>
-        <div dangerouslySetInnerHTML={{__html: packageDetail.note}} />
+        {/* <div dangerouslySetInnerHTML={{__html: packageDetail.note}} /> */}
+        <div>
+          <div><span>胎监判图服务次数:{currentPackageData?.service1amount}</span></div>
+          <div><span>图文咨询服务次数:{currentPackageData?.service2amount}</span></div>
+        </div>
         <div dangerouslySetInnerHTML={{__html: packageDetail.introduction}} />
         <div dangerouslySetInnerHTML={{__html: packageDetail.specification}} />
       </Tabs>

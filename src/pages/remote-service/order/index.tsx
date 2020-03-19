@@ -4,7 +4,7 @@
  * @Description: 我的订单
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { NavBar, Tabs } from 'antd-mobile';
 import Router from 'umi/router';
 import { Dispatch } from 'redux';
@@ -82,16 +82,16 @@ function Oders(props: OrderProps) {
   };
   /**  
    * 在订单中加入type用于前端判断类型
-   *  fType 1 代表为远程胎监 套餐订单
-   *  fType 2 代表为胎监判图 服务订单
-   *  fType 3 代表为在线咨询 服务订单
+   *  fType 0 代表为远程胎监 套餐订单
+   *  fType 1 代表为胎监判图 服务订单
+   *  fType 2 代表为在线咨询 服务订单
    * 以 ORDER_TYPE为准
    */
   const dataSource = ():Array<ServiceOrderItem|PackageOrderItem> => {
     const{ packageOrderList,serviceOrderList,packageList } = props;
     let filterList:Array<ServiceOrderItem|PackageOrderItem> = [];
+    // 类型判别 赋值fType
     if (currentKey === 'monitoring') {
-      //@ts-ignore
       filterList = packageOrderList.map((v: PackageOrderItem) => {
         for(let i = 0; i < packageList.length; i++){
           if(packageList[i].id === v.servicepackage.id){
@@ -112,6 +112,12 @@ function Oders(props: OrderProps) {
       // @ts-ignore
       let p = packageOrderList.map((v: PackageOrderItem) => {
         v.fType = ORDER_TYPE.PACKAGE;
+        for(let i = 0; i < packageList.length; i++){
+          if(packageList[i].id === v.servicepackage.id){
+            v.products = packageList[i].products;
+            break;
+          }
+        }
         return v;
       });
       let o = serviceOrderList.map(v => {
@@ -124,7 +130,6 @@ function Oders(props: OrderProps) {
       });
       filterList = p.concat(o);
     }
-    console.log(filterList);
     return filterList;
   };
 
@@ -134,8 +139,8 @@ function Oders(props: OrderProps) {
 
   useEffect(() => {
     props.dispatch({type: 'combo/getPackage'});
-    props.dispatch({type: 'order/getPackageOrders',payload: {pregnancyId: 207}});
-    props.dispatch({type: 'order/getServiceOrders',payload: {pregnancyId: 207}});
+    props.dispatch({type: 'order/getPackageOrders',payload: {pregnancyId: props.userid}});
+    props.dispatch({type: 'order/getServiceOrders',payload: {pregnancyId: props.userid}});
   },[]);
 
   return (

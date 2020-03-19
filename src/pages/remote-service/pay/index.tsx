@@ -9,6 +9,8 @@ import { ConnectState } from '@/models/connect';
 import { PackageListItem } from '@/pages/remote-service/package/interface';
 import { GlobalModelState } from '@/models/global';
 
+import { IconFont, Tag  } from '@/components/antd-mobile';
+
 var wx =  require('weixin-js-sdk');
 
 import styles from './index.less';
@@ -111,25 +113,36 @@ function Pay(props:PayProp) {
         <WingBlank>
           {currentPackageData ? (
             <div className={styles.packageInfo}>
-              <div>
-                <div><span>套餐名称</span></div>
-                <div><span>{currentPackageData.name}</span></div>
+              <div className={styles.h}>
+                <div className={styles.title}>
+                  <IconFont type="order" size="0.4rem" />
+                  <span className={styles.name}>{currentPackageData.name}</span>
+                </div>
+                <div className={styles.info}>
+                  <div><span>设备有效期：{currentPackageData.validdate}天</span></div>
+                </div>
               </div>
-              <div>
-                <div><span>套餐价格</span></div>
-                <div><span>￥{currentPackageData.price}</span></div>
+              <div className={styles.detail}>
+                <div>   
+                  <div><span>套餐胎监判图次数</span></div>
+                  <div><span>{currentPackageData.service1amount}次</span></div>
+                </div>
+                <div>
+                  <div><span>套餐图文咨询次数</span></div>
+                  <div><span>{currentPackageData.service2amount}次</span></div>    
+                </div>
+                {currentPackageData.products.map(v => (
+                  <div>
+                    <div><span>{v.name}</span></div>
+                    <div><span>租用</span></div>    
+                  </div>
+                ))}
+                
               </div>
-              <div>
-                <div><span>套餐有效期</span></div>
-                <div><span>{currentPackageData.validdate}天</span></div>
-              </div>
-              <div>
-                <div><span>套餐判图可用次数</span></div>
-                <div><span>{currentPackageData.service1amount}次</span></div>
-              </div>
-              <div>
-                <div><span>套餐咨询可用次数</span></div>
-                <div><span>{currentPackageData.service2amount}次</span></div>
+              <div className={styles.price}>
+                <div>
+                  <span>￥{currentPackageData.price}</span>
+                </div>
               </div>
             </div>
           ):(

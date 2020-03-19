@@ -81,7 +81,7 @@ function BloodPressureRecord() {
         },
       },
       tooltips: {
-        mode: 'index',
+        mode: 'nearest',
         intersect: false,
         titleFontSize: 20,
         bodyFontSize: 20
@@ -94,7 +94,11 @@ function BloodPressureRecord() {
           //   fontSize:20
           // }
           ticks: {
-            fontSize: 20
+            // TODO 之后再调这个位置
+            fontSize: 20,
+            fontWeight: 400,
+            autoSkip: true,
+            autoSkipPadding: 50
           },
           gridLines: {
             display: false
@@ -110,7 +114,8 @@ function BloodPressureRecord() {
             max: 150,
             min: 30,
             stepSize: 30,
-            fontSize: 20
+            fontSize: 20,
+            autoSkip: true
           }
         }]
       }
@@ -147,13 +152,14 @@ function BloodPressureRecord() {
     }else{
       targetData = sortDate<ServiceDataItem>(targetData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr),"timestamp");
     }
+    console.log(nOptions);
     if(!targetData){
       console.error('timestamp数据格式有问题');
       return nOptions;
     }
      // 分段
-     let count = 1;
-     const COUNT_PER = (targetData.length / COUNT_DURATION) | 0 ;
+    // let count = 1;
+    // const COUNT_PER = ((targetData.length / COUNT_DURATION) | 0) + 1;
     const len = nOptions.data.datasets.length;
     targetData.forEach((v: ServiceDataItem, index: number) => {
       // 填入数据
@@ -187,14 +193,14 @@ function BloodPressureRecord() {
       }
       // 填充x轴
       if(isHistory){
-        if(count === COUNT_PER){
+        // if(count === COUNT_PER){
           // @ts-ignore
           nOptions.data.labels.push(v.timestamp.slice(5,10));
-          count = 1;
-        }else {
-          nOptions.data.labels.push(" ");
-          count++;
-        }
+        //   count = 1;
+        // }else {
+        //   nOptions.data.labels.push(" ");
+        //   count++;
+        // }
       }else{
         nOptions.data.labels.push(v.timestamp.slice(11, 16));
       }

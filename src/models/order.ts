@@ -5,7 +5,7 @@ import { PackageOrderItem, ServiceOrderItem } from '@/pages/remote-service/order
 export interface OrderStateType {
   serviceOrderList: Array<ServiceOrderItem>,
   packageOrderList: Array<PackageOrderItem>,
-  currentOrder: number | string
+  currentOrder: PackageOrderItem|ServiceOrderItem|null
 };
 
 export interface OrderModelType {
@@ -18,6 +18,7 @@ export interface OrderModelType {
   reducers: {
     setPackageOrderList: Reducer,
     setServiceOrderList: Reducer,
+    setCurrentOrder: Reducer
   }
 }
 
@@ -26,19 +27,15 @@ const Model: OrderModelType = {
   state: {
     packageOrderList: [],
     serviceOrderList: [],
-    currentOrder: -1
+    currentOrder: null
   },
   effects: {
     *getPackageOrders({ payload }, { put, call }) {
-      const { data, response } = yield call(getPackageOrders, payload);
-      console.log(data);
-      console.log(response);
+      const { data } = yield call(getPackageOrders, payload);
       yield put({ type: 'setPackageOrderList', payload: data });
     },
     *getServiceOrders({ payload }, { put, call }) {
-      const { data, response } = yield call(getServiceOrders, payload);
-      console.log(data);
-      console.log(response);
+      const { data } = yield call(getServiceOrders, payload);
       yield put({type: 'setServiceOrderList', payload:data});
     }
   },
@@ -53,6 +50,11 @@ const Model: OrderModelType = {
       newState.serviceOrderList = payload;
       return newState;
     },
+    setCurrentOrder(state, {payload}) {
+      let newState = JSON.parse(JSON.stringify(state));
+      newState.currentOrder = payload;
+      return newState;
+    }
   }
 }
 

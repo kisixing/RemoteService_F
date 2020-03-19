@@ -1,7 +1,7 @@
 import React from 'react';
 import {IconFont, Button} from '@/components/antd-mobile';
 
-import { ServiceOrderItem } from './interface';
+import { ServiceOrderItem } from '../interface';
 
 import styles from './ConsultCard.less';
 
@@ -11,7 +11,6 @@ interface ConsultCardProps {
 
 export default function ConsultCard(props: ConsultCardProps) {
   const {data} = props;
-  console.log(data);
   return (
     <div>
       <div className={styles.header}>
