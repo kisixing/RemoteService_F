@@ -33,6 +33,6 @@ export const dva = {
     onReducer: (reducer: any) => persistReducer(persistConfig, reducer)
   },
   plugins: [
-    process.env.APP_TYPE === 'build' ? null : require('dva-logger')()
+    // process.env.APP_TYPE === 'build' ? null : require('dva-logger')()
   ],
 };

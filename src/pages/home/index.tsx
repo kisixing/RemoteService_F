@@ -34,10 +34,16 @@ interface IProps {
 }
 
 function Home(props: IProps) {
-  const { currentPregnancy, news, loading } = props;
+  const { dispatch, currentPregnancy, news, loading } = props;
 
   useEffect(() => {
-    const { dispatch } = props;
+    if (!currentPregnancy.name) {
+      // TODO 后续取消
+      dispatch({
+        type: 'global/getPregnancy',
+        payload: currentPregnancy.id,
+      });
+    }
     dispatch({
       type: 'news/getPersonNews',
       payload: {

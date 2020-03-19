@@ -93,3 +93,14 @@ export async function getCaptcha(params: object) {
     data: params,
   });
 }
+
+/**
+ * 获取孕册信息
+ *
+ * @export
+ * @param {(string | number)} id 孕册id
+ * @returns 孕册所有信息
+ */
+export async function getPregnancy(id: string | number) {
+  return request(`/api/pregnancies?id.equals=${id}`);
+}

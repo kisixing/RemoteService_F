@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 import store from 'store';
 import { Effect } from './connect';
 // import { ConnectState } from './connect.d';
-import { mpauth } from '@/services/user';
+import { mpauth, getPregnancy } from '@/services/user';
 
 
 export interface GlobalModelState {
@@ -17,6 +17,7 @@ export interface GlobalModelType {
   state: GlobalModelState;
   effects: {
     mpauth: Effect;
+    getPregnancy: Effect;
   };
   reducers: {
     changeUserStatus: Reducer<GlobalModelState>;
@@ -59,6 +60,14 @@ const GlobalModel: GlobalModelType = {
         console.log('on error', error);
       }
     },
+    *getPregnancy({ payload }, { call, put }) {
+      const data = yield call(getPregnancy, payload);
+      yield put({
+        type: 'updatePregnancy',
+        payload: data[0],
+      });
+      return data;
+    }
   },
 
   reducers: {
