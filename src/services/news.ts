@@ -1,7 +1,7 @@
 /*
  * @Author: ZHONG JUN
  * @Date: 2020-02-18 21:18:25
- * @Description:
+ * @Description: 宣教、随访api
  */
 
 import request from '@/utils/request';

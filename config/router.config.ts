@@ -11,6 +11,79 @@ export default [
     ],
   },
   {
+    path: '/consultation',
+    component: '../layouts/BlankLayout',
+    title: '在线咨询',
+    routes: [
+      {
+        path: '/consultation',
+        name: 'consultation home',
+        title: '首页',
+        component: './consultation',
+      },
+      {
+        path: '/consultation/doctor',
+        name: 'doctor list',
+        title: '专家咨询', // 在线复诊
+        component: './consultation/doctors/List',
+      },
+      {
+        path: '/consultation/doctor/:id',
+        name: 'doctor detail',
+        title: '专家详情', // 在线复诊
+        component: './consultation/doctors/Detail',
+      },
+      {
+        path: '/consultation/team/:id',
+        name: 'doctor team',
+        title: '团队',
+        component: './consultation/team',
+      },
+      {
+        path: '/consultation/chat/:id',
+        name: 'chat view',
+        title: '问诊详情',
+        component: './consultation/chats/$id',
+      },
+    ],
+  },
+  {
+    path: '/perinatal',
+    component: '../layouts/BlankLayout',
+    name: 'perinatal',
+    title: '围产建档',
+    routes: [
+      // {
+      //   path: '/perinatal',
+      //   redirect: '/perinatal/list',
+      // },
+      {
+        path: '/perinatal',
+        name: 'perinatal list',
+        title: '列表',
+        component: './perinatal/MapList',
+      },
+      {
+        path: '/perinatal/basic-info',
+        name: 'basic Info',
+        title: '基本信息',
+        component: './perinatal/BasicInfo',
+      },
+      {
+        path: '/perinatal/current-pregnancy',
+        name: 'current pregnancy',
+        title: '本孕信息',
+        component: './perinatal/CurrentPregnancy',
+      },
+      {
+        path: '/perinatal/pregnancy-history',
+        name: 'pregnancy history',
+        title: '孕产史信息',
+        component: './perinatal/PregnancyHistory',
+      },
+    ],
+  },
+  {
     path: '/school',
     component: '../layouts/BlankLayout',
     routes: [
@@ -51,41 +124,6 @@ export default [
             component: './home',
           },
           {
-            path: '/perinatal',
-            name: 'perinatal',
-            title: '围产建档',
-            routes: [
-              // {
-              //   path: '/perinatal',
-              //   redirect: '/perinatal/list',
-              // },
-              {
-                path: '/perinatal',
-                name: 'perinatal list',
-                title: '列表',
-                component: './perinatal/MapList',
-              },
-              {
-                path: '/perinatal/basic-info',
-                name: 'basic Info',
-                title: '基本信息',
-                component: './perinatal/BasicInfo',
-              },
-              {
-                path: '/perinatal/current-pregnancy',
-                name: 'current pregnancy',
-                title: '本孕信息',
-                component: './perinatal/CurrentPregnancy',
-              },
-              {
-                path: '/perinatal/pregnancy-history',
-                name: 'pregnancy history',
-                title: '孕产史信息',
-                component: './perinatal/PregnancyHistory',
-              },
-            ],
-          },
-          {
             path: '/orders',
             name: 'my order',
             title: '',
@@ -100,7 +138,7 @@ export default [
                 path: '/orders/consultdetail',
                 name: 'consultdetail',
                 title: '咨询详情',
-                component: './remote-service/order/ConsultDetail'
+                component: './remote-service/order/ConsultDetail',
               },
               {
                 path: '/orders/detail', // 考虑动态路由
@@ -180,37 +218,6 @@ export default [
                 name: '预览',
                 title: 'pdf预览',
                 component: './reports/Preview',
-              },
-            ],
-          },
-          {
-            path: '/consultation',
-            name: 'online consultation',
-            title: '在线咨询',
-            routes: [
-              {
-                path: '/consultation',
-                name: 'consultation home',
-                title: ' ',
-                component: './consultation',
-              },
-              {
-                path: '/consultation/doctor',
-                name: 'doctor list',
-                title: '专家咨询', // 在线复诊
-                component: './consultation/doctors/List',
-              },
-              {
-                path: '/consultation/doctor/:id',
-                name: 'doctor detail',
-                title: '专家详情', // 在线复诊
-                component: './consultation/doctors/Detail',
-              },
-              {
-                path: '/consultation/team/:id',
-                name: 'doctor team',
-                title: '团队',
-                component: './consultation/team',
               },
             ],
           },

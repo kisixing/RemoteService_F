@@ -6,7 +6,7 @@
 
 import React from 'react';
 import BackButton from '@/components/BackButton';
-import { IconFont, Tag, Touchable } from '@/components/antd-mobile';
+import { IconFont, Tag } from '@/components/antd-mobile';
 import { router } from '@/utils/utils';
 
 import styles from './index.less';
@@ -61,33 +61,26 @@ const data = [
 
 function Consultation() {
 
-  const onPress = (route: string) => router(route)
+  const onClick = (route: string) => router(route)
 
   return (
     <>
       <div className={styles.container}>
         {data.map(item => (
-          <Touchable
-            key={item.key}
-            activeStopPropagation
-            delayPressIn={60}
-            delayPressOut={60}
-            onPress={() => onPress(item.route)}
-            // onLongPress={onLongPress}
-          >
-            <div>
-              <div className={styles.header}>
-                <IconFont type={item.icon} size=".6rem" style={{ marginRight: '.24rem' }} />
-                <Tag size="middle" bgcolor={item.tagColor}>{item.tag}</Tag>
-              </div>
-              <div className={styles.title}>{item.title}</div>
+          <div key={item.key} onClick={() => onClick(item.route)}>
+            <div className={styles.header}>
+              <IconFont type={item.icon} size=".6rem" style={{ marginRight: '.24rem' }} />
+              <Tag size="middle" bgcolor={item.tagColor}>
+                {item.tag}
+              </Tag>
             </div>
-          </Touchable>
+            <div className={styles.title}>{item.title}</div>
+          </div>
         ))}
       </div>
       <BackButton />
     </>
-  )
+  );
 }
 
 export default Consultation;

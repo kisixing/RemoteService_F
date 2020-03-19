@@ -20,12 +20,12 @@ interface IProps {
   inquiries?: string
   favorableRate?: string
   answerRate?: string
-  onPress?: (key: string) => void
+  onClick?: (key: string) => void
 }
 
 export default function DoctorItem({
   id,
-  onPress = () => {},
+  onClick = () => {},
   name,
   position,
   price,
@@ -37,40 +37,31 @@ export default function DoctorItem({
   answerRate
 }: IProps) {
   return (
-    <Touchable
-      activeStopPropagation
-      activeStyle={{ background: 'rgba(0, 0, 0, 0.02)' }}
-      delayPressIn={60}
-      delayPressOut={60}
-      onPress={() => onPress(id)}
-      // onLongPress={onLongPress}
-    >
-      <div className={styles.card}>
-        <div className={styles.thumbnail}>
-          <img src={thumbnail} />
+    <div className={styles.card} onClick={() => onClick(id)}>
+      <div className={styles.thumbnail}>
+        <img src={thumbnail} />
+      </div>
+      <div className={styles.content}>
+        <div className={styles.name}>
+          {name}
+          <Tag size="middle" bgcolor="#ddd" color="#383f4a" style={{ marginLeft: '0.42rem' }}>
+            {position}
+          </Tag>
         </div>
-        <div className={styles.content}>
-          <div className={styles.name}>
-            {name}
-            <Tag size="middle" bgcolor="#ddd" color="#383f4a" style={{ marginLeft: '0.42rem' }}>
-              {position}
-            </Tag>
-          </div>
-          <div className={styles.extra}>
-            <span>解答率 {answerRate}</span>
-            <span>好评率 {favorableRate}</span>
-            <span>咨询量 {inquiries}</span>
-          </div>
-          <div className={styles.speciality}>擅长：{content}</div>
-          <div className={styles.extra}>
-            平均回复: <span>{replytime}小时内</span>
-          </div>
-          <div className={styles.rates}>
-            <IconFont type="fl-renminbi" size="0.3rem" />
-            <span>{numeral(price).format('0,0.00')}</span>
-          </div>
+        <div className={styles.extra}>
+          <span>解答率 {answerRate}</span>
+          <span>好评率 {favorableRate}</span>
+          <span>咨询量 {inquiries}</span>
+        </div>
+        <div className={styles.speciality}>擅长：{content}</div>
+        <div className={styles.extra}>
+          平均回复: <span>{replytime}小时内</span>
+        </div>
+        <div className={styles.rates}>
+          <IconFont type="fl-renminbi" size="0.3rem" />
+          <span>{numeral(price).format('0,0.00')}</span>
         </div>
       </div>
-    </Touchable>
+    </div>
   );
 }

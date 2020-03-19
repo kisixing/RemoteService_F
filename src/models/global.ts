@@ -94,12 +94,18 @@ const GlobalModel: GlobalModelType = {
   },
 
   subscriptions: {
-    setup({ history }: any): void {
+    setup({ dispatch, history }: any): void {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
       history.listen(({ pathname, search }: any): void => {
         if (typeof window['ga'] !== 'undefined') {
           window['ga']('send', 'pageview', pathname + search);
         }
+        // if (['/', '/consultation'].indexOf(pathname) > -1) {
+        //   dispatch({
+        //     type: 'getPregnancy',
+        //     payload: store.get('id'),
+        //   });
+        // }
       });
     },
   },

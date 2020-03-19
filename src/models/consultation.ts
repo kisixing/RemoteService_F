@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { Effect, ConnectState } from './connect';
 // import { ConnectState } from './connect.d';
-import { getDoctors, getComments } from '@/services/consultation';
+import { getDoctors, getComments } from '@/services/remote-service';
 
 export interface StateType {
   doctors?: any[];

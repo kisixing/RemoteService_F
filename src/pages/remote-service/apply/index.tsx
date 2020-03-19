@@ -70,14 +70,14 @@ function Apply(props: any) {
   }
 
   const onClick = (p1: number, p2: number, p3?: number) => {
-    if (checked) {
+    if (checked.id) {
       // 套餐已用完，单次收费
       // 单次判图服务类型
       const type = checked.type;
       const params = { pregnancy: { id: p1 }, prenatalvisit: { id: p2 }, type };
       webpay(params).then((res: any) => {
         if (res && res.mwebUrl) {
-          window.location.href = res.mwebUrl;
+          // window.location.href = res.mwebUrl;
         }
       });
     } else {
@@ -102,7 +102,7 @@ function Apply(props: any) {
   };
 
   if (isReady) {
-    const { id, service1amount, service2amount, createtime, validdate, servicepackage } = packageOrder;
+    const { id, sn, service1amount, service2amount, createtime, validdate, servicepackage } = packageOrder;
     return (
       <div className={styles.container}>
         <div className={styles.card}>
@@ -121,7 +121,7 @@ function Apply(props: any) {
                 {moment(createtime).format('YYYY-MM-DD HH:mm:ss')}
               </span>
             </div>
-            <div className={styles.orderNo}>订单号：{id}</div>
+            <div className={styles.orderNo}>订单号：{sn}</div>
             <div className={styles.indate}>
               有效期：
               <i>{!!validdate ? moment(validdate).format('YYYY-MM-DD HH:mm:dd') : '分娩前'}</i>{' '}
@@ -140,8 +140,8 @@ function Apply(props: any) {
               <span className={styles.name}>{'胎监判图服务'}</span>
             </div>
             <div className={styles.extra}>
-              <span>已使用 {service2amount - service1amount} 次 / </span>
-              <span>{service2amount} 次</span>
+              {/* <span>已使用 {service2amount - service1amount} 次</span> */}
+              <span>剩余 {service1amount} 次</span>
             </div>
           </div>
           <WhiteSpace />

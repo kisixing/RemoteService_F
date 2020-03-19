@@ -19,7 +19,7 @@ export default function StepBar({ current }: Iprops) {
   return (
     <ul className={styles.stepContainer}>
       {MAPS.map((e, i) => (
-        <li key={e.name} className={styles.item} onClick={() => router(e.route)}>
+        <li key={e.name} className={styles.item} /* onClick={() => router(e.route)} */>
           <span className={classnames(styles.dot, { [styles.color]: i < current })} />
           <div className={styles.title}>{e.title}</div>
         </li>

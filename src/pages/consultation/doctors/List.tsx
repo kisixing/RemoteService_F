@@ -28,6 +28,7 @@ function DoctorList({ dispatch, doctors }: any) {
 
   useEffect(() => {
     dispatch({ type: 'consultation/getDoctors' });
+
   }, []);
 
   // 医院设置
@@ -36,6 +37,8 @@ function DoctorList({ dispatch, doctors }: any) {
   const onClick = (id: string) => {
     router(`/consultation/doctor/${id}`);
   };
+
+  const onSearch = () => {};
 
   return (
     <div className="page">
@@ -51,13 +54,20 @@ function DoctorList({ dispatch, doctors }: any) {
             </Picker>
           </div>
         </div>
-        <SearchBar placeholder="搜索医生" maxLength={8} />
+        <SearchBar focus={false} placeholder="搜索医生" maxLength={8} onSubmit={onSearch} />
       </div>
       <WingBlank className={styles.content}>
         <div className={styles.header}>
-          <Tag data-seed="logId" size="middle" color="#F5897C">解答快</Tag>
+          <Tag data-seed="logId" size="middle" color="#F5897C">
+            解答快
+          </Tag>
           <div className={styles.title}>
-            快速咨询 <IconFont type="jiantou-right-circle-xian" style={{ marginLeft: '10px' }} />
+            快速咨询{' '}
+            <IconFont
+              type="jiantou-right-circle-xian"
+              size="0.36rem"
+              style={{ marginLeft: '10px' }}
+            />
           </div>
           <div className={styles.subTitle}>快速匹配医生，第一时间解答</div>
         </div>
@@ -76,7 +86,7 @@ function DoctorList({ dispatch, doctors }: any) {
               answerRate={e.answerRate}
               favorableRate={e.favorableRate}
               inquiries={e.inquiries}
-              onPress={onClick}
+              onClick={onClick}
             />
           ))}
       </WingBlank>

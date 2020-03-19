@@ -6,12 +6,14 @@
 
 import React, { useEffect } from 'react';
 import { connect } from 'dva';
+import { Modal } from 'antd-mobile';
 import { ConnectState } from '@/models/connect';
 import { IconFont, Tag, BackButton, Button } from '@/components/antd-mobile';
 import CommentItem from './CommentItem';
 import styles from './Detail.less';
+import { router } from '@/utils/utils';
 
-function DoctorDetail({ dispatch, comments, match, ...rest }: any) {
+function DoctorDetail({ dispatch, comments, match, pregnancyId, ...rest }: any) {
   useEffect(() => {
     const doctorId = match.params.id;
     dispatch({
@@ -21,6 +23,16 @@ function DoctorDetail({ dispatch, comments, match, ...rest }: any) {
       },
     });
   }, []);
+
+  const onClick = (id: string | number) => {
+    if (pregnancyId) {
+      return Modal.alert('温馨提示', '本院仅支持建档已审核孕妇线上咨询，是否开始建档？', [
+        { text: '取消', onPress: () => {} },
+        { text: '确定', onPress: () => router('/perinatal/basic-info') },
+      ]);
+    }
+    return router(`/consultation/chat/:${id}`);
+  };
 
   return (
     <div className="page">
@@ -86,7 +98,7 @@ function DoctorDetail({ dispatch, comments, match, ...rest }: any) {
           ￥<span>{'30'}</span>
           元/次
         </div>
-        <Button type="primary" size="small" inline>
+        <Button inline type="primary" size="small" onClick={() => onClick(12345)}>
           图文咨询
         </Button>
       </div>
@@ -95,7 +107,8 @@ function DoctorDetail({ dispatch, comments, match, ...rest }: any) {
   );
 }
 
-export default connect(({ loading, consultation }: ConnectState) => ({
+export default connect(({ loading, consultation, global }: ConnectState) => ({
   loading: loading,
   comments: consultation.comments,
+  pregnancyId: global.currentPregnancy.id,
 }))(DoctorDetail);
