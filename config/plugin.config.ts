@@ -18,19 +18,22 @@ const webpackPlugin = (config: IWebpackChainConfig) => {
           antd: {
             name: 'antd',
             priority: 20,
-            test: /[\\/]node_modules[\\/](antd|@ant-design|antd-mobile)[\\/]/,
+            test: /[\\/]node_modules[\\/](antd|@ant-design\/icons|@ant-design\/compatible|antd-mobile)[\\/]/,
           },
           'react-pdf': {
             name: 'react-pdf',
-            minChunks: 2,
             priority: 20,
-            test: /[\\/]node_modules[\\/]react-pdf[\\/]/,
+            test: /[\\/]node_modules[\\/](react-pdf\/dist|pdfjs-dist)[\\/]/,
           },
-          'pdfjs-dist': {
-            name: 'pdfjs-dist',
-            minChunks: 2,
+          'chart-js': {
+            name: 'chart-js',
             priority: 20,
-            test: /[\\/]node_modules[\\/]pdfjs-dist[\\/]/,
+            test: /[\\/]node_modules[\\/](chart.js\/dist)[\\/]/,
+          },
+          'china-division': {
+            name: 'china-division',
+            priority: 20,
+            test: /[\\/]node_modules[\\/](china-division\/dist)[\\/]/,
           },
           async: {
             chunks: 'async',

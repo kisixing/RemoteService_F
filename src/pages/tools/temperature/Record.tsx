@@ -96,7 +96,9 @@ function TemperatureRecord() {
           // 坐标轴
           ticks: {
             fontSize: 20,
-            fontWeight: 400
+            fontWeight: 400,
+            autoSkip: true,
+            autoSkipPadding: 50
           }
         }],
         yAxes: [{

@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconFont } from '@/components/antd-mobile';
 import styles from './ApplyCard.less';
-import { ServiceOrderItem } from './interface';
+import { ServiceOrderItem } from '../interface';
 interface ApplyCardProp{
   data: ServiceOrderItem
 }

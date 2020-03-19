@@ -41,8 +41,7 @@ const Model: ComboModelType = {
   effects: {
     // 获取套餐
     *getPackage({payload}, { call, put}) {
-      const { response, data } = yield call((getPackage));
-      console.log(response);
+      const { data } = yield call((getPackage));
       yield put({type: 'setPackageList', payload: data})
     },
     /**

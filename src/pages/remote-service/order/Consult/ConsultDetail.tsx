@@ -5,17 +5,19 @@
  */
 
 import React,{ReactNode} from 'react';
-import Router from 'umi/router';
 import BackButton from '@/components/BackButton';
-import { NavBar, Button, Icon } from 'antd-mobile';
+import { Button } from 'antd-mobile';
+import { ServiceOrderItem } from '@/pages/remote-service/order/interface';
+
+import styles from '../Detail.less';
+
+interface ConsultDetailProp{
+  data: ServiceOrderItem
+}
+
+function ConsultDetail(props: ConsultDetailProp) {
 
 
-import styles from './Detail.less';
-
-function ConsultDetail(props: any) {
-  const { location: { query } } = props;
-  const state:string = query.state || '1';
-  
   const renderHeader = (state:string):ReactNode => {
     console.log(state);
     switch (state) {
@@ -53,20 +55,10 @@ function ConsultDetail(props: any) {
     }
   }
 
-  const handleChangeType = (state:string) => {
-    let n = Number(state);
-    if(n === 4) n = 0;
-    Router.push(`/orders/consultdetail?state=${n+1}`);
-  }
 
   return (
     <div className={styles.container}>
-      <NavBar 
-      mode="light"
-      leftContent={<Icon type="left"/>}
-      onLeftClick={() => Router.push('/orders')}
-      >订单详情</NavBar>
-        {renderHeader(state)}
+        {/* {renderHeader(state)} */}
         <div className={styles.page}>
         <div className={styles.header}>
           <div>
@@ -94,7 +86,6 @@ function ConsultDetail(props: any) {
         </div>
       </div>
       <br/>
-      <Button onClick={() => handleChangeType(state)}>NextType</Button>
       <BackButton/>
     </div>
   )

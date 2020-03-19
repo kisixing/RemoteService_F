@@ -1,7 +1,8 @@
 import React from 'react';
 import { IconFont, Tag  } from '@/components/antd-mobile';
 import { ProductItem } from '@/pages/remote-service/package/interface';
-import { PackageOrderItem } from './interface';
+import { PackageOrderItem } from '../interface';
+import { ORDER_STATE_STR } from '../config';
 import styles from './MonitorCard.less';
 
 interface MonitorCardProp {
@@ -23,7 +24,8 @@ export default function MonitorCard(props: MonitorCardProp) {
           {/* <Tag size="middle" bgcolor="#E3D9FC" color="#7540EE">多胎</Tag> */}
           <span className={styles.extra}>
             {/* {e.stateText}   */}
-            <img src={require('@/assets/order/statepic.png')} alt=""/>
+            {/* <img src={require('@/assets/order/statepic.png')} alt=""/> */}
+            {data.state ? `${ORDER_STATE_STR[data.state]}` : '无状态'}
           </span>
         </div>
         <div className={styles.info}>
@@ -40,13 +42,13 @@ export default function MonitorCard(props: MonitorCardProp) {
             </div>
           ))}
           <div>
-            <div><IconFont type="fetus"/><span>判图次数</span></div>
+            <div><IconFont type="fetus"/><span>剩余可用次数</span></div>
             <div><span>{data.service1amount}次</span></div>
           </div>
-          <div>
+          {/* <div>
             <div><IconFont type="fetus"/><span>咨询次数</span></div>
             <div><span>{data.service2amount}次</span></div>
-          </div>
+          </div> */}
         </div>
         <hr/>
         <div className={styles.price}>

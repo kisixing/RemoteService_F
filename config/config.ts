@@ -89,7 +89,7 @@ const config: IConfig = {
   ],
   chainWebpack: process.env.NODE_ENV === 'development' ? undefined : webpackPlugin,
   uglifyJSOptions: {
-    parallel: false,
+    parallel: true,
   },
 };
 
