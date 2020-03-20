@@ -1,11 +1,11 @@
 // 支付页面
 import React,{useState } from 'react';
 import { connect } from 'dva';
-import { Button, Checkbox, WingBlank } from 'antd-mobile';
+import { Button, Checkbox, WingBlank, Toast } from 'antd-mobile';
 import BackButton from '@/components/BackButton';
 import { wxpay } from '@/services/pay';
 import { ConnectState } from '@/models/connect';
-
+import Router from 'umi/router';
 import { PackageListItem } from '@/pages/remote-service/package/interface';
 import { GlobalModelState } from '@/models/global';
 
@@ -21,19 +21,18 @@ interface PayProp{
   currentPregnancy:GlobalModelState
 }
 
-// props中获取订单信息 | 路由获取
 function Pay(props:PayProp) {
 
-  // 传入订单header - 订单确认/订单续租
-  console.log(props);
+  
   const [payType, setPayType] = useState('');
-
   const [isAgree, setIsAgree] = useState(false);
 
+  // 选择支付方式
   const onSelect = (type: string):void => {
     setPayType(type);
   }
 
+  // 同意按钮
   const handleAgree = ():void => {
     if(isAgree){setPayType('');}
     setIsAgree(isAgree => !isAgree);
@@ -41,12 +40,17 @@ function Pay(props:PayProp) {
 
   // TODO 支付fn
   const pay = () => {
-    const sessionData = window.sessionStorage['persist:redux-storage'];
-    const sessionObj = JSON.parse(sessionData);
-    const PREGNANCY_ID = JSON.parse(sessionObj['global'])['currentPregnancy']['id'];
-    // const {confirmData} = props
+    // const sessionData = window.sessionStorage['persist:redux-storage'];
+    // const sessionObj = JSON.parse(sessionData);
+    // const PREGNANCY_ID = JSON.parse(sessionObj['global'])['currentPregnancy']['id'];
     const PACKAGE_ID = props.currentPackageId;
-    console.log(props);
+    // @ts-ignore
+    const PREGNANCY_ID = props.currentPregnancy.id;
+    if(!PREGNANCY_ID){
+      Toast.info('没有找到孕妇ID,支付行为终止');
+      return;
+    }
+    // 请求后台得到订单数据
     wxpay({servicepackage: {id: PACKAGE_ID}, pregnancy: {id: PREGNANCY_ID}}).then(payorder => {
       wx.config({
         appId: payorder.appId,
@@ -54,36 +58,28 @@ function Pay(props:PayProp) {
         nonceStr: payorder.nonceStr, // 支付签名随机串，不长于 32 位
         jsApiList: ['chooseWXPay']
       });
-      // wx.checkJsApi({
-      //   jsApiList: ['chooseWXPay'],
-      //   success: function (res:any) {
-      //     // 微信内置浏览器接口 - 判别微信支付信息
-      // @ts-ignore
-      WeixinJSBridge.invoke(
-        "getBrandWCPayRequest", {
-          appId: payorder.appId,
-          timestamp: payorder.timeStamp,
-          nonceStr: payorder.nonceStr,
-          package: payorder.packageValue,
-          signType: payorder.signType,
-          paySign: payorder.paySign
-        },
-        function (res:any) {
-          if(res.err_msg === 'get_brand_wcpay_request:cancel' || res.err_msg === 'get_brand_wcpay_request:fail') {
-            alert('支付失败，请重新支付');
-          }else if(res.err_msg === '调用支付JSAPI缺少参数：total_fee') {
-            alert('请检查下单接口')
-          }else if(res.err_msg === 'get_brand_wcpay_request:ok') {
-            alert('支付成功,跳转');
+      // 监听微信浏览器时间
+      document.addEventListener('WeixinJSBridgeReady',function onBridgeReady() {
+        // @ts-ignore
+        WeixinJSBridge.invoke("getBrandWCPayRequest", {
+            appId: payorder.appId,
+            timestamp: payorder.timeStamp,
+            nonceStr: payorder.nonceStr,
+            package: payorder.packageValue,
+            signType: payorder.signType,
+            paySign: payorder.paySign
+          },
+          function (res:any) {
+            if(res.err_msg === 'get_brand_wcpay_request:cancel' || res.err_msg === 'get_brand_wcpay_request:fail') {
+              alert('支付失败，请重新支付');
+            }else if(res.err_msg === '调用支付JSAPI缺少参数：total_fee') {
+              alert('请检查下单接口')
+            }else if(res.err_msg === 'get_brand_wcpay_request:ok') {
+              alert('支付成功,跳转');
+            }
           }
-        }
-      )
-      //   },
-      //   error: function(err:any) {
-      //     alert('不可以');
-      //     console.log(err);
-      //   }
-      // });
+        )
+      });
       wx.chooseWXPay({
         timestamp: payorder.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
         nonceStr: payorder.nonceStr, // 支付签名随机串，不长于 32 位
@@ -92,8 +88,10 @@ function Pay(props:PayProp) {
         paySign: payorder.paySign, // 支付签名
         success: function (res:any) {
           // 支付成功后的回调函数
-          alert(res);
-          // router.push({ pathname: '/purchase/result'});
+          Toast.info(JSON.stringify(res),5);
+          setTimeout(() => {
+            Router.push('./remote-service/order/index');
+          },5000)
         }
       });
     })

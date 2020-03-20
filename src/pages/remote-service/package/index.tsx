@@ -37,7 +37,7 @@ function Packages(props: PackageProps) {
       {props.packageList.map((item: PackageListItem) => {
         return (
           <Touchable key={item.id}>
-            <div className={styles.card}>
+            <div className={styles.card} onClick={() => onClick(item.id)}>
               <div className={styles.thumbnail}>
                 <img src="/images/slice/pic.png" />
               </div>
@@ -50,7 +50,7 @@ function Packages(props: PackageProps) {
                   <div className={styles.price}>￥<b>{item.price}</b></div>
                   <div className={styles.device}>·含设备</div>
                   <div className={styles.detail}>
-                    <button onClick={() => onClick(item.id)}>查看详情</button> 
+                    <span>查看详情</span> 
                     <img src={require('@/assets/icons/icon_wc_next_1@2x.png')} alt=""/>
                   </div>
                 </div>

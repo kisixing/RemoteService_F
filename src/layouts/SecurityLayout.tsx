@@ -89,7 +89,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       return <Redirect to={`/user/login?${queryString}`} />;
     }
     // token、isBind，含有用户权限和已绑定的情况下才会进入主页
-    return children;
+    return children; 
   }
 }
 

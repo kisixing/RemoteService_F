@@ -9,9 +9,13 @@ import Chart from 'chart.js';
 import { Tabs } from 'antd-mobile';
 import { PERIOD_CODE } from './config';
 import { getBloodGlucose } from '@/services/tools';
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect'
+import { sortDate } from '@/utils/utils';
+import moment from 'moment';
 
 import styles from './Record.less';
-import { ServiceOrderItem } from '@/pages/remote-service/order/interface';
+import options from '@/components/antd-mobile/dataEntry/address-picker/cascader-address-options';
 
 interface ServiceDataItem {
   id:number,
@@ -37,7 +41,7 @@ const periodString = ['空腹','早餐后2H','午餐前2H','午餐后2H','晚餐
  *  当天
  *    将进入值筛选出来做点的显示
  */
-function BloodGlucoseRecord() {
+function BloodGlucoseRecord(props: {userid: number}) {
 
   const hChart = useRef(null),tChart = useRef(null);
   let chartH,chartT;
@@ -45,7 +49,7 @@ function BloodGlucoseRecord() {
   const [listData,setListData] = useState([]);
   
   
-
+  /* =========================  历史 ====================================== */
   let hChartOptions = {
     type: 'line',
     data: {
@@ -91,7 +95,7 @@ function BloodGlucoseRecord() {
       },
       tooltips:{
         mode: 'index',
-        intersect: false,
+        // intersect: false,
         titleFontSize: 20,
         bodyFontSize: 20
       },
@@ -117,53 +121,107 @@ function BloodGlucoseRecord() {
           scaleLabel:{ 
             display: true, 
             labelString: '测量值', 
-            fontSize: 20
+            fontSize: 16
           },
           ticks: {
             // 幅度
-            max: 6,
-            min: 3.5,
+            max: 9,
+            min: 2.5,
             stepSize: 0.5,
             // style
-            fontSize: 20 
+            fontSize: 16,
+            autoSkip: true,
+            autoSkipPadding: 50 
           }
         }],
       }
     }
   }
-
   // 将日历按周期展示
-  const convertTChartData = (options: any,  serviceData: Array<ServiceDataItem>, COUNT_DURATION:number = 5) => {
-    // let count = 0;
-    // const COUNT_PER = (serviceData.length / COUNT_DURATION) | 0 ;
+  const convertHChartData = (options: any,  serviceData: Array<ServiceDataItem>) => {
     let nOptions = JSON.parse(JSON.stringify(options));
-    let labels = new Set(serviceData.map(v => v.timestamp));
-    
+    let labels = sortDate<string>(new Set(serviceData.map(v => v.timestamp.slice(0,10))));
+    let targetData:Array<ServiceDataItem>|false = sortDate<ServiceDataItem>(serviceData,"timestamp");
+    if(!targetData || !labels) return;
     labels.forEach((v:string) => nOptions.data.labels.push(v.slice(5,10)));
-    console.log(nOptions);
-    serviceData.forEach((v: ServiceDataItem, index: number) => {
-      // 填入数据
-      const len = nOptions.data.datasets.length;
-      for(let i = 0 ; i < len; i++){
-        // @ts-ignore
-        // nOptions.data.datasets[i].data.push(v[options.data.datasets[i].key]);
+    for(let i = 0; i < targetData.length; i++){
+      for(let j = 0; j < nOptions.data.datasets.length ; j++){
+        // 判断period
+        if(targetData[i].period === nOptions.data.datasets[j].key) {
+          for(let k = 0; k < nOptions.data.labels.length; k++){
+            // 对应日期的位置
+            if(targetData[i].timestamp.slice(5,10) === nOptions.data.labels[k]){
+              nOptions.data.datasets[j].data[k] = serviceData[i].result;
+            }
+          }
+        }
       }
-    });
+    }
+    console.log(nOptions);
     return nOptions;
   }
 
+  /* =========================  当日 ====================================== */
+  let tChartOptions = {
+    type: 'bar',
+    data:{
+      labels: ['空腹','早餐后2H','午餐前','午餐后2H','晚餐前','晚餐后2H','睡前'],
+      datasets:[{
+        label: '今日记录',
+        backgroundColor: ['#FFC0CB','#DDA0DD','#6495ED','#48D1CC','#FFFF00','#FF4500','#C0C0C0'],
+        data:[]
+      }]
+    },
+    options:{
+      responsive: true,
+      steppedLine: true,
+      scales: {
+        yAxes:[{
+          ticks:{
+            // 幅度
+            max: 9,
+            min: 2.5,
+            stepSize: 0.5,
+            // style
+            fontSize: 16,
+            autoSkip: true,
+            autoSkipPadding: 50 
+          }
+        }]
+      }
+    }
+  }
+
+  const convertTChartData = (options: any, serviceData: Array<ServiceDataItem>) => {
+    let nOptions = JSON.parse(JSON.stringify(options));
+
+    const todayStr = moment(new Date()).format('YYYY-MM-DD');
+    // 筛选今日值
+    let targetData:Array<ServiceDataItem> = serviceData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr);
+    for(let i = 0; i < targetData.length ; i++){
+      nOptions.data.datasets[0].data[targetData[i].period] = targetData[i].result;
+    }
+    return nOptions;
+  }
 
   const newChart = (data: Array<ServiceDataItem>) => {
-    //@ts-ignore
-    const ctx = hChart.current.getContext('2d');
-    chartH = new Chart(ctx, convertTChartData(hChartOptions,data));
+    try{
+      //@ts-ignore
+      const ctx = hChart.current.getContext('2d');
+      chartH = new Chart(ctx, convertHChartData(hChartOptions,data));
+      //@ts-ignore
+      const ctx1 = tChart.current.getContext('2d');
+      chartT = new Chart(ctx1, convertTChartData(tChartOptions,data));
+    }catch(e){
+      console.error(e);
+    }
     //@ts-ignore
     // const ctx1 = tChart.current.getContext('2d');
     // chartT = new Chart(ctx1, convertChartData(chartOptions,listData,false));
   }
 
   useEffect(()=> {
-    getBloodGlucose({pregnancyId: '207'}).then(res => {
+    getBloodGlucose({pregnancyId: props.userid}).then(res => {
       newChart(res.data);
       setListData(res.data);
     })
@@ -210,4 +268,6 @@ function BloodGlucoseRecord() {
   )
 }
 
-export default BloodGlucoseRecord;
+export default connect(({global}: ConnectState) => ({
+  userid: global.currentPregnancy.id
+}))(BloodGlucoseRecord);

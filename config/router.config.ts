@@ -146,18 +146,6 @@ export default [
                 title: '我的订单',
                 component: './remote-service/order/index',
               },
-              // {
-              //   path: '/orders/consultdetail',
-              //   name: 'consultdetail',
-              //   title: '咨询详情',
-              //   component: './remote-service/order/ConsultDetail',
-              // },
-              // {
-              //   path: '/orders/applydetail',
-              //   name: 'applydetail',
-              //   title: '判图详情',
-              //   component: './remote-service/order/ApplyDetail'
-              // },
               {
                 path: '/orders/detail', // 考虑动态路由
                 name: 'order detail',
