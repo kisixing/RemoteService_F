@@ -7,7 +7,7 @@
 import React,{ ReactNode, useEffect } from 'react';
 import { connect } from 'dva';
 import { Tabs } from 'antd-mobile';
-import { Tag, Button } from '@/components/antd-mobile';
+import { Tag, Button, IconFont } from '@/components/antd-mobile';
 import { router } from '@/utils/utils';
 
 import { ConnectState } from '@/models/connect';
@@ -49,18 +49,27 @@ function Details(props: any) {
           </div>
         </div>
       </div>
-      <Tabs tabs={tabs}>
-        <div dangerouslySetInnerHTML={{ __html: product.note }} />
-        <div dangerouslySetInnerHTML={{ __html: product.introduction }} />
-        <div dangerouslySetInnerHTML={{ __html: product.specification }} />
-      </Tabs>
+      <div className={styles.tabs}>
+        <Tabs
+          tabs={tabs}
+          swipeable={false}
+          animated={true}
+          tabBarUnderlineStyle={{
+            height: '5px',
+            backgroundColor: '#FFCC4A',
+          }}
+        >
+          <div dangerouslySetInnerHTML={{ __html: product.note }} />
+          <div dangerouslySetInnerHTML={{ __html: product.introduction }} />
+          <div dangerouslySetInnerHTML={{ __html: product.specification }} />
+        </Tabs>
+      </div>
       <div className={styles.bottom}>
-        <div className={styles.footer}>
-          <div className={styles.price}>￥{product.price}</div>
-          <div className={styles.buy}>
-            <Button className={styles.button} onClick={toPay} >购买</Button>
-          </div>
+        <div className={styles.left}>
+          <IconFont type="serve" size="0.64rem" />
+          <span>￥{product.price}</span>
         </div>
+        <Button inline type="primary" onClick={toPay} >购买</Button>
       </div>
     </div>
   )
