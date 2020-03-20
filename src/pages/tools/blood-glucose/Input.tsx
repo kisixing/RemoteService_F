@@ -11,47 +11,44 @@ import { Button, IconFont } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
 import DatePicker from '../components/DatePicker';
 import { router } from '@/utils/utils';
+import { PERIOD_CODE } from './config';
+import { setBloodGlucose } from '@/services/tools';
 import styles from '../blood-pressure/Input.less';
 
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
 const tabs = [
-  { title: '早餐前', key: 'before-breakfast' },
-  { title: '早餐后', key: 'after-breakfast' },
-  { title: '午餐前', key: 'before-lunch' },
-  { title: '午餐后', key: 'after-lunch' },
-  { title: '晚餐前', key: 'before-dinner' },
-  { title: '晚餐后', key: 'after-dinner' },
-  { title: '睡前', key: 'before-sleep' },
+  { title: '早餐前', key: PERIOD_CODE.FASTING },
+  { title: '早餐后', key: PERIOD_CODE.AFTER_B },
+  { title: '午餐前', key: PERIOD_CODE.BEFORE_L },
+  { title: '午餐后', key: PERIOD_CODE.AFTER_L },
+  { title: '晚餐前', key: PERIOD_CODE.BEFORE_D },
+  { title: '晚餐后', key: PERIOD_CODE.AFTER_D},
+  { title: '睡前', key: PERIOD_CODE.BEFORE_S },
 ];
 
 // 数据结构
 const json = [
-  {
-    key: 'before-breakfast',
-    bloodGlucose: 100,
-    isInsulin: null,
-    quantity: null,
-    dietaryStatus: '',
-  },
-  { key: 'after-breakfast', bloodGlucose: 10 },
-  { key: 'before-lunch', bloodGlucose: 99 },
-  { key: 'after-lunch', bloodGlucose: 69 },
-  { key: 'before-dinner', bloodGlucose: '' },
-  { key: 'after-dinner', bloodGlucose: '' },
-  { key: 'before-sleep', bloodGlucose: '' },
+  { key: PERIOD_CODE.FASTING, bloodGlucose: 10 },
+  { key: PERIOD_CODE.AFTER_B , bloodGlucose: 99 },
+  { key: PERIOD_CODE.BEFORE_L, bloodGlucose: 69 },
+  { key: PERIOD_CODE.AFTER_L, bloodGlucose: '' },
+  { key: PERIOD_CODE.BEFORE_D, bloodGlucose: '' },
+  { key: PERIOD_CODE.AFTER_D, bloodGlucose: '' },
+  { key: PERIOD_CODE.BEFORE_S, bloodGlucose: '' },
 ];
 
-function BloodGlucoseInput() {
+function BloodGlucoseInput(props: {userid: number}) {
   // TODO 根据tab key获取提交的值
   const [date, setDate] = useState(now);
-  const [activatedTab, setActivatedTab] = useState('before-breakfast');
+  const [activatedTab, setActivatedTab] = useState(PERIOD_CODE.FASTING);
   const [values, setValues] = useState(json);
   const [current, setCurrent] = useState({
     bloodGlucose: '',
     isInsulin: null,
     quantity: undefined,
     dietaryStatus: '',
+    key: 0
   });
 
   useEffect(() => {
@@ -61,19 +58,30 @@ function BloodGlucoseInput() {
   }, [activatedTab]);
 
   const onSubmit = () => {
-    const d = moment(date).format('YYYY-MM-DD');
+    const d = moment(date);
     // const index = values.findIndex(e => e.key === activatedTab);
     // const current = values[index];
     if (!current.bloodGlucose) {
       return Toast.info('请输入血糖数值...');
     }
-    if (current.isInsulin === null || current.isInsulin === '' || current.isInsulin === undefined) {
-      return Toast.info('请选择是否注射胰岛素...');
-    }
-    if (current.isInsulin && !current.quantity) {
-      return Toast.info('请输入注射胰岛素量...');
-    }
+    // if (current.isInsulin === null || current.isInsulin === '' || current.isInsulin === undefined) {
+    //   return Toast.info('请选择是否注射胰岛素...');
+    // }
+    // if (current.isInsulin && !current.quantity) {
+    //   return Toast.info('请输入注射胰岛素量...');
+    // }
     console.log({ d, current });
+    const reqData = {
+      timestamp: d,
+      result: Number(current.bloodGlucose),
+      pregnancy:{id: props.userid},
+      period: current.key
+    }
+    setBloodGlucose(reqData).then(r => {
+      if(r.response.status >=200 && r.response.status < 300){
+        Toast.success('血糖信息成功');
+      }
+    });
   };
 
   const onChange = (key: string, value: any) => {
@@ -86,7 +94,7 @@ function BloodGlucoseInput() {
   return (
     <div className={styles.container}>
       <DatePicker
-        mode="date"
+        mode="datetime"
         title="选择日期"
         extra="请选择日期"
         value={date}
@@ -105,6 +113,7 @@ function BloodGlucoseInput() {
           保存
         </Button>
       </div>
+      {/* 类型对不上 */}
       <Tabs
         tabs={tabs}
         page={activatedTab}
@@ -149,7 +158,7 @@ function BloodGlucoseInput() {
                 }
               >
                 <div className={styles.label}>
-                  <span className={styles.required}>*</span>
+                  {/* <span className={styles.required}>*</span> */}
                   注射胰岛素
                 </div>
               </List.Item>

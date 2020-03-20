@@ -6,11 +6,13 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import Chart from 'chart.js';
+import { connect } from 'dva';
 
 import { getBloodOxygens } from '@/services/tools';
 import moment from 'moment';
 import { sortDate } from '@/utils/utils';
 import { Tabs } from 'antd-mobile';
+import { ConnectState } from '@/models/connect';
 
 import styles from './Record.less';
 interface ServiceDataItem {
@@ -24,7 +26,7 @@ interface ServiceDataItem {
 
 const NORMAL_O:number = 95;
 
-function BloodOxygenRecord() {
+function BloodOxygenRecord(props: {userid: number}) {
 
   const hChart = useRef(null);
   const tChart = useRef(null);
@@ -126,8 +128,11 @@ function BloodOxygenRecord() {
     const [defaultPointRadius, errorPointRadius] = [2, 8];
     // 定义标准日期
     const todayStr = moment(new Date()).format('YYYY-MM-DD');
-    // 深拷贝
-    let targetData:Array<ServiceDataItem>|false = serviceData.map(v => v);
+    // 排序
+    let targetData:Array<ServiceDataItem>|false = sortDate<ServiceDataItem>(serviceData,'timestamp');
+    if(!targetData) {
+      return;
+    }
     if(isHistory){
       // 展示历史数据，将单天最大值保留
       for(let i=0;i<targetData.length;) {
@@ -244,4 +249,6 @@ function BloodOxygenRecord() {
   )
 }
 
-export default BloodOxygenRecord
+export default connect(({global}: ConnectState) => ({
+  userid: global.currentPregnancy.id
+}))(BloodOxygenRecord)

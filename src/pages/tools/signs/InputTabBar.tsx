@@ -8,6 +8,8 @@ import React from 'react';
 import { Tabs } from 'antd-mobile';
 import Router from 'umi/router';
 import { StickyContainer, Sticky } from 'react-sticky';
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect'
 // content 组件
 import Weight from '../weight/Input';
 import BloodPressure from '../blood-pressure/Input';
@@ -21,7 +23,6 @@ function InputTabBar(props: any) {
   const { location: { query } } = props;
   const type = query.type || 'weight';
   // document.title = TABS.filter(e => e.key === type)[0]['title'];
-
   const onTabClick = (tab: any, index: number) => {
     const key = tab.key;
     if (key === type) {
@@ -44,19 +45,19 @@ function InputTabBar(props: any) {
 
   const content = (key: string) => {
     if (key === 'weight') {
-      return <Weight />
+      return <Weight userid={props.userid}/>
     }
     if (key === 'blood-pressure') {
-      return <BloodPressure />
+      return <BloodPressure userid={props.userid}/>
     }
     if (key === 'blood-glucose') {
-      return <BloodGlucose />
+      return <BloodGlucose userid={props.userid}/>
     }
     if (key === 'blood-oxygen') {
-      return <BloodOxygen />
+      return <BloodOxygen userid={props.userid}/>
     }
     if (key === 'temperature') {
-      return <Temperature />
+      return <Temperature userid={props.userid}/>
     }
     return <div style={{ margin: '1rem', textAlign: 'center' }}>没有定义{type}这个体征组件</div>
   }
@@ -86,4 +87,6 @@ function InputTabBar(props: any) {
   );
 }
 
-export default InputTabBar
+export default connect(({global}: ConnectState) => ({
+  userid: global.currentPregnancy.id
+}))(InputTabBar);

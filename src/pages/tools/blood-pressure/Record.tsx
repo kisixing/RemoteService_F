@@ -7,7 +7,8 @@
 import React,{ useRef, useEffect, useState } from 'react'
 import Chart from 'chart.js';
 import {Tabs} from 'antd-mobile';
-
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect';
 import {sortDate} from '@/utils/utils';
 import moment from 'moment';
 import BackButton from '@/components/BackButton';
@@ -35,9 +36,10 @@ DIA_MAX=89,
 DIA_MIN=50;
 
 
-function BloodPressureRecord() {
+function BloodPressureRecord(props: {userid: number}) {
   const hChart=useRef(null),tChart=useRef(null);
   let chartH,chartT;
+  console.log(props);
   const [listData,setListData] = useState([]);
   // date与日期未填入
   let chartOptions = {
@@ -123,7 +125,7 @@ function BloodPressureRecord() {
   }
 
   // 将日历按周期展示
-  const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>, isHistory: boolean, COUNT_DURATION:number = 5) => {
+  const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>, isHistory: boolean) => {
     //
     let nOptions = JSON.parse(JSON.stringify(options));
     // 异常|正常 样式
@@ -131,8 +133,9 @@ function BloodPressureRecord() {
     const [ defaultPointRadius, errorPointRadius ] = [2,8];
     // 定义标准日期
     const todayStr = moment(new Date()).format('YYYY-MM-DD');
-    // 深拷贝
-    let targetData:Array<ServiceDataItem>|false = serviceData.map(v => v);
+    // 排序
+    let targetData:Array<ServiceDataItem>|false = sortDate<ServiceDataItem>(serviceData,'timestamp');
+    if(!targetData) return;
     if(isHistory){
       // 展示历史数据，将单天最大值保留
       for(let i=0;i<targetData.length;) {
@@ -224,7 +227,7 @@ function BloodPressureRecord() {
   }
   
   useEffect(() => {
-    getBloodPressures({pregnancyId: "207"}).then(res => {
+    getBloodPressures({pregnancyId: props.userid}).then(res => {
       newChart(res.data);
       setListData(res.data);
     })
@@ -266,4 +269,6 @@ function BloodPressureRecord() {
   )
 }
 
-export default BloodPressureRecord
+export default connect(({global}: ConnectState) => ({
+  userid: global.currentPregnancy.id
+}))(BloodPressureRecord);

@@ -277,7 +277,7 @@ export function router(type: string) {
  */
 
 
-export function sortDate<T>(arr: Array<T>, key: string = ""): Array<T>|false {
+export function sortDate<T>(arr: Array<T>|Set<T>, key: string = ""): Array<T>|false {
   let formatArr:Array<any> = [];
   try {
     if(key !== "") {

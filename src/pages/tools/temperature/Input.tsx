@@ -11,26 +11,36 @@ import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
 import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
+import { setTemperatures } from '@/services/tools';
 import styles from '../blood-pressure/Input.less';
 
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
 
-function TemperatureInput() {
+function TemperatureInput(props: {userid: number}) {
   const [date, setDate] = useState(now);
   const [temperature, setTemperature] = useState('')
 
   const onSubmit = () => {
-    const d = moment(date).format('YYYY-MM-DD');
+    const d = moment(date);
     if (!temperature) {
       return Toast.info('请输入体温数值...');
     }
     console.log({ d, temperature });
+    setTemperatures({
+      result: Number(temperature),
+      timestamp: d,
+      pregnancy: {id: props.userid}
+    }).then(r => {
+      if(r.response.status >= 200 && r.response.status < 300){
+        Toast.success('保存体温数据成功');
+      }
+    })
   };
   return (
     <div className={styles.container}>
       <DatePicker
-        mode="date"
+        mode="datetime"
         title="选择日期"
         extra="请选择日期"
         value={date}

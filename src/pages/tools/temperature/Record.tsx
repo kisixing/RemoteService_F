@@ -6,7 +6,8 @@
 
 import React, { useRef, useState, useEffect } from 'react'
 import Chart from 'chart.js';
-
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect';
 import { getTemperatures } from '@/services/tools';
 import moment from 'moment';
 import { sortDate } from '@/utils/utils';
@@ -26,7 +27,7 @@ interface ServiceDataItem {
 
 const NORMAL_T:number = 37
 
-function TemperatureRecord() {
+function TemperatureRecord(props: {userid: number}) {
 
   const [hChart, tChart] = [useRef(null), useRef(null)];
   // 历史记录chart，todayChart
@@ -132,7 +133,8 @@ function TemperatureRecord() {
     // 定义标准YYYY-MM-DD字符串
     const todayStr = moment(new Date()).format('YYYY-MM-DD');
     // 深拷贝
-    let targetData:Array<ServiceDataItem>|false = serviceData.map(v => v);
+    let targetData:Array<ServiceDataItem>|false = sortDate<ServiceDataItem>(serviceData,'timestamp');
+    if(!targetData) return ;
     if(isHistory){
       // 展示历史数据，将单天最大值保留
       for(let i=0;i<targetData.length;) {
@@ -213,7 +215,7 @@ function TemperatureRecord() {
   }
 
   useEffect(() => {
-    getTemperatures({ pregnancyId: '207' }).then(res => {
+    getTemperatures({ pregnancyId: props.userid }).then(res => {
       newChart(res.data);
       setListData(res.data);
     });
@@ -257,4 +259,6 @@ function TemperatureRecord() {
   )
 }
 
-export default TemperatureRecord;
+export default connect(({global}: ConnectState) => ({
+  userid: global.currentPregnancy.id
+}))(TemperatureRecord);

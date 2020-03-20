@@ -6,11 +6,14 @@
 
 import React, { useState } from 'react';
 import { InputItem, List, Toast } from 'antd-mobile';
+import { notification } from 'antd';
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
 import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
+import { setBloodPressures } from '@/services/tools';
+
 import styles from './Input.less';
 
 const nowTimeStamp = Date.now();
@@ -18,7 +21,7 @@ const now = new Date(nowTimeStamp);
 const minDate = new Date(nowTimeStamp - 1000 * 60 * 60 * 24 * 30);
 const maxDate = new Date(nowTimeStamp);
 
-function BloodPressureInput() {
+function BloodPressureInput(props: {userid: number}) {
   const [date, setDate] = useState(now)
   // const [bloodPressure, setBloodPressure] = useState();
   const [diastolic, setDiastolic] = useState('')
@@ -26,29 +29,39 @@ function BloodPressureInput() {
   const [heartRate, setHeartRate] = useState('');
 
   const onSubmit = () => {
-    const d = moment(date).format('YYYY-MM-DD');
+    const d = moment(date);
     if (!diastolic || !systolic) {
       return Toast.info('请输入血压数值...');
     }
-    if (!heartRate) {
-      return Toast.info('请输入心率数值...');
-    }
-    console.log({ d, diastolic, systolic, heartRate });
+    // if (!heartRate) {
+    //   return Toast.info('请输入心率数值...');
+    // }
+    setBloodPressures({
+      systolic: Number(systolic),
+      diastolic: Number(diastolic),
+      timestamp: d,
+      pregnancy: {id: props.userid}
+    }).then((r:any) => {
+      console.log(r);
+      if(r.response.status >= 200 && r.response.status < 300){
+        notification.success({message: '数据保存成功'});
+      } 
+    });
   }
   return (
     <div className={styles.container}>
       <DatePicker
-        mode="date"
+        mode="datetime"
         title="选择日期"
         extra="请选择日期"
-        minDate={minDate}
-        maxDate={maxDate}
+        // minDate={minDate}
+        // maxDate={maxDate}
         value={date}
         onChange={date => setDate(date)}
       />
       <WhiteSpace />
       <div className={styles.content}>
-        <div className={styles.text} onClick={() => router('/signs/blood-glucose/record')}>
+        <div className={styles.text} onClick={() => router('/signs/blood-pressure/record')}>
           <IconFont type="record" size="28px" />
           <span>历史记录</span>
         </div>
@@ -84,7 +97,7 @@ function BloodPressureInput() {
             onChange={v => setHeartRate(v)}
           >
             <div className={styles.label}>
-              <span className={styles.required}>*</span>
+              {/* <span className={styles.required}>*</span> */}
               心率
               <span className={styles.unit}>(次/分)</span>
             </div>
@@ -101,4 +114,4 @@ function BloodPressureInput() {
   );
 }
 
-export default BloodPressureInput
+export default BloodPressureInput;
