@@ -48,12 +48,17 @@ function Apply(props: any) {
     getPackageOrders(p1).then(res => {
       if (res && res.length) {
         setIsReady(true);
-        const object = res.filter((e: any) => !!e.device)[0];
-        setPackageOrder(object);
-        if (object.service1amount === 0) {
-          // 套餐服务次数已用完
-          getPrice();
+        const filterArr = res.filter((e: any) => !!e.device);
+        if (!filterArr.length) {
+          Toast.info('没有可用套餐，请前往莲孕公众号购买...')
+        } else {
+          setPackageOrder(filterArr[0]);
+          if (filterArr[0].service1amount === 0) {
+            // 套餐服务次数已用完
+            getPrice();
+          }
         }
+
         // onClick(Number(p1), Number(p2), object.id);
       }
     });
