@@ -8,7 +8,6 @@ import React from 'react';
 import { connect } from 'dva';
 import { WingBlank } from 'antd-mobile';
 import { Touchable } from '@/components/antd-mobile';
-import BackButton from '@/components/BackButton';
 
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { router } from '@/utils/utils';
@@ -88,7 +87,6 @@ class MapList extends React.Component<P, S> {
             </Touchable>
           );
         })}
-        <BackButton route="/">返回</BackButton>
       </WingBlank>
     );
   }

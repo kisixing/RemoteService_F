@@ -10,7 +10,6 @@ import { ActivityIndicator, Modal } from 'antd-mobile';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 
-import BackButton from '@/components/BackButton';
 import { getPageKeyValue } from '@/utils/utils';
 
 import styles from './Preview.less';
@@ -76,7 +75,6 @@ export default function Preview() {
         )
       }
       </Document>
-      <BackButton />
     </div>
   )
 }

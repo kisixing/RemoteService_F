@@ -6,9 +6,8 @@
 
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { WingBlank } from 'antd-mobile';
 import createDOMForm from 'rc-form/lib/createDOMForm';
-import { Button, BackButton } from '@/components/antd-mobile';
+import { Button } from '@/components/antd-mobile';
 import FormFields from './FormFields';
 import StepBar from './StepBar';
 import styles from './styles.less';
@@ -50,11 +49,10 @@ class BasicInfo extends PureComponent<P, S> {
         <form className={styles.form}>
           <FormFields form={form} dataSource={basic.data} />
         </form>
-        <div className={styles.buttonView}>
+        <div className="bottom_button">
           <Button type="primary" onClick={this.onSubmit}>
             保存
           </Button>
-          <BackButton route="/perinatal">返回</BackButton>
         </div>
       </div>
     );

@@ -38,3 +38,15 @@ export async function getPackageOrders(id: string) {
 export async function getApplyPrice(type: string) {
   return request(`/api/ctgapplyfees?type.equals=${type}`);
 }
+
+export async function getPackages() {
+  return request('/api/servicepackages')
+};
+
+/**
+ * 获取套餐产品详情
+ * @param {string} id 产品id
+ */
+export async function getProduct(id: string) {
+  return request(`/api/products/${id}`);
+}

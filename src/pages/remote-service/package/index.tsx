@@ -8,9 +8,8 @@ import React,{useEffect} from 'react';
 import Router from 'umi/router';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-import { WingBlank, Tag } from 'antd-mobile';
-import BackButton from '@/components/BackButton';
-import { Touchable } from '@/components/antd-mobile';
+import { WingBlank } from 'antd-mobile';
+import { Touchable, Tag, IconFont } from '@/components/antd-mobile';
 
 import { ConnectState } from '@/models/connect';
 import { PackageListItem } from './interface';
@@ -18,40 +17,47 @@ import { PackageListItem } from './interface';
 import styles from './index.less';
 
 interface PackageProps{
-  packageList: Array<PackageListItem>,
+  packages: Array<PackageListItem>,
   dispatch: Dispatch
 }
 
-function Packages(props: PackageProps) {
+function Packages({ dispatch, packages }: PackageProps) {
 
-  const onClick = (id: number|string):void => {
-    console.log(`C-${id}`);
-    props.dispatch({type: 'combo/setPackageId', payload: id});
-    Router.push('/packages/detail');
+  const onClick = (item: any) => {
+    const productId = item.products[0]['id'];
+    Router.push({
+      pathname: '/packages/detail',
+      query: { id: productId }
+    });
   }
 
-  // 获取套餐列表
-  useEffect(() => {props.dispatch({type: 'combo/getPackage'})},[]);
+  // 获取所有套餐列表
+  useEffect(() => {
+    dispatch({ type: 'remoteService/getPackages' })
+  }, []);
+
   return (
     <WingBlank className={styles.container}>
-      {props.packageList.map((item: PackageListItem) => {
+      {packages && packages.map((item: PackageListItem) => {
         return (
           <Touchable key={item.id}>
-            <div className={styles.card} onClick={() => onClick(item.id)}>
+            <div className={styles.card} onClick={() => onClick(item)}>
               <div className={styles.thumbnail}>
-                <img src="/images/slice/pic.png" />
+                <img src={`/images/slice/pic_${Math.floor(Math.random() * 3 + 1)}.png`} />
               </div>
               <div className={styles.content}>
                 <div className={styles.first}>
-                  <div className={styles.name}><b>{item.name}</b></div>
-                  <Tag className={styles.marking}>单胎</Tag>
+                  <div className={styles.name}>{item.name}</div>
+                  <Tag size="middle" color="#3fb6dc" bgcolor="#d9f0f8">单胎</Tag>
                 </div>
                 <div className={styles.second}>
-                  <div className={styles.price}>￥<b>{item.price}</b></div>
-                  <div className={styles.device}>·含设备</div>
+                  <div>
+                    <div className={styles.price}>￥{item.price}</div>
+                    <div className={styles.device}>含设备</div>
+                  </div>
                   <div className={styles.detail}>
-                    <span>查看详情</span> 
-                    <img src={require('@/assets/icons/icon_wc_next_1@2x.png')} alt=""/>
+                    <span>查看详情</span>
+                    <IconFont type="dropdown" size=".4rem" />
                   </div>
                 </div>
               </div>
@@ -59,11 +65,10 @@ function Packages(props: PackageProps) {
           </Touchable>
         );
       })}
-      <BackButton />
     </WingBlank>
   );
 }
 
-export default connect(({combo}: ConnectState) => ({
-  packageList: combo.packageList
+export default connect(({ remoteService }: ConnectState) => ({
+  packages: remoteService.packages
 }))(Packages);

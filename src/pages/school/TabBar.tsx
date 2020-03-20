@@ -11,7 +11,6 @@ import { Tabs } from 'antd-mobile';
 import Router from 'umi/router';
 import { StickyContainer, Sticky } from 'react-sticky';
 
-import BackButton from '@/components/BackButton';
 import { IconFont } from '@/components/antd-mobile';
 import Video from './Video';
 import Article from './Article';
@@ -84,7 +83,6 @@ const SchoolTabBar = (props: any) => {
           </div> */}
         </Tabs>
       </StickyContainer>
-      <BackButton route="/">返回</BackButton>
     </div>
   )
 }

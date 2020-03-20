@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import BackButton from '@/components/BackButton';
+import { Button } from '@/components/antd-mobile';
 import StepBar from './StepBar';
 
 interface P {
@@ -23,7 +23,9 @@ class PregnancyHistory extends React.Component<P, S> {
       <div className="page">
         <StepBar current={3} />
         孕产史信息
-        <BackButton route="/perinatal">返回</BackButton>
+        <div className="bottom_button">
+          <Button type="primary">确定</Button>
+        </div>
       </div>
     );
   }

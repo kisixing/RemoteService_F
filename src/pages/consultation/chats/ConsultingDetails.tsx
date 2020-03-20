@@ -9,7 +9,7 @@ import { connect } from 'dva';
 import Router from 'umi/router';
 import { createForm } from 'rc-form';
 import { WingBlank, List, InputItem, TextareaItem, ImagePicker, Toast } from 'antd-mobile';
-import { BackButton, Button } from '@/components/antd-mobile';
+import { Button } from '@/components/antd-mobile';
 import styles from './ConsultingDetails.less';
 
 const defaultData = [
@@ -137,7 +137,6 @@ class ConsultingDetails extends PureComponent<P, S> {
           <Button type="primary" onClick={this.onSubmit}>
             提交咨询
           </Button>
-          <BackButton />
         </div>
       </div>
     );

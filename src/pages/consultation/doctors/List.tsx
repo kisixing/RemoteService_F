@@ -10,7 +10,6 @@ import { ConnectState } from '@/models/connect';
 
 import { Picker, WingBlank, SearchBar } from 'antd-mobile';
 import { IconFont, Tag } from '@/components/antd-mobile';
-import BackButton from '@/components/BackButton';
 import DoctorItem from './Item';
 import { router } from '@/utils/utils';
 import styles from './List.less';
@@ -91,7 +90,6 @@ function DoctorList({ dispatch, doctors }: any) {
               />
             ))}
       </WingBlank>
-      <BackButton />
     </div>
   );
 }

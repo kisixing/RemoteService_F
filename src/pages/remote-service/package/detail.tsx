@@ -6,13 +6,10 @@
 
 import React,{ ReactNode, useEffect } from 'react';
 import { connect } from 'dva';
-import { Dispatch } from 'redux';
-import { Tabs, Button } from 'antd-mobile';
-import { Tag } from '@/components/antd-mobile';
+import { Tabs } from 'antd-mobile';
+import { Tag, Button } from '@/components/antd-mobile';
 import { router } from '@/utils/utils';
-import BackButton from '@/components/BackButton';
 
-import { CurrentPackageDetail, PackageListItem } from './interface';
 import { ConnectState } from '@/models/connect';
 import styles from './Detail.less';
 
@@ -23,44 +20,28 @@ const tabs:Array<TAB> = [
   {title: '设备规格'},
 ];
 
+function Details(props: any) {
+  const { dispatch, location, product } = props;
 
-interface DETAIL_PAGE_PROPS {
-  packageDetail: CurrentPackageDetail,
-  currentPackageId: number|string,
-  packageList: Array<PackageListItem>,
-  dispatch: Dispatch
-}
-
-function Details(props: DETAIL_PAGE_PROPS) {
-
-
-  const { packageDetail, packageList, currentPackageId } = props;
-  let price = "套餐信息有误";
-  const currentPackageData:PackageListItem|undefined = packageList.find(item => item.id === currentPackageId);
-  console.log(currentPackageData);
-  if(currentPackageData){
-    price = currentPackageData.price.toString();
-  }
   const toPay = () => {
     // 可以动态路由携带信息
     router('/pay');
   }
 
   useEffect(() => {
-    if(currentPackageId !== -1) {
-      props.dispatch({type: 'combo/getPackageData', payload: {id: currentPackageId}});
-    }else {
-      console.log('非法套餐id');
-    }
+    const { query: { id } } = location;
+    dispatch({
+      type: 'remoteService/getProduct',
+      payload: id
+    });
   },[])
 
   return (
     <div className={styles.container}>
-      <div className={styles['img-block']}>
-      <div className={styles.title}>
+      <div className={styles.banner} style={{ backgroundImage: `url(${product.picture})` }}>
+        <div className={styles.text}>
           <div>
             <span>孕期胎监套餐</span>
-            &nbsp;&nbsp;&nbsp;&nbsp;
             <span><Tag size="middle" bgcolor="#D9F0F8" color="#3FB6DC">单胎</Tag></span>
           </div>
           <div>
@@ -69,30 +50,23 @@ function Details(props: DETAIL_PAGE_PROPS) {
         </div>
       </div>
       <Tabs tabs={tabs}>
-        {/* <div dangerouslySetInnerHTML={{__html: packageDetail.note}} /> */}
-        <div>
-          <div><span>胎监判图服务次数:{currentPackageData?.service1amount}</span></div>
-          <div><span>图文咨询服务次数:{currentPackageData?.service2amount}</span></div>
-        </div>
-        <div dangerouslySetInnerHTML={{__html: packageDetail.introduction}} />
-        <div dangerouslySetInnerHTML={{__html: packageDetail.specification}} />
+        <div dangerouslySetInnerHTML={{ __html: product.note }} />
+        <div dangerouslySetInnerHTML={{ __html: product.introduction }} />
+        <div dangerouslySetInnerHTML={{ __html: product.specification }} />
       </Tabs>
       <div className={styles.bottom}>
         <div className={styles.footer}>
-          <div className={styles.price}>￥{price}</div>
+          <div className={styles.price}>￥{product.price}</div>
           <div className={styles.buy}>
             <Button className={styles.button} onClick={toPay} >购买</Button>
           </div>
         </div>
       </div>
-      <BackButton />
     </div>
   )
 }
 
 
-export default connect(({combo}:ConnectState ) => ({
-  currentPackageId: combo.currentPackageId,
-  packageDetail: combo.currentPackageDetail,
-  packageList: combo.packageList
+export default connect(({ remoteService }: ConnectState ) => ({
+  product: remoteService.product,
 }))(Details);

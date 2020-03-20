@@ -5,13 +5,13 @@
 
 .card {
   height: 2rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.2rem;
   border-radius: 4px;
   box-shadow: 0 2px 8px #f0f1f2;
 
   .thumbnail {
     float: left;
-    height: 100%;
+    height: 2rem;
     width: 1.84rem;
 
     img {
@@ -22,54 +22,61 @@
 
   .content {
     height: 100%;
-    padding: .2rem .1rem .2rem .2rem;
-    background-color: #ffffff;
+    padding: .4rem .2rem;
+    background-color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    > div {
+
+    & > div {
       display: flex;
-      flex-direction: row;
       justify-content: space-between;
     }
-    .first {
-      .name {
-      font-size: 0.3rem;
-      font-weight: 600;
-      color: #0f1232;
-      }
 
-      .marking {
-        text-align: center;
-        border-radius: 0.2rem;
-        background-color: #d9f0f8;
+    .first {
+      margin-bottom: 0.3em;
+
+      .name {
+        font-size: 0.3rem;
+        font-weight: 500;
+        color: #0f1232;
       }
     }
     .second {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-end;
       .price {
+        display: inline-block;
         font-size: 0.3rem;
         font-weight: 600;
         color: #0f1232;
       }
       .device {
+        display: inline-block;
+        margin-left: 0.52rem;
         font-size: 0.2rem;
         color: #828c99;
-        margin: 0.1rem 0 0 0;
+        position: relative;
+
+        &:before {
+          position: absolute;
+          top: 50%;
+          left: -12px;
+          margin-top: -4px;
+          display: inline-block;
+          content: '';
+          width: 8px;
+          height: 8px;
+          border-radius: 4px;
+          background-color: #828c99;
+        }
       }
       .detail{
-        font-size: 0.25rem;
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.24rem;
         color: #828c99;
-        font-weight: 500;
-        text-align: right;
-        img {
-          margin-left: 0.1rem;
-        }
       }
     }
 
-    
+
   }
 }
