@@ -139,8 +139,8 @@ function Oders(props: OrderProps) {
 
   useEffect(() => {
     props.dispatch({type: 'combo/getPackage'});
-    props.dispatch({type: 'order/getPackageOrders',payload: {pregnancyId: 4229}});
-    props.dispatch({type: 'order/getServiceOrders',payload: {pregnancyId: 4229}});
+    props.dispatch({type: 'order/getPackageOrders',payload: {pregnancyId: props.userid}});
+    props.dispatch({type: 'order/getServiceOrders',payload: {pregnancyId: props.userid}});
   },[]);
 
   return (

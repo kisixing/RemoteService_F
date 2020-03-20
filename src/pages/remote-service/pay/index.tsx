@@ -59,27 +59,27 @@ function Pay(props:PayProp) {
         jsApiList: ['chooseWXPay']
       });
       // 监听微信浏览器时间
-      document.addEventListener('WeixinJSBridgeReady',function onBridgeReady() {
-        // @ts-ignore
-        WeixinJSBridge.invoke("getBrandWCPayRequest", {
-            appId: payorder.appId,
-            timestamp: payorder.timeStamp,
-            nonceStr: payorder.nonceStr,
-            package: payorder.packageValue,
-            signType: payorder.signType,
-            paySign: payorder.paySign
-          },
-          function (res:any) {
-            if(res.err_msg === 'get_brand_wcpay_request:cancel' || res.err_msg === 'get_brand_wcpay_request:fail') {
-              alert('支付失败，请重新支付');
-            }else if(res.err_msg === '调用支付JSAPI缺少参数：total_fee') {
-              alert('请检查下单接口')
-            }else if(res.err_msg === 'get_brand_wcpay_request:ok') {
-              alert('支付成功,跳转');
-            }
-          }
-        )
-      });
+      // document.addEventListener('WeixinJSBridgeReady',function onBridgeReady() {
+      //   // @ts-ignore
+      //   WeixinJSBridge.invoke("getBrandWCPayRequest", {
+      //       appId: payorder.appId,
+      //       timestamp: payorder.timeStamp,
+      //       nonceStr: payorder.nonceStr,
+      //       package: payorder.packageValue,
+      //       signType: payorder.signType,
+      //       paySign: payorder.paySign
+      //     },
+      //     function (res:any) {
+      //       if(res.err_msg === 'get_brand_wcpay_request:cancel' || res.err_msg === 'get_brand_wcpay_request:fail') {
+      //         alert('支付失败，请重新支付');
+      //       }else if(res.err_msg === '调用支付JSAPI缺少参数：total_fee') {
+      //         alert('请检查下单接口')
+      //       }else if(res.err_msg === 'get_brand_wcpay_request:ok') {
+      //         alert('支付成功,跳转');
+      //       }
+      //     }
+      //   )
+      // });
       wx.chooseWXPay({
         timestamp: payorder.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
         nonceStr: payorder.nonceStr, // 支付签名随机串，不长于 32 位
@@ -88,10 +88,19 @@ function Pay(props:PayProp) {
         paySign: payorder.paySign, // 支付签名
         success: function (res:any) {
           // 支付成功后的回调函数
-          Toast.info(JSON.stringify(res),5);
-          setTimeout(() => {
-            Router.push('./remote-service/order/index');
-          },5000)
+          if(res.errMsg == "chooseWXPay:ok"){
+            Router.push('/orders');
+          }else if(res.errMsg == "chooseWXPay:fail"){
+            Toast.info('支付失败');
+          }
+        },
+        fail: function(res: any){
+          Toast.fail('支付失败');
+        },
+        complete: function(res: any){
+          if(res.errMsg == "chooseWXPay:cancel"){
+            Toast.info('支付取消');
+          }
         }
       });
     })
