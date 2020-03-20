@@ -40,6 +40,18 @@ export default [
         component: './consultation/team',
       },
       {
+        path: '/consultation/consulting-details',
+        name: 'consulting details input',
+        title: '我要咨询',
+        component: './consultation/chats/ConsultingDetails',
+      },
+      {
+        path: '/consultation/payment-page',
+        name: 'payment-page',
+        title: '订单支付',
+        component: './consultation/chats/PaymentPage',
+      },
+      {
         path: '/consultation/chat/:id',
         name: 'chat view',
         title: '问诊详情',
@@ -134,18 +146,18 @@ export default [
                 title: '我的订单',
                 component: './remote-service/order/index',
               },
-              {
-                path: '/orders/consultdetail',
-                name: 'consultdetail',
-                title: '咨询详情',
-                component: './remote-service/order/ConsultDetail',
-              },
-              {
-                path: '/orders/applydetail',
-                name: 'applydetail',
-                title: '判图详情',
-                component: './remote-service/order/ApplyDetail'
-              },
+              // {
+              //   path: '/orders/consultdetail',
+              //   name: 'consultdetail',
+              //   title: '咨询详情',
+              //   component: './remote-service/order/ConsultDetail',
+              // },
+              // {
+              //   path: '/orders/applydetail',
+              //   name: 'applydetail',
+              //   title: '判图详情',
+              //   component: './remote-service/order/ApplyDetail'
+              // },
               {
                 path: '/orders/detail', // 考虑动态路由
                 name: 'order detail',

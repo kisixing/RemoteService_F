@@ -6,7 +6,7 @@ const webpackPlugin = (config: IWebpackChainConfig) => {
       minimize: true,
       splitChunks: {
         chunks: 'all',
-        minSize: 10000,
+        minSize: 30000,
         minChunks: 3,
         automaticNameDelimiter: '.',
         cacheGroups: {
@@ -22,6 +22,7 @@ const webpackPlugin = (config: IWebpackChainConfig) => {
           },
           'react-pdf': {
             name: 'react-pdf',
+            chunks: 'async',
             priority: 20,
             test: /[\\/]node_modules[\\/](react-pdf\/dist|pdfjs-dist)[\\/]/,
           },
@@ -33,7 +34,7 @@ const webpackPlugin = (config: IWebpackChainConfig) => {
           'china-division': {
             name: 'china-division',
             priority: 20,
-            test: /[\\/]node_modules[\\/](china-division\/dist)[\\/]/,
+            test: /[\\/]node_modules[\\/](china-division)[\\/]/,
           },
           async: {
             chunks: 'async',

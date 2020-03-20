@@ -54,7 +54,7 @@ function DoctorList({ dispatch, doctors }: any) {
             </Picker>
           </div>
         </div>
-        <SearchBar focus={false} placeholder="搜索医生" maxLength={8} onSubmit={onSearch} />
+        <SearchBar focused={false} placeholder="搜索医生" maxLength={8} onSubmit={onSearch} />
       </div>
       <WingBlank className={styles.content}>
         <div className={styles.header}>
@@ -71,24 +71,25 @@ function DoctorList({ dispatch, doctors }: any) {
           </div>
           <div className={styles.subTitle}>快速匹配医生，第一时间解答</div>
         </div>
-        <div style={{ marginBottom: '0.3rem', color: '#25265e' }}>在线医生</div>
-        {doctors.length > 0 &&
-          doctors.map((e: any) => (
-            <DoctorItem
-              key={e.id}
-              id={e.id}
-              name={e.name}
-              thumbnail={e.thumbnail}
-              price={e.price}
-              position={e.position}
-              content={e.content}
-              replytime={e.replytime}
-              answerRate={e.answerRate}
-              favorableRate={e.favorableRate}
-              inquiries={e.inquiries}
-              onClick={onClick}
-            />
-          ))}
+        <div style={{ lineHeight: 1, marginBottom: '0.3rem', color: '#25265e' }}>在线医生</div>
+        {doctors &&
+          doctors.length > 0 &&
+            doctors.map((e: any) => (
+              <DoctorItem
+                key={e.id}
+                id={e.id}
+                name={e.name}
+                thumbnail={e.thumbnail}
+                price={e.price}
+                position={e.position}
+                content={e.content}
+                replytime={e.replytime}
+                answerRate={e.answerRate}
+                favorableRate={e.favorableRate}
+                inquiries={e.inquiries}
+                onClick={onClick}
+              />
+            ))}
       </WingBlank>
       <BackButton />
     </div>

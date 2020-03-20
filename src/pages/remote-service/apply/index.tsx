@@ -77,7 +77,7 @@ function Apply(props: any) {
       const params = { pregnancy: { id: p1 }, prenatalvisit: { id: p2 }, type };
       webpay(params).then((res: any) => {
         if (res && res.mwebUrl) {
-          // window.location.href = res.mwebUrl;
+          window.location.href = res.mwebUrl;
         }
       });
     } else {
