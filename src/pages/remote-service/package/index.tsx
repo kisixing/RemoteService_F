@@ -25,6 +25,13 @@ function Packages({ dispatch, packages }: PackageProps) {
 
   const onClick = (item: any) => {
     const productId = item.products[0]['id'];
+    // 选择当前的套餐
+    dispatch({
+      type: 'remoteService/updateState',
+      payload: {
+        currentPackage: item
+      }
+    });
     Router.push({
       pathname: '/packages/detail',
       query: { id: productId }

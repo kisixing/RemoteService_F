@@ -57,6 +57,7 @@ export default [
         title: '问诊详情',
         component: './consultation/chats/$id',
       },
+      { component: './404' }
     ],
   },
   {
@@ -93,6 +94,7 @@ export default [
         title: '孕产史信息',
         component: './perinatal/PregnancyHistory',
       },
+      { component: './404' }
     ],
   },
   {
@@ -152,6 +154,7 @@ export default [
                 title: '订单详情',
                 component: './remote-service/order/detail',
               },
+              { component: './404' }
             ],
           },
           {
@@ -171,6 +174,7 @@ export default [
                 title: '套餐详情',
                 component: './remote-service/package/Detail',
               },
+              { component: './404' }
             ],
           },
           {
@@ -196,6 +200,7 @@ export default [
                 title: '',
                 // component: './remote-service/apply/payResult',
               },
+              { component: './404' }
             ],
           },
           {
@@ -225,6 +230,7 @@ export default [
                 title: 'pdf预览',
                 component: './reports/Preview',
               },
+              { component: './404' }
             ],
           },
           {
@@ -308,6 +314,7 @@ export default [
                 title: '体温记录',
                 component: './tools/temperature/Record',
               },
+              { component: './404' }
             ],
           },
         ],

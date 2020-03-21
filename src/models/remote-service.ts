@@ -11,6 +11,7 @@ import { getPackages, getProduct } from '@/services/remote-service';
 export interface StateType {
   product?: object
   packages?: object
+  currentPackage?: object
 }
 
 export interface NewsModelType {
@@ -29,7 +30,9 @@ const RemoteServiceModel: NewsModelType = {
   namespace: 'remoteService',
 
   state: {
-    product: {}
+    packages: [],
+    currentPackage: {},
+    product: {},
   },
 
   effects: {
