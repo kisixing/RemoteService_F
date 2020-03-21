@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { WingBlank, Radio, List } from 'antd-mobile';
-import { IconFont, BackButton, Button } from '@/components/antd-mobile';
+import { IconFont, Button } from '@/components/antd-mobile';
 
 import styles from './PaymentPage.less';
 
@@ -54,7 +54,6 @@ function PaymentPage() {
         <Button type="primary" disabled={!payment}>
           确认支付
         </Button>
-        <BackButton />
       </div>
     </div>
   );

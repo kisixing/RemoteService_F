@@ -6,7 +6,6 @@
 
 import React from 'react';
 import { List } from 'antd-mobile';
-import BackButton from '@/components/BackButton';
 
 import router from 'umi/router';
 import styles from './BBSList.less';
@@ -40,7 +39,6 @@ function BBSList(props: IProps) {
           <Brief>{item.time}</Brief>
         </Item>
       ))}
-      <BackButton />
     </List>
   )
 }

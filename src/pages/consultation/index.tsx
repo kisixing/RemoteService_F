@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-import BackButton from '@/components/BackButton';
 import { IconFont, Tag } from '@/components/antd-mobile';
 import { router } from '@/utils/utils';
 
@@ -64,22 +63,19 @@ function Consultation() {
   const onClick = (route: string) => router(route)
 
   return (
-    <>
-      <div className={styles.container}>
-        {data.map(item => (
-          <div key={item.key} onClick={() => onClick(item.route)}>
-            <div className={styles.header}>
-              <IconFont type={item.icon} size=".6rem" style={{ marginRight: '.24rem' }} />
-              <Tag size="middle" bgcolor={item.tagColor}>
-                {item.tag}
-              </Tag>
-            </div>
-            <div className={styles.title}>{item.title}</div>
+    <div className={styles.container}>
+      {data.map(item => (
+        <div key={item.key} onClick={() => onClick(item.route)}>
+          <div className={styles.header}>
+            <IconFont type={item.icon} size=".6rem" style={{ marginRight: '.24rem' }} />
+            <Tag size="middle" bgcolor={item.tagColor}>
+              {item.tag}
+            </Tag>
           </div>
-        ))}
-      </div>
-      <BackButton />
-    </>
+          <div className={styles.title}>{item.title}</div>
+        </div>
+      ))}
+    </div>
   );
 }
 

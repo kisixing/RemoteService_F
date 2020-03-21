@@ -8,7 +8,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { Modal } from 'antd-mobile';
 import { ConnectState } from '@/models/connect';
-import { IconFont, Tag, BackButton, Button } from '@/components/antd-mobile';
+import { IconFont, Tag, Button } from '@/components/antd-mobile';
 import CommentItem from './CommentItem';
 import styles from './Detail.less';
 import { router } from '@/utils/utils';
@@ -105,7 +105,6 @@ function DoctorDetail({ dispatch, comments, match, pregnancyId, ...rest }: any) 
           图文咨询
         </Button>
       </div>
-      <BackButton />
     </div>
   );
 }

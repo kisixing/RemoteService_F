@@ -6,7 +6,7 @@
 
 import React from 'react';
 import numeral from 'numeral';
-import { IconFont, Tag, Touchable } from '@/components/antd-mobile';
+import { IconFont, Tag } from '@/components/antd-mobile';
 import styles from './Item.less';
 
 interface IProps {
