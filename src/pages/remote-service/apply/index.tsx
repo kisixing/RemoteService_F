@@ -16,7 +16,7 @@ import styles from './index.less';
 
 // 初始化值为一个对象时
 interface IState {
-  id: string
+  id: any
   pregnancy: any;
   device: any;
   servicepackage: any
@@ -36,7 +36,7 @@ function Apply(props: any) {
     servicepackage: {},
   });
   const [isReady, setIsReady] = useState(false);
-  const [checked, setChecked] = useState({});
+  const [checked, setChecked] = useState<any>({});
   const [prices, setPrices] = useState([]); // 单次判图服务价格列表
 
   useEffect(() => {
@@ -58,8 +58,6 @@ function Apply(props: any) {
             getPrice();
           }
         }
-
-        // onClick(Number(p1), Number(p2), object.id);
       }
     });
   };
@@ -93,7 +91,6 @@ function Apply(props: any) {
           } else {
             Toast.info('判图服务扣除失败，请稍后再试...');
           }
-          // setValid(true);
         })
         .catch(error => {
           console.log('请求异常', error);
@@ -107,7 +104,7 @@ function Apply(props: any) {
   };
 
   if (isReady) {
-    const { id, sn, service1amount, service2amount, createtime, validdate, servicepackage } = packageOrder;
+    const { sn, service1amount, createtime, validdate, servicepackage } = packageOrder;
     return (
       <div className={styles.container}>
         <div className={styles.card}>
