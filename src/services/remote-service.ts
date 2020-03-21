@@ -40,13 +40,31 @@ export async function getApplyPrice(type: string) {
 }
 
 export async function getPackages() {
-  return request('/api/servicepackages')
+  return request('/api/servicepackages');
+};
+
+export async function getPackage(id: string | number) {
+  return request(`/api/servicepackages/${id}`);
 };
 
 /**
- * 获取套餐产品详情
+ * 获取产品详情
  * @param {string} id 产品id
  */
 export async function getProduct(id: string) {
   return request(`/api/products/${id}`);
+}
+
+/**
+ * 微信支付
+ *
+ * @export
+ * @param {object} params
+ * @returns
+ */
+export async function wechatPay(params: object) {
+  return request('/api/servicepackages/wxpay', {
+    method: 'POST',
+    data: { ...params },
+  });
 }

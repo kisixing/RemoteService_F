@@ -1,18 +1,24 @@
 .container {
   height: 100vh;
   width: 100%;
-  display: flex;
-  flex-direction: column;
 
   // TODO  这里样式要调整
   .banner {
     width: 100%;
     height: 4.2rem;
     background-color: #ccc;
-    background-size: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
     position: relative;
+
+    .carousel {
+      width: 100vw;
+      height: 4.2rem !important;
+      text-align: center;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
 
     .text {
       position: absolute;
@@ -39,14 +45,8 @@
   }
 
   .tabs {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: auto;
+    padding-bottom: 1.14rem;
     background-color: #f8f7fc;
-
 
     :global {
       .am-tabs-pane-wrap {
@@ -72,7 +72,11 @@
   }
 
   .bottom {
-    height: 1.24rem;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1.14rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -94,7 +98,8 @@
 
     a {
       width: 2rem;
+      height: 0.76rem;
+      line-height: .76rem;
     }
   }
-
 }

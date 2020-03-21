@@ -174,6 +174,12 @@ export default [
                 title: '套餐详情',
                 component: './remote-service/package/Detail',
               },
+              {
+                patn: '/packages/payment',
+                name: 'package pay',
+                title: '套餐支付',
+                component: './remote-service/package/PackagePay'
+              },
               { component: './404' }
             ],
           },

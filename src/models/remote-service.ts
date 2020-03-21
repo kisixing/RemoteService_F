@@ -6,7 +6,7 @@
 
 import { Reducer } from 'redux';
 import { Effect, ConnectState } from './connect';
-import { getPackages, getProduct } from '@/services/remote-service';
+import { getPackage, getPackages, getProduct } from '@/services/remote-service';
 
 export interface StateType {
   product?: object
@@ -15,14 +15,15 @@ export interface StateType {
 }
 
 export interface NewsModelType {
-  namespace: string
+  namespace: string;
   state: StateType
   effects: {
     getProduct: Effect
     getPackages: Effect
+    getPackage: Effect
   };
   reducers: {
-    updateState: Reducer<StateType>;
+    updateState: Reducer<StateType>
   };
 }
 
@@ -37,13 +38,23 @@ const RemoteServiceModel: NewsModelType = {
 
   effects: {
     *getPackages({ payload }, { call, put }) {
-      const response = yield call(getPackages, payload);
+      const response = yield call(getPackages);
       yield put({
         type: 'updateState',
         payload: {
           packages: response,
         },
       });
+    },
+    *getPackage({ payload }, { call, put }) {
+      const response = yield call(getPackage, payload);
+      yield put({
+        type: 'updateState',
+        payload: {
+          currentPackage: response,
+        },
+      });
+      return response;
     },
     *getProduct({ payload }, { call, put }) {
       const response = yield call(getProduct, payload);

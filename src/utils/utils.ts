@@ -10,6 +10,10 @@ import { parse, stringify } from 'querystring';
 import moment,{ Moment } from 'moment';
 // import pathRegexp from 'path-to-regexp';
 
+export function isWeixin() {
+  return /micromessenger/.test(navigator.userAgent.toLowerCase());
+}
+
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
 export function getPageKeyValue(key: string){
@@ -271,9 +275,9 @@ export function router(type: string) {
 
 /**
  * 对日期字符串进行排序
- * @param arr 需要排序的数组 
+ * @param arr 需要排序的数组
  * @params key 排序的字段，若为空，则代表数组内元素为datestring
- * 入参形式 
+ * 入参形式
  */
 
 
