@@ -6,7 +6,7 @@
 
 import React,{ useRef, useEffect, useState } from 'react'
 import Chart from 'chart.js';
-import {Tabs} from 'antd-mobile';
+
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import {sortDate} from '@/utils/utils';
@@ -22,7 +22,7 @@ import styles from './Record.less'
  *  当用户查看历史记录 需要显示最高压和最低压
  */
 interface ServiceDataItem {
-  timestamp:string, systolic: number, diastolic: number,
+  timestamp:string, systolic: number, diastolic: number, pulserate: number,
   map?: number,
   id:number,
   pregnancy?: {
@@ -39,8 +39,8 @@ DIA_MIN=50;
 function BloodPressureRecord(props: {userid: number}) {
   const hChart=useRef(null),tChart=useRef(null);
   let chartH,chartT;
-  console.log(props);
   const [listData,setListData] = useState([]);
+  const [isHistory, setIsHistory] = useState(true);
   // date与日期未填入
   let chartOptions = {
     type: 'line',
@@ -233,21 +233,20 @@ function BloodPressureRecord(props: {userid: number}) {
     })
   },[]);
 
-  const tab = [
-    {title: '历史记录'},
-    {title: '当天记录'}
-  ]
   return (
     <div className={styles.container}>
-      <Tabs tabs={tab}>
-        <div className={styles.canvas}>
-            <canvas ref={hChart}></canvas>
+      <div className={styles['canvas-block']}>
+        <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.switch}>
+          {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+        </div>
+          <div className={styles.canvas} style={{display: isHistory ? "block" : "none"}}>
+            <canvas ref={hChart}/>
           </div>
-          <div className={styles.canvas}>
-            <canvas ref={tChart}></canvas>
+          <div className={styles.canvas} style={{display: isHistory ? "none" : "block"}}>
+            <canvas ref={tChart}/>
           </div>
-      </Tabs>
-      <div>
+        <div>
+      </div>
         {listData.map((item: ServiceDataItem) => (
           <div className={styles.card} key={item.id}>
             <div className={styles.header}>

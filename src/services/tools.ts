@@ -9,7 +9,14 @@ interface SetProp{
   pregnancy: {
     id: number
   },
-  period?: number
+  period?: number,
+  // 血氧
+  pulserate?: number,
+  // 血糖
+  insulin?: boolean,
+  insulinnote?: number,
+  exercise?: string,
+  diet?: string
 }
 // 血糖
 export async function getBloodGlucose({pregnancyId}: {pregnancyId:string|number}) {
@@ -63,7 +70,8 @@ interface SetBloodPressuresProp{
   timestamp: Moment,
   pregnancy: {
     id: number
-  }
+  },
+  pulserate?: number
 }
 
 export async function getBloodPressures({pregnancyId}: {pregnancyId:string|number}) {
