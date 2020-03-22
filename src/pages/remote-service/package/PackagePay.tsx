@@ -100,7 +100,7 @@ function PackagePay(props: any) {
           <span>xxx医院门诊4楼508胎监室</span>
         </div>
         <div className={styles.time}>
-          <IconFont type="ultrasonic" size="0.4rem" />
+          <IconFont type="time2" size="0.4rem" />
           <span>周一至周五：</span>
           <div className={styles.interval}>
             <div>08:00 - 09:00 上午</div>

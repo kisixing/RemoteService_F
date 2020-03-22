@@ -587,6 +587,90 @@
       "unicode_decimal": 58996
     },
     {
+      "icon_id": "51618600",
+      "name": "date",
+      "font_class": "date",
+      "unicode": "e676",
+      "unicode_decimal": 58998
+    },
+    {
+      "icon_id": "51618601",
+      "name": "blood pressure",
+      "font_class": "bloodpressure",
+      "unicode": "e677",
+      "unicode_decimal": 58999
+    },
+    {
+      "icon_id": "51618602",
+      "name": "blood oxygen",
+      "font_class": "bloodoxygen",
+      "unicode": "e679",
+      "unicode_decimal": 59001
+    },
+    {
+      "icon_id": "51618605",
+      "name": "order wait",
+      "font_class": "orderwait",
+      "unicode": "e67a",
+      "unicode_decimal": 59002
+    },
+    {
+      "icon_id": "51618606",
+      "name": "temperature",
+      "font_class": "temperature",
+      "unicode": "e67b",
+      "unicode_decimal": 59003
+    },
+    {
+      "icon_id": "51619614",
+      "name": "fast",
+      "font_class": "fast",
+      "unicode": "e67c",
+      "unicode_decimal": 59004
+    },
+    {
+      "icon_id": "51619639",
+      "name": "on time",
+      "font_class": "ontime",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    },
+    {
+      "icon_id": "51619753",
+      "name": "edite",
+      "font_class": "edite",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    },
+    {
+      "icon_id": "51624908",
+      "name": "blood sugar",
+      "font_class": "bloodsugar1",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
+      "icon_id": "51947715",
+      "name": "temperature",
+      "font_class": "temperature1",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
+      "icon_id": "51947716",
+      "name": "synchronization",
+      "font_class": "synchronization",
+      "unicode": "e681",
+      "unicode_decimal": 59009
+    },
+    {
+      "icon_id": "51947717",
+      "name": "risk",
+      "font_class": "risk",
+      "unicode": "e682",
+      "unicode_decimal": 59010
+    },
+    {
       "icon_id": "246144",
       "name": "editor-line",
       "font_class": "editor-line",
@@ -594,11 +678,32 @@
       "unicode_decimal": 59012
     },
     {
+      "icon_id": "433854",
+      "name": "add",
+      "font_class": "add",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
       "icon_id": "435893",
       "name": "编辑",
       "font_class": "bianji",
       "unicode": "e795",
       "unicode_decimal": 59285
+    },
+    {
+      "icon_id": "751622",
+      "name": "time",
+      "font_class": "0501shijian",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "968717",
+      "name": "add",
+      "font_class": "add1",
+      "unicode": "e656",
+      "unicode_decimal": 58966
     },
     {
       "icon_id": "978322",
@@ -613,6 +718,20 @@
       "font_class": "datijilu",
       "unicode": "e606",
       "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "1375564",
+      "name": "time",
+      "font_class": "time1",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "1457609",
+      "name": "add",
+      "font_class": "add2",
+      "unicode": "e626",
+      "unicode_decimal": 58918
     },
     {
       "icon_id": "1761457",
@@ -660,15 +779,22 @@
       "icon_id": "7817213",
       "name": "编辑",
       "font_class": "bianji2",
-      "unicode": "e612",
-      "unicode_decimal": 58898
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "10258934",
+      "name": "time",
+      "font_class": "time2",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
     },
     {
       "icon_id": "10909318",
       "name": "record",
       "font_class": "record",
-      "unicode": "e613",
-      "unicode_decimal": 58899
+      "unicode": "e614",
+      "unicode_decimal": 58900
     },
     {
       "icon_id": "11641854",
@@ -681,8 +807,8 @@
       "icon_id": "12215196",
       "name": "pullright",
       "font_class": "pullright",
-      "unicode": "e626",
-      "unicode_decimal": 58918
+      "unicode": "e627",
+      "unicode_decimal": 58919
     },
     {
       "icon_id": "12990807",
