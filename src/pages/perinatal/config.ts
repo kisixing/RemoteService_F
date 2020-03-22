@@ -4,39 +4,38 @@
  * @Description:
  */
 
- const profession = [
-   { label: '国家公务员', value: '国家公务员' },
-   { label: '专业技术人员', value: '专业技术人员' },
-   { label: '企业管理人员', value: '企业管理人员' },
-   { label: '自由职业者', value: '自由职业者' },
-   { label: '工人', value: '工人' },
-   { label: '现役军人', value: '现役军人' },
-   { label: '个体经营者', value: '个体经营者' },
-   { label: '职员', value: '职员' },
-   { label: '农民', value: '农民' },
-   { label: '学生', value: '学生' },
-   { label: '退（离）休人员', value: '退（离）休人员' },
-   { label: '其他', value: '其他' },
- ];
+// 普通数组转对象数组 如['国家公务员'] --> [{ label: '国家公务员', value: '国家公务员' }]
+const arrayToObject = (data: string[]) => {
+  return { label: data, value: data };
+}
 
- const status = [
-   { label: '已婚', value: '已婚' },
-   { label: '未婚', value: '未婚' },
-   { label: '离异', value: '离异' },
-   { label: '丧偶', value: '丧偶' },
- ];
+// 职业种类
+const profession = arrayToObject(['国家公务员', '专业技术人员', '企业管理人员', '自由职业者', '工人', '现役军人', '个体经营者', '职员', '农民', '学生', '退（离）休人员', '其他']);
 
- const illness = ['无', '异位妊娠', '葡萄糖等滋养细胞疾病', '胚胎停育', '胎儿畸形', '死胎', '死产', '不清楚'];
+// 婚姻状态
+const maritalstatus = arrayToObject(['已婚', '未婚', '离异', '丧偶']);
+
+// 证件类型
+const IDType = [
+  { label: '二代身份证', value: '0' },
+  { label: '港澳台居民居住证', value: '4'},
+  { label: '回乡证', value: '2'},
+  { label: '台胞证', value: '3'},
+  { label: '护照', value: '1'},
+  { label: '其他', value: '5' },
+];
+
+const illness = ['无', '异位妊娠', '葡萄糖等滋养细胞疾病', '胚胎停育', '胎儿畸形', '死胎', '死产', '不清楚'];
 
 export const basic = {
   description: '基本信息',
   data: [
     {
       id: 'part-1',
-      desc: '信息块1',
+      desc: '孕妇个人基本信息1',
       children: [
         {
-          id: 'username',
+          id: 'name',
           label: '姓名',
           type: 'text-input',
           charactertype: 'text',
@@ -44,29 +43,92 @@ export const basic = {
           placeholder: '请输入您的姓名',
         },
         {
-          id: 'mobilephone',
+          id: 'telephone',
           label: '手机号码',
           type: 'text-input',
           charactertype: 'phone',
           required: true,
         },
         {
-          id: 'usermcno',
+          id: 'workPhone',
+          label: '固话',
+          type: 'text-input',
+          charactertype: 'text',
+          required: true,
+        },
+        {
+          id: 'cardNO',
           label: '就诊卡号',
+          type: 'text-input',
+          charactertype: 'text',
+          required: true,
+        },
+        {
+          id: 'zhunshengNO',
+          label: '准生证号',
+          type: 'text-input',
+          charactertype: 'text',
+          required: true,
+        },
+      ],
+    },
+    {
+      id: 'part-2',
+      desc: '孕妇个人基本信息2',
+      children: [
+        {
+          id: 'idType',
+          label: '证件类型',
+          type: 'picker',
+          required: true,
+          data: IDType
+        },
+        {
+          id: 'idNO',
+          label: '证件号码',
+          type: 'text-input',
+          charactertype: 'text',
+          required: true,
+        },
+        {
+          id: 'bob',
+          label: '生日',
+          type: 'date-picker',
+          required: true,
+          mode: 'date', // 日期date,时间time,日期+时间datetime,年year,月month
+          format: 'YYYY-MM-DD'
+        },
+        {
+          id: 'age',
+          label: '年龄',
           type: 'text-input',
           charactertype: 'number',
           required: true,
         },
         {
-          id: 'yunci',
-          label: '孕次',
-          type: 'stepper-input',
+          id: 'nationality',
+          label: '国籍',
+          type: 'text-input',
+          charactertype: 'text',
           required: true,
-          min: 0,
-          max: 10,
         },
         {
-          id: 'profession',
+          id: 'nativeplace',
+          label: '籍贯',
+          type: 'picker',
+          addressPicker: true,
+          required: true,
+          cols: 2,
+        },
+        {
+          id: 'ethnic',
+          label: '民族',
+          type: 'picker',
+          required: true,
+          data: IDType
+        },
+        {
+          id: 'occupation',
           label: '职业',
           type: 'picker',
           required: true,
@@ -74,31 +136,239 @@ export const basic = {
           data: profession
         },
         {
-          id: 'fmsj',
-          label: '分娩时间',
+          id: 'maritalStatus',
+          label: '婚姻状态',
+          type: 'radio-picker',
+          required: true,
+          data: maritalstatus
+        },
+      ]
+    },
+    {
+      id: 'part-3',
+      desc: '伴侣基本信息',
+      children: [
+        {
+          id: 'partnerName',
+          label: '男方姓名',
+          type: 'text-input',
+          charactertype: 'text',
+          required: true,
+        },
+        {
+          id: 'partnerTelephone',
+          label: '男方电话',
+          type: 'text-input',
+          charactertype: 'phone',
+          required: false,
+        },
+        {
+          id: 'partnerIdType',
+          label: '男方证件类型',
+          type: 'picker',
+          required: true,
+          data: IDType
+        },
+        {
+          id: 'partnerIdNO',
+          label: '男方证件号码',
+          type: 'text-input',
+          charactertype: 'text',
+          required: true,
+        },
+        {
+          id: 'partnerDob',
+          label: '男方生日',
+          type: 'date-picker',
+          required: true,
+          mode: 'date',
+          format: 'YYYY-MM-DD'
+        },
+        {
+          id: 'partnerAage',
+          label: '男方年龄',
+          type: 'text-input',
+          charactertype: 'number',
+          required: true,
+        },
+        {
+          id: 'partnerNationality',
+          label: '男方国籍',
+          type: 'text-input',
+          charactertype: 'text',
+          required: true,
+        },
+        {
+          id: 'partnerNativeplace',
+          label: '男方籍贯',
+          type: 'picker',
+          addressPicker: true,
+          required: true,
+          cols: 2,
+        },
+        {
+          id: 'partnerEthnic',
+          label: '男方民族',
+          type: 'picker',
+          required: true,
+          data: IDType
+        },
+        {
+          id: 'partnerOccupation',
+          label: '男方职业',
+          type: 'picker',
+          required: true,
+          cols: 1,
+          data: profession
+        },
+      ]
+    },
+    {
+      id: 'part-4',
+      desc: '地址信息',
+      children: [
+        {
+          id: 'registeredAddress',
+          label: '户口地址',
+          type: 'address-picker',
+          required: true,
+        },
+        {
+          id: 'registeredAddressDetail',
+          label: '详细户口地址',
+          type: 'textarea-input',
+          required: true,
+        },
+        {
+          id: 'residenceAddress',
+          label: '居住地址',
+          type: 'address-picker',
+          required: true,
+        },
+        {
+          id: 'residenceAddressDetail',
+          label: '详细居住地址',
+          type: 'textarea-input',
+          required: true,
+        },
+        {
+          id: 'postpartumAddress',
+          label: '产休地址',
+          type: 'textarea-input',
+          required: true,
+        },
+      ]
+    },
+  ],
+};
+
+export const pregnancy = {
+  description: '本孕信息',
+  data: [
+    {
+      id: 'part-1',
+      desc: '信息块1',
+      children: [
+        {
+          id: 'gravidity',
+          label: '孕次',
+          type: 'stepper-input',
+          required: true,
+          min: 0,
+          max: 10,
+        },
+        {
+          id: 'parity',
+          label: '产次',
+          type: 'stepper-input',
+          required: true,
+          min: 0,
+          max: 10,
+        },
+        {
+          id: 'lmp',
+          label: '末次月经',
           type: 'date-picker',
           required: true,
           mode: 'date', // 日期date,时间time,日期+时间datetime,年year,月month
           format: 'YYYY-MM-DD'
         },
         {
-          id: 'remind',
-          label: '开启消息提醒',
-          type: 'switch',
+          id: 'gestationalWeek',
+          label: '孕周',
+          type: 'text-input',
+          charactertype: 'text',
           required: true,
         },
         {
-          id: 'status',
-          label: '婚姻状态',
-          type: 'radio',
+          id: 'edd',
+          label: '预产期',
+          type: 'date-picker',
           required: true,
-          data: status
+          mode: 'date',
+          format: 'YYYY-MM-DD'
         },
-      ],
+        {
+          id: 'sureEdd',
+          label: '修订预产期',
+          type: 'date-picker',
+          required: true,
+          mode: 'date',
+          format: 'YYYY-MM-DD'
+        },
+      ]
     },
     {
-      id: 'part-2',
-      desc: '信息块2',
+      id: 'part-1',
+      desc: '信息块1',
+      children: [
+        {
+          id: 'pregnancyWeight',
+          label: '孕前体重',
+          type: 'text-input',
+          charactertype: 'number',
+          required: true,
+        },
+        {
+          id: 'weight',
+          label: '现在体重',
+          type: 'text-input',
+          charactertype: 'number',
+          required: true,
+        },
+        {
+          id: 'height',
+          label: '身高',
+          type: 'text-input',
+          charactertype: 'number',
+          required: true,
+        },
+        {
+          id: 'systolicPressure',
+          label: '收缩压',
+          type: 'text-input',
+          charactertype: 'number',
+          required: true,
+        },
+        {
+          id: ' diastolicPressure',
+          label: '舒张压',
+          type: 'text-input',
+          charactertype: 'number',
+          required: true,
+        },
+        {
+          id: 'pulse',
+          label: '脉搏',
+          type: 'text-input',
+          charactertype: 'number',
+          required: true,
+        },
+      ]
+    },
+    {
+      id: 'part-1',
+      desc: '信息块1',
       children: [
         {
           id: 'jibingshi1',
@@ -107,7 +377,6 @@ export const basic = {
           multiple: true,
           required: true,
           data: illness,
-          // value: ['死胎', '死产', '其他疾病史一',]
         },
         {
           id: 'jibingshi2',
@@ -115,14 +384,12 @@ export const basic = {
           type: 'mix-picker',
           required: true,
           data: illness,
-          // value: ['死胎', '其他疾病史二',]
         },
         {
           id: 'address',
           label: '居住地址',
           type: 'address-picker',
           required: true,
-          // 街道数据库太大，暂时不用
         },
         {
           id: 'address1',
@@ -139,38 +406,20 @@ export const basic = {
           addressPicker: true,
           required: true,
           cols: 2,
-        },
-        {
-          id: 'detailAddress',
-          label: '详细居住地址',
-          type: 'textarea-input',
-          required: true,
-        },
+        }
       ]
     },
     {
-      id: 'part-3',
-      desc: '信息块3',
+      id: 'part-2',
+      desc: '信息块2',
       children: [
         {
-          id: 'husername',
-          label: '男方姓名',
-          type: 'text-input',
-          charactertype: 'text',
+          id: 'remind',
+          label: '开启消息提醒',
+          type: 'switch',
           required: true,
         },
-        {
-          id: 'htelephone',
-          label: '男方电话',
-          type: 'text-input',
-          charactertype: 'number',
-          required: false,
-        }
       ],
     },
-  ],
-};
-
-export const pregnancy = {
-
+  ]
 };
