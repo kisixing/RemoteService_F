@@ -32,4 +32,4 @@ function RadioGroup({ data, value, onChange, error }: any) {
   );
 }
 
-export default RadioGroup
+export default RadioGroup;

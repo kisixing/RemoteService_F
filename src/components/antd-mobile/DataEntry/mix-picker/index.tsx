@@ -19,7 +19,7 @@ const CustomItem = (props: any) => {
             color: props.extra && props.extra.includes('请') ? '#bbb' : '#000',
           }}
         >
-          {typeof props.extra === 'object' ? props.extra.join(',') : props.extra}
+          {typeof props.extra === 'object' ? props.extra.filter(e => !!e).join(',') : props.extra}
         </span>
       }
       onClick={props.onClick}
@@ -40,14 +40,14 @@ interface IProps {
 }
 
 function MixPicker(
-  { required, children, data, value = [], placeholder, onChange, multiple }: IProps,
+  { required, children, data, value, placeholder, onChange, multiple }: IProps,
   ref: any,
 ) {
   const [visible, setVisible] = useState(false);
   const [cacheValue, setCacheValue] = useState(value);
 
   useEffect(() => {
-    setCacheValue(value);
+    setCacheValue(value || []);
   }, [])
 
   const onOk = () => {

@@ -4,16 +4,143 @@
  * @Description:
  */
 
-// 普通数组转对象数组 如['国家公务员'] --> [{ label: '国家公务员', value: '国家公务员' }]
-const arrayToObject = (data: string[]) => {
-  return { label: data, value: data };
-}
+let citys = {
+  11: '北京',
+  12: '天津',
+  13: '河北',
+  14: '山西',
+  15: '内蒙古',
+  21: '辽宁',
+  22: '吉林',
+  23: '黑龙江',
+  31: '上海',
+  32: '江苏',
+  33: '浙江',
+  34: '安徽',
+  35: '福建',
+  36: '江西',
+  37: '山东',
+  41: '河南',
+  42: '湖北',
+  43: '湖南',
+  44: '广东',
+  45: '广西',
+  46: '海南',
+  50: '重庆',
+  51: '四川',
+  52: '贵州',
+  53: '云南',
+  54: '西藏',
+  61: '陕西',
+  62: '甘肃',
+  63: '青海',
+  64: '宁夏',
+  65: '新疆',
+  71: '台湾',
+  81: '香港',
+  82: '澳门',
+  91: '国外',
+};
+citys = Object.values(citys).map(e => ({ label: e, value: e }));
+
+// 民族
+const ethnics = [
+  '汉族',
+  '壮族',
+  '回族',
+  '满族',
+  '土家族',
+  '瑶族',
+  '苗族',
+  '侗族',
+  '畲族',
+  '蒙古族',
+  '藏族',
+  '维吾尔族',
+  '彝族',
+  '布依族',
+  '朝鲜族',
+  '白族',
+  '哈尼族',
+  '哈萨克族',
+  '傣族',
+  '黎族',
+  '傈僳族',
+  '佤族',
+  '高山族',
+  '拉祜族',
+  '水族',
+  '东乡族',
+  '纳西族',
+  '景颇族',
+  '柯尔克孜族',
+  '土族',
+  '达斡尔族',
+  '仫佬族',
+  '羌族',
+  '布朗族',
+  '撒拉族',
+  '毛南族',
+  '仡佬族',
+  '锡伯族',
+  '阿昌族',
+  '普米族',
+  '塔吉克族',
+  '怒族',
+  '乌孜别克族',
+  '俄罗斯族',
+  '鄂温克族',
+  '德昂族',
+  '保安族',
+  '裕固族',
+  '京族',
+  '塔塔尔族',
+  '独龙族',
+  '鄂伦春族',
+  '赫哲族',
+  '门巴族',
+  '珞巴族',
+  '基诺族',
+  '其他',
+].map(e => ({ label: e, value: e }));;
 
 // 职业种类
-const profession = arrayToObject(['国家公务员', '专业技术人员', '企业管理人员', '自由职业者', '工人', '现役军人', '个体经营者', '职员', '农民', '学生', '退（离）休人员', '其他']);
+const profession = [
+  '国家公务员',
+  '专业技术人员',
+  '企业管理人员',
+  '自由职业者',
+  '工人',
+  '现役军人',
+  '个体经营者',
+  '职员',
+  '农民',
+  '学生',
+  '退（离）休人员',
+  '其他',
+].map(e => ({ label: e, value: e }));
 
 // 婚姻状态
-const maritalstatus = arrayToObject(['已婚', '未婚', '离异', '丧偶']);
+const maritalstatus = ['已婚', '未婚', '离异', '丧偶'].map(e => ({ label: e, value: e }));
+
+const illness = [
+  '无',
+  '妊娠糖尿病',
+  '糖尿病',
+  '高血压',
+  '甲亢',
+  'G6PD',
+  '肝炎',
+  '肺结核',
+  '肾炎',
+  '风湿',
+  '贫血',
+  '地中海贫血',
+  '癫痫',
+  '心脏病',
+  '肝脏疾病',
+  '肾脏疾病',
+];
 
 // 证件类型
 const IDType = [
@@ -24,8 +151,6 @@ const IDType = [
   { label: '护照', value: '1'},
   { label: '其他', value: '5' },
 ];
-
-const illness = ['无', '异位妊娠', '葡萄糖等滋养细胞疾病', '胚胎停育', '胎儿畸形', '死胎', '死产', '不清楚'];
 
 export const basic = {
   description: '基本信息',
@@ -81,6 +206,7 @@ export const basic = {
           label: '证件类型',
           type: 'picker',
           required: true,
+          cols: 1,
           data: IDType
         },
         {
@@ -92,7 +218,7 @@ export const basic = {
         },
         {
           id: 'bob',
-          label: '生日',
+          label: '出生日期',
           type: 'date-picker',
           required: true,
           mode: 'date', // 日期date,时间time,日期+时间datetime,年year,月month
@@ -125,7 +251,8 @@ export const basic = {
           label: '民族',
           type: 'picker',
           required: true,
-          data: IDType
+          data: ethnics,
+          cols: 1
         },
         {
           id: 'occupation',
@@ -138,9 +265,9 @@ export const basic = {
         {
           id: 'maritalStatus',
           label: '婚姻状态',
-          type: 'radio-picker',
+          type: 'radio',
           required: true,
-          data: maritalstatus
+          data: maritalstatus,
         },
       ]
     },
@@ -150,35 +277,36 @@ export const basic = {
       children: [
         {
           id: 'partnerName',
-          label: '男方姓名',
+          label: '伴侣姓名',
           type: 'text-input',
           charactertype: 'text',
           required: true,
         },
         {
           id: 'partnerTelephone',
-          label: '男方电话',
+          label: '伴侣电话',
           type: 'text-input',
           charactertype: 'phone',
-          required: false,
+          required: true,
         },
         {
           id: 'partnerIdType',
-          label: '男方证件类型',
+          label: '伴侣证件类型',
           type: 'picker',
           required: true,
+          cols:1,
           data: IDType
         },
         {
           id: 'partnerIdNO',
-          label: '男方证件号码',
+          label: '伴侣证件号码',
           type: 'text-input',
           charactertype: 'text',
           required: true,
         },
         {
           id: 'partnerDob',
-          label: '男方生日',
+          label: '伴侣出生日期',
           type: 'date-picker',
           required: true,
           mode: 'date',
@@ -186,21 +314,21 @@ export const basic = {
         },
         {
           id: 'partnerAage',
-          label: '男方年龄',
+          label: '伴侣年龄',
           type: 'text-input',
           charactertype: 'number',
           required: true,
         },
         {
           id: 'partnerNationality',
-          label: '男方国籍',
+          label: '伴侣国籍',
           type: 'text-input',
           charactertype: 'text',
           required: true,
         },
         {
           id: 'partnerNativeplace',
-          label: '男方籍贯',
+          label: '伴侣籍贯',
           type: 'picker',
           addressPicker: true,
           required: true,
@@ -208,14 +336,15 @@ export const basic = {
         },
         {
           id: 'partnerEthnic',
-          label: '男方民族',
+          label: '伴侣民族',
           type: 'picker',
           required: true,
-          data: IDType
+          cols: 1,
+          data: ethnics
         },
         {
           id: 'partnerOccupation',
-          label: '男方职业',
+          label: '伴侣职业',
           type: 'picker',
           required: true,
           cols: 1,
@@ -235,7 +364,7 @@ export const basic = {
         },
         {
           id: 'registeredAddressDetail',
-          label: '详细户口地址',
+          label: '户口详细地址',
           type: 'textarea-input',
           required: true,
         },
@@ -247,7 +376,7 @@ export const basic = {
         },
         {
           id: 'residenceAddressDetail',
-          label: '详细居住地址',
+          label: '居住详细地址',
           type: 'textarea-input',
           required: true,
         },
@@ -263,163 +392,322 @@ export const basic = {
 };
 
 export const pregnancy = {
-  description: '本孕信息',
-  data: [
-    {
-      id: 'part-1',
-      desc: '信息块1',
-      children: [
-        {
-          id: 'gravidity',
-          label: '孕次',
-          type: 'stepper-input',
-          required: true,
-          min: 0,
-          max: 10,
-        },
-        {
-          id: 'parity',
-          label: '产次',
-          type: 'stepper-input',
-          required: true,
-          min: 0,
-          max: 10,
-        },
-        {
-          id: 'lmp',
-          label: '末次月经',
-          type: 'date-picker',
-          required: true,
-          mode: 'date', // 日期date,时间time,日期+时间datetime,年year,月month
-          format: 'YYYY-MM-DD'
-        },
-        {
-          id: 'gestationalWeek',
-          label: '孕周',
-          type: 'text-input',
-          charactertype: 'text',
-          required: true,
-        },
-        {
-          id: 'edd',
-          label: '预产期',
-          type: 'date-picker',
-          required: true,
-          mode: 'date',
-          format: 'YYYY-MM-DD'
-        },
-        {
-          id: 'sureEdd',
-          label: '修订预产期',
-          type: 'date-picker',
-          required: true,
-          mode: 'date',
-          format: 'YYYY-MM-DD'
-        },
-      ]
-    },
-    {
-      id: 'part-1',
-      desc: '信息块1',
-      children: [
-        {
-          id: 'pregnancyWeight',
-          label: '孕前体重',
-          type: 'text-input',
-          charactertype: 'number',
-          required: true,
-        },
-        {
-          id: 'weight',
-          label: '现在体重',
-          type: 'text-input',
-          charactertype: 'number',
-          required: true,
-        },
-        {
-          id: 'height',
-          label: '身高',
-          type: 'text-input',
-          charactertype: 'number',
-          required: true,
-        },
-        {
-          id: 'systolicPressure',
-          label: '收缩压',
-          type: 'text-input',
-          charactertype: 'number',
-          required: true,
-        },
-        {
-          id: ' diastolicPressure',
-          label: '舒张压',
-          type: 'text-input',
-          charactertype: 'number',
-          required: true,
-        },
-        {
-          id: 'pulse',
-          label: '脉搏',
-          type: 'text-input',
-          charactertype: 'number',
-          required: true,
-        },
-      ]
-    },
-    {
-      id: 'part-1',
-      desc: '信息块1',
-      children: [
-        {
-          id: 'jibingshi1',
-          label: '疾病史一',
-          type: 'mix-picker',
-          multiple: true,
-          required: true,
-          data: illness,
-        },
-        {
-          id: 'jibingshi2',
-          label: '疾病史二',
-          type: 'mix-picker',
-          required: true,
-          data: illness,
-        },
-        {
-          id: 'address',
-          label: '居住地址',
-          type: 'address-picker',
-          required: true,
-        },
-        {
-          id: 'address1',
-          label: '省市区',
-          type: 'picker',
-          addressPicker: true,
-          required: true,
-          cols: 3,
-        },
-        {
-          id: 'address2',
-          label: '省市',
-          type: 'picker',
-          addressPicker: true,
-          required: true,
-          cols: 2,
-        }
-      ]
-    },
-    {
-      id: 'part-2',
-      desc: '信息块2',
-      children: [
-        {
-          id: 'remind',
-          label: '开启消息提醒',
-          type: 'switch',
-          required: true,
-        },
-      ],
-    },
-  ]
-};
+         description: '本孕信息',
+         data: [
+           {
+             id: 'part-1',
+             desc: '信息块1',
+             children: [
+               {
+                 id: 'gravidity',
+                 label: '孕次',
+                 type: 'stepper-input',
+                 required: true,
+                 min: 0,
+                 max: 10,
+               },
+               {
+                 id: 'parity',
+                 label: '产次',
+                 type: 'stepper-input',
+                 required: true,
+                 min: 0,
+                 max: 10,
+               },
+             ],
+           },
+           {
+             id: 'part-2',
+             desc: '信息块2',
+             children: [
+               {
+                 id: 'lmp',
+                 label: '末次月经',
+                 type: 'date-picker',
+                 required: true,
+                 mode: 'date', // 日期date,时间time,日期+时间datetime,年year,月month
+                 format: 'YYYY-MM-DD',
+               },
+               {
+                 id: 'gestationalWeek',
+                 label: '孕周',
+                 type: 'text-input',
+                 charactertype: 'text',
+                 required: true,
+               },
+               {
+                 id: 'edd',
+                 label: '预产期',
+                 type: 'date-picker',
+                 required: true,
+                 mode: 'date',
+                 format: 'YYYY-MM-DD',
+               },
+               {
+                 id: 'sureEdd',
+                 label: '修订预产期',
+                 type: 'date-picker',
+                 required: true,
+                 mode: 'date',
+                 format: 'YYYY-MM-DD',
+               },
+             ],
+           },
+           {
+             id: 'part-3',
+             desc: '信息块3',
+             children: [
+               {
+                 id: 'pregnancyWeight',
+                 label: '孕前体重',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+               {
+                 id: 'weight',
+                 label: '现在体重',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+               {
+                 id: 'height',
+                 label: '身高',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+               {
+                 id: 'systolicPressure',
+                 label: '收缩压',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+               {
+                 id: ' diastolicPressure',
+                 label: '舒张压',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+               {
+                 id: 'pulse',
+                 label: '脉搏',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+             ],
+           },
+           {
+             id: 'part-4',
+             desc: '信息块4',
+             children: [
+               {
+                 id: 'yjcuch',
+                 label: '初潮',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+               {
+                 id: 'yjzhouq',
+                 label: '月经周期',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+               {
+                 id: 'yjchix',
+                 label: '月经持续天数',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+               {
+                 id: 'yjjingl',
+                 label: '经量多少',
+                 type: 'radio',
+                 required: true,
+                 data: ['多', '中', '少'].map(e => ({ label: e, value: e })),
+               },
+               {
+                 id: 'yjtongj',
+                 label: '是否痛经',
+                 type: 'radio',
+                 required: true,
+                 data: ['经常', '偶尔', '无'].map(e => ({ label: e, value: e })),
+               },
+               {
+                 id: 'cigarette',
+                 label: '嗜好-烟',
+                 unit: '支/天',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+               {
+                 id: 'liquor',
+                 label: '嗜好-酒',
+                 type: 'mix-picker',
+                 multiple: true,
+                 required: true,
+                 data: ['无', '白酒', '啤酒', '葡萄酒', '药酒'],
+               },
+               {
+                 id: 'liquorCapacity',
+                 label: '饮酒量',
+                 unit: 'ml/天',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+             ],
+           },
+           {
+             id: 'part-5',
+             desc: '信息块5',
+             children: [
+               {
+                 id: 'maritalYears',
+                 label: '结婚年龄',
+                 unit: '岁',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+               {
+                 id: 'nearRelation',
+                 label: '是否近亲',
+                 type: 'radio',
+                 required: true,
+                 data: ['是', '否'].map(e => ({ label: e, value: e })),
+               },
+               {
+                 id: 'partnerCigarette',
+                 label: '伴侣嗜好-烟',
+                 unit: '支/天',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+               {
+                 id: 'partnerLiquor',
+                 label: '伴侣嗜好-酒',
+                 type: 'mix-picker',
+                 multiple: true,
+                 required: true,
+                 data: ['无', '白酒', '啤酒', '葡萄酒', '药酒'],
+               },
+               {
+                 id: 'partnerLiquorCapacity',
+                 label: '伴侣饮酒量',
+                 unit: 'ml/天',
+                 type: 'text-input',
+                 charactertype: 'number',
+                 required: true,
+               },
+               {
+                 id: 'partnerDiseaseHistory',
+                 label: '伴侣疾病史',
+                 type: 'mix-picker',
+                 multiple: true,
+                 required: true,
+                 data: [
+                   '无',
+                   '高血压',
+                   '糖尿病',
+                   '心脏病',
+                   '肝脏疾病',
+                   '肾脏疾病',
+                   '脑梗',
+                   '脑出血',
+                   '癌症',
+                   '哮喘',
+                   '肺结核',
+                   '甲亢',
+                   '过敏性疾病',
+                   '癫痫病',
+                   '风湿',
+                   '贫血',
+                   '地中海贫血',
+                   '癫痫',
+                   '近视',
+                 ],
+               },
+             ],
+           },
+           {
+             id: 'part-6',
+             desc: 'part-6',
+             children: [
+               {
+                 id: 'diseaseHistory',
+                 label: '疾病史',
+                 type: 'mix-picker',
+                 multiple: true,
+                 required: true,
+                 data: [
+                   '无',
+                   '妊娠糖尿病',
+                   'G6PD',
+                   '高血压',
+                   '糖尿病',
+                   '心脏病',
+                   '肝脏疾病',
+                   '肾脏疾病',
+                   '脑梗',
+                   '脑出血',
+                   '癌症',
+                   '哮喘',
+                   '肺结核',
+                   '甲亢',
+                   '过敏性疾病',
+                   '癫痫病',
+                   '风湿',
+                   '贫血',
+                   '地中海贫血',
+                   '癫痫',
+                   '近视',
+                 ],
+               },
+               {
+                 id: 'allergyHistory',
+                 label: '过敏史',
+                 type: 'mix-picker',
+                 multiple: true,
+                 required: true,
+                 data: ['无', '青霉素', '头孢', '磺胺类', '酒精', '食物过敏'],
+               },
+               {
+                 id: 'familyHistory',
+                 label: '家庭病史',
+                 type: 'mix-picker',
+                 multiple: true,
+                 required: true,
+                 data: [
+                   '无',
+                   '双胎',
+                   '死胎',
+                   '死产',
+                   '畸形',
+                   '遗传病',
+                   '精神病',
+                   '痴呆',
+                   '先天智力低下',
+                   '肿瘤',
+                   '糖尿病',
+                   '高血压',
+                   '高血脂',
+                   '肝炎',
+                   '甲亢',
+                   'G6PD',
+                   '肺结咳',
+                 ],
+               }
+             ],
+           }
+         ],
+       };

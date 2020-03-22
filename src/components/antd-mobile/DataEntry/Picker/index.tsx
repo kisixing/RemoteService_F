@@ -13,12 +13,16 @@ interface IProps extends PickerPropsType {
   pickerType?: any
 }
 
-const CustomItem = props => (
+const CustomItem = (props: any) => (
   <List.Item
+    className={styles.customList}
     arrow={props.arrow}
     extra={
       <span
-        style={{ fontSize: '0.3rem', color: props.extra && props.extra.includes('请') ? '#bbb' : '#000' }}
+        style={{
+          fontSize: '0.3rem',
+          color: props.extra && props.extra.includes('请') ? '#bbb' : '#000',
+        }}
       >
         {props.extra}
       </span>

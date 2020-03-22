@@ -21,7 +21,9 @@ function PackagePay(props: any) {
   const [agree, setAgree] = useState(false);
 
   useEffect(() => {
-    setPayment('wechat');
+    if (isWeixn) {
+      setPayment('wechat');
+    }
   }, []);
 
   const onChange = (e: any) => {
@@ -102,7 +104,7 @@ function PackagePay(props: any) {
           <span>周一至周五：</span>
           <div className={styles.interval}>
             <div>08:00 - 09:00 上午</div>
-            <div>08:00 - 09:00 下午</div>
+            <div>16:00 - 17:00 下午</div>
           </div>
         </div>
       </div>

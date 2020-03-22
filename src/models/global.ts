@@ -6,10 +6,13 @@ import { mpauth, getPregnancy } from '@/services/user';
 
 
 export interface GlobalModelState {
-  locale?: string
-  mpuid?: string
-  currentUser?: any
-  currentPregnancy?: any
+  locale?: string;
+  mpuid?: string;
+  currentUser?: any;
+  currentPregnancy?: {
+    id?: string | number;
+    [propName: string]: any;
+  };
 }
 
 export interface GlobalModelType {
@@ -34,7 +37,7 @@ const GlobalModel: GlobalModelType = {
     locale: 'cn', // cn/en
     mpuid: '',
     currentUser: {},
-    currentPregnancy: { id: 4103 },
+    currentPregnancy: {},
   },
 
   effects: {

@@ -53,10 +53,26 @@
 
 .form {
   min-height: 7.5rem;
-  padding-top: 0 0.15rem .15rem;
-  padding-bottom: 0.15rem;
+
+  & > div:not(:last-child) {
+    margin-bottom: 0.2rem;
+  }
 }
 
 .buttonView {
   padding: 0 .3rem .3rem .3rem;
+}
+
+.empty {
+  padding: .3rem;
+  color: #666;
+  font-size: .3rem;
+  text-align: center;
+}
+
+.addButton {
+  position: fixed;
+  right: .3rem;
+  bottom: .3rem;
+  width: 0.94rem;
 }

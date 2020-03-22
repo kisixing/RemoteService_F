@@ -6,7 +6,7 @@
  */
 
 
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useState, useEffect } from 'react';
 import { List, Toast } from 'antd-mobile';
 import { PickerPropsType } from 'antd-mobile/es/picker/PropsType';
 import Picker from '../picker';
@@ -24,23 +24,31 @@ interface IProps extends PickerPropsType {
   children?: React.ReactNode
   placeholder?: string
   onChange?: any
+  value?: string[]
 }
 
-function AddressPicker({ required, children, placeholder, onChange, ...rest }: IProps, ref: any) {
+function AddressPicker({ required, children, placeholder, onChange, value = [], ...rest }: IProps, ref: any) {
   const [ssq, setSSQ] = useState([])
   const [zc, setZC] = useState([]);
   const [streetOptions, setStreetOptions] = useState([]);
 
+  useEffect(() => {
+    if (Array.isArray(value)) {
+      setSSQ(value.slice(0, 3));
+      setZC(value.slice(3));
+    }
+  }, [])
+
   const handleSSQ = (val: any) => {
     setSSQ(val);
-    onChange([val, zc]);
+    onChange([...val, ...zc]);
     // 获取该地区的街道信息、村委信息
     getDistrict(val[2]);
   }
 
   const handleZC = (val: any) => {
     setZC(val);
-    onChange([ssq, val]);
+    onChange([...ssq, ...val]);
   };
 
   const getDistrict = (area: string) => {

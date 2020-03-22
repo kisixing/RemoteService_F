@@ -37,13 +37,6 @@ function Home(props: IProps) {
   const { dispatch, currentPregnancy, news, loading } = props;
 
   useEffect(() => {
-    if (!currentPregnancy.name) {
-      // TODO 后续取消
-      dispatch({
-        type: 'global/getPregnancy',
-        payload: currentPregnancy.id,
-      });
-    }
     dispatch({
       type: 'news/getPersonNews',
       payload: {

@@ -25,6 +25,36 @@
   }
 }
 
+.stepperItem {
+  width: 100% !important;
+  height: 0.44rem !important;
+  line-height: 0.44rem !important;
+
+  :global {
+    .am-stepper-handler {
+      width: 0.36rem;
+      height: 0.36rem;
+      line-height: 0.36rem;
+      border-width: 2PX;
+      border-color: #999;;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .am-icon {
+        width: 0.24rem;
+        height: 0.24rem;
+        color: #999;
+      }
+    }
+
+    .am-stepper-input-wrap {
+      height: 100%;
+      line-height: 1.5;
+    }
+  }
+}
+
 .popup {
   :global {
     .rmc-picker-popup-item {

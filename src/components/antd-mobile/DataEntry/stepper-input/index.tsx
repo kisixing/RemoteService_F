@@ -19,7 +19,7 @@ function StepperInput(
       extra={
         <Stepper
           ref={ref}
-          style={{ width: '100%' }}
+          className={styles.stepperItem}
           showNumber
           value={value}
           onChange={onChange}

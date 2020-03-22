@@ -12,6 +12,7 @@ interface IProps extends PropsType  {
 
 const CustomItem = props => (
   <List.Item
+    className={styles.customList}
     arrow={props.arrow}
     extra={
       <span
