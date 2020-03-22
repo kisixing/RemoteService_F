@@ -32,11 +32,8 @@ function TemperatureRecord(props: {userid: number}) {
   const [hChart, tChart] = [useRef(null), useRef(null)];
   // 历史记录chart，todayChart
   let chartH,chartT;
-
   const [listData, setListData] = useState([]);
-
-
-
+  const [isHistory, setIsHistory] = useState(true);
   let chartOptions = {
     type: 'line',
     data: {
@@ -221,26 +218,21 @@ function TemperatureRecord(props: {userid: number}) {
     });
   },[]);
 
-  const tab = [
-    {title: '历史记录'},
-    {title: '当天记录'}
-  ]
+
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
- 
+      <div className={styles['canvas-block']}>
+        <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.switch}>
+          {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+        </div>
+          <div className={styles.canvas} style={{display: isHistory ? "block" : "none"}}>
+            <canvas ref={hChart}/>
+          </div>
+          <div className={styles.canvas} style={{display: isHistory ? "none" : "block"}}>
+            <canvas ref={tChart}/>
+          </div>
       </div>
-      <Tabs
-        tabs={tab}
-      >
-        <div className={styles.canvas}>
-          <canvas ref={hChart}></canvas>
-        </div>
-        <div className={styles.canvas}>
-          <canvas ref={tChart}></canvas>
-        </div>
-      </Tabs>
       <div>
         {listData.map((item: ServiceDataItem) => (
           <div className={styles.card} key={item.id}>

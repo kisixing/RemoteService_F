@@ -33,14 +33,15 @@ function BloodPressureInput(props: {userid: number}) {
     if (!diastolic || !systolic) {
       return Toast.info('请输入血压数值...');
     }
-    // if (!heartRate) {
-    //   return Toast.info('请输入心率数值...');
-    // }
+    if (!heartRate) {
+      return Toast.info('请输入心率数值...');
+    }
     setBloodPressures({
       systolic: Number(systolic),
       diastolic: Number(diastolic),
       timestamp: d,
-      pregnancy: {id: props.userid}
+      pregnancy: {id: props.userid},
+      pulserate: Number(heartRate)
     }).then((r:any) => {
       console.log(r);
       if(r.response.status >= 200 && r.response.status < 300){
@@ -54,8 +55,8 @@ function BloodPressureInput(props: {userid: number}) {
         mode="datetime"
         title="选择日期"
         extra="请选择日期"
-        // minDate={minDate}
-        // maxDate={maxDate}
+        minDate={minDate}
+        maxDate={maxDate}
         value={date}
         onChange={date => setDate(date)}
       />

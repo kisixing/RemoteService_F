@@ -6,7 +6,6 @@
 
 import React,{ useRef, useState, useEffect } from 'react'
 import Chart from 'chart.js';
-import { Tabs } from 'antd-mobile';
 import { PERIOD_CODE } from './config';
 import { getBloodGlucose } from '@/services/tools';
 import { connect } from 'dva';
@@ -15,7 +14,7 @@ import { sortDate } from '@/utils/utils';
 import moment from 'moment';
 
 import styles from './Record.less';
-import options from '@/components/antd-mobile/dataEntry/address-picker/cascader-address-options';
+
 
 interface ServiceDataItem {
   id:number,
@@ -47,7 +46,7 @@ function BloodGlucoseRecord(props: {userid: number}) {
   let chartH,chartT;
 
   const [listData,setListData] = useState([]);
-  
+  const [isHistory, setIsHistory] = useState(true);
   
   /* =========================  历史 ====================================== */
   let hChartOptions = {
@@ -205,6 +204,7 @@ function BloodGlucoseRecord(props: {userid: number}) {
   }
 
   const newChart = (data: Array<ServiceDataItem>) => {
+    console.log('a');
     try{
       //@ts-ignore
       const ctx = hChart.current.getContext('2d');
@@ -227,22 +227,24 @@ function BloodGlucoseRecord(props: {userid: number}) {
     })
   },[]);
 
-  const tab = [
-    {title: '历史记录'},
-    {title: '当天记录'}
-  ]
-  console.log(listData);
   return (
     <div className={styles.container}>
-      <Tabs tabs={tab}>
-        <div className={styles.canvas}>
-            <canvas ref={hChart}></canvas>
+      <div className={styles['canvas-block']}>
+
+        <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.switch}>
+          {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
         </div>
-        <div className={styles.canvas}>
-          <canvas ref={tChart}></canvas>
-        </div>
-      </Tabs>
-      <div>
+
+          <div className={styles.canvas} style={{display: isHistory ? "block" : "none"}}>
+            <canvas ref={hChart}/>
+          </div>
+
+          <div className={styles.canvas} style={{display: isHistory ? "none" : "block"}}>
+            <canvas ref={tChart}/>
+          </div>
+
+      </div>
+
         {listData.map((item: ServiceDataItem) => (
             <div className={styles.card} key={item.id}>
               <div className={styles.header}>
@@ -263,7 +265,7 @@ function BloodGlucoseRecord(props: {userid: number}) {
               </div>
             </div>
           ))}
-      </div>
+
     </div>
   )
 }

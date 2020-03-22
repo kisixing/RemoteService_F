@@ -48,6 +48,7 @@ function BloodGlucoseInput(props: {userid: number}) {
     isInsulin: null,
     quantity: undefined,
     dietaryStatus: '',
+    exercise: '',
     key: 0
   });
 
@@ -64,19 +65,23 @@ function BloodGlucoseInput(props: {userid: number}) {
     if (!current.bloodGlucose) {
       return Toast.info('请输入血糖数值...');
     }
-    // if (current.isInsulin === null || current.isInsulin === '' || current.isInsulin === undefined) {
-    //   return Toast.info('请选择是否注射胰岛素...');
-    // }
-    // if (current.isInsulin && !current.quantity) {
-    //   return Toast.info('请输入注射胰岛素量...');
-    // }
-    console.log({ d, current });
+    if (current.isInsulin === null || current.isInsulin === '' || current.isInsulin === undefined) {
+      return Toast.info('请选择是否注射胰岛素...');
+    }
+    if (current.isInsulin && !current.quantity) {
+      return Toast.info('请输入注射胰岛素量...');
+    }
     const reqData = {
       timestamp: d,
       result: Number(current.bloodGlucose),
       pregnancy:{id: props.userid},
-      period: current.key
-    }
+      period: current.key,
+      insulin: current.isInsulin,
+      insulinnote: Number(current.quantity),
+      diet: current.dietaryStatus,
+      exercise: current.exercise
+    };
+    // @ts-ignore
     setBloodGlucose(reqData).then(r => {
       if(r.response.status >=200 && r.response.status < 300){
         Toast.success('血糖信息成功');
@@ -158,7 +163,7 @@ function BloodGlucoseInput(props: {userid: number}) {
                 }
               >
                 <div className={styles.label}>
-                  {/* <span className={styles.required}>*</span> */}
+                  <span className={styles.required}>*</span>
                   注射胰岛素
                 </div>
               </List.Item>
@@ -190,6 +195,19 @@ function BloodGlucoseInput(props: {userid: number}) {
                 labelNumber={7}
                 value={current.dietaryStatus}
                 onChange={e => onChange('dietaryStatus', e)}
+              />
+              <TextareaItem
+                autoHeight
+                title={
+                  <div className={styles.label}>
+                    <span className={styles.required} />
+                    饮食情况
+                  </div>
+                }
+                placeholder="请输入运动情况，方便医生了解的情况..."
+                labelNumber={7}
+                value={current.exercise}
+                onChange={e => onChange('exercise', e)}
               />
             </List>
           </div>

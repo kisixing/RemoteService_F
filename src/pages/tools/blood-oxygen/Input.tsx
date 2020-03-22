@@ -27,14 +27,15 @@ function BloodOxygenInput(props: {userid: number}) {
     if (!bloodOxygen) {
       return Toast.info('请输入血氧数值...');
     }
-    // if (!pulseRate) {
-    //   return Toast.info('请输入脉率数值...');
-    // }
+    if (!pulseRate) {
+      return Toast.info('请输入脉率数值...');
+    }
     console.log({ d, bloodOxygen, pulseRate });
     setBloodOxygens({
       result: Number(bloodOxygen),
       timestamp: d,
-      pregnancy: {id: props.userid}
+      pregnancy: {id: props.userid},
+      pulserate: Number(pulseRate)
     }).then((r:any) => {
       if(r.response.status >= 200 && r.response.status < 300 ){
         Toast.success('血氧数据保存成功');

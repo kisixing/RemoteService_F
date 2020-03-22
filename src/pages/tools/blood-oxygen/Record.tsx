@@ -34,6 +34,7 @@ function BloodOxygenRecord(props: {userid: number}) {
   let chartH,chartT;
 
   const [listData, setListData] = useState([]);
+  const [isHistory, setIsHistory] = useState(true);
 
   let chartOptions = {
     type: 'line',
@@ -216,21 +217,22 @@ function BloodOxygenRecord(props: {userid: number}) {
     });
   }, []);
 
-  const tab = [
-    {title: '历史记录'},
-    {title: '当天记录'}
-  ]
 
   return (
     <div className={styles.container}>
-      <Tabs tabs={tab}>
-        <div className={styles.canvas}>
+      <div className={styles['canvas-block']}>
+      <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.switch}>
+          {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+        </div>
+        <div>
+          <div className={styles.canvas} style={{display: isHistory ? "block" : "none"}}>
             <canvas ref={hChart}></canvas>
           </div>
-          <div className={styles.canvas}>
+          <div className={styles.canvas} style={{display: isHistory ? "none" : "block"}}>
             <canvas ref={tChart}></canvas>
           </div>
-      </Tabs>
+        </div>
+      </div>
       <div>
         {listData.map((item: ServiceDataItem) => (
           <div className={styles.card} key={item.id}>
