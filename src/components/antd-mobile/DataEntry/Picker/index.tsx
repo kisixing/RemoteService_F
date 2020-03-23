@@ -11,6 +11,7 @@ interface IProps extends PickerPropsType {
   children?: React.ReactNode
   placeholder?: string
   pickerType?: any
+  addressPicker?: boolean
 }
 
 const CustomItem = (props: any) => (

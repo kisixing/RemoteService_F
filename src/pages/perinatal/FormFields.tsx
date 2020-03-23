@@ -31,6 +31,7 @@ function FormFields({ form, onChange, dataSource = [] }: IProps) {
     const { getFieldDecorator, getFieldError } = form;
     const { id, label, type, charactertype, hide, required, value, ...rest } = object;
     let placeholder = object.placeholder || type && type.includes('input') ? `请输入${label}` : `请选择${label}`;
+
     if (hide) {
       return null;
     }

@@ -14,9 +14,9 @@ import { getPregnancy, updatePregnancy } from '@/services/user';
 import { ConnectState } from '@/models/connect';
 import FormFields from './FormFields';
 import StepBar from './StepBar';
-import { pregnancy } from './config';
 import styles from './styles.less';
 
+const { pregnancy } = require('./config');
 const keys = getKeys(pregnancy.data);
 
 interface P {
@@ -43,6 +43,10 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
 
   componentDidMount() {
     this.initValue();
+  }
+
+  componentWillReceiveProps() {
+
   }
 
   initValue = () => {

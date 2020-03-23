@@ -7,7 +7,9 @@
     "test": "umi test",
     "lint:es": "eslint --ext .js src mock tests",
     "lint:ts": "tslint \"src/**/*.ts\" \"src/**/*.tsx\"",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "link:lianmed": "npm link @lianmed/request @lianmed/lmg @lianmed/f_types @lianmed/utils @lianmed/pages @lianmed/im react",
+    "postinstall": "yarn link:lianmed"
   },
   "dependencies": {
     "@types/node": "^13.7.2",

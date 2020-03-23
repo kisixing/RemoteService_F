@@ -64,7 +64,7 @@ class ConsultingDetails extends PureComponent<P, S> {
       Router.push({
         pathname: '/consultation/payment-page',
         query: {
-          sn: 'b',
+          IMId: '88888',
         },
       });
     });

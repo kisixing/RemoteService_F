@@ -5,9 +5,10 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { WingBlank, Radio, List } from 'antd-mobile';
+import Router from 'umi/router';
+import { Radio, List, Toast } from 'antd-mobile';
 import { IconFont, Button } from '@/components/antd-mobile';
-import { isWeixin, getPageQuery } from '@/utils/utils';
+import { isWeixin, getPageKeyValue } from '@/utils/utils';
 
 import styles from './PaymentPage.less';
 
@@ -26,6 +27,14 @@ function PaymentPage() {
   const onChange = (e: any) => {
     const { name } = e.target;
     setPayment(name);
+  };
+
+  const onSubmit = () => {
+    const IMId = getPageKeyValue('IMId');
+    if (payment === 'alipay') {
+      return Toast.info('暂不支持支付宝，请使用微信支付...');
+    }
+    Router.push(`/consultation/chat/${IMId}`);
   };
 
   return (
@@ -64,7 +73,7 @@ function PaymentPage() {
         )}
       </List>
       <div className="bottom_button">
-        <Button type="primary" disabled={!payment}>
+        <Button type="primary" disabled={!payment} onClick={onSubmit}>
           确认支付
         </Button>
       </div>

@@ -4,9 +4,9 @@ import RadioGroup from './RadioGroup';
 
 import styles from '../index.less';
 
-function RadioPicker({ required, children, ...rest }: any, ref: any) {
+function RadioPicker({ required, children, charactertype = 'string', ...rest }: any, ref: any) {
   return (
-    <List.Item ref={ref} className={styles.customList} extra={<RadioGroup {...rest} />}>
+    <List.Item ref={ref} className={styles.customList} extra={<RadioGroup charactertype={charactertype} {...rest} />}>
       <>
         {required ? <i className={styles.required}>*</i> : null}
         <span className={styles.label}>{children}</span>

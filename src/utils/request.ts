@@ -91,9 +91,9 @@ request.interceptors.request.use((url, options) => {
   options.headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json;charset=UTF-8',
-    Authorization: token,
+    Authorization: `Bearer ${token}`,
     ...options.headers,
-  }
+  };
   return ({
       url,
       options: {
@@ -114,7 +114,7 @@ request.interceptors.response.use((response, options) => {
   if (token) {
     // 修改token值
     if (token.includes('captcha')) {
-      token = token.replace(/captcha/, 'Bearer');
+      token = token.replace(/captcha /, '');
     }
     store.set('lianmp-token', token);
   }

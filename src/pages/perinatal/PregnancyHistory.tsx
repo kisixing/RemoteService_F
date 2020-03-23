@@ -28,8 +28,8 @@ class PregnancyHistory extends React.PureComponent<P, S> {
 
   componentDidMount() {
     this.setState({
-      dataSource: []
-    })
+      dataSource: [],
+    });
   }
 
   accordion = (data: any[]) => {

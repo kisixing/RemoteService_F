@@ -28,7 +28,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       location: { query },
       currentPregnancy,
     } = this.props;
-    const { code, p1, p2, t, access_token, token } = query; // p1 孕册id， p2 监测档案id/判图档案id
+    const { code, p1, p2, t, access_token } = query; // p1 孕册id， p2 监测档案id/判图档案id
 
     // TODO 验证过程 验证全局 sessionStorage isLogin
     // 1、isLogin === true，不再异步验证用户信息
@@ -89,7 +89,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       return <Redirect to={`/user/login?${queryString}`} />;
     }
     // token、isBind，含有用户权限和已绑定的情况下才会进入主页
-    return children; 
+    return children;
   }
 }
 

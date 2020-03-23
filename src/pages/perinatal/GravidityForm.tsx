@@ -15,7 +15,6 @@ interface IProps {
 }
 
 function GravidityForm({ form, fields }: IProps) {
-  console.log('pppppp', fields)
   return (
     <form>
       <FormFields form={form} dataSource={fields} />

@@ -1,9 +1,13 @@
 import React from 'react';
 import styles from './RadioGroup.less';
 
-function RadioGroup({ data, value, onChange, error }: any) {
+function RadioGroup({ id, data, value, onChange, charactertype, error }: any) {
   const handleChange = (e: any) => {
     const value = e.target.value;
+    if (charactertype === 'boolean') {
+      const flag = value === 'false' ? false : true;
+      return onChange(flag);
+    }
     onChange(value);
   };
 
@@ -13,15 +17,14 @@ function RadioGroup({ data, value, onChange, error }: any) {
         return (
           <span key={item.value || index} className={styles.item}>
             <input
-              id={item.value || index}
-              name={item.label}
+              id={`${id}-${index}`}
               className={styles.radio}
               type="radio"
               value={item.value}
               checked={item.value === value}
               onChange={handleChange}
             />
-            <label htmlFor={item.value} className={styles.label}>
+            <label htmlFor={item.value.toString()} className={styles.label}>
               {item.label}
             </label>
           </span>
