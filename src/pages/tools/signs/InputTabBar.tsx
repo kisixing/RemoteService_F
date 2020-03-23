@@ -88,5 +88,5 @@ function InputTabBar(props: any) {
 }
 
 export default connect(({global}: ConnectState) => ({
-  userid: global.currentPregnancy.id
+  userid: global.currentPregnancy?.id
 }))(InputTabBar);

@@ -7,11 +7,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Chart from 'chart.js';
 import { connect } from 'dva';
-
-import { getBloodOxygens } from '@/services/tools';
+import { Toast } from 'antd-mobile';
+import { getBloodOxygens, getRecordNum, GetProp } from '@/services/tools';
 import moment from 'moment';
-import { sortDate } from '@/utils/utils';
-import { Tabs } from 'antd-mobile';
 import { ConnectState } from '@/models/connect';
 
 import styles from './Record.less';
@@ -130,7 +128,7 @@ function BloodOxygenRecord(props: {userid: number}) {
     // 定义标准日期
     const todayStr = moment(new Date()).format('YYYY-MM-DD');
     // 排序
-    let targetData:Array<ServiceDataItem>|false = sortDate<ServiceDataItem>(serviceData,'timestamp');
+    let targetData:Array<ServiceDataItem>|false = serviceData.map(v=>v);
     if(!targetData) {
       return;
     }
@@ -152,7 +150,7 @@ function BloodOxygenRecord(props: {userid: number}) {
       }
     }else{
       // 展示当天数据
-      targetData = sortDate<ServiceDataItem>(targetData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr),"timestamp");
+      targetData = targetData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr),"timestamp";
     } 
     if(!targetData){
       console.error('timestamp数据格式有问题');
@@ -211,10 +209,18 @@ function BloodOxygenRecord(props: {userid: number}) {
   }
 
   useEffect(() => {
-    getBloodOxygens({ pregnancyId: '207' }).then(res => {
-      newChart(res.data);
-      setListData(res.data);
-    });
+    getRecordNum({type: 'blood-oxygens', pregnancyId: props.userid}).then(res => {
+      if(res.data !== 0){
+        const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
+        getBloodOxygens(reqData).then(res => {
+          newChart(res.data);
+          setListData(res.data);
+        });
+      }else{
+        newChart([]);
+        Toast.info('暂无数据');
+      }
+    })
   }, []);
 
 
@@ -252,5 +258,5 @@ function BloodOxygenRecord(props: {userid: number}) {
 }
 
 export default connect(({global}: ConnectState) => ({
-  userid: global.currentPregnancy.id
+  userid: global.currentPregnancy?.id
 }))(BloodOxygenRecord)

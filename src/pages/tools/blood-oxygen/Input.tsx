@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { InputItem, List, Toast } from 'antd-mobile';
+import Router from 'umi/router'
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
@@ -35,10 +36,12 @@ function BloodOxygenInput(props: {userid: number}) {
       result: Number(bloodOxygen),
       timestamp: d,
       pregnancy: {id: props.userid},
-      pulserate: Number(pulseRate)
+      pulserate: Number(pulseRate),
+      status: 0
     }).then((r:any) => {
       if(r.response.status >= 200 && r.response.status < 300 ){
         Toast.success('血氧数据保存成功');
+        Router.push('/signs/record?type=blood-oxygen');
       }
     });
   };

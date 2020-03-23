@@ -6,16 +6,16 @@
 
 import React,{ useRef, useEffect, useState } from 'react'
 import Chart from 'chart.js';
-
+import { Toast, Modal, List, Checkbox, Button } from 'antd-mobile';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
-import {sortDate} from '@/utils/utils';
 import moment from 'moment';
 import BackButton from '@/components/BackButton';
-import { getBloodPressures } from '@/services/tools';
+import { getBloodPressures, getRecordNum, GetProp, editBloodPressures } from '@/services/tools';
 
 import styles from './Record.less'
 
+const CheckboxItem = Checkbox.CheckboxItem;
 
 /**
  * 数据展示备注
@@ -27,7 +27,8 @@ interface ServiceDataItem {
   id:number,
   pregnancy?: {
     id: number
-  }
+  },
+  status:number
 }
 
 const SYS_MAX=139,
@@ -36,11 +37,19 @@ DIA_MAX=89,
 DIA_MIN=50;
 
 
+const tableColumn = [
+  {dataIndex: 'timestamp', render:(text:string) => `${text.slice(0,10)}/${text.slice(11,19)}`, title: '时间'},
+  {dataIndex: 'systolic', title: '收缩压'},
+  {dataIndex: 'diastolic', title: '舒张压'},
+]
+
 function BloodPressureRecord(props: {userid: number}) {
   const hChart=useRef(null),tChart=useRef(null);
   let chartH,chartT;
   const [listData,setListData] = useState([]);
   const [isHistory, setIsHistory] = useState(true);
+  const [visible,setVisible] = useState(false);
+  const [selection, setSelection] = useState([]);
   // date与日期未填入
   let chartOptions = {
     type: 'line',
@@ -134,8 +143,10 @@ function BloodPressureRecord(props: {userid: number}) {
     // 定义标准日期
     const todayStr = moment(new Date()).format('YYYY-MM-DD');
     // 排序
-    let targetData:Array<ServiceDataItem>|false = sortDate<ServiceDataItem>(serviceData,'timestamp');
-    if(!targetData) return;
+    let targetData:Array<ServiceDataItem> = [];
+    serviceData.map(v => {
+      targetData.push(v);
+    });
     if(isHistory){
       // 展示历史数据，将单天最大值保留
       for(let i=0;i<targetData.length;) {
@@ -153,7 +164,7 @@ function BloodPressureRecord(props: {userid: number}) {
         i++; 
       }
     }else{
-      targetData = sortDate<ServiceDataItem>(targetData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr),"timestamp");
+      targetData = targetData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr);
     }
     console.log(nOptions);
     if(!targetData){
@@ -226,12 +237,70 @@ function BloodPressureRecord(props: {userid: number}) {
     }
   }
   
+  const renderList = (errData: Array<ServiceDataItem>) => (
+    <List>
+      {errData.map((v:ServiceDataItem) => (
+      <CheckboxItem key={v.id}
+        onChange={(e:any) => handleCheckBoxChange(e, v.id)}
+      >
+        {`${v.timestamp.slice(5,10)}/${v.timestamp.slice(11,16)} 收缩压：${v.systolic} 舒张压: ${v.diastolic}`}
+      </CheckboxItem>
+    ))}
+    </List>
+  )
+
+  const handleCheckBoxChange = (e:any, id:number) => {
+    if(e.target.checked){
+      //@ts-ignore
+      setSelection(selection => {
+        selection.push(id);
+        return selection;
+      });
+    }else{
+      const i = selection.findIndex((v:number) => v === id);
+      setSelection(selection => {
+        selection.splice(i,1);
+        return selection;
+      });
+    }
+  }
+  const handleDelete = () => {
+    console.log(selection);
+    for(let i = 0 ;i < selection.length ; i++){
+      let t:ServiceDataItem|false = listData.find((v:ServiceDataItem) => v.id === selection[i]) || false;
+      if(t){
+        t.status = -1; 
+        editBloodPressures(t).then(res => console.log(res));
+      }
+    }
+  }
+  const handleConfirm = () => {
+    for(let i = 0 ;i < selection.length ; i++){
+      let t:ServiceDataItem|false = listData.find((v:ServiceDataItem) => v.id === selection[i]) || false;
+      if(t){
+        t.status = 0; 
+        editBloodPressures(t).then(res => console.log(res));
+      }
+    }
+  }
+
   useEffect(() => {
-    getBloodPressures({pregnancyId: props.userid}).then(res => {
-      newChart(res.data);
-      setListData(res.data);
+    getRecordNum({type: 'blood-pressures',pregnancyId: props.userid}).then(res => {
+      if(res.data !== 0){
+        const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
+        getBloodPressures(reqData).then(res => setListData(res.data))
+      }else{
+        Toast.info('暂无数据');
+      }
     })
   },[]);
+  useEffect(() => {
+    // 判断异常数据
+    if(listData.filter((v: ServiceDataItem) => v.status === 1).length !== 0){
+      setVisible(true);
+    }
+    newChart(listData);
+  },[listData])
 
   return (
     <div className={styles.container}>
@@ -244,9 +313,9 @@ function BloodPressureRecord(props: {userid: number}) {
           </div>
           <div className={styles.canvas} style={{display: isHistory ? "none" : "block"}}>
             <canvas ref={tChart}/>
-          </div>
-        <div>
+          </div> 
       </div>
+      <div className={styles.list}>
         {listData.map((item: ServiceDataItem) => (
           <div className={styles.card} key={item.id}>
             <div className={styles.header}>
@@ -261,13 +330,26 @@ function BloodPressureRecord(props: {userid: number}) {
             </div>
           </div>
         ))}
-      </div>  
+      </div>
+      <Modal
+        visible={visible}
+        transparent
+        title="请删除异常数据"
+        style={{width: '100%', height: 'auto'}}
+      >
+        <div>
+          {renderList(listData.filter((v:ServiceDataItem) => v.status === 1))}
+          <div className={styles.btn}>
+            <Button onClick={handleDelete}>删除</Button>
+            <Button onClick={handleConfirm}>确定</Button>
+          </div>
+        </div>
+      </Modal>   
       <BackButton/>
-
     </div>
   )
 }
 
 export default connect(({global}: ConnectState) => ({
-  userid: global.currentPregnancy.id
+  userid: global.currentPregnancy?.id
 }))(BloodPressureRecord);
