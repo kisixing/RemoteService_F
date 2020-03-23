@@ -59,7 +59,7 @@ class MapList extends React.Component<P, S> {
       type: 'global/getPregnancy',
       payload: currentPregnancy.id,
     }).then((res: any) => {
-      if (res && res[0] && res[0]['id']) {
+      if (res && res.id) {
         const data = [...this.state.dataSource];
         const { residenceAddressDetail, maritalYears } = res;
         if (!!residenceAddressDetail) {

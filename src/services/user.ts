@@ -65,6 +65,17 @@ export async function bindUserMp(params: bindMpParamsType) {
   });
 }
 
+/**
+ * 获取验证码
+ * @param mobile
+ */
+export async function getCaptcha(params: object) {
+  return request('/api/captcha', {
+    method: 'POST',
+    data: params,
+  });
+}
+
 export interface newYcParamsType {
   userName: string
   gesmoc: string
@@ -84,17 +95,6 @@ export async function newPregnancy(params: newYcParamsType) {
 }
 
 /**
- * 获取验证码
- * @param mobile
- */
-export async function getCaptcha(params: object) {
-  return request('/api/captcha', {
-    method: 'POST',
-    data: params,
-  });
-}
-
-/**
  * 获取孕册信息
  *
  * @export
@@ -102,5 +102,19 @@ export async function getCaptcha(params: object) {
  * @returns 孕册所有信息
  */
 export async function getPregnancy(id: string | number) {
-  return request(`/api/pregnancies?id.equals=${id}`);
+  return request(`/api/pregnancies/${id}`);
+}
+
+/**
+ * 保存孕册信息
+ *
+ * @export
+ * @param {*} params 孕册参数
+ * @returns
+ */
+export async function updatePregnancy(params: any) {
+  return request('/api/pregnancies', {
+    method: 'PUT',
+    data: params,
+  });
 }

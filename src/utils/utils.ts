@@ -311,3 +311,24 @@ export function sortDate<T>(arr: Array<T>|Set<T>, key: string = ""): Array<T>|fa
     return formatArr.map((v) => v.originalData);
   }
 }
+
+/**
+ * 获取建档表单的每一个key
+ *
+ * @export
+ * @param {any[]} fields
+ * @returns
+ */
+export function getKeys(fields: any[]) {
+  let keys = [];
+  for (let i = 0; i < fields.length; i++) {
+    const element = fields[i];
+    if (element.type) {
+      keys.push(element.id);
+    }
+    if (element.children) {
+      keys.push(...getKeys(element.children));
+    }
+  }
+  return keys;
+};

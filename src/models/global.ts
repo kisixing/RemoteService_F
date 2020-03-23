@@ -37,7 +37,7 @@ const GlobalModel: GlobalModelType = {
     locale: 'cn', // cn/en
     mpuid: '',
     currentUser: {},
-    currentPregnancy: {},
+    currentPregnancy: { id: 4193 },
   },
 
   effects: {

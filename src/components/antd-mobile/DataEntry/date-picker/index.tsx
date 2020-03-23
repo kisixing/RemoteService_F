@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import { List, DatePicker as AntdDatePicker } from 'antd-mobile';
+import moment from 'moment';
 import { PropsType } from 'antd-mobile/es/date-picker';
 
 import styles from '../index.less';
@@ -10,7 +11,7 @@ interface IProps extends PropsType  {
   placeholder?: string
 }
 
-const CustomItem = props => (
+const CustomItem = (props: any) => (
   <List.Item
     className={styles.customList}
     arrow={props.arrow}
@@ -30,12 +31,36 @@ const CustomItem = props => (
   </List.Item>
 );
 
-function DatePicker({ required, children, placeholder, ...rest }: IProps, ref: any) {
+function DatePicker(
+  { required, children, placeholder, value, format = 'YYYY-MM-DD HH:mm', ...rest }: IProps,
+  ref: any,
+) {
+  // value格式处理
+  const transInit = (time: any) => {
+    let val = null;
+    if (!time) {
+      val = null;
+    }
+    if (moment.isDate(time)) {
+      val = value;
+    }
+    if (moment.isMoment(time)) {
+      val = time.toDate();
+    }
+    if (typeof time == 'string') {
+      val = new Date(time);
+    }
+    return val;
+  };
+  const onOk = () => {};
+
   return (
     <AntdDatePicker
       ref={ref}
       title={`选择${children}时间`}
       extra={placeholder}
+      value={transInit(value)}
+      onOk={onOk}
       {...rest}
     >
       <CustomItem arrow="horizontal">
