@@ -67,7 +67,7 @@ const GlobalModel: GlobalModelType = {
       const data = yield call(getPregnancy, payload);
       yield put({
         type: 'updatePregnancy',
-        payload: data[0],
+        payload: data,
       });
       return data;
     }
@@ -103,12 +103,6 @@ const GlobalModel: GlobalModelType = {
         if (typeof window['ga'] !== 'undefined') {
           window['ga']('send', 'pageview', pathname + search);
         }
-        // if (['/', '/consultation'].indexOf(pathname) > -1) {
-        //   dispatch({
-        //     type: 'getPregnancy',
-        //     payload: store.get('id'),
-        //   });
-        // }
       });
     },
   },
