@@ -2,7 +2,26 @@ import request from '@/utils/request';
 
 import { Moment } from 'moment';
 
-// 适用于 血糖 血氧 体温
+// 查询目标记录数量
+interface GetRecordProp{
+  type: string,
+  pregnancyId:number|string
+}
+export async function getRecordNum(entity: GetRecordProp) {
+  return request(`/api/${entity.type}/count?pregnancyId.equals=${entity.pregnancyId}`,{
+    method: 'GET',
+    getResponse: true
+  })
+}
+// 
+export interface GetProp{
+  pregnancyId: number|string,
+  page?:number,
+  size?:number,
+  sort?:string
+}
+
+// 适用于 血糖 血氧 体温 POST
 interface SetProp{
   result: number,
   timestamp: Moment,
@@ -16,11 +35,12 @@ interface SetProp{
   insulin?: boolean,
   insulinnote?: number,
   exercise?: string,
-  diet?: string
+  diet?: string,
+  status?:number
 }
 // 血糖
-export async function getBloodGlucose({pregnancyId}: {pregnancyId:string|number}) {
-  return request(`/api/blood-glucoses?pregnancyId.equals=${pregnancyId}`,{
+export async function getBloodGlucose(entity: GetProp) {
+  return request(`/api/blood-glucoses?pregnancyId.equals=${entity.pregnancyId}&page=${entity.page}&size=${entity.size}&sort=${entity.sort}`,{
     method: 'GET',
     getResponse: true
   })
@@ -32,10 +52,17 @@ export async function setBloodGlucose(data: SetProp) {
     getResponse: true
   })
 }
+export async function editBloodGlucose(data: SetProp) {
+  return request(`/api/blood-glucoses`,{
+    method: 'PUT',
+    data,
+    getResponse: true
+  })
+}
 
 // 血氧
-export async function getBloodOxygens({pregnancyId}: {pregnancyId:string|number}) {
-  return request(`/api/blood-oxygens?pregnancyId.equals=${pregnancyId}`,{
+export async function getBloodOxygens(entity: GetProp) {
+  return request(`/api/blood-oxygens?pregnancyId.equals=${entity.pregnancyId}&page=${entity.page}&size=${entity.size}&sort=${entity.sort}`,{
     method: 'GET',
     getResponse: true
   })
@@ -50,8 +77,8 @@ export async function setBloodOxygens(data: SetProp) {
 }
 
 // 体温
-export async function getTemperatures({pregnancyId}: {pregnancyId:string|number}) {
-  return request(`/api/temperatures?pregnancyId.equals=${pregnancyId}`,{
+export async function getTemperatures(entity:GetProp) {
+  return request(`/api/temperatures?pregnancyId.equals=${entity.pregnancyId}&page=${entity.page}&size=${entity.size}&sort=${entity.sort}`,{
     method: 'GET',
     getResponse: true
   })
@@ -65,17 +92,19 @@ export async function setTemperatures(data: SetProp) {
   })
 }
 
+// 血压
 interface SetBloodPressuresProp{
   systolic: number, diastolic: number,
   timestamp: Moment,
   pregnancy: {
     id: number
   },
-  pulserate?: number
+  pulserate?: number,
+  status?:number
 }
 
-export async function getBloodPressures({pregnancyId}: {pregnancyId:string|number}) {
-  return request(`/api/blood-pressures?pregnancyId.equals=${pregnancyId}`,{
+export async function getBloodPressures(entity:GetProp) {
+  return request(`/api/blood-pressures?pregnancyId.equals=${entity.pregnancyId}&page=${entity.page}&size=${entity.size}&sort=${entity.sort}`,{
     method: 'GET',
     getResponse: true
   })
@@ -84,6 +113,13 @@ export async function getBloodPressures({pregnancyId}: {pregnancyId:string|numbe
 export async function setBloodPressures(data: SetBloodPressuresProp) {
   return request(`/api/blood-pressures`,{
     method: 'POST',
+    data,
+    getResponse: true
+  })
+}
+export async function editBloodPressures(data: SetBloodPressuresProp) {
+  return request(`/api/blood-pressures`,{
+    method: 'PUT',
     data,
     getResponse: true
   })

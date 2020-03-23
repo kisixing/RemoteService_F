@@ -4,8 +4,9 @@
  * @Date: 2020-03-06 18:30:21
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef, MutableRefObject } from 'react';
 import { InputItem, List, Toast } from 'antd-mobile';
+import Router from 'umi/router';
 import { notification } from 'antd';
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
@@ -28,6 +29,8 @@ function BloodPressureInput(props: {userid: number}) {
   const [systolic, setSystolic] = useState('')
   const [heartRate, setHeartRate] = useState('');
 
+  const diastolicInput:MutableRefObject<any> = useRef(null),systolicInput:MutableRefObject<any> = useRef(null)
+
   const onSubmit = () => {
     const d = moment(date);
     if (!diastolic || !systolic) {
@@ -41,14 +44,35 @@ function BloodPressureInput(props: {userid: number}) {
       diastolic: Number(diastolic),
       timestamp: d,
       pregnancy: {id: props.userid},
-      pulserate: Number(heartRate)
+      pulserate: Number(heartRate),
+      status:0
     }).then((r:any) => {
-      console.log(r);
       if(r.response.status >= 200 && r.response.status < 300){
         notification.success({message: '数据保存成功'});
+        Router.push('/signs/record?type=blood-pressure');
       } 
     });
   }
+
+  // 处理输入 根据首位字母自动定位到对应的输入框
+  const handleInput = (type:string,val:string):void => {
+    if(type === 'diastolic'){
+      if(val.length === 1 && /1|2/.test(val)){
+        setSystolic(val);
+        systolicInput.current.focus();
+      }else{
+        setDiastolic(val);
+      }
+    }else if(type === 'systolic'){
+      if(val.length === 1 && !(/1|2/.test(val))){
+        setDiastolic(val);
+        diastolicInput.current.focus();
+      }else{
+        setSystolic(val);
+      }
+    }
+  }
+
   return (
     <div className={styles.container}>
       <DatePicker
@@ -71,18 +95,20 @@ function BloodPressureInput(props: {userid: number}) {
           <div className={styles.input}>
             <input
               type="number"
-              placeholder="舒张压"
-              value={diastolic}
-              onChange={e => setDiastolic(e.target.value)}
+              placeholder="收缩压"
+              value={systolic}
+              onChange={e => handleInput('systolic',e.target.value)}
               style={{ width: '1.2rem' }}
+              ref={systolicInput}
             />
             /
             <input
               type="number"
-              placeholder="收缩压"
-              value={systolic}
-              onChange={e => setSystolic(e.target.value)}
+              placeholder="舒张压"
+              value={diastolic}
+              onChange={e => handleInput('diastolic',e.target.value)}
               style={{ width: '1.2rem' }}
+              ref={diastolicInput}
             />
             <IconFont type="editor-line" size="0.36rem" />
           </div>
@@ -98,7 +124,7 @@ function BloodPressureInput(props: {userid: number}) {
             onChange={v => setHeartRate(v)}
           >
             <div className={styles.label}>
-              {/* <span className={styles.required}>*</span> */}
+              <span className={styles.required}>*</span>
               心率
               <span className={styles.unit}>(次/分)</span>
             </div>

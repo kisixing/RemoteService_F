@@ -6,11 +6,11 @@
 
 import React,{ useRef, useState, useEffect } from 'react'
 import Chart from 'chart.js';
+import { Toast } from 'antd-mobile';
 import { PERIOD_CODE } from './config';
-import { getBloodGlucose } from '@/services/tools';
+import { getBloodGlucose, getRecordNum, GetProp } from '@/services/tools';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect'
-import { sortDate } from '@/utils/utils';
 import moment from 'moment';
 
 import styles from './Record.less';
@@ -139,8 +139,8 @@ function BloodGlucoseRecord(props: {userid: number}) {
   // 将日历按周期展示
   const convertHChartData = (options: any,  serviceData: Array<ServiceDataItem>) => {
     let nOptions = JSON.parse(JSON.stringify(options));
-    let labels = sortDate<string>(new Set(serviceData.map(v => v.timestamp.slice(0,10))));
-    let targetData:Array<ServiceDataItem>|false = sortDate<ServiceDataItem>(serviceData,"timestamp");
+    let labels = new Set(serviceData.map(v => v.timestamp.slice(0,10)));
+    let targetData:Array<ServiceDataItem>|false = serviceData.map((v:any) => v);
     if(!targetData || !labels) return;
     labels.forEach((v:string) => nOptions.data.labels.push(v.slice(5,10)));
     for(let i = 0; i < targetData.length; i++){
@@ -204,7 +204,6 @@ function BloodGlucoseRecord(props: {userid: number}) {
   }
 
   const newChart = (data: Array<ServiceDataItem>) => {
-    console.log('a');
     try{
       //@ts-ignore
       const ctx = hChart.current.getContext('2d');
@@ -221,10 +220,19 @@ function BloodGlucoseRecord(props: {userid: number}) {
   }
 
   useEffect(()=> {
-    getBloodGlucose({pregnancyId: props.userid}).then(res => {
-      newChart(res.data);
-      setListData(res.data);
+    getRecordNum({type: 'blood-glucoses', pregnancyId: props.userid}).then(res => {
+      if(res.data !== 0){
+        const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
+        getBloodGlucose(reqData).then(res => {
+          newChart(res.data);
+          setListData(res.data);
+        })
+      }else{
+        newChart([]);
+        Toast.info('暂无数据');
+      }
     })
+    
   },[]);
 
   return (
@@ -271,5 +279,5 @@ function BloodGlucoseRecord(props: {userid: number}) {
 }
 
 export default connect(({global}: ConnectState) => ({
-  userid: global.currentPregnancy.id
+  userid: global.currentPregnancy?.id
 }))(BloodGlucoseRecord);

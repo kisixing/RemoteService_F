@@ -6,6 +6,7 @@
 
 import React, { useState } from 'react';
 import { Toast } from 'antd-mobile';
+import Router from 'umi/router';
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
@@ -30,10 +31,12 @@ function TemperatureInput(props: {userid: number}) {
     setTemperatures({
       result: Number(temperature),
       timestamp: d,
-      pregnancy: {id: props.userid}
+      pregnancy: {id: props.userid},
+      status: 0
     }).then(r => {
       if(r.response.status >= 200 && r.response.status < 300){
         Toast.success('保存体温数据成功');
+        Router.push('/signs/input?record=temperature');
       }
     })
   };

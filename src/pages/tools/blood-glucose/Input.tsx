@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Tabs, List, InputItem, TextareaItem, Toast, Checkbox } from 'antd-mobile';
+import Router from 'umi/router';
 import moment from 'moment';
 import { Button, IconFont } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
@@ -17,7 +18,7 @@ import styles from '../blood-pressure/Input.less';
 
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
-const tabs = [
+const tabs:Array<any> = [
   { title: '早餐前', key: PERIOD_CODE.FASTING },
   { title: '早餐后', key: PERIOD_CODE.AFTER_B },
   { title: '午餐前', key: PERIOD_CODE.BEFORE_L },
@@ -28,7 +29,7 @@ const tabs = [
 ];
 
 // 数据结构
-const json = [
+const json:Array<any> = [
   { key: PERIOD_CODE.FASTING, bloodGlucose: 10 },
   { key: PERIOD_CODE.AFTER_B , bloodGlucose: 99 },
   { key: PERIOD_CODE.BEFORE_L, bloodGlucose: 69 },
@@ -54,14 +55,34 @@ function BloodGlucoseInput(props: {userid: number}) {
 
   useEffect(() => {
     const index = values.findIndex(e => e.key === activatedTab);
-    setCurrent(values[index.toString()]);
+    setCurrent(values[index]);
     return () => {};
   }, [activatedTab]);
+  useEffect(() => {
+    const h = now.getHours();
+    if(h >= 3 && h < 8){
+      setActivatedTab(PERIOD_CODE.FASTING);
+    }else if(h >= 8 && h < 10){
+      setActivatedTab(PERIOD_CODE.AFTER_B);
+    }else if(h >= 10 && h < 12){
+      setActivatedTab(PERIOD_CODE.BEFORE_L);
+    }else if(h >= 12 && h < 15){
+      setActivatedTab(PERIOD_CODE.AFTER_L);
+    }else if(h >= 15 && h < 18){
+      setActivatedTab(PERIOD_CODE.BEFORE_D);
+    }else if(h >= 18 && h < 21){
+      setActivatedTab(PERIOD_CODE.AFTER_D);
+    }else{
+      setActivatedTab(PERIOD_CODE.BEFORE_S);
+    }
+  },[])
+
 
   const onSubmit = () => {
     const d = moment(date);
     // const index = values.findIndex(e => e.key === activatedTab);
     // const current = values[index];
+    
     if (!current.bloodGlucose) {
       return Toast.info('请输入血糖数值...');
     }
@@ -79,12 +100,14 @@ function BloodGlucoseInput(props: {userid: number}) {
       insulin: current.isInsulin,
       insulinnote: Number(current.quantity),
       diet: current.dietaryStatus,
-      exercise: current.exercise
+      exercise: current.exercise, 
+      status: 0
     };
     // @ts-ignore
     setBloodGlucose(reqData).then(r => {
       if(r.response.status >=200 && r.response.status < 300){
-        Toast.success('血糖信息成功');
+        Toast.success('血糖信息保存成功');
+        Router.push('/signs/record?type=blood-glucose');
       }
     });
   };
@@ -120,10 +143,10 @@ function BloodGlucoseInput(props: {userid: number}) {
       </div>
       {/* 类型对不上 */}
       <Tabs
-        tabs={tabs}
+        tabs={tabs.map(v => {v.key = v.key.toString(); return v;})}
         page={activatedTab}
         tabBarPosition="top"
-        onChange={(tab: any, index) => setActivatedTab(tab.key)}
+        onChange={(tab: any, index) => setActivatedTab(Number(tab.key))}
         renderTab={tab => <span>{tab.title}</span>}
       >
         <div style={{ height: '100%' }}>

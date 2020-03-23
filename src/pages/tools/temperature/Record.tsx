@@ -6,12 +6,12 @@
 
 import React, { useRef, useState, useEffect } from 'react'
 import Chart from 'chart.js';
+import { Toast } from 'antd-mobile';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
-import { getTemperatures } from '@/services/tools';
+import { getTemperatures, getRecordNum, GetProp } from '@/services/tools';
 import moment from 'moment';
-import { sortDate } from '@/utils/utils';
-import { Tabs } from 'antd-mobile';
+
 
 import styles from './Record.less';
 
@@ -130,7 +130,7 @@ function TemperatureRecord(props: {userid: number}) {
     // 定义标准YYYY-MM-DD字符串
     const todayStr = moment(new Date()).format('YYYY-MM-DD');
     // 深拷贝
-    let targetData:Array<ServiceDataItem>|false = sortDate<ServiceDataItem>(serviceData,'timestamp');
+    let targetData:Array<ServiceDataItem>|false = serviceData.map(v=>v)
     if(!targetData) return ;
     if(isHistory){
       // 展示历史数据，将单天最大值保留
@@ -152,7 +152,7 @@ function TemperatureRecord(props: {userid: number}) {
       console.log(targetData);
     }else{
       // 展示当天数据
-      targetData = sortDate<ServiceDataItem>(targetData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr),"timestamp");
+      targetData = targetData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr);
     } 
     if(!targetData){
       console.error('timestamp数据格式有问题');
@@ -212,10 +212,18 @@ function TemperatureRecord(props: {userid: number}) {
   }
 
   useEffect(() => {
-    getTemperatures({ pregnancyId: props.userid }).then(res => {
-      newChart(res.data);
-      setListData(res.data);
-    });
+    getRecordNum({type: 'temperatures', pregnancyId: props.userid}).then(res => {
+      if(res.data!==0){
+        const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
+        getTemperatures(reqData).then(res => {
+          newChart(res.data);
+          setListData(res.data);
+        });
+      }else{
+        newChart([]);
+        Toast.info('暂无数据');
+      }
+    })
   },[]);
 
 
@@ -252,5 +260,5 @@ function TemperatureRecord(props: {userid: number}) {
 }
 
 export default connect(({global}: ConnectState) => ({
-  userid: global.currentPregnancy.id
+  userid: global.currentPregnancy?.id
 }))(TemperatureRecord);
