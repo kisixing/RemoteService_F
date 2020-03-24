@@ -5,21 +5,25 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react'
+import Router from 'umi/router';
 import Chart from 'chart.js';
 import { connect } from 'dva';
 import { Toast } from 'antd-mobile';
 import { getBloodOxygens, getRecordNum, GetProp } from '@/services/tools';
 import moment from 'moment';
 import { ConnectState } from '@/models/connect';
+import { IconFont } from '@/components/antd-mobile';
 
-import styles from './Record.less';
+import styles from '../signs/RecordsTabBar.less';
 interface ServiceDataItem {
   timestamp: string,
   id: number,
   result: number,
   pregnancy: {
     id: number
-  }
+  },
+  pulserate: number,
+  status: number
 }
 
 const NORMAL_O:number = 95;
@@ -29,7 +33,7 @@ function BloodOxygenRecord(props: {userid: number}) {
   const hChart = useRef(null);
   const tChart = useRef(null);
 
-  let chartH,chartT;
+
 
   const [listData, setListData] = useState([]);
   const [isHistory, setIsHistory] = useState(true);
@@ -107,8 +111,8 @@ function BloodOxygenRecord(props: {userid: number}) {
           ticks: {
             // 幅度
             max: 100,
-            min: 85,
-            stepSize: 5,
+            min: 50,
+            stepSize: 10,
             // style
             fontSize: 20,
             fontWeight: 500
@@ -191,7 +195,6 @@ function BloodOxygenRecord(props: {userid: number}) {
         nOptions.data.labels.push(v.timestamp.slice(11, 16));
       }
     });
-    console.log(nOptions);
     return nOptions;
   }
 
@@ -199,13 +202,17 @@ function BloodOxygenRecord(props: {userid: number}) {
     try {
       // @ts-ignore
       const ctx = hChart.current.getContext('2d');
-      chartH = new Chart(ctx, convertChartData(chartOptions, serviceData, true));
+      let chartH = new Chart(ctx, convertChartData(chartOptions, serviceData, true));
       // @ts-ignore
       const ctx1 = tChart.current.getContext('2d');
-      chartT = new Chart(ctx1, convertChartData(chartOptions, serviceData, false));
+      let chartT = new Chart(ctx1, convertChartData(chartOptions, serviceData, false));
     } catch (e) {
 
     }
+  }
+
+  const toEdit = (item: ServiceDataItem) => {
+    Router.push(`/signs/blood-oxygen/input?timestamp=${item.timestamp}&result=${item.result}&pulserate=${item.pulserate}&id=${item.id}`);
   }
 
   useEffect(() => {
@@ -239,16 +246,36 @@ function BloodOxygenRecord(props: {userid: number}) {
           </div>
         </div>
       </div>
-      <div>
+      <div className={styles.count}>
+        <div>
+          <span>记录列表</span>
+        </div>
+        <div>
+          <span>共{listData.filter((item: ServiceDataItem) => item.status !== -1).length}条</span>
+        </div>
+      </div>
+      <div className={styles.list}>
         {listData.map((item: ServiceDataItem) => (
-          <div className={styles.card} key={item.id}>
+          <div className={styles.card} key={item.id} onClick={() => toEdit(item)}>
             <div className={styles.header}>
-              <div><span>{item.timestamp.slice(0, 10)} -- {item.timestamp.slice(11, 19)}</span></div>
+              <div className={styles.src}>
+                <IconFont type="fetus"/><span>录入</span>
+              </div>
+              <div className={styles.date}>
+                <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
+                </div>
             </div>
-            <hr />
             <div className={styles.content}>
-              <div><span>血氧值：{item.result}</span></div>
-              <div>{item.result < NORMAL_O ? <span>异常</span> : <span>正常</span>}</div>
+              <div>
+                <div><span>血氧值</span></div>
+                <div><span>{item.result}%</span></div>
+                <div>{item.result < NORMAL_O ? <span>异常</span> : <span>正常</span>}</div>
+              </div>
+              <div>
+                <div><span>脉率</span></div>
+                <div><span>{item.pulserate}</span></div>
+                <div>正常</div>
+              </div>
             </div>
           </div>
         ))}

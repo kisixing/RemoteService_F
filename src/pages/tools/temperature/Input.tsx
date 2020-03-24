@@ -4,7 +4,7 @@
  * @Date: 2020-03-06 18:30:21
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Toast } from 'antd-mobile';
 import Router from 'umi/router';
 import moment from 'moment';
@@ -22,24 +22,42 @@ function TemperatureInput(props: {userid: number}) {
   const [date, setDate] = useState(now);
   const [temperature, setTemperature] = useState('')
 
+  const [id,setId] = React.useState(-1);
+
   const onSubmit = () => {
     const d = moment(date);
     if (!temperature) {
       return Toast.info('请输入体温数值...');
     }
-    console.log({ d, temperature });
-    setTemperatures({
-      result: Number(temperature),
-      timestamp: d,
-      pregnancy: {id: props.userid},
-      status: 0
-    }).then(r => {
-      if(r.response.status >= 200 && r.response.status < 300){
-        Toast.success('保存体温数据成功');
-        Router.push('/signs/input?record=temperature');
-      }
-    })
+    if(id !== -1) {
+
+    }else {
+      setTemperatures({
+        result: Number(temperature),
+        timestamp: d,
+        pregnancy: {id: props.userid},
+        status: 0
+      }).then(r => {
+        if(r.response.status >= 200 && r.response.status < 300){
+          Toast.success('保存体温数据成功');
+          Router.push('/signs/record?type=temperature');
+        }
+      })
+    }
   };
+
+  useEffect(() => {
+    let obj = {};
+    window.location.search.split('?')[1].split('&').forEach((v:string) => {
+      obj[v.split('=')[0]] = v.split('=')[1];
+    });    
+    if(obj['timestamp']){
+      setId(Number(obj['id']));
+      setTemperature(obj['result'])
+      setDate(new Date(obj['timestamp']));
+    }
+  },[]);
+
   return (
     <div className={styles.container}>
       <DatePicker

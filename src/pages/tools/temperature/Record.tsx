@@ -5,15 +5,17 @@
  */
 
 import React, { useRef, useState, useEffect } from 'react'
+import Router from 'umi/router'; 
 import Chart from 'chart.js';
 import { Toast } from 'antd-mobile';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { getTemperatures, getRecordNum, GetProp } from '@/services/tools';
 import moment from 'moment';
+import { IconFont } from '@/components/antd-mobile';
 
+import styles from '../signs/RecordsTabBar.less';
 
-import styles from './Record.less';
 
 
 interface ServiceDataItem {
@@ -22,7 +24,8 @@ interface ServiceDataItem {
   result: number,
   pregnancy: {
     id: number
-  }
+  },
+  status:number
 }
 
 const NORMAL_T:number = 37
@@ -211,6 +214,10 @@ function TemperatureRecord(props: {userid: number}) {
     }
   }
 
+  const toEdit = (item:ServiceDataItem) => {
+    Router.push(`/signs/temperature/input?timestamp=${item.timestamp}&result=${item.result}&id=${item.id}`);
+  }
+
   useEffect(() => {
     getRecordNum({type: 'temperatures', pregnancyId: props.userid}).then(res => {
       if(res.data!==0){
@@ -241,16 +248,31 @@ function TemperatureRecord(props: {userid: number}) {
             <canvas ref={tChart}/>
           </div>
       </div>
-      <div>
+      <div className={styles.count}>
+        <div>
+          <span>记录列表</span>
+        </div>
+        <div>
+          <span>共{listData.filter((item: ServiceDataItem) => item.status !== -1).length}条</span>
+        </div>
+      </div>
+      <div className={styles.list}>
         {listData.map((item: ServiceDataItem) => (
-          <div className={styles.card} key={item.id}>
+          <div className={styles.card} key={item.id} onClick={() => toEdit(item)}>
             <div className={styles.header}>
-              <div><span>{item.timestamp.slice(0, 10)} -- {item.timestamp.slice(11, 19)}</span></div>
+              <div className={styles.src}>
+                <IconFont type="fetus"/><span>录入</span>
+              </div>
+              <div className={styles.date}>
+                <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
+                </div>
             </div>
-            <hr />
             <div className={styles.content}>
-              <div><span>体温：{item.result}</span></div>
-              <div>{item.result > NORMAL_T ? <span>异常</span> : <span>正常</span>}</div>
+              <div>
+                <div><span>体温</span></div>
+                <div><span>{item.result}度</span></div>
+                <div>{item.result > NORMAL_T ? <span>异常</span> : <span>正常</span>}</div>
+              </div>
             </div>
           </div>
         ))}

@@ -8,8 +8,6 @@ import React from 'react';
 import { Tabs } from 'antd-mobile';
 import Router from 'umi/router';
 import { StickyContainer, Sticky } from 'react-sticky';
-import { connect } from 'dva';
-import { ConnectState } from '@/models/connect'
 // content 组件
 import Weight from '../weight/Input';
 import BloodPressure from '../blood-pressure/Input';
@@ -45,19 +43,19 @@ function InputTabBar(props: any) {
 
   const content = (key: string) => {
     if (key === 'weight') {
-      return <Weight userid={props.userid}/>
+      return <Weight userid={1}/>
     }
     if (key === 'blood-pressure') {
-      return <BloodPressure userid={props.userid}/>
+      return <BloodPressure/>
     }
     if (key === 'blood-glucose') {
-      return <BloodGlucose userid={props.userid}/>
+      return <BloodGlucose/>
     }
     if (key === 'blood-oxygen') {
-      return <BloodOxygen userid={props.userid}/>
+      return <BloodOxygen/>
     }
     if (key === 'temperature') {
-      return <Temperature userid={props.userid}/>
+      return <Temperature/>
     }
     return <div style={{ margin: '1rem', textAlign: 'center' }}>没有定义{type}这个体征组件</div>
   }
@@ -87,6 +85,4 @@ function InputTabBar(props: any) {
   );
 }
 
-export default connect(({global}: ConnectState) => ({
-  userid: global.currentPregnancy?.id
-}))(InputTabBar);
+export default InputTabBar;

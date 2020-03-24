@@ -22,7 +22,7 @@ export interface GetProp{
 }
 
 // 适用于 血糖 血氧 体温 POST
-interface SetProp{
+export interface SetProp{
   result: number,
   timestamp: Moment,
   pregnancy: {
@@ -32,7 +32,7 @@ interface SetProp{
   // 血氧
   pulserate?: number,
   // 血糖
-  insulin?: boolean,
+  insulin?: boolean|null,
   insulinnote?: number,
   exercise?: string,
   diet?: string,

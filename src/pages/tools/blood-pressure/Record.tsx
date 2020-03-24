@@ -5,17 +5,19 @@
  */
 
 import React,{ useRef, useEffect, useState } from 'react'
+import Router from 'umi/router';
 import Chart from 'chart.js';
-import { Toast, Modal, List, Checkbox, Button } from 'antd-mobile';
+import { Toast, List, Checkbox } from 'antd-mobile';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import moment from 'moment';
 import BackButton from '@/components/BackButton';
 import { getBloodPressures, getRecordNum, GetProp, editBloodPressures } from '@/services/tools';
 
-import styles from './Record.less'
+import { IconFont } from '@/components/antd-mobile';
+import styles from '../signs/RecordsTabBar.less';
 
-const CheckboxItem = Checkbox.CheckboxItem;
+// const CheckboxItem = Checkbox.CheckboxItem;
 
 /**
  * 数据展示备注
@@ -36,21 +38,18 @@ SYS_MIN=90,
 DIA_MAX=89,
 DIA_MIN=50;
 
-
-const tableColumn = [
-  {dataIndex: 'timestamp', render:(text:string) => `${text.slice(0,10)}/${text.slice(11,19)}`, title: '时间'},
-  {dataIndex: 'systolic', title: '收缩压'},
-  {dataIndex: 'diastolic', title: '舒张压'},
-]
+const [ defaultColor, errorColor ] = ['#c3c5c6','#dc143c'];
+const [ defaultPointRadius, errorPointRadius ] = [2,8];
 
 function BloodPressureRecord(props: {userid: number}) {
   const hChart=useRef(null),tChart=useRef(null);
-  let chartH,chartT;
   const [listData,setListData] = useState([]);
   const [isHistory, setIsHistory] = useState(true);
-  const [visible,setVisible] = useState(false);
-  const [selection, setSelection] = useState([]);
-  // date与日期未填入
+
+  // const [visible,setVisible] = useState(false);
+  // const [selection, setSelection] = useState([]);
+  
+  // chart 配置
   let chartOptions = {
     type: 'line',
     data: {
@@ -78,34 +77,16 @@ function BloodPressureRecord(props: {userid: number}) {
         FontFamily: 'Arial',
         text: '血压曲线'
       },
-      layout: {
-        padding: {
-          top: 0,
-          left: 10,
-          right: 10,
-          bottom :10
-        }
-      },
-      elements:{
-        line: {
-          // tension: 0
-        },
-      },
+      layout: {padding: {top: 0,left: 10,right: 10,bottom :10}},
       tooltips: {
-        mode: 'nearest',
+        mode: 'index',
         intersect: false,
         titleFontSize: 20,
         bodyFontSize: 20
       },
       scales: {
         xAxes: [{
-          // scaleLabel: {
-          //   display: true,
-          //   labelString: '日期',
-          //   fontSize:20
-          // }
           ticks: {
-            // TODO 之后再调这个位置
             fontSize: 20,
             fontWeight: 400,
             autoSkip: true,
@@ -123,30 +104,25 @@ function BloodPressureRecord(props: {userid: number}) {
           },
           ticks: {
             max: 150,
-            min: 30,
-            stepSize: 30,
+            min: 45,
+            stepSize: 15,
             fontSize: 20,
             autoSkip: true
           }
         }]
       }
     }
-  }
+  };
 
   // 将日历按周期展示
   const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>, isHistory: boolean) => {
-    //
-    let nOptions = JSON.parse(JSON.stringify(options));
-    // 异常|正常 样式
-    const [ defaultColor, errorColor ] = ['#c3c5c6','#dc143c'];
-    const [ defaultPointRadius, errorPointRadius ] = [2,8];
-    // 定义标准日期
+    let nOptions = JSON.parse(JSON.stringify(options));  
+    // 定义YYYY-MM-DD日期
     const todayStr = moment(new Date()).format('YYYY-MM-DD');
     // 排序
     let targetData:Array<ServiceDataItem> = [];
-    serviceData.map(v => {
-      targetData.push(v);
-    });
+    serviceData.forEach(v => targetData.push(v));
+    // 对显示数据进行过滤
     if(isHistory){
       // 展示历史数据，将单天最大值保留
       for(let i=0;i<targetData.length;) {
@@ -166,17 +142,10 @@ function BloodPressureRecord(props: {userid: number}) {
     }else{
       targetData = targetData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr);
     }
-    console.log(nOptions);
-    if(!targetData){
-      console.error('timestamp数据格式有问题');
-      return nOptions;
-    }
-     // 分段
-    // let count = 1;
-    // const COUNT_PER = ((targetData.length / COUNT_DURATION) | 0) + 1;
+
     const len = nOptions.data.datasets.length;
     targetData.forEach((v: ServiceDataItem, index: number) => {
-      // 填入数据
+      // 填入数据/样式
       for(let i = 0 ; i < len; i++){
         const data = v[nOptions.data.datasets[i].key];
         if(data) {
@@ -207,18 +176,10 @@ function BloodPressureRecord(props: {userid: number}) {
       }
       // 填充x轴
       if(isHistory){
-        // if(count === COUNT_PER){
-          // @ts-ignore
-          nOptions.data.labels.push(v.timestamp.slice(5,10));
-        //   count = 1;
-        // }else {
-        //   nOptions.data.labels.push(" ");
-        //   count++;
-        // }
+        nOptions.data.labels.push(v.timestamp.slice(5,10));
       }else{
         nOptions.data.labels.push(v.timestamp.slice(11, 16));
       }
-      
     });
     return nOptions;
   }
@@ -228,78 +189,83 @@ function BloodPressureRecord(props: {userid: number}) {
     try{
       // @ts-ignore
       const ctx = hChart.current.getContext('2d');
-      chartH = new Chart(ctx,convertChartData(chartOptions,serviceData, true))
+      let chartH = new Chart(ctx,convertChartData(chartOptions,serviceData, true))
       // @ts-ignore
       const ctx1 = tChart.current.getContext('2d');
-      chartT = new Chart(ctx1,convertChartData(chartOptions,serviceData, false))
+      let chartT = new Chart(ctx1,convertChartData(chartOptions,serviceData, false))
     }catch(e){
-
-    }
+      console.error(e);
+    } 
   }
   
-  const renderList = (errData: Array<ServiceDataItem>) => (
-    <List>
-      {errData.map((v:ServiceDataItem) => (
-      <CheckboxItem key={v.id}
-        onChange={(e:any) => handleCheckBoxChange(e, v.id)}
-      >
-        {`${v.timestamp.slice(5,10)}/${v.timestamp.slice(11,16)} 收缩压：${v.systolic} 舒张压: ${v.diastolic}`}
-      </CheckboxItem>
-    ))}
-    </List>
-  )
-
-  const handleCheckBoxChange = (e:any, id:number) => {
-    if(e.target.checked){
-      //@ts-ignore
-      setSelection(selection => {
-        selection.push(id);
-        return selection;
-      });
-    }else{
-      const i = selection.findIndex((v:number) => v === id);
-      setSelection(selection => {
-        selection.splice(i,1);
-        return selection;
-      });
-    }
-  }
-  const handleDelete = () => {
-    console.log(selection);
-    for(let i = 0 ;i < selection.length ; i++){
-      let t:ServiceDataItem|false = listData.find((v:ServiceDataItem) => v.id === selection[i]) || false;
-      if(t){
-        t.status = -1; 
-        editBloodPressures(t).then(res => console.log(res));
-      }
-    }
-  }
-  const handleConfirm = () => {
-    for(let i = 0 ;i < selection.length ; i++){
-      let t:ServiceDataItem|false = listData.find((v:ServiceDataItem) => v.id === selection[i]) || false;
-      if(t){
-        t.status = 0; 
-        editBloodPressures(t).then(res => console.log(res));
-      }
-    }
+  const toEdit = (item: ServiceDataItem) => {
+    Router.push(`/signs/blood-pressure/input?timestamp=${item.timestamp}&systolic=${item.systolic}&diastolic=${item.diastolic}&pulserate=${item.pulserate}&id=${item.id}`);
   }
 
+
+  // const renderList = (errData: Array<ServiceDataItem>) => (
+  //   <List> 
+  //     {errData.map((v:ServiceDataItem) => (
+  //     <CheckboxItem key={v.id}
+  //       onChange={(e:any) => handleCheckBoxChange(e, v.id)}
+  //     >
+  //       {`${v.timestamp.slice(5,10)}/${v.timestamp.slice(11,16)}  血压：${v.systolic}/${v.diastolic}`}
+  //     </CheckboxItem>
+  //   ))}
+  //   </List>
+  // )
+
+  // const handleCheckBoxChange = (e:any, id:number) => {
+  //   if(e.target.checked){
+  //     setSelection(selection => {
+  //       //@ts-ignore
+  //       selection.push(id);
+  //       return selection;
+  //     });
+  //   }else{
+  //     const i = selection.findIndex((v:number) => v === id);
+  //     setSelection(selection => {
+  //       selection.splice(i,1);
+  //       return selection;
+  //     });
+  //   }
+  // }
+  
+  // const handleConfirm = () => {
+  //   for(let i = 0 ;i < selection.length ; i++){
+  //     let t:ServiceDataItem|false = listData.find((v:ServiceDataItem) => v.id === selection[i]) || false;
+  //     if(t){
+  //       // @ts-ignore
+  //       t.status = 0; 
+  //       editBloodPressures(t).then(res => console.log(res));
+  //     }
+  //   }
+  // }
+
+  // 请求
   useEffect(() => {
-    getRecordNum({type: 'blood-pressures',pregnancyId: props.userid}).then(res => {
-      if(res.data !== 0){
-        const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
-        getBloodPressures(reqData).then(res => setListData(res.data))
-      }else{
-        Toast.info('暂无数据');
-      }
-    })
-  },[]);
+    const { search } = window.location;
+    if(/blood-pressure/.test(search)){
+      getRecordNum({type: 'blood-pressures',pregnancyId: props.userid}).then(res => {
+        if(res.data !== 0){
+          const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
+          getBloodPressures(reqData).then(res => setListData(res.data))
+        }else{
+          Toast.info('暂无数据');
+        }
+      })
+    }
+  },[props.userid]);
+  // 渲染chart
   useEffect(() => {
+    // 离开页面时listData会变为空
+    if(listData.length === 0) return;
     // 判断异常数据
-    if(listData.filter((v: ServiceDataItem) => v.status === 1).length !== 0){
-      setVisible(true);
-    }
-    newChart(listData);
+    // if(listData.filter((v: ServiceDataItem) => v.status === 1).length !== 0){
+    //   setVisible(true);
+    // }
+    // 过滤已删除的数据
+    newChart(listData.filter((v:ServiceDataItem) => v.status !== -1));
   },[listData])
 
   return (
@@ -315,36 +281,53 @@ function BloodPressureRecord(props: {userid: number}) {
             <canvas ref={tChart}/>
           </div> 
       </div>
+      <div className={styles.count}>
+        <div>
+          <span>记录列表</span>
+        </div>
+        <div>
+          <span>共{listData.filter((item: ServiceDataItem) => item.status !== -1).length}条</span>
+        </div>
+      </div>
       <div className={styles.list}>
         {listData.map((item: ServiceDataItem) => (
-          <div className={styles.card} key={item.id}>
+          <div className={styles.card} key={item.id} onClick={() => toEdit(item)}>
             <div className={styles.header}>
-              <div><span>{item.timestamp.slice(0, 10)} -- {item.timestamp.slice(11, 19)}</span></div>
+              <div className={styles.src}>
+                <IconFont type="fetus"/><span>录入</span>
+              </div>
+              <div className={styles.date}>
+                <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
+                </div>
             </div>
-            <hr />
             <div className={styles.content}>
-              <div><span>收缩压：{item.systolic}</span></div>
-              <div>{(item.systolic < SYS_MIN || item.systolic > SYS_MAX) ? <span>异常</span> : <span>正常</span>}</div>
-              <div><span>舒张压：{item.diastolic}</span></div>
-              <div>{(item.diastolic < DIA_MIN || item.diastolic > DIA_MAX) ? <span>异常</span> : <span>正常</span>}</div>
+              <div>
+                <div><span>血压</span></div>
+                <div><span>{item.systolic}/{item.diastolic}</span></div>
+                <div>{(item.systolic < SYS_MIN || item.systolic > SYS_MAX) ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+              </div>
+              <div>
+                <div><span>脉率</span></div>
+                <div><span>{item.pulserate}</span></div>
+                <div>正常</div>
+              </div>
             </div>
           </div>
         ))}
       </div>
-      <Modal
+      {/* <Modal
         visible={visible}
         transparent
-        title="请删除异常数据"
+        title="异常数据"
         style={{width: '100%', height: 'auto'}}
-      >
+      > 
         <div>
           {renderList(listData.filter((v:ServiceDataItem) => v.status === 1))}
-          <div className={styles.btn}>
-            <Button onClick={handleDelete}>删除</Button>
+          <div>
             <Button onClick={handleConfirm}>确定</Button>
           </div>
         </div>
-      </Modal>   
+      </Modal>    */}
       <BackButton/>
     </div>
   )
