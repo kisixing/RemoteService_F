@@ -7,11 +7,13 @@
 import React from 'react';
 import { Redirect } from 'umi';
 import PageLoading from '@/components/Loader';
-
-function index() {
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect';
+function index(props:any) {
+  const {pregnancy} = props;
   const [loading, setLoading] = React.useState(true);
   // 是否绑定设备， true已绑定 false未绑定
-  const [state, setState] = React.useState(false);
+  const [state, setState] = React.useState(pregnancy.devices.length !== 0);
   React.useEffect(() => {
     let a = setTimeout(() => {
       setState(true);
@@ -31,4 +33,6 @@ function index() {
   return <PageLoading fullScreen spinning />;
 }
 
-export default index;
+export default connect(({global}: ConnectState) => ({
+  pregnancy: global.currentPregnancy
+}))(index);
