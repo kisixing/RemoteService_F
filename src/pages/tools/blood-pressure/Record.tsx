@@ -1,18 +1,18 @@
 /*
  * @Author: ZHONG JUN
  * @Date: 2020-03-07 18:03:19
- * @Description: 血氧记录
+ * @Description: 血压记录
  */
 
 import React,{ useRef, useEffect, useState } from 'react'
 import Router from 'umi/router';
 import Chart from 'chart.js';
-import { Toast, List, Checkbox } from 'antd-mobile';
+import { Toast } from 'antd-mobile';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import moment from 'moment';
 import BackButton from '@/components/BackButton';
-import { getBloodPressures, getRecordNum, GetProp, editBloodPressures } from '@/services/tools';
+import { getBloodPressures, getRecordNum, GetProp } from '@/services/tools';
 
 import { IconFont } from '@/components/antd-mobile';
 import styles from '../signs/RecordsTabBar.less';
@@ -33,13 +33,75 @@ interface ServiceDataItem {
   status:number
 }
 
-const SYS_MAX=139,
-SYS_MIN=90,
-DIA_MAX=89,
-DIA_MIN=50;
+const SYS_MAX=139,SYS_MIN=90,DIA_MAX=89,DIA_MIN=50;
 
 const [ defaultColor, errorColor ] = ['#c3c5c6','#dc143c'];
 const [ defaultPointRadius, errorPointRadius ] = [2,8];
+
+// chart 配置
+const chartOptions = {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [
+      {key: 'systolic',label: '收缩压',fill: false,borderColor: '#f5bff0',pointBackgroundColor: [], pointBorderColor: [],pointRadius: [],data: []},
+      {key: 'diastolic',label: '收缩压',fill: false,borderColor: '#fcdebb',pointBackgroundColor: [],pointBorderColor: [],pointRadius: [],data: []},
+      {label: '正常',data: [],borderColor: '#C3C5C6'},
+      {label: '异常',data: [],borderColor: '#DC143C',fill: false}
+    ]
+  },
+  options: {
+    responsive: true,
+    steppedLine: true,
+    legend: {
+      labels: {
+        fontSize: 25,
+        fontColor: '#000000'
+      }
+    },
+    title: {
+      display: true,
+      fontSize: 28,
+      fontColor: '#000000',
+      FontFamily: 'Arial',
+      text: '血压曲线'
+    },
+    layout: {padding: {top: 0,left: 10,right: 10,bottom :10}},
+    tooltips: {
+      mode: 'index',
+      intersect: false,
+      titleFontSize: 20,
+      bodyFontSize: 20
+    },
+    scales: {
+      xAxes: [{
+        ticks: {
+          fontSize: 20,
+          fontWeight: 400,
+          autoSkip: true,
+          autoSkipPadding: 50
+        },
+        gridLines: {
+          display: false
+        },
+      }],
+      yAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: '测量值',
+          fontSize:20
+        },
+        ticks: {
+          max: 150,
+          min: 45,
+          stepSize: 15,
+          fontSize: 20,
+          autoSkip: true
+        }
+      }]
+    }
+  }
+};
 
 function BloodPressureRecord(props: {userid: number}) {
   const hChart=useRef(null),tChart=useRef(null);
@@ -49,71 +111,6 @@ function BloodPressureRecord(props: {userid: number}) {
   // const [visible,setVisible] = useState(false);
   // const [selection, setSelection] = useState([]);
   
-  // chart 配置
-  let chartOptions = {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: [
-        {key: 'systolic',label: '收缩压',fill: false,borderColor: '#f5bff0',pointBackgroundColor: [], pointBorderColor: [],pointRadius: [],data: []},
-        {key: 'diastolic',label: '收缩压',fill: false,borderColor: '#fcdebb',pointBackgroundColor: [],pointBorderColor: [],pointRadius: [],data: []},
-        {label: '正常',data: [],borderColor: '#C3C5C6'},
-        {label: '异常',data: [],borderColor: '#DC143C',fill: false}
-      ]
-    },
-    options: {
-      responsive: true,
-      steppedLine: true,
-      legend: {
-        labels: {
-          fontSize: 25,
-          fontColor: '#000000'
-        }
-      },
-      title: {
-        display: true,
-        fontSize: 28,
-        fontColor: '#000000',
-        FontFamily: 'Arial',
-        text: '血压曲线'
-      },
-      layout: {padding: {top: 0,left: 10,right: 10,bottom :10}},
-      tooltips: {
-        mode: 'index',
-        intersect: false,
-        titleFontSize: 20,
-        bodyFontSize: 20
-      },
-      scales: {
-        xAxes: [{
-          ticks: {
-            fontSize: 20,
-            fontWeight: 400,
-            autoSkip: true,
-            autoSkipPadding: 50
-          },
-          gridLines: {
-            display: false
-          },
-        }],
-        yAxes: [{
-          scaleLabel: {
-            display: true,
-            labelString: '测量值',
-            fontSize:20
-          },
-          ticks: {
-            max: 150,
-            min: 45,
-            stepSize: 15,
-            fontSize: 20,
-            autoSkip: true
-          }
-        }]
-      }
-    }
-  };
-
   // 将日历按周期展示
   const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>, isHistory: boolean) => {
     let nOptions = JSON.parse(JSON.stringify(options));  
@@ -142,7 +139,6 @@ function BloodPressureRecord(props: {userid: number}) {
     }else{
       targetData = targetData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr);
     }
-
     const len = nOptions.data.datasets.length;
     targetData.forEach((v: ServiceDataItem, index: number) => {
       // 填入数据/样式
@@ -244,28 +240,25 @@ function BloodPressureRecord(props: {userid: number}) {
 
   // 请求
   useEffect(() => {
-    const { search } = window.location;
-    if(/blood-pressure/.test(search)){
-      getRecordNum({type: 'blood-pressures',pregnancyId: props.userid}).then(res => {
-        if(res.data !== 0){
-          const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
-          getBloodPressures(reqData).then(res => setListData(res.data))
-        }else{
-          Toast.info('暂无数据');
-        }
-      })
-    }
+    getRecordNum({type: 'blood-pressures',pregnancyId: props.userid}).then(res => {
+      if(res.data !== 0){
+        const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
+        getBloodPressures(reqData).then(res => setListData(res.data))
+      }else{
+        Toast.info('暂无数据');
+      }
+    })
   },[props.userid]);
   // 渲染chart
   useEffect(() => {
-    // 离开页面时listData会变为空
-    if(listData.length === 0) return;
     // 判断异常数据
     // if(listData.filter((v: ServiceDataItem) => v.status === 1).length !== 0){
-    //   setVisible(true);
-    // }
-    // 过滤已删除的数据
-    newChart(listData.filter((v:ServiceDataItem) => v.status !== -1));
+      //   setVisible(true);
+      // }
+      // 过滤已删除的数据
+    if(listData.length !== 0){
+      newChart(listData.filter((v:ServiceDataItem) => v.status !== -1));
+    }
   },[listData])
 
   return (
@@ -304,7 +297,7 @@ function BloodPressureRecord(props: {userid: number}) {
               <div>
                 <div><span>血压</span></div>
                 <div><span>{item.systolic}/{item.diastolic}</span></div>
-                <div>{(item.systolic < SYS_MIN || item.systolic > SYS_MAX) ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+                <div>{(item.systolic < SYS_MIN || item.systolic > SYS_MAX || item.diastolic < DIA_MIN || item.diastolic > DIA_MAX) ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
               </div>
               <div>
                 <div><span>脉率</span></div>

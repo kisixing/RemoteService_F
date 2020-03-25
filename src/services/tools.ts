@@ -36,7 +36,8 @@ export interface SetProp{
   insulinnote?: number,
   exercise?: string,
   diet?: string,
-  status?:number
+  status?:number,
+  id?: number
 }
 // 血糖
 export async function getBloodGlucose(entity: GetProp) {
@@ -75,6 +76,13 @@ export async function setBloodOxygens(data: SetProp) {
     getResponse: true
   })
 }
+export async function editBloodOxygens(data: SetProp) {
+  return request(`/api/blood-oxygens`,{
+    method: 'PUT',
+    data,
+    getResponse: true
+  })
+}
 
 // 体温
 export async function getTemperatures(entity:GetProp) {
@@ -92,6 +100,14 @@ export async function setTemperatures(data: SetProp) {
   })
 }
 
+export async function editTemperatures(data: SetProp) {
+  return request(`/api/temperatures`,{
+    method: 'PUT',
+    data,
+    getResponse: true
+  })
+}
+
 // 血压
 interface SetBloodPressuresProp{
   systolic: number, diastolic: number,
@@ -100,7 +116,8 @@ interface SetBloodPressuresProp{
     id: number
   },
   pulserate?: number,
-  status?:number
+  status?:number,
+  id?:number
 }
 
 export async function getBloodPressures(entity:GetProp) {

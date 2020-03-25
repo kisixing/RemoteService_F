@@ -4,6 +4,7 @@
  * @Date: 2020-03-06 18:29:38
  */
 
+ // TODO 血压这里的period有问题
 import React, { useState, useEffect } from 'react';
 import { Tabs, List, InputItem, TextareaItem, Toast, Checkbox } from 'antd-mobile';
 import { connect } from 'dva';
@@ -15,7 +16,7 @@ import DatePicker from '../components/DatePicker';
 import { router } from '@/utils/utils';
 import { PERIOD_CODE } from './config';
 import { ConnectState } from '@/models/connect'
-import { setBloodGlucose } from '@/services/tools';
+import { setBloodGlucose, editBloodGlucose } from '@/services/tools';
 import styles from '../blood-pressure/Input.less';
 
 const nowTimeStamp = Date.now();
@@ -59,28 +60,30 @@ function BloodGlucoseInput(props: {userid: number}) {
   
   useEffect(() => {
     let obj = {};
-    window.location.search.split('?')[1].split('&').forEach((v:string) => {
-      obj[v.split('=')[0]] = v.split('=')[1];
-    });    
-    if(obj['timestamp']){
-      const tar = {
-        bloodGlucose: obj['result'],
-        isInsulin: Boolean(obj['insulin']),
-        quantity: obj['insulinnote'],
-        key: Number(obj['period']),
-        dietaryStatus: obj['diet'] === "null" ? "" : obj['diet'],
-        exercise: obj['exercise'] === "null" ? "" : obj['exercise']
-      };
-      setValues((values:any) => {
-        const i = values.findIndex((v:any) => v.key === Number(obj['period']));
-        let newValues = JSON.parse(JSON.stringify(values));
-        newValues.splice(i,1,tar);
-        return newValues;
-      });
-      setId(Number(obj['id']));
-      setActivatedTab(Number(obj['period']));
-      setDate(new Date(obj['timestamp']));
-    }else{
+    if(window.location.search){
+      window.location.search.split('?')[1].split('&').forEach((v:string) => {
+        obj[v.split('=')[0]] = v.split('=')[1];
+      });    
+      if(obj['timestamp']){
+        const tar = {
+          bloodGlucose: obj['result'],
+          isInsulin: Boolean(obj['insulin']),
+          quantity: obj['insulinnote'] === "null" ? "" : obj['insulinnote'],
+          key: Number(obj['period']),
+          dietaryStatus: obj['diet'] === "null" ? "" : obj['diet'],
+          exercise: obj['exercise'] === "null" ? "" : obj['exercise']
+        };
+        setValues((values:any) => {
+          const i = values.findIndex((v:any) => v.key === Number(obj['period']));
+          let newValues = JSON.parse(JSON.stringify(values));
+          newValues.splice(i,1,tar);
+          return newValues;
+        });
+        setId(Number(obj['id']));
+        setActivatedTab(Number(obj['period']));
+        setDate(new Date(obj['timestamp']));
+      }
+    }else{    
       const h = now.getHours();
       if(h >= 3 && h < 8){
         setActivatedTab(PERIOD_CODE.FASTING);
@@ -103,7 +106,6 @@ function BloodGlucoseInput(props: {userid: number}) {
   useEffect(() => {
     const index = values.findIndex(e => e.key === activatedTab);
     setCurrent(values[index]);
-    console.log(current);
     return () => {};
   }, [activatedTab,values]);
 
@@ -124,7 +126,27 @@ function BloodGlucoseInput(props: {userid: number}) {
     }
     let reqFlag = true;
     if(id !== -1){
-
+      console.log(current);
+      // const reqData = {values.find((v:any) => v.)}
+      const reqData = {
+        timestamp: d,
+        result: Number(current.bloodGlucose),
+        pregnancy:{id: props.userid},
+        period: current.key,
+        insulin: current.isInsulin,
+        insulinnote: Number(current.quantity),
+        diet: current.dietaryStatus,
+        exercise: current.exercise, 
+        status: 0,
+        id:id
+      };
+      const res = await editBloodGlucose(reqData);
+      console.log(res);
+      if(res.response.status >= 200 && res.response.status < 300){
+        // 合法
+        Toast.info(`血糖信息修改成功`);
+        Router.push('/signs/record?type=blood-glucose');
+      }
     }else{
       for(let i = 0 ; i < values.length ; i++){
         if(!values[i].bloodGlucose){
@@ -161,8 +183,14 @@ function BloodGlucoseInput(props: {userid: number}) {
     newValues[index][key] = value;
     setValues(newValues);
   }
+  const tabChange = (tab:any) => {
+    if(id!==-1){
+      return Toast.info('修改模式');
+    }else{
+      setActivatedTab(Number(tab.key));
+    }
+  }
 
-  console.log(values);
   return (
     <div className={styles.container}>
       <DatePicker
@@ -190,7 +218,7 @@ function BloodGlucoseInput(props: {userid: number}) {
         tabs={tabs.map(v => {v.key = v.key.toString(); return v;})}
         page={activatedTab}
         tabBarPosition="top"
-        onChange={(tab: any, index) => setActivatedTab(Number(tab.key))}
+        onChange={(tab: any, index) => tabChange(tab)}
         renderTab={tab => <span>{tab.title}</span>}
       >
         <div style={{ height: '100%' }}>

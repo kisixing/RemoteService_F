@@ -22,11 +22,11 @@ export default function MonitorCard(props: MonitorCardProp) {
           </div>
           <Tag size="middle" bgcolor="#D9F0F8" color="#3FB6DC">单胎</Tag>
           {/* <Tag size="middle" bgcolor="#E3D9FC" color="#7540EE">多胎</Tag> */}
-          <span className={styles.extra}>
+          <div className={styles.extra}>
             {/* {e.stateText}   */}
             {/* <img src={require('@/assets/order/statepic.png')} alt=""/> */}
             {data.state ? `${ORDER_STATE_STR[data.state]}` : '无状态'}
-          </span>
+          </div>
         </div>
         <div className={styles.info}>
           <div><span>订单号：{data.sn}</span></div>
@@ -52,7 +52,7 @@ export default function MonitorCard(props: MonitorCardProp) {
         </div>
         <hr/>
         <div className={styles.price}>
-          <div><IconFont type="device"/><span>{data.price}</span><span>（含押金2500）</span></div>
+          <div><IconFont type="device"/><span>{data.price}</span></div>
         </div>
       </div>
     </div>

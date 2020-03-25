@@ -5,6 +5,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect';
 import { Toast } from 'antd-mobile';
 import Router from 'umi/router';
 import moment from 'moment';
@@ -12,7 +14,7 @@ import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
 import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
-import { setTemperatures } from '@/services/tools';
+import { setTemperatures, editTemperatures } from '@/services/tools';
 import styles from '../blood-pressure/Input.less';
 
 const nowTimeStamp = Date.now();
@@ -29,32 +31,44 @@ function TemperatureInput(props: {userid: number}) {
     if (!temperature) {
       return Toast.info('请输入体温数值...');
     }
+    const reqData = {
+      result: Number(temperature),
+      timestamp: d,
+      pregnancy: {id: props.userid},
+      status: 0
+    };
     if(id !== -1) {
-
+      editTemperatures({...reqData,id:id}).then(res => {
+        if(res.response.status >= 200 && res.response.status < 300){
+          Toast.success('体温数据修改成功');
+          setTimeout(() => {
+            Router.push('/signs/record?type=temperature');
+          },500)
+        }
+      })
     }else {
-      setTemperatures({
-        result: Number(temperature),
-        timestamp: d,
-        pregnancy: {id: props.userid},
-        status: 0
-      }).then(r => {
+      setTemperatures(reqData).then(r => {
         if(r.response.status >= 200 && r.response.status < 300){
-          Toast.success('保存体温数据成功');
-          Router.push('/signs/record?type=temperature');
+          Toast.success('体温数据保存成功');
+          setTimeout(() => {
+            Router.push('/signs/record?type=temperature');
+          },500)
         }
       })
     }
   };
 
   useEffect(() => {
-    let obj = {};
-    window.location.search.split('?')[1].split('&').forEach((v:string) => {
-      obj[v.split('=')[0]] = v.split('=')[1];
-    });    
-    if(obj['timestamp']){
-      setId(Number(obj['id']));
-      setTemperature(obj['result'])
-      setDate(new Date(obj['timestamp']));
+    if(window.location.search){
+      let obj = {};
+      window.location.search.split('?')[1].split('&').forEach((v:string) => {
+        obj[v.split('=')[0]] = v.split('=')[1];
+      });    
+      if(obj['timestamp']){
+        setId(Number(obj['id']));
+        setTemperature(obj['result'])
+        setDate(new Date(obj['timestamp']));
+      }
     }
   },[]);
 
@@ -97,4 +111,6 @@ function TemperatureInput(props: {userid: number}) {
   );
 }
 
-export default TemperatureInput;
+export default connect(({global}: ConnectState) => ({
+  userid: global.currentPregnancy?.id
+}))(TemperatureInput);
