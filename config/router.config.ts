@@ -13,12 +13,11 @@ export default [
   {
     path: '/consultation',
     component: '../layouts/BlankLayout',
-    title: '在线咨询',
     routes: [
       {
         path: '/consultation',
         name: 'consultation home',
-        title: '首页',
+        title: '在线咨询',
         component: './consultation',
       },
       {
@@ -57,23 +56,17 @@ export default [
         title: '问诊详情',
         component: './consultation/chats/$id',
       },
-      { component: './404' }
+      { component: './404' },
     ],
   },
   {
     path: '/perinatal',
     component: '../layouts/BlankLayout',
-    name: 'perinatal',
-    title: '围产建档',
     routes: [
-      // {
-      //   path: '/perinatal',
-      //   redirect: '/perinatal/list',
-      // },
       {
         path: '/perinatal',
         name: 'perinatal list',
-        title: '列表',
+        title: '围产建档',
         component: './perinatal/MapList',
       },
       {
@@ -94,11 +87,12 @@ export default [
         title: '孕产史信息',
         component: './perinatal/PregnancyHistory',
       },
-      { component: './404' }
+      { component: './404' },
     ],
   },
   {
     path: '/school',
+    title: '孕妇学校',
     component: '../layouts/BlankLayout',
     routes: [
       { path: '/school', name: 'school', title: '孕妇学校', component: './school/TabBar' },
@@ -139,8 +133,6 @@ export default [
           },
           {
             path: '/orders',
-            name: 'my order',
-            title: '',
             routes: [
               {
                 path: '/orders',
@@ -154,13 +146,12 @@ export default [
                 title: '订单详情',
                 component: './remote-service/order/detail',
               },
-              { component: './404' }
+              { component: './404' },
             ],
           },
           {
             path: '/packages',
             name: 'packages services',
-            title: '',
             routes: [
               {
                 path: '/packages',
@@ -178,15 +169,14 @@ export default [
                 patn: '/packages/payment',
                 name: 'package pay',
                 title: '套餐支付',
-                component: './remote-service/package/PackagePay'
+                component: './remote-service/package/PackagePay',
               },
-              { component: './404' }
+              { component: './404' },
             ],
           },
           {
             path: '/apply',
             name: 'Apply',
-            title: '胎监判图',
             routes: [
               {
                 path: '/apply',
@@ -203,10 +193,10 @@ export default [
               {
                 path: '/apply/payResult',
                 name: 'pay result',
-                title: '',
+                title: '支付结果',
                 // component: './remote-service/apply/payResult',
               },
-              { component: './404' }
+              { component: './404' },
             ],
           },
           {
@@ -218,7 +208,6 @@ export default [
           {
             path: '/reports',
             name: 'reports',
-            title: '产检报告',
             routes: [
               // {
               //   path: '/reports',
@@ -227,36 +216,35 @@ export default [
               {
                 path: '/reports',
                 name: 'reports list',
-                title: '列表',
+                title: '产检报告',
                 component: './reports/BBSList',
               },
               {
                 path: '/reports/preview',
-                name: '预览',
-                title: 'pdf预览',
+                name: 'preview',
+                title: '报告预览',
                 component: './reports/Preview',
               },
-              { component: './404' }
+              { component: './404' },
             ],
           },
           {
             path: '/signs',
             name: 'signs',
-            title: '体征管理',
             routes: [
               {
                 path: '/signs',
-                title: '',
+                title: '体征管理',
                 component: './tools/signs',
               },
               {
                 path: '/signs/input',
-                title: '录入',
+                title: '体征录入',
                 component: './tools/signs/InputTabBar',
               },
               {
                 path: '/signs/record',
-                title: '记录',
+                title: '体征记录',
                 component: './tools/signs/RecordsTabBar',
               },
               // 以下不常用，确保有单独的路由，便于后续扩展
@@ -320,7 +308,7 @@ export default [
                 title: '体温记录',
                 component: './tools/temperature/Record',
               },
-              { component: './404' }
+              { component: './404' },
             ],
           },
         ],

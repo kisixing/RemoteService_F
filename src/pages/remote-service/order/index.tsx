@@ -5,44 +5,30 @@
  */
 
 import React, { useEffect } from 'react';
-import { NavBar, Tabs } from 'antd-mobile';
+import { connect } from 'dva';
 import Router from 'umi/router';
 import { Dispatch } from 'redux';
 import { StickyContainer, Sticky } from 'react-sticky';
-import BackButton from '@/components/BackButton';
+import { NavBar, Tabs } from 'antd-mobile';
 import ListView from './ListView';
-
 
 import { PackageListItem } from '../package/interface';
 import { ServiceOrderItem, PackageOrderItem, ORDER_TYPE } from './interface';
 
-import { connect } from 'dva';
 import { ConnectState} from '@/models/connect';
 
 import styles from './index.less';
 
 let currentKey = '';
 const tabs = [
-  { title: <Title text="全部订单" />, key: 'all' },
-  { title: <Title text="远程监护" />, key: 'monitoring' },
-  { title: <Title text="胎监判图" />, key: 'apply' },
-  { title: <Title text="在线咨询" />, key: 'consult' },
+  { title: '全部订单', key: 'all' },
+  { title: '远程监护', key: 'monitoring' },
+  { title: '胎监判图', key: 'apply' },
+  { title: '在线咨询', key: 'consult' },
 ];
 
-
-interface Itext { text: string, icon?: string }
-function Title({ text, icon }: Itext) {
-  // TODO 增加iconfont字体支持
-  return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <span style={{ marginLeft: '0.1rem', fontSize: '0.3rem' }}>{text}</span>
-    </div>
-  );
-}
-
-
 // 渲染顶部bar
-function renderTabBar(props:any) {
+function renderTabBar(props: any) {
   return (
     <Sticky>
       {({ style }: any) => (
@@ -55,12 +41,12 @@ function renderTabBar(props:any) {
 }
 
 interface OrderProps{
-  dispatch:Dispatch,
-  userid:number|string,
-  serviceOrderList:Array<ServiceOrderItem>,
-  packageOrderList:Array<PackageOrderItem>,
-  packageList: Array<PackageListItem>,
-  location:{
+  dispatch: Dispatch
+  currentPregnancy: any
+  serviceOrderList: Array<ServiceOrderItem>
+  packageOrderList: Array<PackageOrderItem>
+  packageList: Array<PackageListItem>
+  location: {
     query: {
       type: string
     }
@@ -68,10 +54,12 @@ interface OrderProps{
 }
 
 function Oders(props: OrderProps) {
-  const { location: { query }, userid } = props;
+  const {
+    location: { query },
+    currentPregnancy: { id },
+  } = props;
   const type = query.type || 'all';
   currentKey = type;
-  
 
   const onTabClick = (tab: any, index: number) => {
     const key = tab.key;
@@ -80,7 +68,8 @@ function Oders(props: OrderProps) {
     }
     return Router.replace(`/orders?type=${key}`);
   };
-  /**  
+
+  /**
    * 在订单中加入type用于前端判断类型
    *  fType 0 代表为远程胎监 套餐订单
    *  fType 1 代表为胎监判图 服务订单
@@ -139,8 +128,8 @@ function Oders(props: OrderProps) {
 
   useEffect(() => {
     props.dispatch({type: 'combo/getPackage'});
-    props.dispatch({type: 'order/getPackageOrders',payload: {pregnancyId: props.userid}});
-    props.dispatch({type: 'order/getServiceOrders',payload: {pregnancyId: props.userid}});
+    props.dispatch({type: 'order/getPackageOrders',payload: {pregnancyId: id}});
+    props.dispatch({type: 'order/getServiceOrders',payload: {pregnancyId: id}});
   },[]);
 
   return (
@@ -167,14 +156,13 @@ function Oders(props: OrderProps) {
           </div>
         </Tabs>
       </StickyContainer>
-      <BackButton />
     </div>
   );
 }
 
-export default connect(({global,order,combo}:ConnectState) => ({
-  userid: global.currentPregnancy.id,
-  serviceOrderList:order.serviceOrderList,
-  packageOrderList:order.packageOrderList,
-  packageList:combo.packageList
+export default connect(({ global, order, combo }: ConnectState) => ({
+  currentPregnancy: global.currentPregnancy,
+  serviceOrderList: order.serviceOrderList,
+  packageOrderList: order.packageOrderList,
+  packageList: combo.packageList,
 }))(Oders);

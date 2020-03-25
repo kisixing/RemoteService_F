@@ -13,10 +13,10 @@ function index(props:any) {
   const {pregnancy} = props;
   const [loading, setLoading] = React.useState(true);
   // 是否绑定设备， true已绑定 false未绑定
-  const [state, setState] = React.useState(pregnancy.devices.length !== 0);
+  const [state, setState] = React.useState(false);
   React.useEffect(() => {
     let a = setTimeout(() => {
-      setState(true);
+      setState(pregnancy.devices.length !== 0);
       setLoading(false);
     }, 600);
     return function clean() {
