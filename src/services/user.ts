@@ -26,6 +26,9 @@ export interface authParamsType {
 export async function mpauth(params: authParamsType) {
   return request('/api/mplogin', {
     method: 'POST',
+    headers: {
+      Authorization: '',
+    },
     getResponse: true,
     data: params,
   });

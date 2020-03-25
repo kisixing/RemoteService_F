@@ -8,10 +8,9 @@ import { mpauth, getPregnancy } from '@/services/user';
 export interface GlobalModelState {
   locale?: string;
   mpuid?: string;
-  currentUser?: any;
   currentPregnancy?: {
-    id?: string | number;
-    [propName: string]: any;
+    id?: string | number
+    [propName: string]: any
   };
 }
 
@@ -23,7 +22,6 @@ export interface GlobalModelType {
     getPregnancy: Effect;
   };
   reducers: {
-    changeUserStatus: Reducer<GlobalModelState>;
     updatePregnancy: Reducer<GlobalModelState>;
     updateState: Reducer<GlobalModelState>;
   };
@@ -36,22 +34,21 @@ const GlobalModel: GlobalModelType = {
   state: {
     locale: 'cn', // cn/en
     mpuid: '',
-    currentUser: {},
-    currentPregnancy: { id: 4193 },
+    currentPregnancy: {},
   },
 
   effects: {
     // 微信跳转验证
     *mpauth({ payload }, { call, put }) {
       try {
-        const { /* response, */ data } = yield call(mpauth, payload);
+        const { response, data } = yield call(mpauth, payload);
         //  已在request封装处理
-        // let token = response && response.headers.get('Authorization');
-        // if (token) {
-        //   token = token.replace(/captcha/, 'Bearer');
-        //   store.set('lianmp-token', token);
-        // }
-        if (data) {
+        let token = response && response.headers.get('Authorization');
+        if (token) {
+          token = token.replace(/captcha /, '');
+          store.set('lianmp-token', token);
+        }
+        if (data && data.id) {
           store.set('mpuid', data.mpuid);
           yield put({
             type: 'updatePregnancy',
@@ -66,21 +63,16 @@ const GlobalModel: GlobalModelType = {
     *getPregnancy({ payload }, { call, put }) {
       const data = yield call(getPregnancy, payload);
       yield put({
-        type: 'updatePregnancy',
-        payload: data,
+        type: 'updateState',
+        payload: {
+          currentPregnancy: data,
+        },
       });
       return data;
     }
   },
 
   reducers: {
-    changeUserStatus(state, { payload }) {
-      return {
-        ...state,
-        mpuid: payload.mpuid || payload.openid,
-        currentUser: payload,
-      };
-    },
     updatePregnancy(state, { payload }) {
       return {
         ...state,

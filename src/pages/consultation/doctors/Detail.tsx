@@ -6,14 +6,14 @@
 
 import React, { useEffect } from 'react';
 import { connect } from 'dva';
-import { Modal } from 'antd-mobile';
+import Router from 'umi/router';
+import { Modal, Toast } from 'antd-mobile';
 import { ConnectState } from '@/models/connect';
 import { IconFont, Tag, Button } from '@/components/antd-mobile';
 import CommentItem from './CommentItem';
 import styles from './Detail.less';
-import { router } from '@/utils/utils';
 
-function DoctorDetail({ dispatch, comments, match, pregnancyId, ...rest }: any) {
+function DoctorDetail({ dispatch, comments, match, pregnancyId }: any) {
   useEffect(() => {
     const doctorId = match.params.id;
     dispatch({
@@ -24,14 +24,20 @@ function DoctorDetail({ dispatch, comments, match, pregnancyId, ...rest }: any) 
     });
   }, []);
 
-  const onClick = (id: string | number) => {
+  const onClick = () => {
     if (!pregnancyId) {
       return Modal.alert('温馨提示', '本院仅支持建档且已审核的孕妇线上咨询，是否开始建档？', [
         { text: '取消', onPress: () => {} },
-        { text: '确定', onPress: () => router('/perinatal/basic-info') },
+        { text: '确定', onPress: () => Router.push('/perinatal/basic-info') },
       ]);
     }
-    return router('/consultation/consulting-details');
+
+    return Router.push({
+      pathname: '/consultation/consulting-details',
+      query: {
+        doctorId: '123'
+      }
+    });
   };
 
   return (
@@ -101,7 +107,7 @@ function DoctorDetail({ dispatch, comments, match, pregnancyId, ...rest }: any) 
           ￥<span>{'30'}</span>
           元/次
         </div>
-        <Button inline type="primary" size="small" onClick={() => onClick(12345)}>
+        <Button inline type="primary" onClick={onClick}>
           图文咨询
         </Button>
       </div>

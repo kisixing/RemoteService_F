@@ -42,6 +42,7 @@ interface S {
 @connect(({ loading, global }: ConnectState) => ({
   submitting: loading.effects['user/bindUser'],
   mpuid: global.mpuid,
+  currentPregnancy: global.currentPregnancy,
 }))
 @createForm()
 class Login extends Component<P, S> {
@@ -49,6 +50,7 @@ class Login extends Component<P, S> {
   state = {
     count: 0,
     disabled: false,
+    visible: false
   };
 
   componentDidMount() {
@@ -187,7 +189,7 @@ class Login extends Component<P, S> {
       <div className={styles.wrapper}>
         <div className={styles.header}>
           <span className={styles.logo} />
-          <h1>登录</h1>
+          <h1>登 录</h1>
         </div>
         <form className={styles.content} onSubmit={this.onSubmit}>
           {getFieldDecorator('mobile', {
@@ -195,13 +197,7 @@ class Login extends Component<P, S> {
               { required: true, message: '请输入手机号码' },
               { pattern: /^1\d{10}$/, message: '请输入合法的手机号码' },
             ],
-          })(
-            <InputItem
-              icon={<IconFont type="mobile1" size="0.44rem" />}
-              type="number"
-              placeholder="请输入手机号"
-            />,
-          )}
+          })(<InputItem icon={<IconFont type="mobile1" size="0.44rem" />} type="number" placeholder="请输入手机号" />)}
           {getFieldDecorator('captcha', {
             rules: [
               { required: true, message: '请输入手机号码' },
@@ -252,18 +248,9 @@ class Login extends Component<P, S> {
           {getFieldDecorator('idNo', {
             rules: [{ required: true }],
           })(
-            <InputItem
-              icon={<IconFont type="cc-card" size="0.44rem" />}
-              type="number"
-              placeholder="请输入证件号码"
-            />,
+            <InputItem icon={<IconFont type="cc-card" size="0.44rem" />} type="number" placeholder="请输入证件号码" />,
           )}
-          <Button
-            type="primary"
-            loading={submitting}
-            onClick={this.onSubmit}
-            style={{ margin: '.6rem 0' }}
-          >
+          <Button type="primary" loading={submitting} onClick={this.onSubmit} style={{ margin: '.6rem 0' }}>
             登录
           </Button>
         </form>

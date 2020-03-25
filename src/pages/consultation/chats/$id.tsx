@@ -9,31 +9,35 @@ import React, { useState, useEffect, useRef } from 'react';
 import uuid from 'uuid';
 import store from 'store';
 import { useI } from '@lianmed/im';
-import { TextareaItem, Button } from 'antd-mobile';
+import { TextareaItem, Button, Toast } from 'antd-mobile';
 import { IconFont } from '@/components/antd-mobile';
+import Message from './Message';
 import styles from './id.less';
 
 let flag = false;
 
 function ChatView() {
   const textRef = useRef(null);
+  const scrollRef = useRef(null);
+  const [currentId, setCurrentId] = useState('mlogin_preg_19142986941');
   const [text, setText] = useState('');
-  const { chatMessage, contacts, current, currentMessage, setCurrentId, sendTextMessage } = useI(
+  const { chatMessage, sendTextMessage } = useI(
     `http://transfer.lian-med.com:9987/ws/stomp?access_token=${store.get('lianmp-token')}`,
   );
 
+  useEffect(() => {
+    scrollRef.current && scrollRef.current.scrollTo(0, 999);
+  }, []);
+
   const sendMessage = () => {
-    sendTextMessage('mlogin_preg_19142986941', text);
+    if (!text) {
+      return Toast.info('请输入内容...')
+    }
+    sendTextMessage(currentId, text);
     setText('');
   };
-  useEffect(() => {
-    if (contacts.length && !flag) {
-      console.log('zzzzzzzz')
-      setCurrentId(contacts[0].name);
-      flag = true;
-    }
-  }, [contacts]);
-  console.log('777777777', current);
+
+  console.log('messages:', chatMessage[currentId]);
 
   return (
     <div className={styles.container}>
@@ -41,7 +45,11 @@ function ChatView() {
         <span>XXX 医生</span>
       </div>
       <div className={styles.content}>
-
+        <div ref={scrollRef}>
+          {chatMessage[currentId] &&
+            chatMessage[currentId].length &&
+            chatMessage[currentId].map(message => <Message message={message} key={message.id} />)}
+        </div>
       </div>
       <div className={styles.footer}>
         <TextareaItem
@@ -53,7 +61,7 @@ function ChatView() {
           onChange={(e: any) => setText(e)}
         />
         <div className={styles.buttons}>
-          <Button inline type="primary" size="small" onClick={sendMessage}>
+          <Button inline type="primary" onClick={sendMessage}>
             发送
           </Button>
           <Button inline size="small">

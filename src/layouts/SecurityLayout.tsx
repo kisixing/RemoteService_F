@@ -40,7 +40,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
 
     if (p1 && p2 && t && access_token) {
       // p1 p2存在，可知是从app跳转过来，进行判图操作
-      store.set('lianmp-token', `Bearer ${access_token}`);
+      store.set('lianmp-token', `${access_token}`);
       dispatch({
         type: 'global/updatePregnancy',
         payload: {

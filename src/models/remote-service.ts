@@ -38,7 +38,7 @@ const RemoteServiceModel: NewsModelType = {
 
   effects: {
     *getPackages({ payload }, { call, put }) {
-      const response = yield call(getPackages);
+      const response = yield call(getPackages, payload);
       yield put({
         type: 'updateState',
         payload: {

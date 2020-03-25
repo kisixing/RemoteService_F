@@ -8,7 +8,7 @@
     "lint:es": "eslint --ext .js src mock tests",
     "lint:ts": "tslint \"src/**/*.ts\" \"src/**/*.tsx\"",
     "precommit": "lint-staged",
-    "link:lianmed": "npm link @lianmed/request @lianmed/lmg @lianmed/f_types @lianmed/utils @lianmed/pages @lianmed/im react",
+    "link:lianmed": "npm link @lianmed/f_types @lianmed/utils @lianmed/im",
     "postinstall": "yarn link:lianmed"
   },
   "dependencies": {
