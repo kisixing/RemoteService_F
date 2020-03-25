@@ -309,7 +309,7 @@ export default [
                 component: './tools/blood-oxygen/Record',
               },
               {
-                path: '/signs/blood-glucose/input',
+                path: '/signs/temperature/input',
                 name: 'temperature input',
                 title: '体温录入',
                 component: './tools/temperature/Input',

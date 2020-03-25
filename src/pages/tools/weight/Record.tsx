@@ -9,7 +9,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import Chart from 'chart.js';
 
 import BackButton from '@/components/BackButton';
-import styles from '../blood-pressure/Record.less';
+import styles from '../signs/RecordsTabBar.less';
 
 const nowTimeStamp = Date.now();
 const end = new Date(nowTimeStamp);

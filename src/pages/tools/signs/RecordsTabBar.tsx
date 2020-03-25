@@ -4,9 +4,8 @@
  * @Date: 2020-03-06 17:38:10
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Tabs } from 'antd-mobile';
-import Router from 'umi/router';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect'
@@ -20,19 +19,14 @@ import { tabs } from './config';
 import styles from './TabBar.less';
 
 function RecordsTabBar(props: any) {
-  
-  const {
-    location: { query },
-  } = props;
+  const { location:{query} } = props;
   const type = query.type || 'weight';
-  // document.title = TABS.filter(e => e.key === type)[0]['title'];
+  const [activeTab, setActiveTab] = useState(type);
 
   const onTabClick = (tab: any, index: number) => {
     const key = tab.key;
-    if (key === type) {
-      return;
-    }
-    Router.replace(`/signs/record?type=${key}`);
+    if (key === activeTab) return;
+    setActiveTab(key)
   };
 
   function renderTabBar(props: any) {
@@ -47,44 +41,29 @@ function RecordsTabBar(props: any) {
     );
   }
 
-  const content = (key: string) => {
-    if (key === 'weight') {
-      return <Weight />;
-    }
-    if (key === 'blood-pressure') {
-      return <BloodPressure userid={props.userid}/>;
-    }
-    if (key === 'blood-glucose') {
-      return <BloodGlucose userid={props.userid}/>;
-    }
-    if (key === 'blood-oxygen') {
-      return <BloodOxygen userid={props.userid}/>;
-    }
-    if (key === 'temperature') {
-      return <Temperature userid={props.userid}/>;
-    }
-    return <div style={{ margin: '1rem', textAlign: 'center' }}>没有定义{type}这个体征组件</div>;
-  };
-
   return (
     <div>
       <StickyContainer className={styles.wrapper}>
         <Tabs
           tabs={tabs}
-          initialPage={type}
+          page={activeTab}
           swipeable={false}
           animated={false}
           renderTabBar={renderTabBar}
           onTabClick={onTabClick}
+          // 默认预加载页面1个
+          // prerenderingSiblingsNumber={0}
           tabBarInactiveTextColor="#787878"
           tabBarUnderlineStyle={{
             height: '6px',
             backgroundColor: '#FFCC4A',
           }}
         >
-          <div key={type} className={styles.content}>
-            {content(type)}
-          </div>
+          <div key="weight"><Weight /></div>
+          <div key="blood-pressure"><BloodPressure userid={props.userid}/></div>
+          <div key="blood-glucose"><BloodGlucose userid={props.userid}/></div>
+          <div key="blood-oxygen"><BloodOxygen userid={props.userid}/></div>
+          <div key="temperature"><Temperature userid={props.userid}/></div>
         </Tabs>
       </StickyContainer>
     </div>
@@ -92,5 +71,5 @@ function RecordsTabBar(props: any) {
 }
 
 export default connect(({global}: ConnectState) => ({
-  userid: global.currentPregnancy.id
+  userid: global.currentPregnancy?.id
 }))(RecordsTabBar)

@@ -4,12 +4,9 @@
  * @Date: 2020-03-06 17:22:51
  */
 
-import React from 'react';
+import React,{useState} from 'react';
 import { Tabs } from 'antd-mobile';
-import Router from 'umi/router';
 import { StickyContainer, Sticky } from 'react-sticky';
-import { connect } from 'dva';
-import { ConnectState } from '@/models/connect'
 // content 组件
 import Weight from '../weight/Input';
 import BloodPressure from '../blood-pressure/Input';
@@ -19,16 +16,15 @@ import Temperature from '../temperature/Input';
 import { tabs } from './config';
 import styles from './TabBar.less'
 
-function InputTabBar(props: any) {
-  const { location: { query } } = props;
-  const type = query.type || 'weight';
-  // document.title = TABS.filter(e => e.key === type)[0]['title'];
+function InputTabBar() {
+
+  const [activeTab, setActiveTab] = useState("weight");
   const onTabClick = (tab: any, index: number) => {
     const key = tab.key;
-    if (key === type) {
+    if (key === activeTab) {
       return;
     }
-    Router.replace(`/signs/input?type=${key}`)
+    setActiveTab(key);
   }
 
   function renderTabBar(props: any) {
@@ -43,31 +39,12 @@ function InputTabBar(props: any) {
     );
   }
 
-  const content = (key: string) => {
-    if (key === 'weight') {
-      return <Weight userid={props.userid}/>
-    }
-    if (key === 'blood-pressure') {
-      return <BloodPressure userid={props.userid}/>
-    }
-    if (key === 'blood-glucose') {
-      return <BloodGlucose userid={props.userid}/>
-    }
-    if (key === 'blood-oxygen') {
-      return <BloodOxygen userid={props.userid}/>
-    }
-    if (key === 'temperature') {
-      return <Temperature userid={props.userid}/>
-    }
-    return <div style={{ margin: '1rem', textAlign: 'center' }}>没有定义{type}这个体征组件</div>
-  }
-
   return (
     <div>
       <StickyContainer className={styles.wrapper}>
         <Tabs
           tabs={tabs}
-          initialPage={type}
+          page={activeTab}
           swipeable={false}
           animated={false}
           renderTabBar={renderTabBar}
@@ -77,16 +54,17 @@ function InputTabBar(props: any) {
             height: '6px',
             backgroundColor: '#FFCC4A',
           }}
+          
         >
-          <div key={type} className={styles.content}>
-            {content(type)}
-          </div>
+          <div key="weight"><Weight userid={1}/></div>
+          <div key="blood-pressure"><BloodPressure/></div>
+          <div key="blood-glucose"><BloodGlucose/></div>
+          <div key="blood-oxygen"><BloodOxygen/></div>
+          <div key="temperature"><Temperature/></div>
         </Tabs>
       </StickyContainer>
     </div>
   );
 }
 
-export default connect(({global}: ConnectState) => ({
-  userid: global.currentPregnancy?.id
-}))(InputTabBar);
+export default InputTabBar;

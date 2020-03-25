@@ -4,15 +4,17 @@
  * @Description: 血氧
  */
 
-import React from 'react';
+import React,{useEffect} from 'react';
 import { InputItem, List, Toast } from 'antd-mobile';
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect';
 import Router from 'umi/router'
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
 import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
-import { setBloodOxygens } from '@/services/tools';
+import { setBloodOxygens, editBloodOxygens } from '@/services/tools';
 import styles from '../blood-pressure/Input.less';
 
 const nowTimeStamp = Date.now();
@@ -23,6 +25,8 @@ function BloodOxygenInput(props: {userid: number}) {
   const [bloodOxygen, setBloodOxygen] = React.useState('');
   const [pulseRate, setPulseRate] = React.useState('');
 
+  // 用于控制新建于修改
+  const [id,setId] = React.useState(-1);
   const onSubmit = () => {
     const d = moment(date);
     if (!bloodOxygen) {
@@ -31,20 +35,46 @@ function BloodOxygenInput(props: {userid: number}) {
     if (!pulseRate) {
       return Toast.info('请输入脉率数值...');
     }
-    console.log({ d, bloodOxygen, pulseRate });
-    setBloodOxygens({
+    const reqData ={
       result: Number(bloodOxygen),
       timestamp: d,
       pregnancy: {id: props.userid},
       pulserate: Number(pulseRate),
       status: 0
-    }).then((r:any) => {
-      if(r.response.status >= 200 && r.response.status < 300 ){
-        Toast.success('血氧数据保存成功');
-        Router.push('/signs/record?type=blood-oxygen');
-      }
-    });
+    }
+    if(id !== -1){
+      editBloodOxygens({...reqData,id: id}).then(res => {
+        if(res.response.status >= 200 && res.response.status < 300 ){
+          Toast.success('血氧数据修改成功');
+          Router.push('/signs/record?type=blood-oxygen');
+        }
+      })
+    }else{
+      setBloodOxygens(reqData).then((r:any) => {
+        if(r.response.status >= 200 && r.response.status < 300 ){
+          Toast.success('血氧数据保存成功');
+          Router.push('/signs/record?type=blood-oxygen');
+        }
+      });
+    }
   };
+
+  useEffect(() => {
+    if(window.location.search){
+      let obj = {};
+      window.location.search.split('?')[1].split('&').forEach((v:string) => {
+        obj[v.split('=')[0]] = v.split('=')[1];
+      });    
+      console.log(obj);
+      if(obj['timestamp']){
+        setId(Number(obj['id']));
+        setBloodOxygen(obj['result']);
+        setPulseRate(obj['pulserate']==="null" ? null : obj['pulserate']);
+        setDate(new Date(obj['timestamp']));
+      }
+    }
+  },[]);
+
   return (
     <div className={styles.container}>
       <DatePicker
@@ -83,7 +113,7 @@ function BloodOxygenInput(props: {userid: number}) {
             onChange={v => setPulseRate(v)}
           >
             <div className={styles.label}>
-              {/* <span className={styles.required}>*</span> */}
+              <span className={styles.required}>*</span>
               脉率
               <span className={styles.unit}>(次/分)</span>
             </div>
@@ -100,4 +130,6 @@ function BloodOxygenInput(props: {userid: number}) {
   );
 }
 
-export default BloodOxygenInput
+export default connect(({global}: ConnectState) => ({
+  userid:global.currentPregnancy?.id
+}))(BloodOxygenInput);
