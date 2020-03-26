@@ -55,8 +55,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
           code: query.code,
         },
       }).then((res: any) => {
-        if (res && res.id) {
-        }
+        if (res && res.id) {}
       });
     } else if (!code) {
       // 3、code/isLogin都不存在，提示并返回登录

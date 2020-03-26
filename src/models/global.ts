@@ -63,6 +63,15 @@ const GlobalModel: GlobalModelType = {
           });
           return data;
         }
+        if (data && data.mpuid) {
+          // 不管是否已经建档，都保存openid
+          yield put({
+            type: 'updateState',
+            payload: {
+              mpuid: data.mpuid,
+            },
+          });
+        }
       } catch (error) {
         console.log('on error', error);
       }
