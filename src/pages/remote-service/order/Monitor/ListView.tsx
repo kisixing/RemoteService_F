@@ -59,14 +59,28 @@ function MonitorListView({ currentPregnancy }: any) {
                 {/* 从0开始对应 新订单、已支付、使用中、完成、关闭、逾期、取消 */}
                 <div
                   className={styles.overprint}
-                  // style={{ backgroundImage: `url(../../../../assets/icons/overprint_1@3x.png)` }}
+                  style={{ backgroundImage: `url(/images/icon/overprint_${!!item.state ? item.state : 1}@3x.png)` }}
                 />
               </div>
               <div className={styles.content}>
-                <div></div>
-                <div></div>
+                <div>
+                  <IconFont type="fetus" size="0.36rem" />
+                  <span>胎监判图服务</span>
+                  <span className={styles.right}>{item.service1amount + item.service2amount} 次</span>
+                </div>
+                <div>
+                  <IconFont type="device" size="0.36rem" />
+                  <span>{item.device && item.device.devicename}</span>
+                  <span className={styles.right}>租用 -- 个</span>
+                </div>
+                <div>
+                  <IconFont type="refund" size="0.36rem" />
+                  <span style={{ fontSize: '0.32rem', color: '#150f55' }}>{item.price}</span>
+                  <span style={{ marginLeft: '.32rem', fontSize: '0.2rem', color: '#5c6187' }}>
+                    (含押金￥ {item.cashPledge || 1099})
+                  </span>
+                </div>
               </div>
-              <div className={styles.footer}></div>
             </li>
           );
         })}
