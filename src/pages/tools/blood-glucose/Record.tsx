@@ -14,8 +14,10 @@ import { getBloodGlucose, getRecordNum, GetProp } from '@/services/tools';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect'
 import moment from 'moment';
+import { Range } from '@/pages/tools/signs/config';
 
 import styles from '../signs/RecordsTabBar.less';
+
 
 
 interface ServiceDataItem {
@@ -30,13 +32,11 @@ interface ServiceDataItem {
   insulin: boolean | null
   insulinnote: string | null,
   exercise?: string,
-  diet?: string
+  diet?: string,
+  src?:number
 }
 
-const EMPTY_MIN = 3.9,
-  EMPTY_MAX = 6.1,
-  EATING_MIN = 3.9,
-  EATING_MAX = 7.8;
+const { EMPTY_MIN, EMPTY_MAX, EATING_MIN, EATING_MAX } = Range.bloodGlucose;
 
 // 历史options
 const hChartOptions = {
@@ -77,14 +77,9 @@ const hChartOptions = {
         bottom: 10
       }
     },
-    elements: {
-      line: {
-        // tension: 0
-      }
-    },
     tooltips: {
       mode: 'index',
-      // intersect: false,
+      intersect: false,
       titleFontSize: 20,
       bodyFontSize: 20
     },
@@ -159,7 +154,7 @@ function BloodGlucoseRecord(props: { userid: number }) {
 
   const [listData, setListData] = useState([]);
   const [isHistory, setIsHistory] = useState(true);
-  
+
   // 展示历史数据
   const convertHChartData = (options: any, serviceData: Array<ServiceDataItem>) => {
     let nOptions = JSON.parse(JSON.stringify(options));
@@ -216,7 +211,12 @@ function BloodGlucoseRecord(props: { userid: number }) {
     getRecordNum({ type: 'blood-glucoses', pregnancyId: props.userid }).then(res => {
       if (res.data !== 0) {
         const reqData: GetProp = { pregnancyId: props.userid, page: 0, size: Number(res.data), sort: 'timestamp' };
-        getBloodGlucose(reqData).then(res => setListData(res.data));
+        getBloodGlucose(reqData).then(res => {
+          setListData(res.data.map((v:ServiceDataItem) => {
+            v.result = Number(v.result.toFixed(1));
+            return v;
+          }).reverse());
+        })
       } else {
         newChart([]);
         Toast.info('暂无数据');
@@ -224,80 +224,92 @@ function BloodGlucoseRecord(props: { userid: number }) {
     })
   }, [props.userid]);
   useEffect(() => {
-    if(listData.length !== 0){
+    if (listData.length !== 0) {
       newChart(listData);
     }
-  },[listData])
-  
+  }, [listData])
+
+  const renderList = (listData: Array<ServiceDataItem>) => (
+    listData.map((item: ServiceDataItem) => (
+      <div className={styles.card} key={item.id} >
+        <div className={styles.header}>
+          {item.src === 1 ? (
+            <div className={styles.src} onClick={() => toEdit(item)}>
+              <IconFont type="synchronization" /><span>同步</span>
+            </div>
+          ) :(
+            <div className={styles.src} onClick={() => toEdit(item)}>
+              <IconFont type="edite" /><span>录入</span>
+            </div>
+          )}
+          <div className={styles.date}>
+            <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
+          </div>
+        </div>
+        <div className={styles.content}>
+          <div>
+            <div><span>血糖</span></div>
+            <div><span>{item.result}</span></div>
+            <div>
+              {item.period === PERIOD_CODE.FASTING || item.period === PERIOD_CODE.BEFORE_S ? (
+                <div>
+                  {item.result < EMPTY_MIN || item.result > EMPTY_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}
+                </div>
+              ) : (
+                  <div>
+                    {item.result < EATING_MIN || item.result > EATING_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}
+                  </div>
+                )}
+            </div>
+          </div>
+          {/* <div>
+            <div><span>胰岛素</span></div>
+            <div>{item.insulin ? <span>已注射</span> : <span>未注射</span>}</div>
+            <div>{item.insulinnote ? <span>{item.insulinnote}U</span> : <span>无</span>}</div>
+          </div>
+          <div>
+            <div><span>运动情况</span></div>
+            <div>{item.exercise ? <span>{item.exercise}</span> : <span>暂无</span> }</div>
+          </div>
+          <div>
+            <div><span>饮食情况</span></div>
+            <div>{item.diet ? <span>{item.diet}</span> : <span>暂无</span> }</div>
+          </div> */}
+        </div>
+      </div>
+    ))
+  );
+
   return (
     <div className={styles.container}>
       <div className={styles['canvas-block']}>
-
-        <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.switch}>
-          {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+        <div className={styles.switch}>
+          <div className={styles.title}>
+            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+          </div>
+          <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>
+            <IconFont type="record" size="0.3rem" />
+            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+          </div>
         </div>
-
         <div className={styles.canvas} style={{ display: isHistory ? "block" : "none" }}>
           <canvas ref={hChart} />
         </div>
-
         <div className={styles.canvas} style={{ display: isHistory ? "none" : "block" }}>
           <canvas ref={tChart} />
         </div>
       </div>
-
       <div className={styles.count}>
         <div>
           <span>记录列表</span>
-        </div>
+          </div>
         <div>
           <span>共{listData.filter((item: ServiceDataItem) => item.status !== -1).length}条</span>
-        </div>
+          </div>
       </div>
       <div className={styles.list}>
-        {listData.map((item: ServiceDataItem) => (
-          <div className={styles.card} key={item.id} onClick={() => toEdit(item)}>
-            <div className={styles.header}>
-              <div className={styles.src}>
-                <IconFont type="fetus" /><span>录入</span>
-              </div>
-              <div className={styles.date}>
-                <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
-              </div>
-            </div>
-            <div className={styles.content}>
-              <div>
-                <div><span>血糖</span></div>
-                <div><span>{item.result}</span></div>
-                <div>
-                  {item.period === PERIOD_CODE.FASTING || item.period === PERIOD_CODE.BEFORE_S ? (
-                    <div>
-                      {item.result < EMPTY_MIN || item.result > EMPTY_MAX ? <span>异常</span> : <span>正常</span>}
-                    </div>
-                  ) : (
-                      <div>
-                        {item.result < EATING_MIN || item.result > EATING_MAX ? <span>异常</span> : <span>正常</span>}
-                      </div>
-                    )}
-                </div>
-              </div>
-              <div>
-                <div><span>胰岛素</span></div>
-                <div>{item.insulin ? <span>已注射</span> : <span>未注射</span>}</div>
-                <div>{item.insulinnote ? <span>{item.insulinnote}ml</span> : <span>无</span>}</div>
-              </div>
-              <div>
-                <div><span>运动情况</span></div>
-                <div>{item.exercise ? <span>{item.exercise}</span> : <span>暂无</span> }</div>
-              </div>
-              <div>
-                <div><span>饮食情况</span></div>
-                <div>{item.diet ? <span>{item.diet}</span> : <span>暂无</span> }</div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+        {renderList(listData)}
+        </div>
     </div>
   )
 }

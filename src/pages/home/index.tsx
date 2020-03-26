@@ -42,7 +42,7 @@ function Home(props: IProps) {
       payload: {
         gesweek: '22'
       }
-    })
+    });
     return () => {};
   }, [])
 

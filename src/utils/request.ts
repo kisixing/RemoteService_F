@@ -3,6 +3,7 @@
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
 import { extend } from 'umi-request';
+import store from 'store';
 import Router from 'umi/router';
 import { notification } from 'antd';
 import { Toast } from 'antd-mobile';
@@ -112,16 +113,16 @@ request.interceptors.request.use((url, options) => {
  * response拦截器, 处理response
  * 每次请求都更新token信息
  */
-// request.interceptors.response.use((response, options) => {
-//   let token = response.headers.get('Authorization');
-//   if (token) {
-//     // 修改token值
-//     if (token.includes('captcha')) {
-//       token = token.replace(/captcha /, '');
-//     }
-//     sessionStorage.setItem('access_token', token);
-//   }
-//   return response;
-// });
+request.interceptors.response.use((response, options) => {
+  let token = response.headers.get('Authorization');
+  if (token) {
+    // 修改token值
+    if (token.includes('captcha')) {
+      token = token.replace(/captcha /, '');
+    }
+    store.set('lianmp-token', token);
+  }
+  return response;
+});
 
 export default request;

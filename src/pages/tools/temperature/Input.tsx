@@ -15,10 +15,14 @@ import BackButton from '@/components/BackButton';
 import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
 import { setTemperatures, editTemperatures } from '@/services/tools';
+import { Range } from '@/pages/tools/signs/config';
+
 import styles from '../blood-pressure/Input.less';
 
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
+
+const { NORMAL_MAX } = Range.temperature;
 
 function TemperatureInput(props: {userid: number}) {
   const [date, setDate] = useState(now);
@@ -72,6 +76,13 @@ function TemperatureInput(props: {userid: number}) {
     }
   },[]);
 
+  const inputStyle = () => {
+    if(Number(temperature) > NORMAL_MAX){
+      return {color: 'red'};
+    }
+    return {};
+  }
+
   return (
     <div className={styles.container}>
       <DatePicker
@@ -94,6 +105,7 @@ function TemperatureInput(props: {userid: number}) {
               type="number"
               placeholder="输入..."
               value={temperature}
+              style={inputStyle()}
               onChange={e => setTemperature(e.target.value)}
             />
             <IconFont type="editor-line" size="0.36rem" />

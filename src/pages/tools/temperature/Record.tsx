@@ -13,6 +13,7 @@ import { ConnectState } from '@/models/connect';
 import { getTemperatures, getRecordNum, GetProp } from '@/services/tools';
 import moment from 'moment';
 import { IconFont } from '@/components/antd-mobile';
+import { Range } from '@/pages/tools/signs/config';
 
 import styles from '../signs/RecordsTabBar.less';
 
@@ -25,10 +26,11 @@ interface ServiceDataItem {
   pregnancy: {
     id: number
   },
-  status:number
+  status:number,
+  src?:number
 }
 
-const NORMAL_T:number = 37
+const { NORMAL_MAX } = Range.temperature;
 
 // 异常与正常样式
 const [defaultColor, errorColor] = ['#c3c5c6', '#dc143c'];
@@ -123,7 +125,6 @@ function TemperatureRecord(props: {userid: number}) {
 
   const [hChart, tChart] = [useRef(null), useRef(null)];
   // 历史记录chart，todayChart
-  let chartH,chartT;
   const [listData, setListData] = useState([]);
   const [isHistory, setIsHistory] = useState(true);
   
@@ -143,7 +144,6 @@ function TemperatureRecord(props: {userid: number}) {
           if(targetData[i].timestamp.slice(0,10) === targetData[i+j].timestamp.slice(0,10)){
             if(targetData[i].result < targetData[i+j].result){
               targetData.splice(i,1);
-              console.log(targetData);
             }else{
               targetData.splice(i+j,1);
             }
@@ -165,11 +165,12 @@ function TemperatureRecord(props: {userid: number}) {
     // 显示的线段数量
     const len = nOptions.data.datasets.length;
     targetData.forEach((v: ServiceDataItem) => {
-      // 填入数据
       for (let i = 0; i < len; i++) {
         const data = v[nOptions.data.datasets[i].key];
         if (data) {
-          if (data > NORMAL_T) {
+          // 只有体温一个值 不抽离
+          // 样式注入
+          if (data > NORMAL_MAX) {
             nOptions.data.datasets[i].pointBackgroundColor.push(errorColor);
             nOptions.data.datasets[i].pointBorderColor.push(errorColor);
             nOptions.data.datasets[i].pointRadius.push(errorPointRadius);
@@ -178,9 +179,11 @@ function TemperatureRecord(props: {userid: number}) {
             nOptions.data.datasets[i].pointBorderColor.push(defaultColor);
             nOptions.data.datasets[i].pointRadius.push(defaultPointRadius);
           }
+          // 数据注入
           nOptions.data.datasets[i].data.push(data);
         }
       }
+      // x轴坐标注入
       if(isHistory){
         nOptions.data.labels.push(v.timestamp.slice(5, 10)); 
       }else{
@@ -195,10 +198,10 @@ function TemperatureRecord(props: {userid: number}) {
     try {
       //@ts-ignore
       const ctx = hChart.current.getContext('2d');
-      chartH = new Chart(ctx, convertChartData(chartOptions, serviceData, true));
+      let chartH = new Chart(ctx, convertChartData(chartOptions, serviceData, true));
       //@ts-ignore
       const ctx1 = tChart.current.getContext('2d');
-      chartT = new Chart(ctx1, convertChartData(chartOptions, serviceData, false));
+      let chartT = new Chart(ctx1, convertChartData(chartOptions, serviceData, false));
     } catch (e) {
       console.error(e);
     }
@@ -214,7 +217,7 @@ function TemperatureRecord(props: {userid: number}) {
         const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
         getTemperatures(reqData).then(res => {
           newChart(res.data);
-          setListData(res.data);
+          setListData(res.data.reverse());
         });
       }else{
         newChart([]);
@@ -229,11 +232,45 @@ function TemperatureRecord(props: {userid: number}) {
   },[listData])
 
 
+  const renderList = (listData: Array<ServiceDataItem>) => (
+    listData.map((item: ServiceDataItem) => (
+      <div className={styles.card} key={item.id}>
+        <div className={styles.header}>
+          {item.src === 1 ? (
+            <div className={styles.src}>
+              <IconFont type="synchronization"/><span>同步</span>
+            </div>
+          ) : (
+            <div className={styles.src} onClick={() => toEdit(item)}>
+              <IconFont type="edite"/><span>录入</span>
+            </div>
+          )}
+          <div className={styles.date}>
+            <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
+          </div>
+        </div>
+        <div className={styles.content}>
+          <div>
+            <div><span>体温</span></div>
+            <div><span>{item.result}度</span></div>
+            <div>{item.result > NORMAL_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+          </div>
+        </div>
+      </div>
+    ))
+  )
+
   return (
     <div className={styles.container}>
       <div className={styles['canvas-block']}>
-        <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.switch}>
-          {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+        <div  className={styles.switch}>
+          <div className={styles.title}>
+            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+          </div>
+          <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>
+            <IconFont type="record" size=".3rem" />
+            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+          </div>
         </div>
           <div className={styles.canvas} style={{display: isHistory ? "block" : "none"}}>
             <canvas ref={hChart}/>
@@ -251,25 +288,7 @@ function TemperatureRecord(props: {userid: number}) {
         </div>
       </div>
       <div className={styles.list}>
-        {listData.map((item: ServiceDataItem) => (
-          <div className={styles.card} key={item.id} onClick={() => toEdit(item)}>
-            <div className={styles.header}>
-              <div className={styles.src}>
-                <IconFont type="fetus"/><span>录入</span>
-              </div>
-              <div className={styles.date}>
-                <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
-                </div>
-            </div>
-            <div className={styles.content}>
-              <div>
-                <div><span>体温</span></div>
-                <div><span>{item.result}度</span></div>
-                <div>{item.result > NORMAL_T ? <span>异常</span> : <span>正常</span>}</div>
-              </div>
-            </div>
-          </div>
-        ))}
+        {renderList(listData)}
       </div>
     </div>
   )

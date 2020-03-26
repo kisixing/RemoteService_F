@@ -15,12 +15,16 @@ import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
 import { setBloodPressures, editBloodPressures } from '@/services/tools';
 import { ConnectState } from '@/models/connect';
+import { Range } from '@/pages/tools/signs/config';
+
 import styles from './Input.less';
+
 
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
-const minDate = new Date(nowTimeStamp - 1000 * 60 * 60 * 24 * 30);
-const maxDate = new Date(nowTimeStamp);
+
+const { SYS_MIN, SYS_MAX, DIA_MIN, DIA_MAX } = Range.bloodPressure;
+const { PULSE_MIN, PULSE_MAX } = Range.pulserate;
 
 function BloodPressureInput(props: {userid: number}) {
   const [date, setDate] = useState(now)
@@ -69,23 +73,17 @@ function BloodPressureInput(props: {userid: number}) {
     }
   }
 
-  // 处理输入 根据首位字母自动定位到对应的输入框
+  // 处理输入 输入1|2 到第三位时自动跳转，输入
   const handleInput = (type:string,val:string):void => {
-    if(type === 'diastolic'){
-      if(val.length === 1 && /1|2/.test(val)){
-        setSystolic(val);
-        systolicInput.current.focus();
-      }else{
-        setDiastolic(val);
-      }
-    }else if(type === 'systolic'){
-      if(val.length === 1 && !(/1|2/.test(val))){
-        setDiastolic(val);
+    if(type === "systolic"){
+      if((val.length === 3 && Number(val.slice(0,1)) < 3) || (val.length === 2 && Number(val.slice(0,1)) >= 3)){
         diastolicInput.current.focus();
-      }else{
-        setSystolic(val);
       }
+      setSystolic(val);
+    }else if(type === 'diastolic'){
+      setDiastolic(val);
     }
+    return;
   }
 
   useEffect(() => {
@@ -106,14 +104,23 @@ function BloodPressureInput(props: {userid: number}) {
    
   },[]);
 
+  const inputStyle = (type:string) => {
+    if(type === "systolic" && (Number(systolic) < SYS_MIN || Number(systolic) > SYS_MAX)){
+      return {color: "red"};
+    }else if(type === "diastolic" && (Number(diastolic) < DIA_MIN || Number(diastolic) > DIA_MAX)){
+      return {color: "red"};
+    }else if(type === "pulserate" && (Number(heartRate) < PULSE_MIN || Number(heartRate) > PULSE_MIN)){
+      return {color: "red"};
+    }
+    return {};
+  }
+
   return (
     <div className={styles.container}>
       <DatePicker
         mode="datetime"
         title="选择日期"
         extra="请选择日期"
-        minDate={minDate}
-        maxDate={maxDate}
         value={date}
         onChange={date => setDate(date)}
       />
@@ -131,7 +138,7 @@ function BloodPressureInput(props: {userid: number}) {
               placeholder="收缩压"
               value={systolic}
               onChange={e => handleInput('systolic',e.target.value)}
-              style={{ width: '1.2rem' }}
+              style={{ width: '1.2rem',...inputStyle('systolic') }}
               ref={systolicInput}
             />
             /
@@ -140,7 +147,7 @@ function BloodPressureInput(props: {userid: number}) {
               placeholder="舒张压"
               value={diastolic}
               onChange={e => handleInput('diastolic',e.target.value)}
-              style={{ width: '1.2rem' }}
+              style={{ width: '1.2rem',...inputStyle('diastolic') }}
               ref={diastolicInput}
             />
             <IconFont type="editor-line" size="0.36rem" />
@@ -154,6 +161,7 @@ function BloodPressureInput(props: {userid: number}) {
             labelNumber={7}
             placeholder="请输入心率"
             value={heartRate}
+            style={inputStyle('pulserate')}
             onChange={v => setHeartRate(v)}
           >
             <div className={styles.label}>

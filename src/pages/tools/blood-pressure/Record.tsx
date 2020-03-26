@@ -13,7 +13,7 @@ import { ConnectState } from '@/models/connect';
 import moment from 'moment';
 import BackButton from '@/components/BackButton';
 import { getBloodPressures, getRecordNum, GetProp } from '@/services/tools';
-
+import { Range } from '@/pages/tools/signs/config';
 import { IconFont } from '@/components/antd-mobile';
 import styles from '../signs/RecordsTabBar.less';
 
@@ -30,11 +30,12 @@ interface ServiceDataItem {
   pregnancy?: {
     id: number
   },
-  status:number
+  status:number,
+  src?:number
 }
 
-const SYS_MAX=139,SYS_MIN=90,DIA_MAX=89,DIA_MIN=50;
-
+const { SYS_MAX,SYS_MIN,DIA_MAX,DIA_MIN} = Range.bloodPressure;
+const { PULSE_MIN, PULSE_MAX } = Range.pulserate;
 const [ defaultColor, errorColor ] = ['#c3c5c6','#dc143c'];
 const [ defaultPointRadius, errorPointRadius ] = [2,8];
 
@@ -45,9 +46,10 @@ const chartOptions = {
     labels: [],
     datasets: [
       {key: 'systolic',label: '收缩压',fill: false,borderColor: '#f5bff0',pointBackgroundColor: [], pointBorderColor: [],pointRadius: [],data: []},
-      {key: 'diastolic',label: '收缩压',fill: false,borderColor: '#fcdebb',pointBackgroundColor: [],pointBorderColor: [],pointRadius: [],data: []},
-      {label: '正常',data: [],borderColor: '#C3C5C6'},
-      {label: '异常',data: [],borderColor: '#DC143C',fill: false}
+      {key: 'diastolic',label: '舒张压',fill: false,borderColor: '#fcdebb',pointBackgroundColor: [],pointBorderColor: [],pointRadius: [],data: []},
+      {key: 'pulserate',label: '脉率',fill: false,borderColor: '#7CFC00',pointBackgroundColor: [],pointBorderColor: [],pointRadius: [],data: []},
+      // {label: '正常',data: [],borderColor: '#C3C5C6'},
+      // {label: '异常',data: [],borderColor: '#DC143C',fill: false}
     ]
   },
   options: {
@@ -141,32 +143,39 @@ function BloodPressureRecord(props: {userid: number}) {
     }
     const len = nOptions.data.datasets.length;
     targetData.forEach((v: ServiceDataItem, index: number) => {
-      // 填入数据/样式
       for(let i = 0 ; i < len; i++){
         const data = v[nOptions.data.datasets[i].key];
         if(data) {
-          if(nOptions.data.datasets[i].key === 'systolic') {
-            if(data < SYS_MIN || data > SYS_MAX) {
-              nOptions.data.datasets[i].pointBackgroundColor.push(errorColor);
-              nOptions.data.datasets[i].pointBorderColor.push(errorColor);
-              nOptions.data.datasets[i].pointRadius.push(errorPointRadius);
-            }else {
-              nOptions.data.datasets[i].pointBackgroundColor.push(defaultColor);
-              nOptions.data.datasets[i].pointBorderColor.push(defaultColor);
-              nOptions.data.datasets[i].pointRadius.push(defaultPointRadius);
-            }
-          }else if(nOptions.data.datasets[i].key === 'diastolic'){
-            if(data < DIA_MIN || data > DIA_MAX) {
-              nOptions.data.datasets[i].pointBackgroundColor.push(errorColor);
-              nOptions.data.datasets[i].pointBorderColor.push(errorColor);
-              nOptions.data.datasets[i].pointRadius.push(errorPointRadius);
-            }else {
-              nOptions.data.datasets[i].pointBackgroundColor.push(defaultColor);
-              nOptions.data.datasets[i].pointBorderColor.push(defaultColor);
-              nOptions.data.datasets[i].pointRadius.push(defaultPointRadius);
-            }
+          let min,max;
+          switch(nOptions.data.datasets[i].key){
+            case 'systolic':
+              min = SYS_MIN; max = SYS_MAX;
+              break;
+            case 'diastolic':
+              min = DIA_MIN; max = DIA_MAX;
+              break;
+            case 'pulserate':
+              min = PULSE_MIN; max = PULSE_MAX;
+              break;
+            default:
+              min = 0; max = 0;
+              break;
           }
-          // @ts-ignore
+          if(min === 0 && max === 0){
+            console.error('区间范围有误');
+            continue;
+          }
+          // 注入样式
+          if(data < min || data > max) {
+            nOptions.data.datasets[i].pointBackgroundColor.push(errorColor);
+            nOptions.data.datasets[i].pointBorderColor.push(errorColor);
+            nOptions.data.datasets[i].pointRadius.push(errorPointRadius);
+          }else {
+            nOptions.data.datasets[i].pointBackgroundColor.push(defaultColor);
+            nOptions.data.datasets[i].pointBorderColor.push(defaultColor);
+            nOptions.data.datasets[i].pointRadius.push(defaultPointRadius);
+          }
+          // 注入数据
           nOptions.data.datasets[i].data.push(data);
         }
       }
@@ -243,12 +252,14 @@ function BloodPressureRecord(props: {userid: number}) {
     getRecordNum({type: 'blood-pressures',pregnancyId: props.userid}).then(res => {
       if(res.data !== 0){
         const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
-        getBloodPressures(reqData).then(res => setListData(res.data))
+        // 反序
+        getBloodPressures(reqData).then(res => setListData(res.data.reverse()))
       }else{
         Toast.info('暂无数据');
       }
     })
   },[props.userid]);
+  
   // 渲染chart
   useEffect(() => {
     // 判断异常数据
@@ -261,11 +272,53 @@ function BloodPressureRecord(props: {userid: number}) {
     }
   },[listData])
 
+  const renderList = (listData: Array<ServiceDataItem>) => (
+    listData.map((item: ServiceDataItem) => (
+      <div className={styles.card} key={item.id}>
+        <div className={styles.header}>
+          {item.src === 1 ? (
+            <div className={styles.src}>
+              <IconFont type="synchronization"/><span>同步</span>
+            </div>
+          ) : (
+            <div className={styles.src} onClick={() => toEdit(item)}>
+              <IconFont type="edite"/><span>录入</span>
+            </div>
+          )}
+          <div className={styles.date}>
+            <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
+            </div>
+        </div>
+        <div className={styles.content}>
+          <div>
+            <div><span>血压</span></div>
+            <div><span>{item.systolic}/{item.diastolic}</span></div>
+            <div>{(item.systolic < SYS_MIN || item.systolic > SYS_MAX || item.diastolic < DIA_MIN || item.diastolic > DIA_MAX) ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+          </div>
+          {item.pulserate ? (
+            <div>
+              <div><span>脉率</span></div>
+              <div><span>{item.pulserate}</span></div>
+              <div>{item.pulserate > PULSE_MAX || item.pulserate < PULSE_MIN ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+            </div>
+          ) : null}
+          
+        </div>
+      </div>
+    ))
+  )
+
   return (
     <div className={styles.container}>
       <div className={styles['canvas-block']}>
-        <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.switch}>
-          {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+        <div  className={styles.switch}>
+          <div className={styles.title}>
+            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+          </div>
+          <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>
+            <IconFont type="record" size=".3rem" />
+            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+          </div>
         </div>
           <div className={styles.canvas} style={{display: isHistory ? "block" : "none"}}>
             <canvas ref={hChart}/>
@@ -283,30 +336,7 @@ function BloodPressureRecord(props: {userid: number}) {
         </div>
       </div>
       <div className={styles.list}>
-        {listData.map((item: ServiceDataItem) => (
-          <div className={styles.card} key={item.id} onClick={() => toEdit(item)}>
-            <div className={styles.header}>
-              <div className={styles.src}>
-                <IconFont type="fetus"/><span>录入</span>
-              </div>
-              <div className={styles.date}>
-                <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
-                </div>
-            </div>
-            <div className={styles.content}>
-              <div>
-                <div><span>血压</span></div>
-                <div><span>{item.systolic}/{item.diastolic}</span></div>
-                <div>{(item.systolic < SYS_MIN || item.systolic > SYS_MAX || item.diastolic < DIA_MIN || item.diastolic > DIA_MAX) ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
-              </div>
-              <div>
-                <div><span>脉率</span></div>
-                <div><span>{item.pulserate}</span></div>
-                <div>正常</div>
-              </div>
-            </div>
-          </div>
-        ))}
+        {renderList(listData)}
       </div>
       {/* <Modal
         visible={visible}

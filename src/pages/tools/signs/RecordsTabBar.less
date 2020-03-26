@@ -4,11 +4,25 @@
   .canvas-block {
     background-color: #ffffff;
     padding: 0.2rem;
-    :first-child {
-      color: #ffcc4a;
-    }
     .switch {
-      text-align: right;
+      display: flex;
+      flex-direction: row;
+      line-height: .4rem;
+      height: .4rem;
+      .title {
+        width: 2rem;
+        font-size: .38rem;
+        font-weight: 600;
+        margin-left: calc(50% - 1rem);
+        text-align: center;
+      }
+      .text{
+        color: #ffcc4a;
+        font-size: 0.3rem;
+        width: calc(50% - 1.2rem);
+        text-align: right;
+      }
+      // text-align: right;
     }
     .canvas {
       margin: 0.2rem;
