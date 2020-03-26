@@ -4,25 +4,19 @@
  * @Description: 我的订单
  */
 
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import Router from 'umi/router';
 import { Dispatch } from 'redux';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { NavBar, Tabs } from 'antd-mobile';
-import ListView from './ListView';
-
-import { PackageListItem } from '../package/interface';
-import { ServiceOrderItem, PackageOrderItem, ORDER_TYPE } from './interface';
-
 import { ConnectState} from '@/models/connect';
+import ListView from './ListView';
 
 import styles from './index.less';
 
-let currentKey = '';
 const tabs = [
-  { title: '全部订单', key: 'all' },
-  { title: '远程监护', key: 'monitoring' },
+  { title: '远程监护', key: 'package' },
   { title: '胎监判图', key: 'apply' },
   { title: '在线咨询', key: 'consult' },
 ];
@@ -40,12 +34,9 @@ function renderTabBar(props: any) {
   );
 }
 
-interface OrderProps{
+interface IProps{
   dispatch: Dispatch
   currentPregnancy: any
-  serviceOrderList: Array<ServiceOrderItem>
-  packageOrderList: Array<PackageOrderItem>
-  packageList: Array<PackageListItem>
   location: {
     query: {
       type: string
@@ -53,84 +44,36 @@ interface OrderProps{
   }
 }
 
-function Oders(props: OrderProps) {
+function Oders(props: IProps) {
   const {
     location: { query },
     currentPregnancy: { id },
   } = props;
-  const type = query.type || 'all';
-  currentKey = type;
+  const type = query.type || 'package';
+  const [currentKey, setCurrentKey] = useState(type);
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    // props.dispatch({ type: 'order/getPackageOrders', payload: { pregnancyId: id } });
+    // props.dispatch({ type: 'order/getServiceOrders', payload: { pregnancyId: id } });
+  }, []);
+
+  const fetchData = () => {
+
+  }
 
   const onTabClick = (tab: any, index: number) => {
     const key = tab.key;
     if (currentKey === key) {
       return;
     }
+    // 路由加type，便于progress进度条加载显示
     return Router.replace(`/orders?type=${key}`);
   };
 
-  /**
-   * 在订单中加入type用于前端判断类型
-   *  fType 0 代表为远程胎监 套餐订单
-   *  fType 1 代表为胎监判图 服务订单
-   *  fType 2 代表为在线咨询 服务订单
-   * 以 ORDER_TYPE为准
-   */
-  const dataSource = ():Array<ServiceOrderItem|PackageOrderItem> => {
-    const{ packageOrderList,serviceOrderList,packageList } = props;
-    let filterList:Array<ServiceOrderItem|PackageOrderItem> = [];
-    // 类型判别 赋值fType
-    if (currentKey === 'monitoring') {
-      filterList = packageOrderList.map((v: PackageOrderItem) => {
-        for(let i = 0; i < packageList.length; i++){
-          if(packageList[i].id === v.servicepackage.id){
-            v.products = packageList[i].products;
-            break;
-          }
-        }
-        v.fType = ORDER_TYPE.PACKAGE;
-        return v;
-      });
-    }else if (currentKey === 'apply') {
-      filterList = serviceOrderList.filter((v:ServiceOrderItem) => v.type === "胎监判图");
-      filterList = serviceOrderList.map(v => {v.fType = ORDER_TYPE.APPLY;return v;});
-    }else if (currentKey === 'consult') {
-      filterList = serviceOrderList.filter((v:ServiceOrderItem) => v.type !== "胎监判图");
-      filterList = serviceOrderList.map(v => {v.fType = ORDER_TYPE.CONSULT;return v;});
-    }else if(currentKey){
-      // @ts-ignore
-      let p = packageOrderList.map((v: PackageOrderItem) => {
-        v.fType = ORDER_TYPE.PACKAGE;
-        for(let i = 0; i < packageList.length; i++){
-          if(packageList[i].id === v.servicepackage.id){
-            v.products = packageList[i].products;
-            break;
-          }
-        }
-        return v;
-      });
-      let o = serviceOrderList.map(v => {
-        if(v.type === "胎监判图"){
-          v.fType = ORDER_TYPE.APPLY;
-        }else{
-          v.fType = ORDER_TYPE.CONSULT;
-        }
-        return v;
-      });
-      filterList = p.concat(o);
-    }
-    return filterList;
-  };
-
   const onClick = () => {
-    Router.push('/packages')
+    Router.push('/packages');
   };
-
-  useEffect(() => {
-    props.dispatch({type: 'combo/getPackage'});
-    props.dispatch({type: 'order/getPackageOrders',payload: {pregnancyId: id}});
-    props.dispatch({type: 'order/getServiceOrders',payload: {pregnancyId: id}});
-  },[]);
 
   return (
     <div className="page">
@@ -152,7 +95,7 @@ function Oders(props: OrderProps) {
           }}
         >
           <div key={type} className={styles.content}>
-            <ListView dataSource={dataSource()} />
+            <ListView dataSource={data} />
           </div>
         </Tabs>
       </StickyContainer>
@@ -164,5 +107,5 @@ export default connect(({ global, order, combo }: ConnectState) => ({
   currentPregnancy: global.currentPregnancy,
   serviceOrderList: order.serviceOrderList,
   packageOrderList: order.packageOrderList,
-  packageList: combo.packageList,
+  packageList: [],
 }))(Oders);

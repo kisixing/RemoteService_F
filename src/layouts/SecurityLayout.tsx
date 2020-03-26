@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Redirect } from 'umi';
-import store from 'store';
 import { stringify } from 'querystring';
 import { Toast } from 'antd-mobile';
 
@@ -40,11 +39,11 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
 
     if (p1 && p2 && t && access_token) {
       // p1 p2存在，可知是从app跳转过来，进行判图操作
-      store.set('lianmp-token', `${access_token}`);
       dispatch({
-        type: 'global/updatePregnancy',
+        type: 'global/updateState',
         payload: {
-          id: p1,
+          currentPregnancy: { id: p1 },
+          access_token: access_token,
         },
       });
     } else if (code && !currentPregnancy.id) {

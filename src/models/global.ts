@@ -1,13 +1,13 @@
 import { Reducer } from 'redux';
-import store from 'store';
 import { Effect } from './connect';
 // import { ConnectState } from './connect.d';
 import { mpauth, getPregnancy } from '@/services/user';
 
 
 export interface GlobalModelState {
-  locale?: string;
-  mpuid?: string;
+  locale?: string
+  access_token?: string
+  mpuid?: string
   currentPregnancy?: {
     id?: string | number
     [propName: string]: any
@@ -31,8 +31,10 @@ export interface GlobalModelType {
 const GlobalModel: GlobalModelType = {
   namespace: 'global',
 
+  // 开发时，写死自己的mpuid和access_token
   state: {
     locale: 'cn', // cn/en
+    access_token: '',
     mpuid: '',
     currentPregnancy: {},
   },
@@ -43,13 +45,18 @@ const GlobalModel: GlobalModelType = {
       try {
         const { response, data } = yield call(mpauth, payload);
         //  已在request封装处理
-        let token = response && response.headers.get('Authorization');
+        const token = response && response.headers.get('Authorization');
         if (token) {
-          token = token.replace(/captcha /, '');
-          store.set('lianmp-token', token);
+          const access_token = token.replace(/captcha /, '');
+          sessionStorage.setItem('access_token', access_token);
+          yield put({
+            type: 'updateState',
+            payload: {
+              access_token,
+            },
+          });
         }
         if (data && data.id) {
-          store.set('mpuid', data.mpuid);
           yield put({
             type: 'updatePregnancy',
             payload: data,
@@ -69,7 +76,7 @@ const GlobalModel: GlobalModelType = {
         },
       });
       return data;
-    }
+    },
   },
 
   reducers: {
