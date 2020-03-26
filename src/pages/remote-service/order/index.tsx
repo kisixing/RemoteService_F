@@ -4,14 +4,14 @@
  * @Description: 我的订单
  */
 
-import React, { useState, useEffect } from 'react';
-import { connect } from 'dva';
+import React from 'react';
 import Router from 'umi/router';
-import { Dispatch } from 'redux';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { NavBar, Tabs } from 'antd-mobile';
-import { ConnectState} from '@/models/connect';
-import ListView from './ListView';
+
+import MonitorListView from './Monitor/ListView';
+import ApplyListView from './Apply/ListView';
+import ConsultListView from './Consult/ListView';
 
 import styles from './index.less';
 
@@ -35,8 +35,6 @@ function renderTabBar(props: any) {
 }
 
 interface IProps{
-  dispatch: Dispatch
-  currentPregnancy: any
   location: {
     query: {
       type: string
@@ -47,20 +45,8 @@ interface IProps{
 function Oders(props: IProps) {
   const {
     location: { query },
-    currentPregnancy: { id },
   } = props;
-  const type = query.type || 'package';
-  const [currentKey, setCurrentKey] = useState(type);
-  const [data, setData] = useState([])
-
-  useEffect(() => {
-    // props.dispatch({ type: 'order/getPackageOrders', payload: { pregnancyId: id } });
-    // props.dispatch({ type: 'order/getServiceOrders', payload: { pregnancyId: id } });
-  }, []);
-
-  const fetchData = () => {
-
-  }
+  const currentKey = query.type || 'package';
 
   const onTabClick = (tab: any, index: number) => {
     const key = tab.key;
@@ -71,9 +57,20 @@ function Oders(props: IProps) {
     return Router.replace(`/orders?type=${key}`);
   };
 
-  const onClick = () => {
-    Router.push('/packages');
-  };
+  const renderListView = () => {
+    if (currentKey === 'package') {
+      return <MonitorListView />
+    }
+    if (currentKey === 'apply') {
+      return <ApplyListView />;
+    }
+    if (currentKey === 'consult') {
+      return <ConsultListView />;
+    }
+    return null
+  }
+
+  const onClick = () => Router.push('/packages');
 
   return (
     <div className="page">
@@ -83,7 +80,7 @@ function Oders(props: IProps) {
       <StickyContainer className={styles.wrapper}>
         <Tabs
           tabs={tabs}
-          initialPage={type}
+          page={currentKey}
           swipeable={false}
           animated={false}
           renderTabBar={renderTabBar}
@@ -93,19 +90,11 @@ function Oders(props: IProps) {
             height: '6px',
             backgroundColor: '#FFCC4A',
           }}
-        >
-          <div key={type} className={styles.content}>
-            <ListView dataSource={data} />
-          </div>
-        </Tabs>
+        />
+          {renderListView()}
       </StickyContainer>
     </div>
   );
 }
 
-export default connect(({ global, order, combo }: ConnectState) => ({
-  currentPregnancy: global.currentPregnancy,
-  serviceOrderList: order.serviceOrderList,
-  packageOrderList: order.packageOrderList,
-  packageList: [],
-}))(Oders);
+export default Oders;

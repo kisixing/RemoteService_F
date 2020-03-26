@@ -86,7 +86,11 @@ const request = extend({
  * request interceptor, change url or options.
  */
 request.interceptors.request.use((url, options) => {
-  const access_token = sessionStorage.getItem('access_token');
+  let access_token = '';
+  const state = window.g_app._store.getState();
+  if (state) {
+    access_token = state.global.access_token;
+  }
   options.headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json;charset=UTF-8',

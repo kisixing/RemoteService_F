@@ -29,10 +29,33 @@ export async function CTGApply(params: object) {
   });
 }
 
-export async function getPackageOrders(id: string) {
-  return request(
-    `/api/packageorders?deviceId.specified=true&state.equals=2&pregnancyId.equals=${id}`,
-  );
+
+/**
+ * 获取套餐订单列表
+ *
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function getPackageOrders(params: any) {
+  return request('/api/packageorders', {
+    method: 'GET',
+    params: { ...params },
+  });
+}
+
+/**
+ * 获取判图订单列表（）
+ *
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function getServiceRrders(params: any) {
+  return request('/api/serviceorders', {
+    method: 'GET',
+    params: { ...params },
+  });
 }
 
 export async function getApplyPrice(type: string) {

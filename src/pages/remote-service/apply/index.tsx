@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, Accordion, Checkbox, Toast } from 'antd-mobile';
 import moment from 'moment';
 import classnames from 'classnames';
-import { Button, BackButton, Tag, IconFont, WhiteSpace } from '@/components/antd-mobile';
+import { Button, Tag, IconFont, WhiteSpace } from '@/components/antd-mobile';
 import { CTGApply, getPackageOrders, getApplyPrice } from '@/services/remote-service';
 import { webpay } from '@/services/pay';
 import { router } from '@/utils/utils';
@@ -45,12 +45,17 @@ function Apply(props: any) {
 
   const redirection = () => {
     // 根据孕妇id查询已购服务
-    getPackageOrders(p1).then(res => {
+    const params = {
+      'pregnancyId.equals': p1,
+      'deviceId.specified': true,
+      'state.equals': 2
+    };
+    getPackageOrders(params).then(res => {
       if (res && res.length) {
         setIsReady(true);
         const filterArr = res.filter((e: any) => !!e.device);
         if (!filterArr.length) {
-          Toast.info('没有可用套餐，请前往莲孕公众号购买...')
+          Toast.info('没有可用套餐，请前往莲孕公众号购买...');
         } else {
           setPackageOrder(filterArr[0]);
           if (filterArr[0].service1amount === 0) {
@@ -201,7 +206,6 @@ function Apply(props: any) {
             确定
           </Button>
         </div>
-        {p1 && p2 ? null : <BackButton />}
       </div>
     );
   }

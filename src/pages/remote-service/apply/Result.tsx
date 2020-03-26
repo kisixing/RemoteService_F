@@ -34,7 +34,12 @@ function Result() {
   }, [])
 
   const getOrder = (id: string) => {
-    getPackageOrders(id).then(res => {
+    const params = {
+      'pregnancyId.equals': id,
+      'deviceId.specified': true,
+      'state.equals': 2,
+    };
+    getPackageOrders(params).then(res => {
       if (res && res.length) {
         const object = res.filter((e: any) => !!e.device)[0];
         setPackageOrder(object);
