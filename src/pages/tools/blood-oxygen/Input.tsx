@@ -15,10 +15,15 @@ import BackButton from '@/components/BackButton';
 import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
 import { setBloodOxygens, editBloodOxygens } from '@/services/tools';
+import { Range } from '@/pages/tools/signs/config';
+
 import styles from '../blood-pressure/Input.less';
 
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
+
+const { NORMAL_MIN, NORMAL_MAX } = Range.bloodOxygen;
+const { PULSE_MIN, PULSE_MAX} = Range.pulserate;
 
 function BloodOxygenInput(props: {userid: number}) {
   const [date, setDate] = React.useState(now);
@@ -75,6 +80,16 @@ function BloodOxygenInput(props: {userid: number}) {
     }
   },[]);
 
+  // 异常显示
+  const inputStyle = (type:string) => {
+    if(type === "bloodOxygen" && (Number(bloodOxygen) < NORMAL_MIN || Number(bloodOxygen) > NORMAL_MAX)){
+      return {color: "red"};
+    }else if(type === "pulseRate" && (Number(pulseRate) < PULSE_MIN || Number(pulseRate) > PULSE_MAX)){
+      return {color: "red"};
+    }
+    return {};
+  }
+
   return (
     <div className={styles.container}>
       <DatePicker
@@ -97,6 +112,7 @@ function BloodOxygenInput(props: {userid: number}) {
               type="number"
               placeholder="输入..."
               value={bloodOxygen}
+              style={inputStyle("bloodOxygen")}
               onChange={e => setBloodOxygen(e.target.value)}
             />
             <IconFont type="editor-line" size="0.36rem" />
@@ -110,6 +126,7 @@ function BloodOxygenInput(props: {userid: number}) {
             placeholder="请输入脉率"
             clear
             value={pulseRate}
+            style={inputStyle("pulseRate")}
             onChange={v => setPulseRate(v)}
           >
             <div className={styles.label}>

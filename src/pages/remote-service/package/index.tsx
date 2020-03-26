@@ -38,37 +38,33 @@ function Packages({ dispatch, packages }: PackageProps) {
 
   return (
     <WingBlank className={styles.container}>
-      {packages &&
-        packages.length > 0 &&
-        packages.map((item: PackageListItem) => {
-          return (
-            <Touchable key={item.id}>
-              <div className={styles.card} onClick={() => onClick(item)}>
-                <div className={styles.thumbnail}>
-                  <img src={`/images/slice/pic_${Math.floor(Math.random() * 3 + 1)}.png`} />
+      {packages && packages.length && packages.map((item: PackageListItem) => {
+        return (
+          <Touchable key={item.id}>
+            <div className={styles.card} onClick={() => onClick(item)}>
+              <div className={styles.thumbnail}>
+                <img src={`/images/slice/pic_${Math.floor(Math.random() * 3 + 1)}.png`} />
+              </div>
+              <div className={styles.content}>
+                <div className={styles.first}>
+                  <div className={styles.name}>{item.name}</div>
+                  <Tag size="middle" color="#3fb6dc" bgcolor="#d9f0f8">单胎</Tag>
                 </div>
-                <div className={styles.content}>
-                  <div className={styles.first}>
-                    <div className={styles.name}>{item.name}</div>
-                    <Tag size="middle" color="#3fb6dc" bgcolor="#d9f0f8">
-                      单胎
-                    </Tag>
+                <div className={styles.second}>
+                  <div>
+                    <div className={styles.price}>￥{item.price}</div>
+                    <div className={styles.device}>含设备</div>
                   </div>
-                  <div className={styles.second}>
-                    <div>
-                      <div className={styles.price}>￥{item.price}</div>
-                      <div className={styles.device}>含设备</div>
-                    </div>
-                    <div className={styles.detail}>
-                      <span>查看详情</span>
-                      <IconFont type="dropdown" size=".4rem" />
-                    </div>
+                  <div className={styles.detail}>
+                    <span>查看详情</span>
+                    <IconFont type="dropdown" size=".4rem" />
                   </div>
                 </div>
               </div>
-            </Touchable>
-          );
-        })}
+            </div>
+          </Touchable>
+        );
+      })}
     </WingBlank>
   );
 }

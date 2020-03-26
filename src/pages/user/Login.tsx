@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import Router from 'umi/router';
+import router from 'umi/router';
 import { stringify } from 'querystring';
 import { createForm } from 'rc-form';
 import { Toast, Modal } from 'antd-mobile';
@@ -120,7 +120,7 @@ class Login extends Component<P, S> {
           // TODO 没有返回任何信息
           // 没有任何的个人绑定信息，跳转新建档案页进行新建
           const queryString = stringify({ ...values });
-          return Router.push(`/user/register?${queryString}`);
+          return router.push(`/user/register?${queryString}`);
         }
       });
     });
@@ -132,10 +132,6 @@ class Login extends Component<P, S> {
     dispatch({
       type: 'user/bindUserMp',
       payload: data,
-    }).then((res: any) => {
-      if (res && res.id) {
-        Router.push('/')
-      }
     });
   };
 
@@ -169,12 +165,12 @@ class Login extends Component<P, S> {
       // tslint:disable-next-line: jsx-wrap-multiline
       <div>
         <p>姓 名：{result.name}</p>
-        <p>末次月经：{result.lmp}</p>
+        <p>末次月经：{result.gesweek}</p>
       </div>,
       [
         {
           text: '新建孕册',
-          onPress: () => Router.replace(`/user/register?${stringify({ ...query })}`),
+          onPress: () => router.replace(`/user/register?${stringify({ ...query })}`),
           style: 'default',
         },
         {

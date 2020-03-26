@@ -48,16 +48,17 @@ const Model: LoginModelType = {
     },
     *bindUser({ payload }, { call, put }) {
       const response = yield call(bindUser, payload);
+      // console.log('78787878', response);
       // 1.若此接口没有返回值，该用户未曾绑定过
       // 2.如果查到信息，接口返回最近一个档案绑定
-      if (response && response.id) {
-        yield put({
-          type: 'global/updateState',
-          payload: {
-            currentPregnancy: response,
-          },
-        });
-      }
+      // if (response) {
+      //   yield put({
+      //     type: 'global/updateState',
+      //     payload: {
+      //       currentPregnancy: response,
+      //     },
+      //   });
+      // }
       return response;
     },
     *bindUserMp({ payload }, { call, put }) {
@@ -66,7 +67,6 @@ const Model: LoginModelType = {
         type: 'global/updatePregnancy',
         payload: response,
       });
-      return response;
     },
 
     *newPregnancy({ payload }, { call, put }) {

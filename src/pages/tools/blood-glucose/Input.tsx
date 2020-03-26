@@ -17,6 +17,7 @@ import { router } from '@/utils/utils';
 import { PERIOD_CODE } from './config';
 import { ConnectState } from '@/models/connect'
 import { setBloodGlucose, editBloodGlucose } from '@/services/tools';
+import { Range } from "@/pages/tools/signs/config";
 import styles from '../blood-pressure/Input.less';
 
 const nowTimeStamp = Date.now();
@@ -41,6 +42,8 @@ const json:Array<any> = [
   { key: PERIOD_CODE.AFTER_D, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '' },
   { key: PERIOD_CODE.BEFORE_S, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '' }
 ];
+
+const { EMPTY_MIN, EMPTY_MAX, EATING_MIN, EATING_MAX } = Range.bloodGlucose;
 
 function BloodGlucoseInput(props: {userid: number}) {
   // TODO 根据tab key获取提交的值
@@ -191,6 +194,17 @@ function BloodGlucoseInput(props: {userid: number}) {
     }
   }
 
+  // 输入异常时标红
+  const inputStyles = () => {
+    const { key, bloodGlucose } = current;
+    if(/^[0|2|4|6]{1}$/.test(key.toString()) &&  (Number(bloodGlucose) < EMPTY_MIN || Number(bloodGlucose) > EMPTY_MAX)){
+      return {color: 'red'};
+    }else if( /^[1|2|5]{1}$/.test(key.toString()) && (Number(bloodGlucose) < EATING_MIN || Number(bloodGlucose) > EATING_MAX)){
+      return {color: 'red'}
+    }
+    return {color: ""}
+  }
+
   return (
     <div className={styles.container}>
       <DatePicker
@@ -230,7 +244,8 @@ function BloodGlucoseInput(props: {userid: number}) {
                   type="number"
                   value={current.bloodGlucose}
                   placeholder="输入..."
-                  onChange={e => onChange('bloodGlucose', Number(e.target.value))}
+                  style={inputStyles()}
+                  onChange={e => onChange('bloodGlucose', e.target.value)}
                 />
                 <IconFont type="editor-line" size="0.36rem" />
               </div>
@@ -296,10 +311,10 @@ function BloodGlucoseInput(props: {userid: number}) {
                 title={
                   <div className={styles.label}>
                     <span className={styles.required} />
-                    饮食情况
+                    运动情况
                   </div>
                 }
-                placeholder="请输入运动情况，方便医生了解的情况..."
+                placeholder="请输入运动类型及运动时间"
                 labelNumber={7}
                 value={current.exercise}
                 onChange={e => onChange('exercise', e)}

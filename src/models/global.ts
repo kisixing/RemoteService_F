@@ -1,13 +1,14 @@
 import { Reducer } from 'redux';
+import store from 'store';
 import { Effect } from './connect';
 // import { ConnectState } from './connect.d';
 import { mpauth, getPregnancy } from '@/services/user';
 
 
 export interface GlobalModelState {
-  locale?: string
-  access_token?: string
-  mpuid?: string
+  locale?: string;
+  mpuid?: string;
+  access_token?: string,
   currentPregnancy?: {
     id?: string | number
     [propName: string]: any
@@ -31,12 +32,14 @@ export interface GlobalModelType {
 const GlobalModel: GlobalModelType = {
   namespace: 'global',
 
-  // 开发时，写死自己的mpuid和access_token
   state: {
     locale: 'cn', // cn/en
-    access_token: '',
     mpuid: '',
-    currentPregnancy: {},
+    access_token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFXRlFNNXlnS3BWM0FlTDNpa1Byc29VIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU4NjQ4MzQ5OH0.qoM6bvl6kQTuLIFC8vCPadwZfVSikq07_dSB_do5iZ54k36oANca31UExghZd-v-l9IPyl0OFZF4nVaJyFdn0g",
+    currentPregnancy: {
+      id: 4229,
+
+    },
   },
 
   effects: {
@@ -45,32 +48,18 @@ const GlobalModel: GlobalModelType = {
       try {
         const { response, data } = yield call(mpauth, payload);
         //  已在request封装处理
-        const token = response && response.headers.get('Authorization');
+        let token = response && response.headers.get('Authorization');
         if (token) {
-          const access_token = token.replace(/captcha /, '');
-          sessionStorage.setItem('access_token', access_token);
-          yield put({
-            type: 'updateState',
-            payload: {
-              access_token,
-            },
-          });
+          token = token.replace(/captcha /, '');
+          store.set('lianmp-token', token);
         }
         if (data && data.id) {
+          store.set('mpuid', data.mpuid);
           yield put({
             type: 'updatePregnancy',
             payload: data,
           });
           return data;
-        }
-        if (data && data.mpuid) {
-          // 不管是否已经建档，都保存openid
-          yield put({
-            type: 'updateState',
-            payload: {
-              mpuid: data.mpuid,
-            },
-          });
         }
       } catch (error) {
         console.log('on error', error);
@@ -85,7 +74,7 @@ const GlobalModel: GlobalModelType = {
         },
       });
       return data;
-    },
+    }
   },
 
   reducers: {

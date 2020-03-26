@@ -7,6 +7,8 @@
 import React,{ReactNode} from 'react';
 import Router from 'umi/router';
 import { connect } from 'dva';
+import BackButton from '@/components/BackButton';
+import { NavBar, Icon } from 'antd-mobile';
 
 import { ORDER_TYPE } from './interface';
 import { PackageOrderItem, ServiceOrderItem } from '@/pages/remote-service/order/interface';
@@ -22,8 +24,8 @@ interface DetailProp{
 }
 
 function details(props: DetailProp) {
-
-
+  
+  
   const renderContent = ():ReactNode => {
     switch(props.currentOrder.fType){
       case ORDER_TYPE.PACKAGE:
@@ -43,7 +45,13 @@ function details(props: DetailProp) {
 
   return (
     <div className={styles.container}>
+      <NavBar 
+        mode="light"
+        leftContent={<Icon type="left"/>}
+        onLeftClick={() => Router.push('/orders')}
+      >订单详情</NavBar>
         {renderContent()}
+      <BackButton/>
     </div>
   )
 }

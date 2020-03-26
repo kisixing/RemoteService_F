@@ -13,7 +13,7 @@ import { getBloodOxygens, getRecordNum, GetProp } from '@/services/tools';
 import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { IconFont } from '@/components/antd-mobile';
-
+import { Range } from '@/pages/tools/signs/config';
 import styles from '../signs/RecordsTabBar.less';
 interface ServiceDataItem {
   timestamp: string,
@@ -23,11 +23,12 @@ interface ServiceDataItem {
     id: number
   },
   pulserate: number,
-  status: number
+  status: number,
+  src?: number
 }
 
-const NORMAL_O:number = 95;
-
+const { NORMAL_MIN, NORMAL_MAX } = Range.bloodOxygen;
+const { PULSE_MIN, PULSE_MAX } = Range.pulserate;
 const [defaultColor, errorColor] = ['#c3c5c6', '#dc143c'];
 const [defaultPointRadius, errorPointRadius] = [2, 8];
 
@@ -36,7 +37,8 @@ const chartOptions = {
   data: {
     labels: [],
     datasets: [
-      { key: 'result', label: '血氧', fill: false, borderColor: '#DDA0DD', pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] }
+      { key: 'result', label: '血氧', fill: false, borderColor: '#DDA0DD', pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] },
+      { key: 'pulserate', label: '脉率', fill: false, borderColor: '#7CFC00', pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] }
     ]
   },
   options: {
@@ -166,7 +168,22 @@ function BloodOxygenRecord(props: {userid: number}) {
       for (let i = 0; i < len; i++) {
         const data = v[nOptions.data.datasets[i].key];
         if(data) {
-          if (data < NORMAL_O) {
+          let min,max;
+          switch(nOptions.data.datasets[i].key){
+            case 'result':
+              min = NORMAL_MIN; max = NORMAL_MAX;
+              break;
+            case 'pulserate':
+              min = PULSE_MIN; max = PULSE_MAX;
+              break;
+            default:
+              min = 0; max = 0;
+              break;
+          }
+          if(min === 0 && max === 0) {
+            continue;
+          }
+          if (data < min || data > max) {
             nOptions.data.datasets[i].pointBackgroundColor.push(errorColor);
             nOptions.data.datasets[i].pointBorderColor.push(errorColor);
             nOptions.data.datasets[i].pointRadius.push(errorPointRadius);
@@ -209,7 +226,8 @@ function BloodOxygenRecord(props: {userid: number}) {
     getRecordNum({type: 'blood-oxygens', pregnancyId: props.userid}).then(res => {
       if(res.data !== 0){
         const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
-        getBloodOxygens(reqData).then(res => setListData(res.data));
+        // 逆序
+        getBloodOxygens(reqData).then(res => setListData(res.data.reverse()));
       }else{
         Toast.info('暂无数据');
       }
@@ -221,11 +239,52 @@ function BloodOxygenRecord(props: {userid: number}) {
     }
   },[listData])
 
+  const renderList = (listData: Array<ServiceDataItem>) => (
+    listData.map((item: ServiceDataItem) => (
+      <div className={styles.card} key={item.id}>
+        <div className={styles.header}>
+          {item.src === 1 ? (
+            <div className={styles.src}>
+              <IconFont type="synchronization"/><span>同步</span>
+            </div>
+          ) : (
+            <div className={styles.src} onClick={() => toEdit(item)}>
+              <IconFont type="edite"/><span>录入</span>
+            </div>
+          )}
+          <div className={styles.date}>
+            <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
+            </div>
+        </div>
+        <div className={styles.content}>
+          <div>
+            <div><span>血氧值</span></div>
+            <div><span>{item.result}%</span></div>
+            <div>{item.result < NORMAL_MIN || item.result > NORMAL_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+          </div>
+          {item.pulserate ? (
+            <div>
+              <div><span>脉率</span></div>
+              <div><span>{item.pulserate}</span></div>
+              <div>{item.pulserate < PULSE_MIN || item.pulserate > PULSE_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    ))
+  );
+
   return (
     <div className={styles.container}>
       <div className={styles['canvas-block']}>
-      <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.switch}>
-          {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+        <div  className={styles.switch}>
+          <div className={styles.title}>
+            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+          </div>
+          <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>
+            <IconFont type="record" size=".3rem" />
+            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+          </div>
         </div>
         <div>
           <div className={styles.canvas} style={{display: isHistory ? "block" : "none"}}>
@@ -245,30 +304,7 @@ function BloodOxygenRecord(props: {userid: number}) {
         </div>
       </div>
       <div className={styles.list}>
-        {listData.map((item: ServiceDataItem) => (
-          <div className={styles.card} key={item.id} onClick={() => toEdit(item)}>
-            <div className={styles.header}>
-              <div className={styles.src}>
-                <IconFont type="fetus"/><span>录入</span>
-              </div>
-              <div className={styles.date}>
-                <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
-                </div>
-            </div>
-            <div className={styles.content}>
-              <div>
-                <div><span>血氧值</span></div>
-                <div><span>{item.result}%</span></div>
-                <div>{item.result < NORMAL_O ? <span>异常</span> : <span>正常</span>}</div>
-              </div>
-              <div>
-                <div><span>脉率</span></div>
-                <div><span>{item.pulserate}</span></div>
-                <div>正常</div>
-              </div>
-            </div>
-          </div>
-        ))}
+        {renderList(listData)}
       </div>
     </div>
   )
