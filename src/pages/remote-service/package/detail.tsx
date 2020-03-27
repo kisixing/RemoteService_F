@@ -78,6 +78,12 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
     );
   }
 
+  const gotoService = () => {
+    Router.push({
+      pathname: `/consultation/chat/${'联系客服'}`,
+    });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.banner}>
@@ -130,7 +136,9 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
       </StickyContainer>
       <div className={styles.bottom}>
         <div className={styles.left}>
-          <IconFont type="serve" size="0.64rem" />
+          <span onClick={gotoService}>
+            <IconFont type="serve" size="0.52rem" />
+          </span>
           <span className={styles.price}>
             <IconFont type="fl-renminbi" size="0.32rem" />
             <span>{currentPackage.price}</span>

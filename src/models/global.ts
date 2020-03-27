@@ -35,9 +35,9 @@ const GlobalModel: GlobalModelType = {
   state: {
     locale: 'cn', // cn/en
     access_token:
-      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFkLWk4T3Jza0Jybk9uZGpNcGN0MFRNIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU4Nzc5NTMzMn0.fowGA822WlWRa0Gw9cqwp3PxTedL7Yf--JzUL7FdeMrKfEBTJ8LWyI-h9QLMRER332lpU9dq0kz9P1G1rM4N7A',
-    mpuid: 'oONcg1d-i8OrskBrnOndjMpct0TM',
-    currentPregnancy: { id: 4193 },
+      '',
+    mpuid: '',
+    currentPregnancy: {},
   },
 
   effects: {

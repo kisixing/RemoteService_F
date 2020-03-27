@@ -62,7 +62,7 @@ export async function getPackageOrder(id: string | number) {
  * @param {*} params
  * @returns
  */
-export async function getServiceRrders(params: any) {
+export async function getServiceOrders(params: any) {
   return request('/api/serviceorders', {
     method: 'GET',
     params: { ...params },
@@ -76,7 +76,7 @@ export async function getServiceRrders(params: any) {
  * @param {(string | number)} id
  * @returns
  */
-export async function getServiceRrder(id: string | number) {
+export async function getServiceOrder(id: string | number) {
   return request(`/api/serviceorders/${id}`);
 }
 

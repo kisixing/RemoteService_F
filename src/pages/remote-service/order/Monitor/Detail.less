@@ -1,3 +1,5 @@
+@import '../../../../utils/utils.less';
+
 .container{
   min-height: 100vh;
   background-color: #ffffff;
@@ -51,10 +53,7 @@
             margin-left: 0.16rem;
             font-weight: 500;
             color: #0f1232;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            word-break: break-all;
+            .textOverflow();
           }
         }
       }

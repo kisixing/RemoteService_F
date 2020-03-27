@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
-import { getServiceRrders } from '@/services/remote-service';
+import { getServiceOrders } from '@/services/remote-service';
 import { ConnectState } from '@/models/connect';
 import { Loader, Empty } from '../Monitor/ListView';
 import Card from './Card';
@@ -12,7 +12,7 @@ function ConsultListView({ currentPregnancy }: any) {
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
-    getServiceRrders({
+    getServiceOrders({
       'pregnancyId.equals': currentPregnancy.id,
     }).then((res: any) => {
       if (res && res.length) {

@@ -5,17 +5,28 @@
  */
 
 import React from 'react';
-import ApplyDetail from './Apply/ApplyDetail';
+import { connect } from 'dva';
+import ApplyDetail from './Apply/Detail';
 import ConsultDetail from './Consult/ConsultDetail';
 import MonitorDetail from './Monitor/Detail';
+// app跳转页面
+import ListView from './Apply/ListView';
 
 
 function details(props: any) {
   const {
     location: { query },
   } = props;
-  const { type, id } = query;
+  const { type, id, p1, p2, t } = query;
 
+  if (t === 'HR') {
+    // 判图历史记录，全部
+    return <ListView  />;
+  }
+  if (t === 'SR') {
+    // 判图历史记录，即详情
+    return <ApplyDetail id={p2} />;
+  }
   if (type === 'package') {
     return <MonitorDetail id={id} />;
   }
@@ -26,8 +37,10 @@ function details(props: any) {
     return <ConsultDetail id={id} />;
   }
   return (
-    <div style={{ height: '100vh', justifyContent: 'center', alignItems: 'center', fontSize: '0.42rem' }}>404</div>
+    <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center', fontSize: '0.42rem' }}>
+      <span>404</span>
+    </div>
   );
 }
 
-export default details;
+export default connect()(details);

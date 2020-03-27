@@ -19,8 +19,10 @@ function Card({ data, onClick }: any) {
     return typeName;
   };
 
+  const diagnosis = data.diagnosis ? JSON.parse(data.diagnosis) : {};
+
   return (
-    <li key={data.id} className={styles.item} onClick={() => onClick(data)}>
+    <li key={data.id} className={styles.item} onClick={() => onClick(data.id)}>
       <div className={styles.header}>
         <div className={styles.title}>
           <IconFont type="order" size="0.36rem" />
@@ -34,7 +36,7 @@ function Card({ data, onClick }: any) {
         </div>
         <div className={styles.div}>
           结&emsp;果：
-          <span className={styles.time}>{!!data.result ? data.result : '待回复'}</span>
+          <span className={styles.time}>{diagnosis.diagnosistxt || '待回复'}</span>
         </div>
       </div>
       <div className={styles.divider} />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
-import { getServiceRrders } from '@/services/remote-service';
+import Router from 'umi/router';
+import { getServiceOrders } from '@/services/remote-service';
 import { ConnectState } from '@/models/connect';
 import { Loader, Empty } from '../Monitor/ListView';
 import Card from './Card';
@@ -12,7 +13,7 @@ function ApplyListView({ currentPregnancy }: any) {
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
-    getServiceRrders({
+    getServiceOrders({
       'pregnancyId.equals': currentPregnancy.id,
     }).then((res: any) => {
       if (res && res.length) {
@@ -22,7 +23,15 @@ function ApplyListView({ currentPregnancy }: any) {
     });
   }, []);
 
-  const onClick = (value: object) => {};
+  const onClick = (id: string) => {
+    Router.push({
+      pathname: '/orders/detail',
+      query: {
+        type: 'apply',
+        id,
+      },
+    });
+  };
 
   if (loading) {
     return <Loader />;

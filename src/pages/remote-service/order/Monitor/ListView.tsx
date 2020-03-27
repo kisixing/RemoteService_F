@@ -45,6 +45,19 @@ export function Empty() {
   );
 }
 
+export function payType(type: string) {
+  if (type === 'WX') {
+    return '微信支付';
+  }
+  if (type === 'ALI') {
+    return '支付宝';
+  }
+  if (type === 'system') {
+    return '已购买套餐扣除';
+  }
+  return '其他支付方式'
+}
+
 function MonitorListView({ currentPregnancy }: any) {
   const [loading, setLoading] = useState(true);
   const [dataSource, setDataSource] = useState([]);

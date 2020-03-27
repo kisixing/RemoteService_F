@@ -38,7 +38,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       });
     }, 600);
 
-    if (p1 && p2 && t && access_token) {
+    if (p1 && access_token) {
       // p1 p2存在，可知是从app跳转过来，进行判图操作
       dispatch({
         type: 'global/updateState',
