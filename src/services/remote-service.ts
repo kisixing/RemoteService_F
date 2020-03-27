@@ -45,6 +45,17 @@ export async function getPackageOrders(params: any) {
 }
 
 /**
+ * 根据id获取套餐订单详情
+ *
+ * @export
+ * @param {(string | number)} id
+ * @returns
+ */
+export async function getPackageOrder(id: string | number) {
+  return request(`/api/packageorders/${id}`);
+}
+
+/**
  * 获取判图订单列表（）
  *
  * @export
@@ -56,6 +67,17 @@ export async function getServiceRrders(params: any) {
     method: 'GET',
     params: { ...params },
   });
+}
+
+/**
+ * 根据id获取判图订单详情
+ *
+ * @export
+ * @param {(string | number)} id
+ * @returns
+ */
+export async function getServiceRrder(id: string | number) {
+  return request(`/api/serviceorders/${id}`);
 }
 
 export async function getApplyPrice(type: string) {

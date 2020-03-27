@@ -11,13 +11,14 @@ import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 function index(props:any) {
   const {pregnancy} = props;
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   // 是否绑定设备， true已绑定 false未绑定
-  // const [state, setState] = React.useState(pregnancy.devices.length !== 0);
-  const [state, setState] = React.useState(true);
+  const [state, setState] = React.useState(false);
+  // const [state, setState] = React.useState(true);
   React.useEffect(() => {
+    const isBind = pregnancy.devices && pregnancy.devices.length !== 0;
     let a = setTimeout(() => {
-      setState(true);
+      setState(isBind);
       setLoading(false);
     }, 600);
     return function clean() {

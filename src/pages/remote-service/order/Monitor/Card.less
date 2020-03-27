@@ -1,0 +1,98 @@
+
+.item {
+  margin-bottom: .3rem;
+  padding-top: 0.2rem;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px #f0f1f2;
+
+  .header {
+    padding-left: .8rem;
+    padding-bottom: 0.3rem;
+    position: relative;
+
+    .title {
+      display: flex;
+      align-items: center;
+      position: relative;
+      margin-bottom: 0.32rem;
+
+      .name {
+        margin-right: 0.24rem;
+        font-weight: 500;
+        color: #0f1232;
+      }
+
+      i {
+        position: absolute;
+        top: 2px;
+        left: -0.54rem;
+      }
+
+      .right {
+        flex: 1;
+        padding-right: .3rem;
+        text-align: right;
+        font-size: .2rem;
+        color: #828c99;
+      }
+    }
+
+    .div {
+      font-size: 0.24rem;
+      color: #25265e;
+      margin-bottom: 0.16rem;
+    }
+
+    .overprint {
+      display: inline-block;
+      width: 1.52rem;
+      height: 1.52rem;
+      border-radius: 50%;
+      position: absolute;
+      top: .36rem;
+      right: .16rem;
+      background-image: url('/images/icon/overprint_2@3x.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100% 100%;
+    }
+  }
+
+  .divider {
+    margin-left: -6px;
+    margin-right: -6px;
+    border-bottom: 14px dotted #f8f8f8;
+  }
+
+  .content {
+    padding-top: 0.16rem;
+    padding-left: .8rem;
+    font-size: .24rem;
+    color: #25265e;
+
+    & > div {
+      position: relative;
+      height: .8rem;
+      line-height: .8rem;
+      padding-right: .3rem;
+
+      i {
+        position: absolute;
+        top: 0.2rem;
+        left: -0.54rem;
+      }
+
+      .right {
+        float: right;
+        height: 100%;
+        color: #8d8dac;
+      }
+
+      a {
+        margin-left: 0.08rem;
+      }
+    }
+
+  }
+}

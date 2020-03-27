@@ -27,7 +27,7 @@ function renderTabBar(props: any) {
     <Sticky>
       {({ style }: any) => (
         <div style={{ ...style, backgroundColor: '#fff', zIndex: 1 }}>
-          <Tabs.DefaultTabBar {...props} animated={true} />
+          <Tabs.DefaultTabBar {...props} />
         </div>
       )}
     </Sticky>
@@ -82,7 +82,7 @@ function Oders(props: IProps) {
           tabs={tabs}
           page={currentKey}
           swipeable={false}
-          animated={false}
+          animated={true}
           renderTabBar={renderTabBar}
           onTabClick={onTabClick}
           tabBarInactiveTextColor="#787878"

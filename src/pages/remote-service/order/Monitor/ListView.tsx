@@ -6,14 +6,47 @@
 
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
-import { Tag, IconFont } from '@/components/antd-mobile';
+import Router from 'umi/router';
+import { ActivityIndicator } from 'antd-mobile';
 import { getPackageOrders } from '@/services/remote-service';
 import { ConnectState } from '@/models/connect';
+import Card from './Card';
 
 import styles from './ListView.less';
 
+// 订单状态
+// public static enum ORDER_STATE {
+//     NEW,PAID,USING,FINISHED,CLOSED,OVERDUE,CANCELED
+// }
+// 从0开始对应 新订单0、已支付1、使用中2、完成3、关闭4、逾期5、取消6
+export const ORDER_STATE = [
+  '新建订单/未支付',
+  '已支付',
+  '使用中',
+  '已结束',
+  '已关闭',
+  '逾期',
+  '已取消'
+];
+
+export function Loader() {
+  return (
+    <div className={styles.emptyView}>
+      <ActivityIndicator text="正在加载，请稍等..." />
+    </div>
+  );
+}
+
+export function Empty() {
+  return (
+    <div className={styles.emptyView}>
+      <span>暂无数据...</span>
+    </div>
+  );
+}
+
 function MonitorListView({ currentPregnancy }: any) {
+  const [loading, setLoading] = useState(true);
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
@@ -26,63 +59,32 @@ function MonitorListView({ currentPregnancy }: any) {
     }).then((res: any) => {
       if (res && res.length) {
         setDataSource(res);
+        setLoading(false);
       }
     });
   }
 
-  const onClick = (value: object) => {};
+  const onClick = (id: string) => {
+    Router.push({
+      pathname: '/orders/detail',
+      query: {
+        type: 'package',
+        id,
+      },
+    });
+  };
 
+  if (loading) {
+    return <Loader />;
+  }
+  if (!dataSource.length) {
+    return <Empty />;
+  }
   return (
     <ul className={styles.listView}>
-      {dataSource &&
-        dataSource.length > 0 &&
+      {
         dataSource.map((item: any) => {
-          return (
-            <li key={item.id} className={styles.item} onClick={() => onClick(item)}>
-              <div className={styles.header}>
-                <div className={styles.title}>
-                  <IconFont type="order" size="0.36rem" />
-                  <span className={styles.name}>{item.servicepackage && item.servicepackage.name}</span>
-                  <Tag size="middle" bgcolor="#d9f0f8" color="#3fb6dc">
-                    {'单胎'}
-                  </Tag>
-                </div>
-                <div className={styles.div}>
-                  订单号：<span className={styles.time}>{item.sn}</span>
-                </div>
-                <div className={styles.div}>
-                  有效期：
-                  <span className={styles.time}>
-                    {moment(item.createtime).format('YYYY-MM-DD')} ~ {moment(item.validdate).format('YYYY-MM-DD')}
-                  </span>
-                </div>
-                {/* 从0开始对应 新订单、已支付、使用中、完成、关闭、逾期、取消 */}
-                <div
-                  className={styles.overprint}
-                  style={{ backgroundImage: `url(/images/icon/overprint_${!!item.state ? item.state : 1}@3x.png)` }}
-                />
-              </div>
-              <div className={styles.content}>
-                <div>
-                  <IconFont type="fetus" size="0.36rem" />
-                  <span>胎监判图服务</span>
-                  <span className={styles.right}>{item.service1amount + item.service2amount} 次</span>
-                </div>
-                <div>
-                  <IconFont type="device" size="0.36rem" />
-                  <span>{item.device && item.device.devicename}</span>
-                  <span className={styles.right}>租用 -- 个</span>
-                </div>
-                <div>
-                  <IconFont type="refund" size="0.36rem" />
-                  <span style={{ fontSize: '0.32rem', color: '#150f55' }}>{item.price}</span>
-                  <span style={{ marginLeft: '.32rem', fontSize: '0.2rem', color: '#5c6187' }}>
-                    (含押金￥ {item.cashPledge || 1099})
-                  </span>
-                </div>
-              </div>
-            </li>
-          );
+          return <Card key={item.id} data={item} onClick={onClick} />;
         })}
     </ul>
   );

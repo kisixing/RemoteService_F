@@ -6,11 +6,14 @@
 
 import React, { useState, useEffect } from 'react';
 import Router from 'umi/router';
-import { WingBlank, Radio, List, Checkbox, Toast } from 'antd-mobile';
+import { connect } from 'dva';
+import { WingBlank, Radio, List, Checkbox, Toast, Modal } from 'antd-mobile';
 import wx from 'weixin-js-sdk';
 import { IconFont, Button } from '@/components/antd-mobile';
+import Card from '../order/Monitor/Card';
 import { wechatPay } from '@/services/remote-service';
 import { isWeixin, getPageQuery } from '@/utils/utils';
+import { ConnectState } from '@/models/connect';
 import styles from './PackagePay.less';
 
 const RadioItem = Radio.RadioItem;
@@ -19,6 +22,7 @@ function PackagePay(props: any) {
   const isWeixn = isWeixin();
   const [payment, setPayment] = useState('');
   const [agree, setAgree] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (isWeixn) {
@@ -33,6 +37,7 @@ function PackagePay(props: any) {
 
   const onAgreement = (e: any) => {
     e.preventDefault();
+    setVisible(true);
   };
 
   const onSubmit = () => {
@@ -110,11 +115,9 @@ function PackagePay(props: any) {
       </div>
       <div className={styles.content}>
         <p>订单详情</p>
+        <Card hideOverPrint={true} data={props.currentPackage} />
       </div>
-      <List
-        className={styles.payment}
-        renderHeader={() => <span style={{ fontSize: '0.24rem' }}>支付方式</span>}
-      >
+      <List className={styles.payment} renderHeader={() => <span style={{ fontSize: '0.24rem' }}>支付方式</span>}>
         <RadioItem id="wechat" name="wechat" checked={payment === 'wechat'} onChange={onChange}>
           <div className={styles.label}>
             <img alt="wechat" src={require('../../../assets/icons/wechat-pay-fill.svg')} />
@@ -131,10 +134,20 @@ function PackagePay(props: any) {
         )}
       </List>
       <WingBlank className={styles.agreeItem}>
+        <Modal
+          closable
+          transparent
+          visible={visible}
+          maskClosable={false}
+          onClose={() => setVisible(false)}
+          className={styles.modal}
+        >
+          <iframe width="100%" src="/useragree.html" />
+        </Modal>
         <Checkbox checked={agree} onChange={(e: any) => setAgree(e.target.checked)}>
           <span style={{ marginLeft: '0.16rem' }}>我同意</span>
         </Checkbox>
-        <span onClick={onAgreement}>《购买协议》</span>
+        <a onClick={onAgreement}>《购买协议》</a>
       </WingBlank>
       <div className="bottom_button">
         <Button type="primary" disabled={!payment || !agree} onClick={onSubmit}>
@@ -145,4 +158,6 @@ function PackagePay(props: any) {
   );
 }
 
-export default PackagePay
+export default connect(({ remoteService }: ConnectState) => ({
+  currentPackage: remoteService.currentPackage,
+}))(PackagePay);

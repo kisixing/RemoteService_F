@@ -43,8 +43,9 @@ export interface ConnectState {
   user: UserModelState;
   combo: ComboStateType;
   news: any;
-  consultation: any,
-  order: OrderStateType
+  consultation: any;
+  order: OrderStateType;
+  remoteService: any;
 }
 
 /**
