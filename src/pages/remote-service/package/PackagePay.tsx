@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Router from 'umi/router';
-import { WingBlank, Radio, List, Checkbox, Toast } from 'antd-mobile';
+import { WingBlank, Radio, List, Checkbox, Toast} from 'antd-mobile';
 import wx from 'weixin-js-sdk';
 import { IconFont, Button } from '@/components/antd-mobile';
 import { wechatPay } from '@/services/remote-service';
@@ -134,7 +134,7 @@ function PackagePay(props: any) {
         <Checkbox checked={agree} onChange={(e: any) => setAgree(e.target.checked)}>
           <span style={{ marginLeft: '0.16rem' }}>我同意</span>
         </Checkbox>
-        <span onClick={onAgreement}>《购买协议》</span>
+        <a onClick={onAgreement}>《购买协议》</a>
       </WingBlank>
       <div className="bottom_button">
         <Button type="primary" disabled={!payment || !agree} onClick={onSubmit}>

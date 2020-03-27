@@ -5,6 +5,7 @@
  */
 
 import React,{useEffect} from 'react';
+import { Progress } from 'antd';
 import { InputItem, List, Toast } from 'antd-mobile';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
@@ -24,6 +25,8 @@ const now = new Date(nowTimeStamp);
 
 const { NORMAL_MIN, NORMAL_MAX } = Range.bloodOxygen;
 const { PULSE_MIN, PULSE_MAX} = Range.pulserate;
+
+const fontSize = document.getElementsByTagName('html')[0].style.fontSize;
 
 function BloodOxygenInput(props: {userid: number}) {
   const [date, setDate] = React.useState(now);
@@ -105,19 +108,32 @@ function BloodOxygenInput(props: {userid: number}) {
           <IconFont type="record" size="28px" />
           <span>历史记录</span>
         </div>
-        <div className={styles.circle}>
-          <span>血氧饱和度</span>
-          <div className={styles.input}>
-            <input
-              type="number"
-              placeholder="输入..."
-              value={bloodOxygen}
-              style={inputStyle("bloodOxygen")}
-              onChange={e => setBloodOxygen(e.target.value)}
+        <div className={styles['input-block']}>
+          <div className={styles.dashboard}>
+            <Progress
+              type="dashboard"
+              gapDegree={150}
+              strokeWidth={2}
+              width={4.4*Number(fontSize.slice(0,fontSize.length-2))}
+              showInfo={false}
+              percent={Number(bloodOxygen)}
+              strokeColor="#ffbe2d"
             />
-            <IconFont type="editor-line" size="0.36rem" />
           </div>
-          <span className={styles.unit}>%</span>
+          <div className={styles.circle}>
+            <span>血氧饱和度</span>
+            <div className={styles.input}>
+              <input
+                type="number"
+                placeholder="输入..."
+                value={bloodOxygen}
+                style={inputStyle("bloodOxygen")}
+                onChange={e => setBloodOxygen(e.target.value)}
+              />
+              <IconFont type="editor-line" size="0.36rem" />
+            </div>
+            <span className={styles.unit}>%</span>
+          </div>
         </div>
         <List className={styles.formList}>
           <InputItem
