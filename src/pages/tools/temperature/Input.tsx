@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Progress } from 'antd';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { Toast } from 'antd-mobile';
@@ -21,6 +22,8 @@ import styles from '../blood-pressure/Input.less';
 
 const nowTimeStamp = Date.now();
 const now = new Date(nowTimeStamp);
+
+const fontSize = document.getElementsByTagName('html')[0].style.fontSize;
 
 const { NORMAL_MAX } = Range.temperature;
 
@@ -98,19 +101,32 @@ function TemperatureInput(props: {userid: number}) {
           <IconFont type="record" size="28px" />
           <span>历史记录</span>
         </div>
-        <div className={styles.circle}>
-          <span>体温</span>
-          <div className={styles.input}>
-            <input
-              type="number"
-              placeholder="输入..."
-              value={temperature}
-              style={inputStyle()}
-              onChange={e => setTemperature(e.target.value)}
+        <div className={styles['input-block']}>
+          <div className={styles.dashboard}>
+            <Progress
+              type="dashboard"
+              gapDegree={150}
+              strokeWidth={2}
+              width={4.4*Number(fontSize.slice(0,fontSize.length-2))}
+              showInfo={false}
+              percent={(Number(temperature)-35)*100/4}
+              strokeColor="#ffbe2d"
             />
-            <IconFont type="editor-line" size="0.36rem" />
           </div>
-          <span className={styles.unit}>℃</span>
+          <div className={styles.circle}>
+            <span>体温</span>
+            <div className={styles.input}>
+              <input
+                type="number"
+                placeholder="输入..."
+                value={temperature}
+                style={inputStyle()}
+                onChange={e => setTemperature(e.target.value)}
+              />
+              <IconFont type="editor-line" size="0.36rem" />
+            </div>
+            <span className={styles.unit}>℃</span>
+          </div>
         </div>
       </div>
       <div className={styles.bottom}>

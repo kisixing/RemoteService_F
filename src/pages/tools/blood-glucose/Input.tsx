@@ -6,6 +6,7 @@
 
  // TODO 血压这里的period有问题
 import React, { useState, useEffect } from 'react';
+import { Progress } from 'antd';
 import { Tabs, List, InputItem, TextareaItem, Toast, Checkbox } from 'antd-mobile';
 import { connect } from 'dva';
 import Router from 'umi/router';
@@ -43,6 +44,7 @@ const json:Array<any> = [
   { key: PERIOD_CODE.BEFORE_S, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '' }
 ];
 
+const fontSize = document.getElementsByTagName('html')[0].style.fontSize;
 const { EMPTY_MIN, EMPTY_MAX, EATING_MIN, EATING_MAX } = Range.bloodGlucose;
 
 function BloodGlucoseInput(props: {userid: number}) {
@@ -227,7 +229,6 @@ function BloodGlucoseInput(props: {userid: number}) {
           保存
         </Button>
       </div>
-      {/* 类型对不上 */}
       <Tabs
         tabs={tabs.map(v => {v.key = v.key.toString(); return v;})}
         page={activatedTab}
@@ -237,6 +238,19 @@ function BloodGlucoseInput(props: {userid: number}) {
       >
         <div style={{ height: '100%' }}>
           <div className={styles.content} style={{ paddingTop: '0.6rem' }}>
+            <div className={styles['input-block']}>
+            <div className={styles.dashboard}>
+              <Progress
+                type="dashboard"
+                gapDegree={150}
+                strokeWidth={2}
+                width={4.4*Number(fontSize.slice(0,fontSize.length-2))}
+                showInfo={false}
+                // TODO 暂时以2~9为区间
+                percent={(Number(current.bloodGlucose)  ) * 100 / 7}
+                strokeColor="#ffbe2d"
+              />
+            </div>
             <div className={styles.circle}>
               <span>血糖</span>
               <div className={styles.input}>
@@ -251,6 +265,8 @@ function BloodGlucoseInput(props: {userid: number}) {
               </div>
               <span className={styles.unit}>mmol/L</span>
             </div>
+          </div>
+
             <List className={styles.formList}>
               <List.Item
                 extra={
