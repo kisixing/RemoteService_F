@@ -60,7 +60,8 @@ function Home(props: IProps) {
         <div className="module">
           <Banner dataSource={bannerProps} />
           <Entrance dataSource={ENTRANCE} />
-          <Notification />
+          {/* 消息提醒 */}
+          {/* <Notification /> */}
         </div>
         <WhiteSpace size="md" />
         <Card full>

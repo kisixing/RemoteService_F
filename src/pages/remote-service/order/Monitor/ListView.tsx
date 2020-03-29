@@ -97,7 +97,7 @@ function MonitorListView({ currentPregnancy }: any) {
     <ul className={styles.listView}>
       {
         dataSource.map((item: any) => {
-          return <Card key={item.id} data={item} onClick={onClick} />;
+          return <Card hideList key={item.id} data={item} onClick={onClick} />;
         })}
     </ul>
   );

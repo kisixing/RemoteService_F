@@ -43,7 +43,16 @@ function ApplyListView({ currentPregnancy }: any) {
     <ul className={styles.listView}>
       {
         dataSource.map((item: any) => {
-          return <Card key={item.id} data={item} onClick={onClick} />;
+          return (
+            <Card
+              hidePaytype
+              hideDoctor
+              textOver
+              key={item.id}
+              data={item}
+              onClick={onClick}
+            />
+          );
         })}
     </ul>
   );

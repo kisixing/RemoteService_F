@@ -36,7 +36,7 @@ export default function MonitorDetail({ id }: IProps) {
         {data.state ? <span>{ORDER_STATE[data.state]}</span> : <span>暂无订单状态</span>}
       </div>
       <div className={styles.main}>
-        <Card data={data} />
+        <Card hideOverPrint data={data} />
       </div>
       <div className={styles.footer}>
         <div className={styles.content}>

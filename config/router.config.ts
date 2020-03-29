@@ -117,6 +117,27 @@ export default [
       { component: './404' },
     ],
   },
+  {
+    path: '/reports',
+    name: 'reports',
+    title: '电子产检本',
+    component: '../layouts/BlankLayout',
+    routes: [
+      {
+        path: '/reports',
+        name: 'reports list',
+        title: '列表',
+        component: './reports/BBSList',
+      },
+      {
+        path: '/reports/preview',
+        name: 'preview',
+        title: '预览',
+        component: './reports/Preview',
+      },
+      { component: './404' },
+    ],
+  },
   { path: '/example', title: '组件示例', component: './example' },
   // user securit verification
   {
@@ -214,30 +235,6 @@ export default [
             name: 'pay',
             title: '支付页',
             component: './remote-service/pay/index',
-          },
-          {
-            path: '/reports',
-            name: 'reports',
-            title: '产检报告',
-            routes: [
-              // {
-              //   path: '/reports',
-              //   redirect: '/reports/list',
-              // },
-              {
-                path: '/reports',
-                name: 'reports list',
-                title: '列表',
-                component: './reports/BBSList',
-              },
-              {
-                path: '/reports/preview',
-                name: '预览',
-                title: 'pdf预览',
-                component: './reports/Preview',
-              },
-              { component: './404' },
-            ],
           },
           {
             path: '/signs',

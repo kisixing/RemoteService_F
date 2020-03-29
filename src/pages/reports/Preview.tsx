@@ -57,7 +57,7 @@ export default function Preview() {
         onLoadError={onDocumentLoadError}
         loading={
           <div style={{ marginTop: '2rem' }}>
-            <ActivityIndicator text="加载中，请稍等..." />
+            <ActivityIndicator text="文件加载中，请稍等..." />
           </div>
         }
         error={<div style={{ marginTop: '2rem' }}>加载PDF文件失败。</div>}

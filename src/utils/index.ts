@@ -1,3 +1,4 @@
+
 /*
  * @Author: ZHONG JUN
  * @Date: 2020-02-08 00:00:02
@@ -7,8 +8,12 @@
 import Router from 'umi/router';
 import { Toast } from 'antd-mobile';
 import { parse, stringify } from 'querystring';
-import moment,{ Moment } from 'moment';
+import moment, { Moment } from 'moment';
 // import pathRegexp from 'path-to-regexp';
+
+// 其他
+export { default as KG } from "./KG";
+export { default as checkIdCard } from "./checkIdCard";
 
 export function isWeixin() {
   return /micromessenger/.test(navigator.userAgent.toLowerCase());
@@ -16,7 +21,7 @@ export function isWeixin() {
 
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
-export function getPageKeyValue(key: string){
+export function getPageKeyValue(key: string) {
   const query = getPageQuery();
   return query[key];
 }
@@ -133,10 +138,10 @@ export function getHeaders() {
   var headerArr = req.getAllResponseHeaders().split('\n');
   var headers = {};
   headerArr.forEach(item => {
-    if(item !== '') {
-    var index = item.indexOf(':');
-      var key = item.slice(0,index);
-      var value = item.slice(index+1).trim();
+    if (item !== '') {
+      var index = item.indexOf(':');
+      var key = item.slice(0, index);
+      var value = item.slice(index + 1).trim();
       headers[key] = value
     }
   })
@@ -164,33 +169,33 @@ export function router(type: string) {
  */
 
 
-export function sortDate<T>(arr: Array<T>|Set<T>, key: string = ""): Array<T>|false {
-  let formatArr:Array<any> = [];
+export function sortDate<T>(arr: Array<T> | Set<T>, key: string = ""): Array<T> | false {
+  let formatArr: Array<any> = [];
   try {
-    if(key !== "") {
-      arr.forEach((v:T) => formatArr.push(Object.assign({_sortDate: moment(v[key])},v)));
-    }else {
-      arr.forEach((v:T) => formatArr.push({_sortDate: moment(v),originalData: v}));
+    if (key !== "") {
+      arr.forEach((v: T) => formatArr.push(Object.assign({ _sortDate: moment(v[key]) }, v)));
+    } else {
+      arr.forEach((v: T) => formatArr.push({ _sortDate: moment(v), originalData: v }));
     }
-  }catch(e) {
+  } catch (e) {
     console.error('对象或对象下字段不可使用moment转换');
     return false;
   }
   // 排序使用 Moment.isAfter 冒泡
   const len = formatArr.length;
   let temp;
-  for(let i = 0 ; i < len ; i++){
-    for(let j = i+1; j < len ; j++){
-      if(formatArr[i]['_sortDate'].isAfter(formatArr[j]['_sortDate'])){
+  for (let i = 0; i < len; i++) {
+    for (let j = i + 1; j < len; j++) {
+      if (formatArr[i]['_sortDate'].isAfter(formatArr[j]['_sortDate'])) {
         temp = formatArr[i];
         formatArr[i] = formatArr[j];
         formatArr[j] = temp;
       }
     }
   }
-  if(key !== "") {
-    return formatArr.map((v) => {delete v['_sortDate']; return v});
-  }else {
+  if (key !== "") {
+    return formatArr.map((v) => { delete v['_sortDate']; return v });
+  } else {
     return formatArr.map((v) => v.originalData);
   }
 }

@@ -1,9 +1,11 @@
 import React from 'react';
 import moment from 'moment';
+import classnames from 'classnames';
 import { Tag, IconFont } from '@/components/antd-mobile';
+import { ORDER_STATE, payType } from '../Monitor/ListView';
 import styles from '../Monitor/Card.less';
 
-function Card({ data, onClick }: any) {
+function Card({ data, onClick, hidePaytype, hideDoctor, textOver }: any) {
   // 判图类型 CTGAPPLY 为普通胎监判图， CTGREALTIME 实时CTG  ， CTGSP 专家判图
   const typeName = (type: string) => {
     let typeName = '未定义胎监判图';
@@ -20,6 +22,7 @@ function Card({ data, onClick }: any) {
   };
 
   const diagnosis = data.diagnosis ? JSON.parse(data.diagnosis) : {};
+  const prenatalvisit = data.prenatalvisit ? data.prenatalvisit : {};
 
   return (
     <li key={data.id} className={styles.item} onClick={() => onClick(data.id)}>
@@ -32,10 +35,23 @@ function Card({ data, onClick }: any) {
           </span>
         </div>
         <div className={styles.div}>
-          订单号：<span className={styles.time}>{data.sn}</span>
+          <span className={styles.label}>订&ensp;单&ensp;号：</span>
+          <span className={styles.time}>{data.sn}</span>
         </div>
-        <div className={styles.div}>
-          结&emsp;果：
+        {!hidePaytype ? (
+          <div className={styles.div}>
+            <span className={styles.label}>支付方式：</span>
+            <span>{payType(data.paytype)}</span>
+          </div>
+        ) : null}
+        {!hideDoctor ? (
+          <div className={styles.div}>
+            <span className={styles.label}>判图医生：</span>
+            <span>{diagnosis.wave}</span>
+          </div>
+        ) : null}
+        <div className={classnames([styles.div], { [styles.textOver]: !!textOver })}>
+          结&emsp;&emsp;果：
           <span className={styles.time}>{diagnosis.diagnosistxt || '待回复'}</span>
         </div>
       </div>
@@ -47,7 +63,7 @@ function Card({ data, onClick }: any) {
             {data.payment === 'package' ? '套餐扣除' : data.payment}
           </span>
           <span style={{ marginLeft: '.32rem', fontSize: '0.2rem', color: '#5c6187' }}>
-            (含押金￥ {data.cashPledge || 1099})
+            {/* (含押金￥ {data.cashPledge || 1099}) */}
           </span>
         </div>
       </div>

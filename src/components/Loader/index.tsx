@@ -21,7 +21,7 @@ const Loader = ({ spinning = false, fullScreen }: LoaderProps) => {
       </div> */}
       <div className={styles.box}>
         <div className={styles['loader-11']} />
-        <div className={styles.text}>LOADING...</div>
+        <div className={styles.text}>正在加载，请稍等...</div>
       </div>
     </div>
   );

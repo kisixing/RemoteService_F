@@ -61,8 +61,8 @@ class MapList extends React.Component<P, S> {
     }).then((res: any) => {
       if (res && res.id) {
         const data = [...this.state.dataSource];
-        const { residenceAddressDetail, maritalYears } = res;
-        if (!!residenceAddressDetail) {
+        const { residenceAddress, maritalYears } = res;
+        if (!!residenceAddress) {
           data[0]['finished'] = true;
         }
         if (!!maritalYears) {

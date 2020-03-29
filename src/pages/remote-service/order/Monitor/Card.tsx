@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Tag, IconFont } from '@/components/antd-mobile';
 import styles from './Card.less';
 
-function Card({ data = {}, hideOverPrint = false, onClick = () => {} }: any) {
+function Card({ data = {}, hideOverPrint, hideList, onClick = () => {} }: any) {
   return (
     <li key={data.id} className={styles.item} onClick={() => onClick(data.id)}>
       <div className={styles.header}>
@@ -34,21 +34,25 @@ function Card({ data = {}, hideOverPrint = false, onClick = () => {} }: any) {
       </div>
       <div className={styles.divider} />
       <div className={styles.content}>
-        <div>
-          <IconFont type="fetus" size="0.36rem" />
-          <span>胎监判图服务</span>
-          <span className={styles.right}>{data.service1amount + data.service2amount} 次</span>
-        </div>
-        <div>
-          <IconFont type="device" size="0.36rem" />
-          <span>{data.device && data.device.devicename}</span>
-          <span className={styles.right}>租用 -- 个</span>
-        </div>
+        {hideList ? null : (
+          <>
+            <div>
+              <IconFont type="fetus" size="0.36rem" />
+              <span>胎监判图服务</span>
+              <span className={styles.right}>{data.service1amount + data.service2amount} 次</span>
+            </div>
+            <div>
+              <IconFont type="device" size="0.36rem" />
+              <span>设备 -- {data.device && data.device.devicename}</span>
+              <span className={styles.right}>租用 -- 个</span>
+            </div>
+          </>
+        )}
         <div>
           <IconFont type="refund" size="0.36rem" />
           <span style={{ fontSize: '0.32rem', color: '#150f55' }}>{data.price}</span>
           <span style={{ marginLeft: '.32rem', fontSize: '0.2rem', color: '#5c6187' }}>
-            (含押金￥ {data.cashPledge || '---'})
+            {/* (含押金￥ {data.cashPledge || '---'}) */}
           </span>
         </div>
       </div>

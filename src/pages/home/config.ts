@@ -29,15 +29,15 @@ export const ENTRANCE = [
   },
   {
     key: '5',
-    label: '电子报告',
-    icon: 'i5.png',
-    route: '/reports',
+    label: '产检本',
+    icon: 'i6.png',
+    route: '/reports/preview', // '/reports',
     color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
   },
   {
     key: '6',
     label: '孕妇学校',
-    icon: 'i6.png',
+    icon: 'i5.png',
     route: '/school?type=article',
     color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
   },
@@ -107,16 +107,16 @@ export const TOOLS = [
     icon: 'i005.png',
     route: '',
   },
-  {
-    key: '7',
-    label: '其他',
-    icon: 'i006.png',
-    route: '',
-  },
-  {
-    key: '8',
-    label: '其他',
-    icon: 'i008.png',
-    route: '/example',
-  },
+  // {
+  //   key: '7',
+  //   label: '其他',
+  //   icon: 'i006.png',
+  //   route: '',
+  // },
+  // {
+  //   key: '8',
+  //   label: '其他',
+  //   icon: 'i008.png',
+  //   route: '/example',
+  // },
 ];

@@ -12,39 +12,77 @@ interface IProps extends PickerPropsType {
   placeholder?: string
   pickerType?: any
   addressPicker?: boolean
+  valueFormat?: 'string' | 'array' | 'number'
 }
 
-const CustomItem = (props: any) => (
-  <List.Item
-    className={styles.customList}
-    arrow={props.arrow}
-    extra={
-      <span
-        style={{
-          fontSize: '0.3rem',
-          color: props.extra && props.extra.includes('请') ? '#bbb' : '#000',
-        }}
-      >
-        {props.extra}
-      </span>
-    }
-    onClick={props.onClick}
-  >
-    {props.children}
-  </List.Item>
-);
+const CustomItem = (props: any) => {
+  return (
+    <List.Item
+      className={styles.customList}
+      arrow={props.arrow}
+      extra={
+        <span
+          style={{
+            fontSize: '0.3rem',
+            color: props.extra && props.extra.includes('请') ? '#bbb' : '#000',
+          }}
+        >
+          {props.extra}
+        </span>
+      }
+      onClick={props.onClick}
+    >
+      {props.children}
+    </List.Item>
+  );
+};
 
-function Picker({ required, children, data, placeholder, title, addressPicker, ...rest }: IProps, ref: any) {
+function Picker({
+  required,
+  children,
+  data,
+  placeholder,
+  title,
+  addressPicker,
+  valueFormat = 'array',
+  onChange = () => {},
+  value,
+  ...rest
+}: IProps, ref: any) {
+  // 是否选择地址组件
   let dataSource = data;
   if (addressPicker) {
     dataSource = options;
   }
+  // value格式转化
+  // 判断value字符类型，默认array同antd-mobile
+  let correctValue = value;
+  if (Object.prototype.toString.call(value) === '[object Number]') {
+    correctValue = [value];
+  }
+  if (Object.prototype.toString.call(value) === '[object String]') {
+    correctValue = value.split(',');
+  }
+
+  const handleChange = (value: any) => {
+    let val = value;
+    if (valueFormat === 'string') {
+      val = value.join(',');
+    }
+    if (valueFormat === 'number') {
+      val = value[0];
+    }
+    onChange(val)
+  }
+
   return (
     <AntdPicker
       ref={ref}
       data={dataSource}
       title={`选择${title || children}`}
-      extra={placeholder || `请选择${title}`}
+      extra={placeholder}
+      value={correctValue}
+      onOk={handleChange}
       {...rest}
     >
       <CustomItem arrow="horizontal">

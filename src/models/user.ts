@@ -64,8 +64,11 @@ const Model: LoginModelType = {
     *bindUserMp({ payload }, { call, put }) {
       const response = yield call(bindUserMp, payload);
       yield put({
-        type: 'global/updatePregnancy',
-        payload: response,
+        type: 'global/updateSate',
+        payload: {
+          currentPregnancy: response,
+          mpuid: response.mpuid || response.openId
+        },
       });
     },
 
@@ -73,8 +76,11 @@ const Model: LoginModelType = {
       const response = yield call(newPregnancy, payload);
       if (response && response.id) {
         yield put({
-          type: 'global/updatePregnancy',
-          payload: response,
+          type: 'global/updateState',
+          payload: {
+            currentPregnancy: response,
+            mpuid: response.mpuid || response.openId
+          },
         });
         return response;
       }

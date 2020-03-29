@@ -4,44 +4,44 @@
  * @Description:
  */
 
-let citys = {
-  11: '北京',
-  12: '天津',
-  13: '河北',
-  14: '山西',
-  15: '内蒙古',
-  21: '辽宁',
-  22: '吉林',
-  23: '黑龙江',
-  31: '上海',
-  32: '江苏',
-  33: '浙江',
-  34: '安徽',
-  35: '福建',
-  36: '江西',
-  37: '山东',
-  41: '河南',
-  42: '湖北',
-  43: '湖南',
-  44: '广东',
-  45: '广西',
-  46: '海南',
-  50: '重庆',
-  51: '四川',
-  52: '贵州',
-  53: '云南',
-  54: '西藏',
-  61: '陕西',
-  62: '甘肃',
-  63: '青海',
-  64: '宁夏',
-  65: '新疆',
-  71: '台湾',
-  81: '香港',
-  82: '澳门',
-  91: '国外',
-};
-citys = Object.values(citys).map(e => ({ label: e, value: e }));
+let areas = [
+  { code: "11", name: "北京市" },
+  { code: "12", name: "天津市" },
+  { code: "13", name: "河北省" },
+  { code: "14", name: "山西省" },
+  { code: "15", name: "内蒙古自治区" },
+  { code: "21", name: "辽宁省" },
+  { code: "22", name: "吉林省" },
+  { code: "23", name: "黑龙江省" },
+  { code: "31", name: "上海市" },
+  { code: "32", name: "江苏省" },
+  { code: "33", name: "浙江省" },
+  { code: "34", name: "安徽省" },
+  { code: "35", name: "福建省" },
+  { code: "36", name: "江西省" },
+  { code: "37", name: "山东省" },
+  { code: "41", name: "河南省" },
+  { code: "42", name: "湖北省" },
+  { code: "43", name: "湖南省" },
+  { code: "44", name: "广东省" },
+  { code: "45", name: "广西壮族自治区" },
+  { code: "46", name: "海南省" },
+  { code: "50", name: "重庆市" },
+  { code: "51", name: "四川省" },
+  { code: "52", name: "贵州省" },
+  { code: "53", name: "云南省" },
+  { code: "54", name: "西藏自治区" },
+  { code: "61", name: "陕西省" },
+  { code: "62", name: "甘肃省" },
+  { code: "63", name: "青海省" },
+  { code: "64", name: "宁夏回族自治区" },
+  { code: "65", name: "新疆维吾尔自治区" },
+  { code: "71", name: "台湾地区" },
+  { code: "81", name: "香港特别行政区" },
+  { code: "82", name: "澳门特别行政区" },
+  { code: "91", name: "国外" },
+];
+areas = areas.map(e => ({ label: e.name, value: e.name }));
 
 // 民族
 const ethnics = [
@@ -121,7 +121,13 @@ const profession = [
 ].map(e => ({ label: e, value: e }));
 
 // 婚姻状态
-const maritalstatus = ['已婚', '未婚', '离异', '丧偶'].map(e => ({ label: e, value: e }));
+const maritalstatus = [
+  { label: '已婚', value: 0 },
+  { label: '未婚', value: 1 },
+  { label: '离异', value: 2 },
+  { label: '丧偶', value: 3 },
+  { label: '再婚', value: 4 },
+];
 
 const illness = [
   '无',
@@ -144,12 +150,12 @@ const illness = [
 
 // 证件类型
 const IDType = [
-  { label: '二代身份证', value: '0' },
-  { label: '港澳台居民居住证', value: '4'},
-  { label: '回乡证', value: '2'},
-  { label: '台胞证', value: '3'},
-  { label: '护照', value: '1'},
-  { label: '其他', value: '5' },
+  { label: '二代身份证', value: 0 },
+  { label: '港澳台居民居住证', value: 4},
+  { label: '回乡证', value: 2},
+  { label: '台胞证', value: 3},
+  { label: '护照', value: 1},
+  { label: '其他', value: 5 },
 ];
 
 export const basic = {
@@ -178,7 +184,7 @@ export const basic = {
           id: 'workPhone',
           label: '固话',
           type: 'text-input',
-          charactertype: 'text',
+          charactertype: 'tel',
           required: true,
         },
         {
@@ -207,7 +213,8 @@ export const basic = {
           type: 'picker',
           required: true,
           cols: 1,
-          data: IDType
+          data: IDType,
+          valueFormat: 'number',
         },
         {
           id: 'idNO',
@@ -217,18 +224,21 @@ export const basic = {
           required: true,
         },
         {
-          id: 'bob',
+          id: 'dob',
           label: '出生日期',
           type: 'date-picker',
           required: true,
           mode: 'date', // 日期date,时间time,日期+时间datetime,年year,月month
-          format: 'YYYY-MM-DD'
+          format: 'YYYY-MM-DD', // 显示格式
+          valueFormat: 'string', // 返回value值格式
+          minDate: new Date(1960, 1, 1, 0, 0, 0),
+          maxDate: new Date()
         },
         {
           id: 'age',
           label: '年龄',
           type: 'text-input',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -242,9 +252,10 @@ export const basic = {
           id: 'nativeplace',
           label: '籍贯',
           type: 'picker',
-          addressPicker: true,
           required: true,
-          cols: 2,
+          cols: 1,
+          data: areas,
+          valueFormat: 'string', // string/array
         },
         {
           id: 'ethnic',
@@ -252,7 +263,8 @@ export const basic = {
           type: 'picker',
           required: true,
           data: ethnics,
-          cols: 1
+          cols: 1,
+          valueFormat: 'string',
         },
         {
           id: 'occupation',
@@ -260,14 +272,17 @@ export const basic = {
           type: 'picker',
           required: true,
           cols: 1,
-          data: profession
+          data: profession,
+          valueFormat: 'string',
         },
         {
           id: 'maritalStatus',
           label: '婚姻状态',
-          type: 'radio',
+          type: 'picker',
+          cols: 1,
           required: true,
           data: maritalstatus,
+          valueFormat: 'number',
         },
       ]
     },
@@ -295,7 +310,8 @@ export const basic = {
           type: 'picker',
           required: true,
           cols:1,
-          data: IDType
+          data: IDType,
+          valueFormat: 'number',
         },
         {
           id: 'partnerIdNO',
@@ -310,13 +326,15 @@ export const basic = {
           type: 'date-picker',
           required: true,
           mode: 'date',
-          format: 'YYYY-MM-DD'
+          format: 'YYYY-MM-DD',
+          minDate: new Date(1960, 1, 1, 0, 0, 0),
+          maxDate: new Date()
         },
         {
-          id: 'partnerAage',
+          id: 'partnerAge',
           label: '伴侣年龄',
           type: 'text-input',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -330,9 +348,10 @@ export const basic = {
           id: 'partnerNativeplace',
           label: '伴侣籍贯',
           type: 'picker',
-          addressPicker: true,
           required: true,
-          cols: 2,
+          cols: 1,
+          data: areas,
+          valueFormat: 'string',
         },
         {
           id: 'partnerEthnic',
@@ -340,7 +359,8 @@ export const basic = {
           type: 'picker',
           required: true,
           cols: 1,
-          data: ethnics
+          data: ethnics,
+          valueFormat: 'string',
         },
         {
           id: 'partnerOccupation',
@@ -348,7 +368,8 @@ export const basic = {
           type: 'picker',
           required: true,
           cols: 1,
-          data: profession
+          data: profession,
+          valueFormat: 'string',
         },
       ]
     },
@@ -360,6 +381,7 @@ export const basic = {
           id: 'registeredAddress',
           label: '户口地址',
           type: 'address-picker',
+          valueFormat: 'string',
           required: true,
         },
         {
@@ -372,6 +394,7 @@ export const basic = {
           id: 'residenceAddress',
           label: '居住地址',
           type: 'address-picker',
+          valueFormat: 'string',
           required: true,
         },
         {
@@ -462,7 +485,7 @@ export const pregnancy = {
           label: '孕前体重',
           type: 'text-input',
           suffix: 'kg',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -470,7 +493,7 @@ export const pregnancy = {
           label: '现在体重',
           type: 'text-input',
           suffix: 'kg',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -478,7 +501,7 @@ export const pregnancy = {
           label: '身高',
           type: 'text-input',
           suffix: 'cm',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -486,7 +509,7 @@ export const pregnancy = {
           label: '收缩压',
           type: 'text-input',
           suffix: 'mmHg',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -494,7 +517,7 @@ export const pregnancy = {
           label: '舒张压',
           type: 'text-input',
           suffix: 'mmHg',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -502,7 +525,7 @@ export const pregnancy = {
           label: '脉搏',
           type: 'text-input',
           suffix: '次/分',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
       ],
@@ -515,7 +538,7 @@ export const pregnancy = {
           id: 'yjcuch',
           label: '初潮',
           type: 'text-input',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -523,7 +546,7 @@ export const pregnancy = {
           label: '月经周期',
           type: 'text-input',
           suffix: '天',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -531,7 +554,7 @@ export const pregnancy = {
           label: '月经持续',
           type: 'text-input',
           suffix: '天',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -560,10 +583,10 @@ export const pregnancy = {
         },
         {
           id: 'smokeNote',
-          label: '每天吸烟数量',
+          label: '每天吸烟量',
           suffix: '支/天',
           type: 'text-input',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -579,7 +602,7 @@ export const pregnancy = {
           label: '饮酒量',
           suffix: 'ml/天',
           type: 'text-input',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
       ],
@@ -593,7 +616,7 @@ export const pregnancy = {
           label: '结婚年龄',
           suffix: '岁',
           type: 'text-input',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -602,14 +625,14 @@ export const pregnancy = {
           type: 'radio',
           charactertype: 'boolean',
           required: true,
-          data: [{ label: '有', value: true }, { label: '无', value: false }],
+          data: [{ label: '是', value: true }, { label: '否', value: false }],
         },
         {
           id: 'partnerCigarette',
           label: '伴侣嗜好-烟',
           suffix: '支/天',
           type: 'text-input',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {
@@ -625,7 +648,7 @@ export const pregnancy = {
           label: '伴侣饮酒量',
           suffix: 'ml/天',
           type: 'text-input',
-          charactertype: 'number',
+          charactertype: 'digit',
           required: true,
         },
         {

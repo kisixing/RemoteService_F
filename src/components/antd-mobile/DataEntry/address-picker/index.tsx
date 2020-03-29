@@ -24,31 +24,52 @@ interface IProps extends PickerPropsType {
   children?: React.ReactNode
   placeholder?: string
   onChange?: any
-  value?: string[]
+  value?: any
+  valueFormat?: 'string' | 'array'
 }
 
-function AddressPicker({ required, children, placeholder, onChange, value = [], ...rest }: IProps, ref: any) {
+function AddressPicker({ required, children, placeholder, onChange, valueFormat = 'array', value, ...rest }: IProps, ref: any) {
   const [ssq, setSSQ] = useState([])
   const [zc, setZC] = useState([]);
   const [streetOptions, setStreetOptions] = useState([]);
 
   useEffect(() => {
-    if (Array.isArray(value)) {
-      setSSQ(value.slice(0, 3));
-      setZC(value.slice(3));
+    // value格式转化
+    // 判断value字符类型，默认array同antd-mobile
+    let correctValue = [];
+    if (value && Object.prototype.toString.call(value) === '[object String]') {
+      correctValue = value.split(',');
     }
-  }, [])
+    if (value && Object.prototype.toString.call(value) === '[object Array]') {
+      correctValue = value;
+    }
+    const ssq = correctValue.slice(0, 3);
+    const zc = correctValue.slice(3);
+    if (correctValue[2]) {
+      getDistrict(correctValue[2])
+    }
+    setSSQ(ssq);
+    setZC(zc);
+  }, [value])
 
   const handleSSQ = (val: any) => {
     setSSQ(val);
-    onChange([...val, ...zc]);
+    let address: any = [...val, ...zc];
+    if (valueFormat === 'string') {
+      address = address.join(',')
+    }
+    onChange(address);
     // 获取该地区的街道信息、村委信息
     getDistrict(val[2]);
   }
 
   const handleZC = (val: any) => {
     setZC(val);
-    onChange([...ssq, ...val]);
+    let address: any = [...ssq, ...val];
+    if (valueFormat === 'string') {
+      address = address.join(',')
+    }
+    onChange(address);
   };
 
   const getDistrict = (area: string) => {
@@ -83,10 +104,10 @@ function AddressPicker({ required, children, placeholder, onChange, value = [], 
       extra={
         <div className={styles.extraContent}>
           <div className={styles.item}>
-            <Picker cols={3} data={options} value={ssq} onChange={handleSSQ} title="省市区" />
+            <Picker cols={3} data={options} value={ssq} onChange={handleSSQ} placeholder="请选择省市区" title="省市区" />
           </div>
           <div className={styles.item}>
-            <Picker data={streetOptions} cols={1} value={zc} onChange={handleZC} title="街道/村委" />
+            <Picker data={streetOptions} cols={1} value={zc} onChange={handleZC} placeholder="请选择街道/村委" title="街道/村委" />
           </div>
         </div>
       }

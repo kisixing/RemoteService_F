@@ -9,7 +9,7 @@ import { connect } from 'dva';
 import _ from 'lodash';
 import createDOMForm from 'rc-form/lib/createDOMForm';
 import { Button } from '@/components/antd-mobile';
-import { getKeys } from '@/utils/utils';
+import { getKeys, KG } from '@/utils';
 import { getPregnancy, updatePregnancy } from '@/services/user';
 import { ConnectState } from '@/models/connect';
 import FormFields from './FormFields';
@@ -54,6 +54,14 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
     getPregnancy(currentPregnancy.id).then((res: any) => {
       if (res && res.id) {
         const values = _.pick(res, keys);
+        // 初始化预产期
+        const EDD = values.lmp && KG.getEdd(values.lmp);
+        if (!values.edd) {
+          values.edd = EDD;
+        }
+        if (!values.sureEdd) {
+          values.sureEdd = EDD;
+        }
         console.log('本孕信息初始值：', values);
         form.setFieldsValue({ ...values });
         this.setState({ values });

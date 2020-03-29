@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 import store from 'store';
 import { Effect } from './connect';
 // import { ConnectState } from './connect.d';
-import { mpauth, getPregnancy } from '@/services/user';
+import { mpauth, getPregnancy, updatePregnancy } from '@/services/user';
 
 
 export interface GlobalModelState {
@@ -21,9 +21,9 @@ export interface GlobalModelType {
   effects: {
     mpauth: Effect;
     getPregnancy: Effect;
+    updatePregnancy: Effect;
   };
   reducers: {
-    updatePregnancy: Reducer<GlobalModelState>;
     updateState: Reducer<GlobalModelState>;
   };
   subscriptions: { setup: any };
@@ -35,9 +35,8 @@ const GlobalModel: GlobalModelType = {
   state: {
     locale: 'cn', // cn/en
     access_token:
-      '',
-    mpuid: '',
-    currentPregnancy: {},
+      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFkLWk4T3Jza0Jybk9uZGpNcGN0MFRNIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU4Nzk2MDIyMH0.10bFoqvnYbFf3lI918zzN8iCQDBOx2i5oQzttkwqlcT2fGNL0Ooe040XEOzvZbugpoCF89qXpePNlS_HLexROw',
+    currentPregnancy: { id: 4193 },
   },
 
   effects: {
@@ -60,8 +59,11 @@ const GlobalModel: GlobalModelType = {
         if (data && data.id) {
           store.set('mpuid', data.mpuid);
           yield put({
-            type: 'updatePregnancy',
-            payload: data,
+            type: 'updateState',
+            payload: {
+              currentPregnancy: data,
+              mpuid: data.mpuid || response.openId
+            },
           });
           return data;
         }
@@ -78,17 +80,22 @@ const GlobalModel: GlobalModelType = {
         },
       });
       return data;
+    },
+    *updatePregnancy({ payload }, { call, put, select }) {
+      const id = yield select(_ => _.global.currentPregnancy.id);
+      const values = { id, ...payload };
+      const response = yield call(updatePregnancy, values);
+      yield put({
+        type: 'updateState',
+        payload: {
+          currentPregnancy: response
+        }
+      });
+      return response;
     }
   },
 
   reducers: {
-    updatePregnancy(state, { payload }) {
-      return {
-        ...state,
-        mpuid: payload.mpuid || payload.openid,
-        currentPregnancy: payload,
-      };
-    },
     updateState(state, { payload }) {
       return {
         ...state,

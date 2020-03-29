@@ -8,7 +8,7 @@
  */
 
 import * as React from 'react';
-import { KG } from '@/utils/utils';
+import { KG } from '@/utils';
 import styles from './Banner.less';
 
 interface IProps {

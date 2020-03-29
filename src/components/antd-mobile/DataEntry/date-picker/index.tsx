@@ -9,6 +9,7 @@ interface IProps extends PropsType  {
   required?: boolean
   children?: React.ReactNode
   placeholder?: string
+  valueFormat?: 'string' | 'date'
 }
 
 const CustomItem = (props: any) => (
@@ -31,16 +32,20 @@ const CustomItem = (props: any) => (
   </List.Item>
 );
 
-function DatePicker(
-  { required, children, placeholder, value, format = 'YYYY-MM-DD HH:mm', ...rest }: IProps,
-  ref: any,
-) {
+function DatePicker({
+  required,
+  children,
+  placeholder,
+  value,
+  mode,
+  format = 'YYYY-MM-DD',
+  valueFormat = 'date',
+  onChange = () => {},
+  ...rest
+}: IProps, ref: any) {
   // value格式处理
   const transInit = (time: any) => {
-    let val = null;
-    if (!time) {
-      val = null;
-    }
+    let val = undefined;
     if (moment.isDate(time)) {
       val = value;
     }
@@ -52,7 +57,14 @@ function DatePicker(
     }
     return val;
   };
-  const onOk = () => {};
+
+  const handleChange = (value: Date) => {
+    let result = value;
+    if (valueFormat === 'string') {
+      result = moment(value).format(format);
+    }
+    return onChange(result);
+  };
 
   return (
     <AntdDatePicker
@@ -60,7 +72,9 @@ function DatePicker(
       title={`选择${children}时间`}
       extra={placeholder}
       value={transInit(value)}
-      onOk={onOk}
+      onOk={handleChange}
+      mode={mode}
+      format={value => moment(value).format(format)}
       {...rest}
     >
       <CustomItem arrow="horizontal">

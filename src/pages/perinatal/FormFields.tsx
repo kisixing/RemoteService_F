@@ -21,11 +21,11 @@ import styles from './FormFields.less';
 
 interface IProps {
   form: any
-  onChange?: any
+  onChange?: (id: string, value: any) => void
   dataSource?: any[]
 }
 
-function FormFields({ form, onChange, dataSource = [] }: IProps) {
+function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
 
   const inputItem = (object: any) => {
     const { getFieldDecorator, getFieldError } = form;
@@ -41,7 +41,14 @@ function FormFields({ form, onChange, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <InputItem {...object} id={id} key={id} type={charactertype} placeholder={placeholder}>
+          <InputItem
+            {...object}
+            id={id}
+            key={id}
+            type={charactertype}
+            placeholder={placeholder}
+            onChange={(e) => onChange(id, e)}
+          >
             {label}
           </InputItem>,
         );
