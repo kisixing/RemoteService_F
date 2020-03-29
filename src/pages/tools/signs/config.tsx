@@ -23,7 +23,7 @@ const bloodPressure = {
 }
 // 温度
 const temperature = {
-  NORMAL_MAX: 37
+  NORMAL_MAX: 37, NORMAL_MIN: 36
 }
 
 const pulserate = {

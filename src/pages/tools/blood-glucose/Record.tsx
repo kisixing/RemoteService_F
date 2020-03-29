@@ -7,7 +7,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Router from 'umi/router';
 import Chart from 'chart.js';
-import { Toast } from 'antd-mobile';
 import { IconFont } from '@/components/antd-mobile';
 import { PERIOD_CODE } from './config';
 import { getBloodGlucose, getRecordNum, GetProp } from '@/services/tools';
@@ -37,7 +36,7 @@ interface ServiceDataItem {
 }
 
 const { EMPTY_MIN, EMPTY_MAX, EATING_MIN, EATING_MAX } = Range.bloodGlucose;
-
+const PERIOD_TEXT = ['空腹', '早餐后', '午餐前', '午餐后', '晚餐前', '晚餐后', '睡前'];
 // 历史options
 const hChartOptions = {
   type: 'line',
@@ -58,7 +57,7 @@ const hChartOptions = {
     steppedLine: true,
     legend: {
       labels: {
-        fontSize: 25,
+        fontSize: 15,
         fontColor: '#000000'
       }
     },
@@ -109,7 +108,7 @@ const hChartOptions = {
         },
         ticks: {
           // 幅度
-          max: 9,
+          max: 11,
           min: 2,
           stepSize: 1,
           // style
@@ -123,7 +122,7 @@ const hChartOptions = {
 const tChartOptions = {
   type: 'bar',
   data: {
-    labels: ['空腹', '早餐后2H', '午餐前', '午餐后2H', '晚餐前', '晚餐后2H', '睡前'],
+    labels: PERIOD_TEXT,
     datasets: [{
       label: '今日记录',
       backgroundColor: ['#FFC0CB', '#DDA0DD', '#6495ED', '#48D1CC', '#FFFF00', '#FF4500', '#C0C0C0'],
@@ -194,10 +193,10 @@ function BloodGlucoseRecord(props: { userid: number }) {
     try {
       //@ts-ignore
       const ctx = hChart.current.getContext('2d');
-      chartH = new Chart(ctx, convertHChartData(hChartOptions, data));
+      chartH = new Chart(ctx, convertHChartData(hChartOptions, data.reverse()));
       //@ts-ignore
       const ctx1 = tChart.current.getContext('2d');
-      chartT = new Chart(ctx1, convertTChartData(tChartOptions, data));
+      chartT = new Chart(ctx1, convertTChartData(tChartOptions, data.reverse()));
     } catch (e) {
       console.error(e);
     }
@@ -219,7 +218,6 @@ function BloodGlucoseRecord(props: { userid: number }) {
         })
       } else {
         newChart([]);
-        Toast.info('暂无数据');
       }
     })
   }, [props.userid]);
@@ -229,56 +227,92 @@ function BloodGlucoseRecord(props: { userid: number }) {
     }
   }, [listData])
 
-  const renderList = (listData: Array<ServiceDataItem>) => (
-    listData.map((item: ServiceDataItem) => (
-      <div className={styles.card} key={item.id} >
-        <div className={styles.header}>
-          {item.src === 1 ? (
-            <div className={styles.src} onClick={() => toEdit(item)}>
-              <IconFont type="synchronization" /><span>同步</span>
+  const renderList = (listData: Array<ServiceDataItem>) => {
+    // 转换展示格式
+    let tarData:Array<any> = [];
+    for(let i = 0; i < listData.length; i++) {
+      let isFind = false;
+      for(let j = 0 ; j < tarData.length ; j++){
+        if(listData[i].timestamp === tarData[j].timestamp){
+          tarData[j].children.push({result: listData[i].result, period: listData[i].period});
+          isFind = true;
+        }
+      }
+      if(!isFind){
+        listData[i].children = [{result: listData[i].result, period: listData[i].period}];
+        tarData.push(listData[i]);
+      }
+      console.log(tarData);
+    }
+    console.log(tarData);
+    return (
+      tarData.map((item: ServiceDataItem) => (
+        <div className={styles.card} key={item.id} >
+          <div className={styles.header}>
+            {item.src === 1 ? (
+              <div className={styles.src} onClick={() => toEdit(item)}>
+                <IconFont type="synchronization" /><span>同步</span>
+              </div>
+            ) :(
+              <div className={styles.src} onClick={() => toEdit(item)}>
+                <IconFont type="edite" /><span>录入</span>
+              </div>
+            )}
+            <div className={styles.date}>
+              <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
             </div>
-          ) :(
-            <div className={styles.src} onClick={() => toEdit(item)}>
-              <IconFont type="edite" /><span>录入</span>
-            </div>
-          )}
-          <div className={styles.date}>
-            <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
           </div>
-        </div>
-        <div className={styles.content}>
-          <div>
-            <div><span>血糖</span></div>
-            <div><span>{item.result}</span></div>
-            <div>
-              {item.period === PERIOD_CODE.FASTING || item.period === PERIOD_CODE.BEFORE_S ? (
+          <div className={styles.content}>
+            {item.children.map((v,index) => (
+              <div key={index}>
+                <div><span>{PERIOD_TEXT[v.period]}</span></div>
+                <div><span>{item.result}</span></div>
                 <div>
-                  {item.result < EMPTY_MIN || item.result > EMPTY_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}
+                  {item.period === PERIOD_CODE.FASTING || item.period === PERIOD_CODE.BEFORE_S ? (
+                    <div>
+                      {item.result < EMPTY_MIN || item.result > EMPTY_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}
+                    </div>
+                  ) : (
+                      <div>
+                        {item.result < EATING_MIN || item.result > EATING_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}
+                      </div>
+                    )}
                 </div>
-              ) : (
+              </div>
+            ))}
+            {/* <div>
+              <div><span>血糖</span></div>
+              
+              <div>
+                {item.period === PERIOD_CODE.FASTING || item.period === PERIOD_CODE.BEFORE_S ? (
                   <div>
-                    {item.result < EATING_MIN || item.result > EATING_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}
+                    {item.result < EMPTY_MIN || item.result > EMPTY_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}
                   </div>
-                )}
+                ) : (
+                    <div>
+                      {item.result < EATING_MIN || item.result > EATING_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}
+                    </div>
+                  )}
+              </div>
+            </div> */}
+            {/* <div>
+              <div><span>胰岛素</span></div>
+              <div>{item.insulin ? <span>已注射</span> : <span>未注射</span>}</div>
+              <div>{item.insulinnote ? <span>{item.insulinnote}U</span> : <span>无</span>}</div>
             </div>
+            <div>
+              <div><span>运动情况</span></div>
+              <div>{item.exercise ? <span>{item.exercise}</span> : <span>暂无</span> }</div>
+            </div>
+            <div>
+              <div><span>饮食情况</span></div>
+              <div>{item.diet ? <span>{item.diet}</span> : <span>暂无</span> }</div>
+            </div> */}
           </div>
-          {/* <div>
-            <div><span>胰岛素</span></div>
-            <div>{item.insulin ? <span>已注射</span> : <span>未注射</span>}</div>
-            <div>{item.insulinnote ? <span>{item.insulinnote}U</span> : <span>无</span>}</div>
-          </div>
-          <div>
-            <div><span>运动情况</span></div>
-            <div>{item.exercise ? <span>{item.exercise}</span> : <span>暂无</span> }</div>
-          </div>
-          <div>
-            <div><span>饮食情况</span></div>
-            <div>{item.diet ? <span>{item.diet}</span> : <span>暂无</span> }</div>
-          </div> */}
         </div>
-      </div>
-    ))
-  );
+      ))
+    )
+  };
 
   return (
     <div className={styles.container}>
@@ -288,8 +322,8 @@ function BloodGlucoseRecord(props: { userid: number }) {
             {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
           </div>
           <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>
-            <IconFont type="record" size="0.3rem" />
-            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+            <IconFont type="record" size="0.25rem" />
+            {isHistory ? <span>今日记录</span> : <span>历史记录</span>}
           </div>
         </div>
         <div className={styles.canvas} style={{ display: isHistory ? "block" : "none" }}>
@@ -308,7 +342,11 @@ function BloodGlucoseRecord(props: { userid: number }) {
           </div>
       </div>
       <div className={styles.list}>
-        {renderList(listData)}
+        {listData.length !== 0 ? (
+          renderList(listData)
+        ) : (
+          <div>暂无数据</div>
+        )}
         </div>
     </div>
   )

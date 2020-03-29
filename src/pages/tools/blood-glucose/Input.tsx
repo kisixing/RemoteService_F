@@ -17,7 +17,7 @@ import DatePicker from '../components/DatePicker';
 import { router } from '@/utils/utils';
 import { PERIOD_CODE } from './config';
 import { ConnectState } from '@/models/connect'
-import { setBloodGlucose, editBloodGlucose } from '@/services/tools';
+import { setBloodGlucose, editBloodGlucose, getBloodGlucose, getRecordNum, GetProp } from '@/services/tools';
 import { Range } from "@/pages/tools/signs/config";
 import styles from '../blood-pressure/Input.less';
 
@@ -65,6 +65,7 @@ function BloodGlucoseInput(props: {userid: number}) {
   
   useEffect(() => {
     let obj = {};
+    // 从修改页面过来的
     if(window.location.search){
       window.location.search.split('?')[1].split('&').forEach((v:string) => {
         obj[v.split('=')[0]] = v.split('=')[1];
@@ -75,8 +76,8 @@ function BloodGlucoseInput(props: {userid: number}) {
           isInsulin: Boolean(obj['insulin']),
           quantity: obj['insulinnote'] === "null" ? "" : obj['insulinnote'],
           key: Number(obj['period']),
-          dietaryStatus: obj['diet'] === "null" ? "" : obj['diet'],
-          exercise: obj['exercise'] === "null" ? "" : obj['exercise']
+          dietaryStatus: obj['diet'] === "null" ? "" : decodeURI(obj['diet']),
+          exercise: obj['exercise'] === "null" ? "" : decodeURI(obj['exercise'])
         };
         setValues((values:any) => {
           const i = values.findIndex((v:any) => v.key === Number(obj['period']));
@@ -89,22 +90,26 @@ function BloodGlucoseInput(props: {userid: number}) {
         setDate(new Date(obj['timestamp']));
       }
     }else{    
+      // 并非从修改页面过来，需要请求当前的数据
+      // 判读当前tabs定位
       const h = now.getHours();
+      let p = 0;
       if(h >= 3 && h < 8){
-        setActivatedTab(PERIOD_CODE.FASTING);
+        p = PERIOD_CODE.FASTING;
       }else if(h >= 8 && h < 10){
-        setActivatedTab(PERIOD_CODE.AFTER_B);
+        p = PERIOD_CODE.AFTER_B;
       }else if(h >= 10 && h < 12){
-        setActivatedTab(PERIOD_CODE.BEFORE_L);
+        p = PERIOD_CODE.BEFORE_L;
       }else if(h >= 12 && h < 15){
-        setActivatedTab(PERIOD_CODE.AFTER_L);
+        p = PERIOD_CODE.AFTER_L;
       }else if(h >= 15 && h < 18){
-        setActivatedTab(PERIOD_CODE.BEFORE_D);
+        p = PERIOD_CODE.BEFORE_D;
       }else if(h >= 18 && h < 21){
-        setActivatedTab(PERIOD_CODE.AFTER_D);
+        p = PERIOD_CODE.AFTER_D;
       }else{
-        setActivatedTab(PERIOD_CODE.BEFORE_S);
+        p = PERIOD_CODE.BEFORE_S;
       }
+      setActivatedTab(p);
     }
   },[])
 
@@ -113,6 +118,32 @@ function BloodGlucoseInput(props: {userid: number}) {
     setCurrent(values[index]);
     return () => {};
   }, [activatedTab,values]);
+
+  useEffect(() => {
+    getRecordNum({ type: 'blood-glucoses', pregnancyId: props.userid }).then(res => {
+      if (res.data !== 0) {
+        const reqData: GetProp = { pregnancyId: props.userid, page: 0, size: Number(res.data), sort: 'timestamp' };
+        getBloodGlucose(reqData).then(res => {
+          // 之后再抽离
+          const { data } = res;
+          const formatDate = moment(now).format('YYYY-MM-DD');
+          const tarData = data.filter(v => v.timestamp.slice(0,10) === formatDate );
+          let newValues = JSON.parse(JSON.stringify(values));
+          console.log(tarData);
+          tarData.forEach((v: any) => {
+            newValues[v.period].bloodGlucose = v.result; 
+            newValues[v.period].isInsulin = v.insulin;
+            newValues[v.period].quantity = Number(v.insulinnote); 
+            newValues[v.period].exercise = v.exercise; 
+            newValues[v.period].dietaryStatus = v.diet; 
+          });
+          setValues(newValues);
+        })
+      } else {
+        Toast.info('暂无数据');
+      }
+    })
+  }, [])
 
   const onSubmit = async () => {
     const d = moment(date);

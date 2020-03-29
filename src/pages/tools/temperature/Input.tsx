@@ -25,7 +25,7 @@ const now = new Date(nowTimeStamp);
 
 const fontSize = document.getElementsByTagName('html')[0].style.fontSize;
 
-const { NORMAL_MAX } = Range.temperature;
+const { NORMAL_MAX,NORMAL_MIN } = Range.temperature;
 
 function TemperatureInput(props: {userid: number}) {
   const [date, setDate] = useState(now);
@@ -80,7 +80,7 @@ function TemperatureInput(props: {userid: number}) {
   },[]);
 
   const inputStyle = () => {
-    if(Number(temperature) > NORMAL_MAX){
+    if(Number(temperature) > NORMAL_MAX || Number(temperature) < NORMAL_MIN  ){
       return {color: 'red'};
     }
     return {};

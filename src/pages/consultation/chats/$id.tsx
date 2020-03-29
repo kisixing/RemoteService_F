@@ -8,7 +8,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import uuid from 'uuid';
 import store from 'store';
-import { useI } from '@lianmed/im';
+import { useI } from 'lianmed/packages/im';
 import { TextareaItem, Button, Toast } from 'antd-mobile';
 import { IconFont } from '@/components/antd-mobile';
 import Message from './Message';
