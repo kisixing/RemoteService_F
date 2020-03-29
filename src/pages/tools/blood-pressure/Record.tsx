@@ -57,7 +57,7 @@ const chartOptions = {
     steppedLine: true,
     legend: {
       labels: {
-        fontSize: 25,
+        fontSize: 15,
         fontColor: '#000000'
       }
     },
@@ -268,7 +268,7 @@ function BloodPressureRecord(props: {userid: number}) {
       // }
       // 过滤已删除的数据
     if(listData.length !== 0){
-      newChart(listData.filter((v:ServiceDataItem) => v.status !== -1));
+      newChart(listData.filter((v:ServiceDataItem) => v.status !== -1).reverse());
     }
   },[listData])
 
@@ -316,8 +316,8 @@ function BloodPressureRecord(props: {userid: number}) {
             {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
           </div>
           <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>
-            <IconFont type="record" size=".3rem" />
-            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+            <IconFont type="record" size="0.25rem" />
+            {isHistory ? <span>今日记录</span> : <span>历史记录</span>}
           </div>
         </div>
           <div className={styles.canvas} style={{display: isHistory ? "block" : "none"}}>
@@ -336,7 +336,11 @@ function BloodPressureRecord(props: {userid: number}) {
         </div>
       </div>
       <div className={styles.list}>
-        {renderList(listData)}
+        {listData.length !== 0 ? (
+          renderList(listData)
+        ) : (
+          <div>暂无数据</div>
+        )}
       </div>
       {/* <Modal
         visible={visible}

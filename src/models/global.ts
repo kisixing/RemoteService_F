@@ -34,10 +34,9 @@ const GlobalModel: GlobalModelType = {
 
   state: {
     locale: 'cn', // cn/en
-    access_token:
-      '',
+    access_token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFXRlFNNXlnS3BWM0FlTDNpa1Byc29VIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU4NjI2NjcxNX0.0ysLE-4FAtj6jNlmnMDNM2sMPQMZPOU9g838CoE4jaoxa5gLOcQii2XPaqfctS7URJt4lUtXttQVz3RJ64PU4w',
     mpuid: '',
-    currentPregnancy: {},
+    currentPregnancy: { id: 4228},
   },
 
   effects: {

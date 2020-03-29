@@ -5,7 +5,7 @@
  */
 
 import React, { useRef, useState, useEffect } from 'react'
-import Router from 'umi/router'; 
+import Router from 'umi/router';
 import Chart from 'chart.js';
 import { Toast } from 'antd-mobile';
 import { connect } from 'dva';
@@ -30,7 +30,7 @@ interface ServiceDataItem {
   src?:number
 }
 
-const { NORMAL_MAX } = Range.temperature;
+const { NORMAL_MAX, NORMAL_MIN } = Range.temperature;
 
 // 异常与正常样式
 const [defaultColor, errorColor] = ['#c3c5c6', '#dc143c'];
@@ -50,7 +50,7 @@ const chartOptions = {
     steppedLine: true,
     legend: {
       labels: {
-        fontSize: 25,
+        fontSize: 15,
         fontColor: '#000000'
       }
     },
@@ -170,7 +170,7 @@ function TemperatureRecord(props: {userid: number}) {
         if (data) {
           // 只有体温一个值 不抽离
           // 样式注入
-          if (data > NORMAL_MAX) {
+          if (data > NORMAL_MAX || data < NORMAL_MIN) {
             nOptions.data.datasets[i].pointBackgroundColor.push(errorColor);
             nOptions.data.datasets[i].pointBorderColor.push(errorColor);
             nOptions.data.datasets[i].pointRadius.push(errorPointRadius);
@@ -227,7 +227,7 @@ function TemperatureRecord(props: {userid: number}) {
   },[]);
   useEffect(() => {
     if(listData.length !== 0) {
-      newChart(listData);
+      newChart(listData.reverse());
     }
   },[listData])
 
@@ -252,8 +252,8 @@ function TemperatureRecord(props: {userid: number}) {
         <div className={styles.content}>
           <div>
             <div><span>体温</span></div>
-            <div><span>{item.result}度</span></div>
-            <div>{item.result > NORMAL_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+            <div><span>{item.result}℃</span></div>
+            <div>{item.result > NORMAL_MAX || item.result < NORMAL_MIN ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
           </div>
         </div>
       </div>
@@ -268,8 +268,8 @@ function TemperatureRecord(props: {userid: number}) {
             {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
           </div>
           <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>
-            <IconFont type="record" size=".3rem" />
-            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+            <IconFont type="record" size="0.25rem" />
+            {isHistory ? <span>今日记录</span> : <span>历史记录</span>}
           </div>
         </div>
           <div className={styles.canvas} style={{display: isHistory ? "block" : "none"}}>
@@ -288,7 +288,11 @@ function TemperatureRecord(props: {userid: number}) {
         </div>
       </div>
       <div className={styles.list}>
-        {renderList(listData)}
+        {listData.length !== 0 ? (
+          renderList(listData)
+        ) : (
+          <div>暂无数据</div>
+        )}
       </div>
     </div>
   )
