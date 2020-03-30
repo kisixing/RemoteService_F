@@ -36,9 +36,9 @@ function TeamDetail({ dispatch, comments, match, ...rest }: any) {
           <div className={headerStyle.name}>{'复旦大学附属妇产科医师团队'}</div>
           <div className={headerStyle.bottom}>
             快速匹配本院在线医生
-          <br />
-          无需长时间等待
-        </div>
+            <br />
+            无需长时间等待
+          </div>
           <div className={headerStyle.icon} />
         </div>
         <div className={styles.content}>
@@ -46,12 +46,12 @@ function TeamDetail({ dispatch, comments, match, ...rest }: any) {
           <div className={styles.tags}>
             <Tag bgcolor="#ebedf0" color="#535881">
               <IconFont type="visit" size="0.3rem" />
-            &nbsp;保证医生真实
-          </Tag>
+              &nbsp;保证医生真实
+            </Tag>
             <Tag bgcolor="#ebedf0" color="#535881">
               <IconFont type="refund" size="0.3rem" />
-            &nbsp;超时自动退费
-          </Tag>
+              &nbsp;超时自动退费
+            </Tag>
           </div>
           <ul className={styles.tips}>
             <li>医生开始解答后24小时内可不限次数交流</li>
@@ -63,10 +63,10 @@ function TeamDetail({ dispatch, comments, match, ...rest }: any) {
             <div className={styles.title}>患者评价 12</div>
             <div className={styles.extra}>
               查看全部
-            <IconFont type="dropdown" size="0.36rem" />
+              <IconFont type="dropdown" size="0.36rem" />
             </div>
           </div>
-          {comments.length > 0 &&
+          {comments && comments.length > 0 &&
             comments.map((e: any) => (
               <CommentItem
                 key={e.id}

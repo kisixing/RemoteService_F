@@ -34,9 +34,9 @@ const GlobalModel: GlobalModelType = {
 
   state: {
     locale: 'cn', // cn/en
-    access_token:
-      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFkLWk4T3Jza0Jybk9uZGpNcGN0MFRNIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU4Nzk2MDIyMH0.10bFoqvnYbFf3lI918zzN8iCQDBOx2i5oQzttkwqlcT2fGNL0Ooe040XEOzvZbugpoCF89qXpePNlS_HLexROw',
-    currentPregnancy: { id: 4193 },
+    mpuid: '',
+    access_token: '',
+    currentPregnancy: {},
   },
 
   effects: {
@@ -62,7 +62,7 @@ const GlobalModel: GlobalModelType = {
             type: 'updateState',
             payload: {
               currentPregnancy: data,
-              mpuid: data.mpuid || response.openId
+              mpuid: data.mpuid || response.openId,
             },
           });
           return data;
@@ -88,11 +88,11 @@ const GlobalModel: GlobalModelType = {
       yield put({
         type: 'updateState',
         payload: {
-          currentPregnancy: response
-        }
+          currentPregnancy: response,
+        },
       });
       return response;
-    }
+    },
   },
 
   reducers: {
