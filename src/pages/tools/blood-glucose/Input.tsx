@@ -88,28 +88,30 @@ function BloodGlucoseInput(props: {userid: number}) {
         setId(Number(obj['id']));
         setActivatedTab(Number(obj['period']));
         setDate(new Date(obj['timestamp']));
+      }else{    
+        // 并非从修改页面过来，需要请求当前的数据
+        // 判读当前tabs定位
+        console.log(now);
+        const h = now.getHours();
+        let p = 0;
+        if(h >= 3 && h < 8){
+          p = PERIOD_CODE.FASTING;
+        }else if(h >= 8 && h < 10){
+          p = PERIOD_CODE.AFTER_B;
+        }else if(h >= 10 && h < 12){
+          p = PERIOD_CODE.BEFORE_L;
+        }else if(h >= 12 && h < 15){
+          p = PERIOD_CODE.AFTER_L;
+        }else if(h >= 15 && h < 18){
+          p = PERIOD_CODE.BEFORE_D;
+        }else if(h >= 18 && h < 21){
+          p = PERIOD_CODE.AFTER_D;
+        }else{
+          p = PERIOD_CODE.BEFORE_S;
+        }
+        console.log(p)
+        setActivatedTab(p);
       }
-    }else{    
-      // 并非从修改页面过来，需要请求当前的数据
-      // 判读当前tabs定位
-      const h = now.getHours();
-      let p = 0;
-      if(h >= 3 && h < 8){
-        p = PERIOD_CODE.FASTING;
-      }else if(h >= 8 && h < 10){
-        p = PERIOD_CODE.AFTER_B;
-      }else if(h >= 10 && h < 12){
-        p = PERIOD_CODE.BEFORE_L;
-      }else if(h >= 12 && h < 15){
-        p = PERIOD_CODE.AFTER_L;
-      }else if(h >= 15 && h < 18){
-        p = PERIOD_CODE.BEFORE_D;
-      }else if(h >= 18 && h < 21){
-        p = PERIOD_CODE.AFTER_D;
-      }else{
-        p = PERIOD_CODE.BEFORE_S;
-      }
-      setActivatedTab(p);
     }
   },[])
 
@@ -139,8 +141,6 @@ function BloodGlucoseInput(props: {userid: number}) {
           });
           setValues(newValues);
         })
-      } else {
-        Toast.info('暂无数据');
       }
     })
   }, [])
@@ -219,12 +219,9 @@ function BloodGlucoseInput(props: {userid: number}) {
     newValues[index][key] = value;
     setValues(newValues);
   }
+
   const tabChange = (tab:any) => {
-    if(id!==-1){
-      return Toast.info('修改模式');
-    }else{
-      setActivatedTab(Number(tab.key));
-    }
+    setActivatedTab(Number(tab.key));
   }
 
   // 输入异常时标红

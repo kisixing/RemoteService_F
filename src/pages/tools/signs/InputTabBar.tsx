@@ -4,7 +4,7 @@
  * @Date: 2020-03-06 17:22:51
  */
 
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import { Tabs } from 'antd-mobile';
 import { StickyContainer, Sticky } from 'react-sticky';
 // content 组件
@@ -16,15 +16,16 @@ import Temperature from '../temperature/Input';
 import { tabs } from './config';
 import styles from './TabBar.less'
 
-function InputTabBar() {
-
-  const [activeTab, setActiveTab] = useState("weight");
+function InputTabBar(props:any) {
+  const { query } = props.history.location;
+  const [activeTab, setActiveTab] = useState("blood-pressure");
   const onTabClick = (tab: any, index: number) => {
     const key = tab.key;
     if (key === activeTab) {
       return;
     }
     setActiveTab(key);
+    props.history.replace(`/signs/input?key=${key}`);
   }
 
   function renderTabBar(props: any) {
@@ -38,6 +39,9 @@ function InputTabBar() {
       </Sticky>
     );
   }
+  useEffect(() => {
+    setActiveTab(query.key);
+  },[])
 
   return (
     <div>

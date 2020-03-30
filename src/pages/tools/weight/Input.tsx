@@ -13,7 +13,6 @@ import DatePicker from '../components/DatePicker';
 import { ConnectState } from '@/models/connect';
 import BackButton from '@/components/BackButton';
 import { IconFont, Button, WhiteSpace } from '@/components/antd-mobile';
-import GaugeInput from '../components/GaugeInput';
 import { router } from '@/utils/utils';
 import styles from '../blood-pressure/Input.less';
 
