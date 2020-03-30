@@ -7,11 +7,12 @@ import { mpauth, getPregnancy, updatePregnancy } from '@/services/user';
 
 export interface GlobalModelState {
   locale?: string;
+  hospital?: string;
   mpuid?: string;
-  access_token?: string,
+  access_token?: string;
   currentPregnancy?: {
-    id?: string | number
-    [propName: string]: any
+    id?: string | number;
+    [propName: string]: any;
   };
 }
 
@@ -34,9 +35,11 @@ const GlobalModel: GlobalModelType = {
 
   state: {
     locale: 'cn', // cn/en
-    mpuid: '',
-    access_token: '',
-    currentPregnancy: {},
+    hospital: '深圳第三人民医院',
+    mpuid: 'oONcg1d-i8OrskBrnOndjMpct0TM',
+    access_token:
+      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFkLWk4T3Jza0Jybk9uZGpNcGN0MFRNIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU4ODE1NjYzNX0.ddF3qtSn6IXMDAfQMG_M0QWHz66Y_ml2fObLb3mEhEsI-4mzwpPyn2_9Dz2wVHShQ5Y5cJoOQnTI_3hc1lZswQ',
+    currentPregnancy: { id: 3 },
   },
 
   effects: {

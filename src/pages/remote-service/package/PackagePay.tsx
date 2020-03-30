@@ -102,7 +102,7 @@ function PackagePay(props: any) {
         <p>设备领取时间地点</p>
         <div className={styles.hospital}>
           <IconFont type="hospital" size="0.4rem" />
-          <span>xxx医院门诊4楼508胎监室</span>
+          <span>{props.hospital}门诊4楼508胎监室</span>
         </div>
         <div className={styles.time}>
           <IconFont type="time2" size="0.4rem" />
@@ -158,6 +158,7 @@ function PackagePay(props: any) {
   );
 }
 
-export default connect(({ remoteService }: ConnectState) => ({
+export default connect(({ global, remoteService }: ConnectState) => ({
   currentPackage: remoteService.currentPackage,
+  hospital: global.hospital,
 }))(PackagePay);

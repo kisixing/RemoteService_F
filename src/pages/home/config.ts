@@ -7,11 +7,11 @@ export const ENTRANCE = [
     color: 'linear-gradient(-45deg, #FFBFD9 0%, #FF6B70 100%)',
   },
   {
-    key: '8',
-    label: '在线咨询',
-    icon: 'i3.png',
-    route: '/consultation',
-    color: '',
+    key: '4',
+    label: '套餐服务',
+    icon: 'i7.png',
+    route: '',
+    color: 'linear-gradient(-45deg, #FFBA8D 0%, #FF7D34 100%)',
   },
   {
     key: '3',
@@ -21,11 +21,18 @@ export const ENTRANCE = [
     color: 'linear-gradient(-45deg, #3BF7FF 0%, #00B9FF 100%)',
   },
   {
-    key: '4',
-    label: '套餐服务',
-    icon: 'i7.png',
-    route: '',
-    color: 'linear-gradient(-45deg, #FFBA8D 0%, #FF7D34 100%)',
+    key: '88',
+    label: '我的订单',
+    icon: 'i4.png',
+    route: '/orders',
+    color: '',
+  },
+  {
+    key: '8',
+    label: '在线咨询',
+    icon: 'i3.png',
+    route: '/consultation',
+    color: '',
   },
   {
     key: '5',
@@ -38,7 +45,7 @@ export const ENTRANCE = [
     key: '6',
     label: '孕妇学校',
     icon: 'i5.png',
-    route: '/school?type=article',
+    route: '', // '/school?type=article',
     color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
   },
   {
@@ -47,13 +54,6 @@ export const ENTRANCE = [
     icon: 'i1.png',
     route: '',
     color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
-  },
-  {
-    key: '88',
-    label: '我的订单',
-    icon: 'i4.png',
-    route: '/orders',
-    color: '',
   },
   {
     key: '2',

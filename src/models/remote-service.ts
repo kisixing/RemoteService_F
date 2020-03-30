@@ -48,12 +48,14 @@ const RemoteServiceModel: NewsModelType = {
     },
     *getPackage({ payload }, { call, put }) {
       const response = yield call(getPackage, payload);
-      yield put({
-        type: 'updateState',
-        payload: {
-          currentPackage: response,
-        },
-      });
+      if (response && response.id) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            currentPackage: response,
+          },
+        });
+      }
       return response;
     },
     *getProduct({ payload }, { call, put }) {

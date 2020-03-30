@@ -9,8 +9,8 @@ import styles from './index.less';
 function Footer() {
   return (
     <footer className={styles.footer}>
-      <span className={styles.icon} />
-      <span className={styles.copyright}>© 2020 lian-med</span>
+      {/* <span className={styles.icon} /> */}
+      <span className={styles.copyright}>© 2020 莲印医疗</span>
     </footer>
   );
 }

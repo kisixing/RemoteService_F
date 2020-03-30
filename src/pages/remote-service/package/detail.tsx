@@ -25,7 +25,7 @@ const tabs:Array<TAB> = [
 const format = 'YYYY-MM-DD'
 
 function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
-  const [products, setProducts] = useState([]);
+  const [images, setImages] = useState([]);
 
   const confirm = () => {
     // 可以动态路由携带信息
@@ -47,7 +47,9 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
       payload: id,
     }).then((res: any) => {
       if (res && res.id) {
-        setProducts(res.products);
+        const images = imageData();
+        console.log('787878787', images);
+        setImages(images);
       }
     });
   }, []);
@@ -60,7 +62,8 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
     let text = '';
     for (let i = 0; i < array.length; i++) {
       const element = array[i];
-      const eleText = `<div style="font-size: 28px; font-weight: 600; padding: 12px 0">${element.name}</div>${element[type]}`;
+      // const eleText = `<div style="font-size: 28px; font-weight: 600; padding: 12px 0">${element.name}</div>${element[type]}`;
+      const eleText = element[type];
       text = text + eleText;
     }
     return text;
@@ -84,22 +87,35 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
     });
   };
 
+  const imageData = () => {
+    const products = currentPackage.products || [];
+    let images = [];
+    for (let i = 0; i < products.length; i++) {
+      const element = products[i];
+      const imgStr = element.picture;
+      if (imgStr) {
+        const imgArr = imgStr.split(',');
+        images = [...images, ...imgArr];
+      }
+    }
+    return images;
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.banner}>
         <Carousel infinite autoplay={true} className={styles.carousel}>
-          {products &&
-            products.map((val: any) => (
-              <div key={val} className={styles.carousel}>
-                <img
-                  src={val.picture}
-                  alt={val.name}
-                  onLoad={() => {
-                    window.dispatchEvent(new Event('resize'));
-                  }}
-                />
-              </div>
-            ))}
+          {images.map((e: any, i: number) => (
+            <div key={i} className={styles.carousel}>
+              <img
+                src={e}
+                alt={e}
+                onLoad={() => {
+                  window.dispatchEvent(new Event('resize'));
+                }}
+              />
+            </div>
+          ))}
         </Carousel>
         <div className={styles.text}>
           <div className={styles.name}>
@@ -129,9 +145,9 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
             backgroundColor: '#FFCC4A',
           }}
         >
-          <div dangerouslySetInnerHTML={{ __html: concatText(products, 'note') }} />
-          <div dangerouslySetInnerHTML={{ __html: concatText(products, 'introduction') }} />
-          <div dangerouslySetInnerHTML={{ __html: concatText(products, 'specification') }} />
+          <div dangerouslySetInnerHTML={{ __html: concatText(currentPackage.products, 'note') }} />
+          <div dangerouslySetInnerHTML={{ __html: concatText(currentPackage.products, 'introduction') }} />
+          <div dangerouslySetInnerHTML={{ __html: concatText(currentPackage.products, 'specification') }} />
         </Tabs>
       </StickyContainer>
       <div className={styles.bottom}>

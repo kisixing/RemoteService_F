@@ -9,7 +9,7 @@ function Card({ data = {}, hideOverPrint, hideList, onClick = () => {} }: any) {
       <div className={styles.header}>
         <div className={styles.title}>
           <IconFont type="order" size="0.36rem" />
-          <span className={styles.name}>{data.servicepackage && data.servicepackage.name || data.name}</span>
+          <span className={styles.name}>{(data.servicepackage && data.servicepackage.name) || data.name}</span>
           <Tag size="middle" bgcolor="#d9f0f8" color="#3fb6dc">
             {'单胎'}
           </Tag>
@@ -20,7 +20,10 @@ function Card({ data = {}, hideOverPrint, hideList, onClick = () => {} }: any) {
         <div className={styles.div}>
           有效期：
           <span className={styles.time}>
-            {moment(data.createtime).format('YYYY-MM-DD')} ~ {moment(data.validdate).format('YYYY-MM-DD')}
+            {moment(data.createtime).format('YYYY-MM-DD')} ~{' '}
+            {moment(data.createtime)
+              .add(data.validdate || 60, 'days')
+              .format('YYYY-MM-DD')}
           </span>
         </div>
         {/* 从0开始对应 新订单、已支付、使用中、完成、关闭、逾期、取消 */}
@@ -39,7 +42,7 @@ function Card({ data = {}, hideOverPrint, hideList, onClick = () => {} }: any) {
             <div>
               <IconFont type="fetus" size="0.36rem" />
               <span>胎监判图服务</span>
-              <span className={styles.right}>{data.service1amount + data.service2amount} 次</span>
+              <span className={styles.right}>{data.service1amount} 次</span>
             </div>
             <div>
               <IconFont type="device" size="0.36rem" />

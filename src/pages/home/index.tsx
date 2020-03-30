@@ -23,6 +23,7 @@ interface IProps {
   dispatch: any
   loading: any
   news: Array<any>
+  hospital: string,
   currentPregnancy: {
     name: string
     lmp: string
@@ -34,7 +35,7 @@ interface IProps {
 }
 
 function Home(props: IProps) {
-  const { dispatch, currentPregnancy, news, loading } = props;
+  const { dispatch, currentPregnancy, news, loading, hospital } = props;
 
   useEffect(() => {
     dispatch({
@@ -51,7 +52,7 @@ function Home(props: IProps) {
     lmp: currentPregnancy.lmp,
     edd: currentPregnancy.edd,
     gesweek: currentPregnancy.gestationalWeek,
-    hospital: currentPregnancy.hospital,
+    hospital: currentPregnancy.hospital || hospital,
   };
 
   return (
@@ -81,7 +82,7 @@ function Home(props: IProps) {
           </Card.Body>
         </Card>
         <WhiteSpace size="md" />
-        <Card full>
+        {/* <Card full>
           <Card.Header
             title={
               <div  className={styles.cardTitle}>
@@ -96,7 +97,7 @@ function Home(props: IProps) {
           <Card.Body style={{ paddingTop: 0 }}>
             <NewsListView dataSource={news} loading={loading.effects['news/getPersonNews']} />
           </Card.Body>
-        </Card>
+        </Card> */}
       </div>
       <Footer />
     </div>
@@ -107,4 +108,5 @@ export default connect(({ loading, global, news }: ConnectState) => ({
   loading: loading,
   currentPregnancy: global.currentPregnancy,
   news: news.personal,
+  hospital: global.hospital,
 }))(Home);
