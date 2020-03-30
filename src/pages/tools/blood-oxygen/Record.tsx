@@ -8,12 +8,12 @@ import React, { useState, useEffect, useRef } from 'react'
 import Router from 'umi/router';
 import Chart from 'chart.js';
 import { connect } from 'dva';
-import { Toast } from 'antd-mobile';
 import { getBloodOxygens, getRecordNum, GetProp } from '@/services/tools';
 import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { IconFont } from '@/components/antd-mobile';
 import { Range } from '@/pages/tools/signs/config';
+import { arrFill } from '../signs/utils';
 import styles from '../signs/RecordsTabBar.less';
 interface ServiceDataItem {
   timestamp: string,
@@ -30,15 +30,16 @@ interface ServiceDataItem {
 const { NORMAL_MIN, NORMAL_MAX } = Range.bloodOxygen;
 const { PULSE_MIN, PULSE_MAX } = Range.pulserate;
 const [defaultColor, errorColor] = ['#c3c5c6', '#dc143c'];
-const [defaultPointRadius, errorPointRadius] = [2, 8];
-
+const [defaultPointRadius, errorPointRadius] = [4, 8];
+// 定义标准日期
+const todayStr = moment(new Date()).format('YYYY-MM-DD');
 const chartOptions = {
   type: 'line',
   data: {
     labels: [],
     datasets: [
-      { key: 'result', label: '血氧', fill: false, borderColor: '#DDA0DD', pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] },
-      { key: 'pulserate', label: '脉率', fill: false, borderColor: '#7CFC00', pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] }
+      { key: 'result', label: '血氧', fill: false, borderColor: '#DDA0DD',borderWidth: 8, pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] },
+      { key: 'pulserate', label: '脉率', fill: false, borderColor: '#7CFC00',borderWidth: 8, pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] }
     ]
   },
   options: {
@@ -99,9 +100,9 @@ const chartOptions = {
       }],
       yAxes: [{
         scaleLabel: {
-          display: true,
-          labelString: '测量值',
-          fontSize: 20
+          display: false,
+          // labelString: '',
+          // fontSize: 20
         },
         ticks: {
           // 幅度
@@ -132,8 +133,6 @@ function BloodOxygenRecord(props: {userid: number}) {
   // 将日历按周期展示
   const convertChartData = (options: any, serviceData: Array<ServiceDataItem>, isHistory: boolean) => {
     let nOptions = JSON.parse(JSON.stringify(options));
-    // 定义标准日期
-    const todayStr = moment(new Date()).format('YYYY-MM-DD');
     // 深拷贝
     let targetData:Array<ServiceDataItem> = serviceData.map(v=>v);
     if(isHistory){
@@ -156,11 +155,10 @@ function BloodOxygenRecord(props: {userid: number}) {
     }else{
       // 展示当天数据
       targetData = targetData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr),"timestamp";
-    } 
-    if(!targetData){
-      console.error('timestamp数据格式有问题');
-      return nOptions;
     }
+    targetData = arrFill<ServiceDataItem>(targetData, 'result');
+    targetData = arrFill<ServiceDataItem>(targetData, 'pulserate');
+
     // 显示的线段数量
     const len = nOptions.data.datasets.length;
     targetData.forEach((v: ServiceDataItem) => {
@@ -228,8 +226,6 @@ function BloodOxygenRecord(props: {userid: number}) {
         const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
         // 逆序
         getBloodOxygens(reqData).then(res => setListData(res.data.reverse()));
-      }else{
-        Toast.info('暂无数据');
       }
     })
   }, []);
@@ -239,47 +235,53 @@ function BloodOxygenRecord(props: {userid: number}) {
     }
   },[listData])
 
-  const renderList = (listData: Array<ServiceDataItem>) => (
-    listData.map((item: ServiceDataItem) => (
-      <div className={styles.card} key={item.id}>
-        <div className={styles.header}>
-          {item.src === 1 ? (
-            <div className={styles.src}>
-              <IconFont type="synchronization"/><span>同步</span>
-            </div>
-          ) : (
-            <div className={styles.src} onClick={() => toEdit(item)}>
-              <IconFont type="edite"/><span>录入</span>
-            </div>
-          )}
-          <div className={styles.date}>
-            <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
-            </div>
-        </div>
-        <div className={styles.content}>
-          <div>
-            <div><span>血氧值</span></div>
-            <div><span>{item.result}%</span></div>
-            <div>{item.result < NORMAL_MIN || item.result > NORMAL_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+  const renderList = (listData: Array<ServiceDataItem>, isHistory: boolean) => {
+    if(!isHistory){
+      listData = listData.filter((v:ServiceDataItem) => v.timestamp.slice(0,10) == todayStr);
+    }
+    return(
+      listData.map((item: ServiceDataItem) => (
+        <div className={styles.card} key={item.id}>
+          <div className={styles.header}>
+            {item.src === 1 ? (
+              <div className={styles.src}>
+                <IconFont type="synchronization"/><span>同步</span>
+              </div>
+            ) : (
+              <div className={styles.src} onClick={() => toEdit(item)}>
+                <IconFont type="edite"/><span>录入</span>
+              </div>
+            )}
+            <div className={styles.date}>
+              <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
+              </div>
           </div>
-          {item.pulserate ? (
+          <div className={styles.content}>
             <div>
-              <div><span>脉率</span></div>
-              <div><span>{item.pulserate}</span></div>
-              <div>{item.pulserate < PULSE_MIN || item.pulserate > PULSE_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+              <div><span>血氧值</span></div>
+              <div><span>{item.result}%</span></div>
+              <div>{item.result < NORMAL_MIN || item.result > NORMAL_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
             </div>
-          ) : null}
+            {item.pulserate ? (
+              <div>
+                <div><span>脉率</span></div>
+                <div><span>{item.pulserate}</span></div>
+                <div>{item.pulserate < PULSE_MIN || item.pulserate > PULSE_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+              </div>
+            ) : null}
+          </div>
         </div>
-      </div>
-    ))
-  );
+      ))
+    )
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles['canvas-block']}>
         <div  className={styles.switch}>
           <div className={styles.title}>
-            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+            {isHistory ? <span>今日血氧曲线</span> : <span>历史血氧曲线</span>}
+            <small>(单位:%)</small>
           </div>
           <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>
             <IconFont type="record" size="0.25rem" />
@@ -305,9 +307,9 @@ function BloodOxygenRecord(props: {userid: number}) {
       </div>
       <div className={styles.list}>
       {listData.length !== 0 ? (
-          renderList(listData)
+          renderList(listData, isHistory)
         ) : (
-          <div>暂无数据</div>
+          <div>无历史记录数据</div>
         )}
       </div>
     </div>

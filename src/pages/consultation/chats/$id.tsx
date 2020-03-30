@@ -6,25 +6,23 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { connect } from 'dva';
-import { ConnectState } from '@/models/connect';
 import uuid from 'uuid';
+import store from 'store';
 import { useI } from '@lianmed/im';
 import { TextareaItem, Button, Toast } from 'antd-mobile';
 import { IconFont } from '@/components/antd-mobile';
 import Message from './Message';
 import styles from './id.less';
 
-interface IProps {
-  access_token: string
-}
-function ChatView({ access_token }: IProps) {
+let flag = false;
+
+function ChatView() {
   const textRef = useRef(null);
   const scrollRef = useRef(null);
   const [currentId, setCurrentId] = useState('mlogin_preg_19142986941');
   const [text, setText] = useState('');
   const { chatMessage, sendTextMessage } = useI(
-    `http://transfer.lian-med.com:9987/ws/stomp?access_token=${access_token}`,
+    `http://transfer.lian-med.com:9987/ws/stomp?access_token=${store.get('lianmp-token')}`,
   );
 
   useEffect(() => {
@@ -33,7 +31,7 @@ function ChatView({ access_token }: IProps) {
 
   const sendMessage = () => {
     if (!text) {
-      return Toast.info('请输入内容...');
+      return Toast.info('请输入内容...')
     }
     sendTextMessage(currentId, text);
     setText('');
@@ -75,6 +73,4 @@ function ChatView({ access_token }: IProps) {
   );
 }
 
-export default connect(({ global }: ConnectState) => ({
-  access_token: global.access_token,
-}))(ChatView);
+export default ChatView;

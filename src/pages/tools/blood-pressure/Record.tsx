@@ -7,7 +7,6 @@
 import React,{ useRef, useEffect, useState } from 'react'
 import Router from 'umi/router';
 import Chart from 'chart.js';
-import { Toast } from 'antd-mobile';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import moment from 'moment';
@@ -37,7 +36,10 @@ interface ServiceDataItem {
 const { SYS_MAX,SYS_MIN,DIA_MAX,DIA_MIN} = Range.bloodPressure;
 const { PULSE_MIN, PULSE_MAX } = Range.pulserate;
 const [ defaultColor, errorColor ] = ['#c3c5c6','#dc143c'];
-const [ defaultPointRadius, errorPointRadius ] = [2,8];
+const [ defaultPointRadius, errorPointRadius ] = [4,8];
+
+// 定义YYYY-MM-DD日期
+const todayStr = moment(new Date()).format('YYYY-MM-DD');
 
 // chart 配置
 const chartOptions = {
@@ -45,9 +47,9 @@ const chartOptions = {
   data: {
     labels: [],
     datasets: [
-      {key: 'systolic',label: '收缩压',fill: false,borderColor: '#f5bff0',pointBackgroundColor: [], pointBorderColor: [],pointRadius: [],data: []},
-      {key: 'diastolic',label: '舒张压',fill: false,borderColor: '#fcdebb',pointBackgroundColor: [],pointBorderColor: [],pointRadius: [],data: []},
-      {key: 'pulserate',label: '脉率',fill: false,borderColor: '#7CFC00',pointBackgroundColor: [],pointBorderColor: [],pointRadius: [],data: []},
+      {key: 'systolic',label: '收缩压',fill: false,borderColor: '#f5bff0', borderWidth: 8,pointBackgroundColor: [], pointBorderColor: [],pointRadius: [],data: []},
+      {key: 'diastolic',label: '舒张压',fill: false,borderColor: '#fcdebb', borderWidth: 8,pointBackgroundColor: [],pointBorderColor: [],pointRadius: [],data: []},
+      {key: 'pulserate',label: '脉率',fill: false,borderColor: '#7CFC00', borderWidth: 8,pointBackgroundColor: [],pointBorderColor: [],pointRadius: [],data: []},
       // {label: '正常',data: [],borderColor: '#C3C5C6'},
       // {label: '异常',data: [],borderColor: '#DC143C',fill: false}
     ]
@@ -89,9 +91,7 @@ const chartOptions = {
       }],
       yAxes: [{
         scaleLabel: {
-          display: true,
-          labelString: '测量值',
-          fontSize:20
+          display: false
         },
         ticks: {
           max: 150,
@@ -116,8 +116,7 @@ function BloodPressureRecord(props: {userid: number}) {
   // 将日历按周期展示
   const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>, isHistory: boolean) => {
     let nOptions = JSON.parse(JSON.stringify(options));  
-    // 定义YYYY-MM-DD日期
-    const todayStr = moment(new Date()).format('YYYY-MM-DD');
+    
     // 排序
     let targetData:Array<ServiceDataItem> = [];
     serviceData.forEach(v => targetData.push(v));
@@ -254,8 +253,6 @@ function BloodPressureRecord(props: {userid: number}) {
         const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
         // 反序
         getBloodPressures(reqData).then(res => setListData(res.data.reverse()))
-      }else{
-        Toast.info('暂无数据');
       }
     })
   },[props.userid]);
@@ -272,48 +269,54 @@ function BloodPressureRecord(props: {userid: number}) {
     }
   },[listData])
 
-  const renderList = (listData: Array<ServiceDataItem>) => (
-    listData.map((item: ServiceDataItem) => (
-      <div className={styles.card} key={item.id}>
-        <div className={styles.header}>
-          {item.src === 1 ? (
-            <div className={styles.src}>
-              <IconFont type="synchronization"/><span>同步</span>
-            </div>
-          ) : (
-            <div className={styles.src} onClick={() => toEdit(item)}>
-              <IconFont type="edite"/><span>录入</span>
-            </div>
-          )}
-          <div className={styles.date}>
-            <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
-            </div>
-        </div>
-        <div className={styles.content}>
-          <div>
-            <div><span>血压</span></div>
-            <div><span>{item.systolic}/{item.diastolic}</span></div>
-            <div>{(item.systolic < SYS_MIN || item.systolic > SYS_MAX || item.diastolic < DIA_MIN || item.diastolic > DIA_MAX) ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+  const renderList = (listData: Array<ServiceDataItem>, isHistory: boolean) => {
+    if(!isHistory){
+      listData = listData.filter((v:ServiceDataItem) => v.timestamp.slice(0,10) == todayStr);
+    }
+    return(
+      listData.map((item: ServiceDataItem) => (
+        <div className={styles.card} key={item.id}>
+          <div className={styles.header}>
+            {item.src === 1 ? (
+              <div className={styles.src}>
+                <IconFont type="synchronization"/><span>同步</span>
+              </div>
+            ) : (
+              <div className={styles.src} onClick={() => toEdit(item)}>
+                <IconFont type="edite"/><span>录入</span>
+              </div>
+            )}
+            <div className={styles.date}>
+              <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
+              </div>
           </div>
-          {item.pulserate ? (
+          <div className={styles.content}>
             <div>
-              <div><span>脉率</span></div>
-              <div><span>{item.pulserate}</span></div>
-              <div>{item.pulserate > PULSE_MAX || item.pulserate < PULSE_MIN ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+              <div><span>血压</span></div>
+              <div><span>{item.systolic}/{item.diastolic}&nbsp; mmHg</span></div>
+              <div>{(item.systolic < SYS_MIN || item.systolic > SYS_MAX || item.diastolic < DIA_MIN || item.diastolic > DIA_MAX) ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
             </div>
-          ) : null}
-          
+            {item.pulserate ? (
+              <div>
+                <div><span>脉率</span></div>
+                <div><span>{item.pulserate}&nbsp; 次/分</span></div>
+                <div>{item.pulserate > PULSE_MAX || item.pulserate < PULSE_MIN ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+              </div>
+            ) : null}
+            
+          </div>
         </div>
-      </div>
-    ))
-  )
+      ))
+    )
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles['canvas-block']}>
         <div  className={styles.switch}>
           <div className={styles.title}>
-            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+            {isHistory ? <span>今日血压曲线</span> : <span>历史血压曲线</span>}
+            <small>(单位:mmHg)</small>
           </div>
           <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>
             <IconFont type="record" size="0.25rem" />
@@ -337,9 +340,9 @@ function BloodPressureRecord(props: {userid: number}) {
       </div>
       <div className={styles.list}>
         {listData.length !== 0 ? (
-          renderList(listData)
+          renderList(listData, isHistory)
         ) : (
-          <div>暂无数据</div>
+          <div>无历史记录数据</div>
         )}
       </div>
       {/* <Modal

@@ -109,7 +109,7 @@ function BloodPressureInput(props: {userid: number}) {
       return {color: "red"};
     }else if(type === "diastolic" && (Number(diastolic) < DIA_MIN || Number(diastolic) > DIA_MAX)){
       return {color: "red"};
-    }else if(type === "pulserate" && (Number(heartRate) < PULSE_MIN || Number(heartRate) > PULSE_MIN)){
+    }else if(type === "pulserate" && (Number(heartRate) < PULSE_MIN || Number(heartRate) > PULSE_MAX)){
       return {color: "red"};
     }
     return {};

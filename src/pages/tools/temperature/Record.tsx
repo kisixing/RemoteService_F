@@ -7,7 +7,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import Router from 'umi/router';
 import Chart from 'chart.js';
-import { Toast } from 'antd-mobile';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { getTemperatures, getRecordNum, GetProp } from '@/services/tools';
@@ -34,15 +33,17 @@ const { NORMAL_MAX, NORMAL_MIN } = Range.temperature;
 
 // 异常与正常样式
 const [defaultColor, errorColor] = ['#c3c5c6', '#dc143c'];
-const [defaultPointRadius, errorPointRadius] = [2, 8];
+const [defaultPointRadius, errorPointRadius] = [4, 8];
+
+// 定义标准YYYY-MM-DD字符串
+const todayStr = moment(new Date()).format('YYYY-MM-DD');
 
 const chartOptions = {
   type: 'line',
   data: {
     labels: [],
     datasets: [
-      { key: 'result', label: '体温', fill: false, borderColor: '#FFC0CB', pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] },
-      { label: '异常', fill: false, borderColor: '#dc143c', }
+      { key: 'result', label: '体温', fill: false, borderColor: '#FFC0CB',borderWidth: 8, pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] },
     ]
   },
   options: {
@@ -103,9 +104,9 @@ const chartOptions = {
       }],
       yAxes: [{
         scaleLabel: {
-          display: true,
-          labelString: '测量值',
-          fontSize: 20
+          display: false,
+          // labelString: '体温(℃)',
+          // fontSize: 20
         },
         ticks: {
           // 幅度
@@ -132,8 +133,6 @@ function TemperatureRecord(props: {userid: number}) {
   const convertChartData = (options: any, serviceData: Array<ServiceDataItem>, isHistory: boolean, COUNT_DURATION: number = 5) => {
     // 这个性能的消耗会不会有点多，考虑是否直接清空options
     let nOptions = JSON.parse(JSON.stringify(options));
-    // 定义标准YYYY-MM-DD字符串
-    const todayStr = moment(new Date()).format('YYYY-MM-DD');
     // 深拷贝
     let targetData:Array<ServiceDataItem>|false = serviceData.map(v=>v)
     if(!targetData) return ;
@@ -221,7 +220,6 @@ function TemperatureRecord(props: {userid: number}) {
         });
       }else{
         newChart([]);
-        Toast.info('暂无数据');
       }
     })
   },[]);
@@ -232,40 +230,46 @@ function TemperatureRecord(props: {userid: number}) {
   },[listData])
 
 
-  const renderList = (listData: Array<ServiceDataItem>) => (
-    listData.map((item: ServiceDataItem) => (
-      <div className={styles.card} key={item.id}>
-        <div className={styles.header}>
-          {item.src === 1 ? (
-            <div className={styles.src}>
-              <IconFont type="synchronization"/><span>同步</span>
+  const renderList = (listData: Array<ServiceDataItem>, isHistory:boolean) => {
+    if(!isHistory){
+      listData = listData.filter((v:ServiceDataItem) => v.timestamp.slice(0,10) == todayStr);
+    }
+    return(
+      listData.map((item: ServiceDataItem) => (
+        <div className={styles.card} key={item.id}>
+          <div className={styles.header}>
+            {item.src === 1 ? (
+              <div className={styles.src}>
+                <IconFont type="synchronization"/><span>同步</span>
+              </div>
+            ) : (
+              <div className={styles.src} onClick={() => toEdit(item)}>
+                <IconFont type="edite"/><span>录入</span>
+              </div>
+            )}
+            <div className={styles.date}>
+              <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
             </div>
-          ) : (
-            <div className={styles.src} onClick={() => toEdit(item)}>
-              <IconFont type="edite"/><span>录入</span>
+          </div>
+          <div className={styles.content}>
+            <div>
+              <div><span>体温</span></div>
+              <div><span>{item.result}℃</span></div>
+              <div>{item.result > NORMAL_MAX || item.result < NORMAL_MIN ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
             </div>
-          )}
-          <div className={styles.date}>
-            <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
           </div>
         </div>
-        <div className={styles.content}>
-          <div>
-            <div><span>体温</span></div>
-            <div><span>{item.result}℃</span></div>
-            <div>{item.result > NORMAL_MAX || item.result < NORMAL_MIN ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
-          </div>
-        </div>
-      </div>
-    ))
-  )
+      ))
+    )
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles['canvas-block']}>
         <div  className={styles.switch}>
           <div className={styles.title}>
-            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+            {isHistory ? <span>今日体温曲线</span> : <span>历史体温曲线</span>}
+            <small>(单位:℃)</small>
           </div>
           <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>
             <IconFont type="record" size="0.25rem" />
@@ -289,9 +293,9 @@ function TemperatureRecord(props: {userid: number}) {
       </div>
       <div className={styles.list}>
         {listData.length !== 0 ? (
-          renderList(listData)
+          renderList(listData, isHistory)
         ) : (
-          <div>暂无数据</div>
+          <div>无历史记录数据</div>
         )}
       </div>
     </div>

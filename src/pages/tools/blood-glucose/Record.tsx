@@ -32,24 +32,31 @@ interface ServiceDataItem {
   insulinnote: string | null,
   exercise?: string,
   diet?: string,
-  src?:number
+  src?:number,
+  // 用于列表的渲染，仅在前端展示
+  children?: Array<any>
 }
 
 const { EMPTY_MIN, EMPTY_MAX, EATING_MIN, EATING_MAX } = Range.bloodGlucose;
 const PERIOD_TEXT = ['空腹', '早餐后', '午餐前', '午餐后', '晚餐前', '晚餐后', '睡前'];
+const [ defaultColor, errorColor ] = ['#c3c5c6','#dc143c'];
+const [ defaultPointRadius, errorPointRadius ] = [4,8];
+
+const todayStr = moment(new Date()).format('YYYY-MM-DD');
+
 // 历史options
 const hChartOptions = {
   type: 'line',
   data: {
     labels: [],
     datasets: [
-      { key: PERIOD_CODE.FASTING, label: '空腹', fill: false, borderColor: '#FFC0CB', pointBackgroundColor: '##C3C5C6', pointBorderColor: '#C3C5C6', pointRadius: 2, data: [] },
-      { key: PERIOD_CODE.AFTER_B, label: '早餐后', fill: false, borderColor: '#DDA0DD', pointBackgroundColor: '#C3C5C6', pointBorderColor: '#C3C5C6', pointRadius: 2, data: [] },
-      { key: PERIOD_CODE.BEFORE_L, label: '午餐前', fill: false, borderColor: '#6495ED', pointBackgroundColor: '#C3C5C6', pointBorderColor: '#C3C5C6', pointRadius: 2, data: [] },
-      { key: PERIOD_CODE.AFTER_L, label: '午餐后', fill: false, borderColor: '#48D1CC', pointBackgroundColor: '#C3C5C6', pointBorderColor: '#C3C5C6', pointRadius: 2, data: [] },
-      { key: PERIOD_CODE.BEFORE_D, label: '晚餐前', fill: false, borderColor: '#FFFF00', pointBackgroundColor: '#C3C5C6', pointBorderColor: '#C3C5C6', pointRadius: 2, data: [] },
-      { key: PERIOD_CODE.AFTER_D, label: '晚餐后', fill: false, borderColor: '#FF4500', pointBackgroundColor: '#C3C5C6', pointBorderColor: '#C3C5C6', pointRadius: 2, data: [] },
-      { key: PERIOD_CODE.BEFORE_S, label: '睡前', fill: false, borderColor: '#C0C0C0', pointBackgroundColor: '#C3C5C6', pointBorderColor: '#C3C5C6', pointRadius: 2, data: [] },
+      { key: PERIOD_CODE.FASTING, label: '空腹', fill: false, borderColor: '#FFC0CB',borderWidth: 8, pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] },
+      { key: PERIOD_CODE.AFTER_B, label: '早餐后', fill: false, borderColor: '#DDA0DD',borderWidth: 8, pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] },
+      { key: PERIOD_CODE.BEFORE_L, label: '午餐前', fill: false, borderColor: '#6495ED',borderWidth: 8, pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] },
+      { key: PERIOD_CODE.AFTER_L, label: '午餐后', fill: false, borderColor: '#48D1CC',borderWidth: 8, pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] },
+      { key: PERIOD_CODE.BEFORE_D, label: '晚餐前', fill: false, borderColor: '#FFFF00',borderWidth: 8, pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] },
+      { key: PERIOD_CODE.AFTER_D, label: '晚餐后', fill: false, borderColor: '#FF4500',borderWidth: 8, pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] },
+      { key: PERIOD_CODE.BEFORE_S, label: '睡前', fill: false, borderColor: '#C0C0C0',borderWidth: 8, pointBackgroundColor: [], pointBorderColor: [], pointRadius: [], data: [] },
     ]
   },
   options: {
@@ -102,9 +109,9 @@ const hChartOptions = {
       }],
       yAxes: [{
         scaleLabel: {
-          display: true,
-          labelString: '测量值',
-          fontSize: 16
+          display: false,
+          // labelString: '',
+          // fontSize: 16
         },
         ticks: {
           // 幅度
@@ -164,23 +171,37 @@ function BloodGlucoseRecord(props: { userid: number }) {
     for (let i = 0; i < targetData.length; i++) {
       for (let j = 0; j < nOptions.data.datasets.length; j++) {
         // 判断period
+        let min:number,max:number;
+        if(j === PERIOD_CODE.AFTER_B || j === PERIOD_CODE.AFTER_L || j === PERIOD_CODE.AFTER_D){
+          min = EATING_MIN;max = EATING_MAX;
+        }else{
+          min = EMPTY_MIN;max = EMPTY_MAX;
+        }
         if (targetData[i].period === nOptions.data.datasets[j].key) {
           for (let k = 0; k < nOptions.data.labels.length; k++) {
             // 对应日期的位置
             if (targetData[i].timestamp.slice(5, 10) === nOptions.data.labels[k]) {
               nOptions.data.datasets[j].data[k] = serviceData[i].result;
+              if(targetData[i].result < min || targetData[i].result > max){
+                nOptions.data.datasets[j].pointBackgroundColor[k] = errorColor;
+                nOptions.data.datasets[j].pointBorderColor[k] = errorColor;
+                nOptions.data.datasets[j].pointRadius[k] = errorPointRadius;
+              }else{
+                nOptions.data.datasets[j].pointBackgroundColor[k] = defaultColor;
+                nOptions.data.datasets[j].pointBorderColor[k] = defaultColor;
+                nOptions.data.datasets[j].pointRadius[k] = defaultPointRadius;
+              }
             }
           }
         }
       }
     }
+    console.log(nOptions)
     return nOptions;
   }
   // 展示当天数据
   const convertTChartData = (options: any, serviceData: Array<ServiceDataItem>) => {
     let nOptions = JSON.parse(JSON.stringify(options));
-
-    const todayStr = moment(new Date()).format('YYYY-MM-DD');
     // 筛选今日值
     let targetData: Array<ServiceDataItem> = serviceData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr);
     for (let i = 0; i < targetData.length; i++) {
@@ -227,8 +248,11 @@ function BloodGlucoseRecord(props: { userid: number }) {
     }
   }, [listData])
 
-  const renderList = (listData: Array<ServiceDataItem>) => {
+  const renderList = (listData: Array<ServiceDataItem>, isHistory: boolean) => {
     // 转换展示格式
+    if(!isHistory){
+      listData = listData.filter((v:ServiceDataItem) => v.timestamp.slice(0,10) == todayStr);
+    }
     let tarData:Array<any> = [];
     for(let i = 0; i < listData.length; i++) {
       let isFind = false;
@@ -242,9 +266,7 @@ function BloodGlucoseRecord(props: { userid: number }) {
         listData[i].children = [{result: listData[i].result, period: listData[i].period}];
         tarData.push(listData[i]);
       }
-      console.log(tarData);
     }
-    console.log(tarData);
     return (
       tarData.map((item: ServiceDataItem) => (
         <div className={styles.card} key={item.id} >
@@ -253,7 +275,7 @@ function BloodGlucoseRecord(props: { userid: number }) {
               <div className={styles.src} onClick={() => toEdit(item)}>
                 <IconFont type="synchronization" /><span>同步</span>
               </div>
-            ) :(
+            ) : (
               <div className={styles.src} onClick={() => toEdit(item)}>
                 <IconFont type="edite" /><span>录入</span>
               </div>
@@ -265,8 +287,8 @@ function BloodGlucoseRecord(props: { userid: number }) {
           <div className={styles.content}>
             {item.children.map((v,index) => (
               <div key={index}>
-                <div><span>{PERIOD_TEXT[v.period]}</span></div>
-                <div><span>{item.result}</span></div>
+                <div className={styles.period}><span>{PERIOD_TEXT[v.period]}</span></div>
+                <div><span>{item.result} mmol/L</span></div>
                 <div>
                   {item.period === PERIOD_CODE.FASTING || item.period === PERIOD_CODE.BEFORE_S ? (
                     <div>
@@ -318,8 +340,9 @@ function BloodGlucoseRecord(props: { userid: number }) {
     <div className={styles.container}>
       <div className={styles['canvas-block']}>
         <div className={styles.switch}>
-          <div className={styles.title}>
-            {isHistory ? <span>历史记录</span> : <span>今日记录</span>}
+        <div className={styles.title}>
+            {isHistory ? <span>今日血糖曲线</span> : <span>历史血糖曲线</span>}
+            <small>(单位:mmol/L)</small>
           </div>
           <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>
             <IconFont type="record" size="0.25rem" />
@@ -343,9 +366,9 @@ function BloodGlucoseRecord(props: { userid: number }) {
       </div>
       <div className={styles.list}>
         {listData.length !== 0 ? (
-          renderList(listData)
+          renderList(listData, isHistory)
         ) : (
-          <div>暂无数据</div>
+          <div>无历史记录数据</div>
         )}
         </div>
     </div>
