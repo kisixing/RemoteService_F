@@ -16,9 +16,9 @@ function ApplyListView({ currentPregnancy }: any) {
     getServiceOrders({
       'pregnancyId.equals': currentPregnancy.id,
     }).then((res: any) => {
+      setLoading(false);
       if (res && res.length) {
         setDataSource(res);
-        setLoading(false);
       }
     });
   }, []);

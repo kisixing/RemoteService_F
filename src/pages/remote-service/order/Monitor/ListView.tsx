@@ -70,9 +70,9 @@ function MonitorListView({ currentPregnancy }: any) {
     getPackageOrders({
       'pregnancyId.equals': currentPregnancy.id,
     }).then((res: any) => {
+      setLoading(false);
       if (res && res.length) {
         setDataSource(res);
-        setLoading(false);
       }
     });
   }

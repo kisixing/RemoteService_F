@@ -38,7 +38,7 @@ function Packages({ dispatch, packages }: PackageProps) {
 
   return (
     <WingBlank className={styles.container}>
-      {packages && packages.length && packages.map((item: PackageListItem) => {
+      {packages && packages.length > 0 && packages.map((item: PackageListItem) => {
         return (
           <Touchable key={item.id}>
             <div className={styles.card} onClick={() => onClick(item)}>
