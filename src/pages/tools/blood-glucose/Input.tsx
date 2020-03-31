@@ -128,6 +128,7 @@ function BloodGlucoseInput(props: {userid: number}) {
         getBloodGlucose(reqData).then(res => {
           // 之后再抽离
           const { data } = res;
+          console.log(data);
           const formatDate = moment(now).format('YYYY-MM-DD');
           const tarData = data.filter(v => v.timestamp.slice(0,10) === formatDate );
           let newValues = JSON.parse(JSON.stringify(values));
