@@ -104,8 +104,7 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
     <div className={styles.container}>
       <div className={styles.banner}>
         <Carousel infinite autoplay={true} className={styles.carousel}>
-          {images &&
-            images.length && images.map((e: any) => (
+          {images.map((e: any) => (
               <div key={e} className={styles.carousel}>
                 <img
                   src={e}
