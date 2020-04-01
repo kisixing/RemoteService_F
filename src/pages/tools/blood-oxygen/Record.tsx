@@ -226,6 +226,8 @@ function BloodOxygenRecord(props: {userid: number}) {
         const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
         // 逆序
         getBloodOxygens(reqData).then(res => setListData(res.data.reverse()));
+      }else{
+        newChart([]);
       }
     })
   }, []);

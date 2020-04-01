@@ -253,6 +253,8 @@ function BloodPressureRecord(props: {userid: number}) {
         const reqData:GetProp = {pregnancyId: props.userid,page:0,size: Number(res.data), sort:'timestamp'};
         // 反序
         getBloodPressures(reqData).then(res => setListData(res.data.reverse()))
+      }else{
+        newChart([]);
       }
     })
   },[props.userid]);

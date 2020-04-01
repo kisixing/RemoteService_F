@@ -156,7 +156,6 @@ const tChartOptions = {
 function BloodGlucoseRecord(props: { userid: number }) {
 
   const hChart = useRef(null), tChart = useRef(null);
-  let chartH, chartT;
 
   const [listData, setListData] = useState([]);
   const [isHistory, setIsHistory] = useState(true);
@@ -214,10 +213,10 @@ function BloodGlucoseRecord(props: { userid: number }) {
     try {
       //@ts-ignore
       const ctx = hChart.current.getContext('2d');
-      chartH = new Chart(ctx, convertHChartData(hChartOptions, data.reverse()));
+      let chartH = new Chart(ctx, convertHChartData(hChartOptions, data.reverse()));
       //@ts-ignore
       const ctx1 = tChart.current.getContext('2d');
-      chartT = new Chart(ctx1, convertTChartData(tChartOptions, data.reverse()));
+      let chartT = new Chart(ctx1, convertTChartData(tChartOptions, data.reverse()));
     } catch (e) {
       console.error(e);
     }
@@ -285,7 +284,9 @@ function BloodGlucoseRecord(props: { userid: number }) {
             </div>
           </div>
           <div className={styles.content}>
-            {item.children.map((v,index) => (
+            {
+            // @ts-ignore
+            item.children.map((v,index) => (
               <div key={index}>
                 <div className={styles.period}><span>{PERIOD_TEXT[v.period]}</span></div>
                 <div><span>{item.result} mmol/L</span></div>
