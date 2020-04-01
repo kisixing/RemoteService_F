@@ -103,7 +103,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <DatePicker id={id} key={id} placeholder={placeholder} {...object}>
+          <DatePicker {...object} id={id} key={id} placeholder={placeholder} onChange={e => onChange(id, e)}>
             {label}
           </DatePicker>,
         );

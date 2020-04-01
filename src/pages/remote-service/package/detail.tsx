@@ -47,7 +47,7 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
       payload: id,
     }).then((res: any) => {
       if (res && res.id) {
-        const images = imageData() || [];
+        const images = imageData(res.products);
         setImages(images);
       }
     });
@@ -86,8 +86,7 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
     });
   };
 
-  const imageData = () => {
-    const products = currentPackage && currentPackage.products ? currentPackage.products : [];
+  const imageData = (products = []) => {
     let images = [];
     for (let i = 0; i < products.length; i++) {
       const element = products[i];

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Router from 'umi/router';
-
+import { Toast }from 'antd-mobile';
 import { IconFont, Button } from '@/components/antd-mobile';
 import { getPackageOrder } from '@/services/remote-service';
 import { ORDER_STATE, payType } from './ListView';
@@ -24,9 +24,10 @@ export default function MonitorDetail({ id }: IProps) {
   }, [])
 
   const gotoService = () => {
-    Router.push({
-      pathname: `/consultation/chat/${'联系客服'}`,
-    });
+    Toast.info('服务未开通...', 1)
+    // Router.push({
+    //   pathname: `/consultation/chat/${'联系客服'}`,
+    // });
   }
 
   return (
@@ -49,10 +50,6 @@ export default function MonitorDetail({ id }: IProps) {
             <div>订单时间：{data.createtime && moment(data.createtime).format('YYYY-MM-DD HH:mm:ss')}</div>
             <div>支付方式：{payType(data.paytype)}</div>
           </div>
-          {/* <div className={styles.service}>
-            <IconFont type="serve" size="0.36rem" />
-            <span>联系客服</span>
-          </div> */}
           <Button className={styles.service} onClick={gotoService}>
             <IconFont type="serve" />
             <span>联系客服</span>

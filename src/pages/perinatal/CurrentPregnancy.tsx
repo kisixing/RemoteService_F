@@ -7,6 +7,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import _ from 'lodash';
+import moment from 'moment';
 import createDOMForm from 'rc-form/lib/createDOMForm';
 import { Button } from '@/components/antd-mobile';
 import { getKeys, KG } from '@/utils';
@@ -79,13 +80,36 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
     });
   };
 
+  onChange = (id: string, value: any) => {
+    if (id === 'lmp') {
+      const {
+        form: { setFieldsValue, getFieldsValue },
+      } = this.props;
+      const lmp = moment(value).format('YYYY-MM-DD')
+      const EDD = KG.getEdd(lmp);
+      const GES = KG.getGesweek(lmp);
+      const values = getFieldsValue(['gestationalWeek', 'edd', 'sureEdd']);
+      console.log('object', value, EDD, GES, values);
+
+      const params = {
+        gestationalWeek: GES,
+        edd: EDD,
+      };
+
+      if (!values.sureEdd) {
+        params.sureEdd = EDD;
+      }
+      setFieldsValue(params);
+    }
+  }
+
   render() {
     const { form } = this.props;
     return (
       <div className="page">
         <StepBar current={2} />
         <form className={styles.form}>
-          <FormFields form={form} dataSource={pregnancy.data} />
+          <FormFields form={form} dataSource={pregnancy.data} onChange={this.onChange} />
         </form>
         <div className="bottom_button">
           <Button type="primary" onClick={this.onSubmit}>
