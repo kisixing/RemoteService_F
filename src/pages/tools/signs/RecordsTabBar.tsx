@@ -7,8 +7,6 @@
 import React, { useState } from 'react';
 import { Tabs } from 'antd-mobile';
 import { StickyContainer, Sticky } from 'react-sticky';
-import { connect } from 'dva';
-import { ConnectState } from '@/models/connect'
 // content 组件
 import Weight from '../weight/Record';
 import BloodPressure from '../blood-pressure/Record';
@@ -18,14 +16,16 @@ import Temperature from '../temperature/Record';
 import { tabs } from './config';
 import styles from './TabBar.less';
 
-function RecordsTabBar(props: any) {
-  const { location:{query} } = props;
+function RecordsTabBar({ location: { query } }: any) {
+
   const type = query.type || 'blood-pressure';
   const [activeTab, setActiveTab] = useState(type);
 
   const onTabClick = (tab: any, index: number) => {
     const key = tab.key;
-    if (key === activeTab) return;
+    if (key === activeTab) {
+      return;
+    };
     setActiveTab(key)
   };
 
@@ -60,16 +60,14 @@ function RecordsTabBar(props: any) {
           }}
         >
           <div key="weight"><Weight /></div>
-          <div key="blood-pressure"><BloodPressure userid={props.userid}/></div>
-          <div key="blood-glucose"><BloodGlucose userid={props.userid}/></div>
-          <div key="blood-oxygen"><BloodOxygen userid={props.userid}/></div>
-          <div key="temperature"><Temperature userid={props.userid}/></div>
+          <div key="blood-pressure"><BloodPressure /></div>
+          <div key="blood-glucose"><BloodGlucose /></div>
+          <div key="blood-oxygen"><BloodOxygen /></div>
+          <div key="temperature"><Temperature /></div>
         </Tabs>
       </StickyContainer>
     </div>
   );
 }
 
-export default connect(({global}: ConnectState) => ({
-  userid: global.currentPregnancy?.id
-}))(RecordsTabBar)
+export default RecordsTabBar;

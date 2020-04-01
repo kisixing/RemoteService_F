@@ -8,7 +8,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Chart from 'chart.js';
 
-import BackButton from '@/components/BackButton';
 import styles from '../signs/RecordsTabBar.less';
 
 const nowTimeStamp = Date.now();
@@ -109,7 +108,6 @@ function Record() {
         </div>
         <div className={styles.content}></div>
       </div>
-      <BackButton />
     </div>
   );
 }

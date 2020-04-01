@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { DatePicker as ANTDDatePicker } from 'antd-mobile';
+import { IconFont } from '@/components/antd-mobile'
 import { PropsType } from 'antd-mobile/es/date-picker';
 import styles from './DatePicker.less';
 
@@ -24,7 +25,8 @@ interface ChildrenIProps {
 // The `onClick / extra` props need to be processed within the component
 const CustomChildren = ({ extra, onClick }: ChildrenIProps) => (
   <div onClick={onClick} className={styles.list}>
-    {extra}
+    <span>{extra}</span>
+    <IconFont type="date" size="0.4rem" />
   </div>
 );
 

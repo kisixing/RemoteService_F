@@ -9,6 +9,7 @@ import { Redirect } from 'umi';
 import PageLoading from '@/components/Loader';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
+
 function index(props:any) {
   const {pregnancy} = props;
   const [loading, setLoading] = React.useState(true);

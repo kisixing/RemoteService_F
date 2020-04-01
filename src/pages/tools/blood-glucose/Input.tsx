@@ -12,7 +12,6 @@ import { connect } from 'dva';
 import Router from 'umi/router';
 import moment from 'moment';
 import { Button, IconFont } from '@/components/antd-mobile';
-import BackButton from '@/components/BackButton';
 import DatePicker from '../components/DatePicker';
 import { router } from '@/utils/utils';
 import { PERIOD_CODE } from './config';
@@ -62,14 +61,14 @@ function BloodGlucoseInput(props: {userid: number}) {
   });
 
   const [id,setId] = React.useState(-1);
-  
+
   useEffect(() => {
     let obj = {};
     // 从修改页面过来的
     if(window.location.search){
       window.location.search.split('?')[1].split('&').forEach((v:string) => {
         obj[v.split('=')[0]] = v.split('=')[1];
-      });    
+      });
       if(obj['timestamp']){
         const tar = {
           bloodGlucose: obj['result'],
@@ -88,7 +87,7 @@ function BloodGlucoseInput(props: {userid: number}) {
         setId(Number(obj['id']));
         setActivatedTab(Number(obj['period']));
         setDate(new Date(obj['timestamp']));
-      }else{    
+      }else{
         // 并非从修改页面过来，需要请求当前的数据
         // 判读当前tabs定位
         console.log(now);
@@ -134,11 +133,11 @@ function BloodGlucoseInput(props: {userid: number}) {
           let newValues = JSON.parse(JSON.stringify(values));
           console.log(tarData);
           tarData.forEach((v: any) => {
-            newValues[v.period].bloodGlucose = v.result; 
+            newValues[v.period].bloodGlucose = v.result;
             newValues[v.period].isInsulin = v.insulin;
-            newValues[v.period].quantity = Number(v.insulinnote); 
-            newValues[v.period].exercise = v.exercise; 
-            newValues[v.period].dietaryStatus = v.diet; 
+            newValues[v.period].quantity = Number(v.insulinnote);
+            newValues[v.period].exercise = v.exercise;
+            newValues[v.period].dietaryStatus = v.diet;
           });
           setValues(newValues);
         })
@@ -173,7 +172,7 @@ function BloodGlucoseInput(props: {userid: number}) {
         insulin: current.isInsulin,
         insulinnote: Number(current.quantity),
         diet: current.dietaryStatus,
-        exercise: current.exercise, 
+        exercise: current.exercise,
         status: 0,
         id:id
       };
@@ -197,7 +196,7 @@ function BloodGlucoseInput(props: {userid: number}) {
           insulin: values[i].isInsulin,
           insulinnote: Number(values[i].quantity),
           diet: values[i].dietaryStatus,
-          exercise: values[i].exercise, 
+          exercise: values[i].exercise,
           status: 0
         });
         if(res.response.status >= 200 && res.response.status < 300){
@@ -368,7 +367,6 @@ function BloodGlucoseInput(props: {userid: number}) {
           </div>
         </div>
       </Tabs>
-      <BackButton />
     </div>
   );
 }

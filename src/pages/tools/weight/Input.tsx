@@ -11,7 +11,6 @@ import { Toast } from 'antd-mobile';
 
 import DatePicker from '../components/DatePicker';
 import { ConnectState } from '@/models/connect';
-import BackButton from '@/components/BackButton';
 import { IconFont, Button, WhiteSpace } from '@/components/antd-mobile';
 import { router } from '@/utils/utils';
 import styles from '../blood-pressure/Input.less';
@@ -73,7 +72,6 @@ function WeightInput() {
         <Button type="primary" onClick={onSubmit}>
           保存
         </Button>
-        <BackButton />
       </div>
     </div>
   );

@@ -10,7 +10,6 @@ import { InputItem, List, Toast } from 'antd-mobile';
 import Router from 'umi/router';
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
-import BackButton from '@/components/BackButton';
 import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
 import { setBloodPressures, editBloodPressures } from '@/services/tools';
@@ -32,7 +31,7 @@ function BloodPressureInput(props: {userid: number}) {
   const [diastolic, setDiastolic] = useState('')
   const [systolic, setSystolic] = useState('')
   const [heartRate, setHeartRate] = useState('');
-  
+
   const [id,setId] = React.useState(-1);
   const diastolicInput:MutableRefObject<any> = useRef(null),systolicInput:MutableRefObject<any> = useRef(null)
 
@@ -68,7 +67,7 @@ function BloodPressureInput(props: {userid: number}) {
           setTimeout(() => {
             Router.push('/signs/record?type=blood-pressure');
           },500);
-        } 
+        }
       });
     }
   }
@@ -92,7 +91,7 @@ function BloodPressureInput(props: {userid: number}) {
     if(window.location.search){
        window.location.search.split('?')[1].split('&').forEach((v:string) => {
       obj[v.split('=')[0]] = v.split('=')[1];
-    });    
+    });
       if(obj['timestamp']){
         setId(Number(obj['id']));
         setDiastolic(obj['diastolic']);
@@ -101,7 +100,7 @@ function BloodPressureInput(props: {userid: number}) {
         setDate(new Date(obj['timestamp']));
       }
     }
-   
+
   },[]);
 
   const inputStyle = (type:string) => {
@@ -176,7 +175,6 @@ function BloodPressureInput(props: {userid: number}) {
         <Button type="primary" onClick={onSubmit}>
           保存
         </Button>
-        <BackButton />
       </div>
     </div>
   );

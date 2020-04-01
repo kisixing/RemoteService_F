@@ -10,7 +10,6 @@ import Chart from 'chart.js';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import moment from 'moment';
-import BackButton from '@/components/BackButton';
 import { getBloodPressures, getRecordNum, GetProp } from '@/services/tools';
 import { Range } from '@/pages/tools/signs/config';
 import { IconFont } from '@/components/antd-mobile';
@@ -20,7 +19,7 @@ import styles from '../signs/RecordsTabBar.less';
 
 /**
  * 数据展示备注
- *  当用户查看历史记录 需要显示最高压和最低压
+ * 当用户查看历史记录 需要显示最高压和最低压
  */
 interface ServiceDataItem {
   timestamp:string, systolic: number, diastolic: number, pulserate: number,
@@ -112,11 +111,11 @@ function BloodPressureRecord(props: {userid: number}) {
 
   // const [visible,setVisible] = useState(false);
   // const [selection, setSelection] = useState([]);
-  
+
   // 将日历按周期展示
   const convertChartData = (options: any,  serviceData: Array<ServiceDataItem>, isHistory: boolean) => {
-    let nOptions = JSON.parse(JSON.stringify(options));  
-    
+    let nOptions = JSON.parse(JSON.stringify(options));
+
     // 排序
     let targetData:Array<ServiceDataItem> = [];
     serviceData.forEach(v => targetData.push(v));
@@ -135,7 +134,7 @@ function BloodPressureRecord(props: {userid: number}) {
             j++;
           }
         }
-        i++; 
+        i++;
       }
     }else{
       targetData = targetData.filter((v: ServiceDataItem) => moment(v.timestamp).format('YYYY-MM-DD') === todayStr);
@@ -199,16 +198,16 @@ function BloodPressureRecord(props: {userid: number}) {
       let chartT = new Chart(ctx1,convertChartData(chartOptions,serviceData, false))
     }catch(e){
       console.error(e);
-    } 
+    }
   }
-  
+
   const toEdit = (item: ServiceDataItem) => {
     Router.push(`/signs/blood-pressure/input?timestamp=${item.timestamp}&systolic=${item.systolic}&diastolic=${item.diastolic}&pulserate=${item.pulserate}&id=${item.id}`);
   }
 
 
   // const renderList = (errData: Array<ServiceDataItem>) => (
-  //   <List> 
+  //   <List>
   //     {errData.map((v:ServiceDataItem) => (
   //     <CheckboxItem key={v.id}
   //       onChange={(e:any) => handleCheckBoxChange(e, v.id)}
@@ -234,13 +233,13 @@ function BloodPressureRecord(props: {userid: number}) {
   //     });
   //   }
   // }
-  
+
   // const handleConfirm = () => {
   //   for(let i = 0 ;i < selection.length ; i++){
   //     let t:ServiceDataItem|false = listData.find((v:ServiceDataItem) => v.id === selection[i]) || false;
   //     if(t){
   //       // @ts-ignore
-  //       t.status = 0; 
+  //       t.status = 0;
   //       editBloodPressures(t).then(res => console.log(res));
   //     }
   //   }
@@ -258,7 +257,7 @@ function BloodPressureRecord(props: {userid: number}) {
       }
     })
   },[props.userid]);
-  
+
   // 渲染chart
   useEffect(() => {
     // 判断异常数据
@@ -305,7 +304,7 @@ function BloodPressureRecord(props: {userid: number}) {
                 <div>{item.pulserate > PULSE_MAX || item.pulserate < PULSE_MIN ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
               </div>
             ) : null}
-            
+
           </div>
         </div>
       ))
@@ -330,7 +329,7 @@ function BloodPressureRecord(props: {userid: number}) {
           </div>
           <div className={styles.canvas} style={{display: isHistory ? "none" : "block"}}>
             <canvas ref={tChart}/>
-          </div> 
+          </div>
       </div>
       <div className={styles.count}>
         <div>
@@ -352,7 +351,7 @@ function BloodPressureRecord(props: {userid: number}) {
         transparent
         title="异常数据"
         style={{width: '100%', height: 'auto'}}
-      > 
+      >
         <div>
           {renderList(listData.filter((v:ServiceDataItem) => v.status === 1))}
           <div>
@@ -360,7 +359,6 @@ function BloodPressureRecord(props: {userid: number}) {
           </div>
         </div>
       </Modal>    */}
-      <BackButton/>
     </div>
   )
 }

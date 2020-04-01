@@ -58,9 +58,9 @@ function InputTabBar(props:any) {
             height: '6px',
             backgroundColor: '#FFCC4A',
           }}
-          
+
         >
-          <div key="weight"><Weight userid={1}/></div>
+          <div key="weight"><Weight /></div>
           <div key="blood-pressure"><BloodPressure/></div>
           <div key="blood-glucose"><BloodGlucose/></div>
           <div key="blood-oxygen"><BloodOxygen/></div>

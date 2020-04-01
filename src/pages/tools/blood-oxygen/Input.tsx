@@ -12,7 +12,6 @@ import { ConnectState } from '@/models/connect';
 import Router from 'umi/router'
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
-import BackButton from '@/components/BackButton';
 import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
 import { setBloodOxygens, editBloodOxygens } from '@/services/tools';
@@ -72,7 +71,7 @@ function BloodOxygenInput(props: {userid: number}) {
       let obj = {};
       window.location.search.split('?')[1].split('&').forEach((v:string) => {
         obj[v.split('=')[0]] = v.split('=')[1];
-      });    
+      });
       console.log(obj);
       if(obj['timestamp']){
         setId(Number(obj['id']));
@@ -157,7 +156,6 @@ function BloodOxygenInput(props: {userid: number}) {
         <Button type="primary" onClick={onSubmit}>
           保存
         </Button>
-        <BackButton />
       </div>
     </div>
   );
