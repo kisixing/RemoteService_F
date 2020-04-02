@@ -5,18 +5,17 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Progress } from 'antd';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { Toast } from 'antd-mobile';
 import Router from 'umi/router';
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
-import BackButton from '@/components/BackButton';
 import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
 import { setTemperatures, editTemperatures } from '@/services/tools';
 import { Range } from '@/pages/tools/signs/config';
+import CircleProgress from '../components/CricleProgress';
 
 import styles from '../blood-pressure/Input.less';
 
@@ -97,20 +96,20 @@ function TemperatureInput(props: {userid: number}) {
       />
       <WhiteSpace />
       <div className={styles.content}>
-        <div className={styles.text} onClick={() => router('/signs/temperature/record')}>
+        <div className={styles.text} onClick={() => router('/signs/record?type=temperature')}>
           <IconFont type="record" size="28px" />
           <span>历史记录</span>
         </div>
         <div className={styles['input-block']}>
           <div className={styles.dashboard}>
-            <Progress
-              type="dashboard"
+            <CircleProgress
               gapDegree={150}
-              strokeWidth={2}
-              width={4.4*Number(fontSize.slice(0,fontSize.length-2))}
-              showInfo={false}
+              width={4.8*Number(fontSize.slice(0,fontSize.length-2))}
+              height={4.8*Number(fontSize.slice(0,fontSize.length-2))}
+              rotate={0}
               percent={(Number(temperature)-35)*100/4}
               strokeColor="#ffbe2d"
+              textArray={['35','36','37','38','39']}
             />
           </div>
           <div className={styles.circle}>
@@ -133,7 +132,6 @@ function TemperatureInput(props: {userid: number}) {
         <Button type="primary" onClick={onSubmit}>
           保存
         </Button>
-        <BackButton />
       </div>
     </div>
   );
