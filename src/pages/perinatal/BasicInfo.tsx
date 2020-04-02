@@ -16,11 +16,14 @@ import { ConnectState, ConnectProps } from '@/models/connect';
 import { checkIdCard, getKeys } from '@/utils';
 import FormFields from './FormFields';
 import StepBar from './StepBar';
-import { basic } from './config';
 
 import styles from './styles.less';
 
-const keys = getKeys(basic.data);
+// 读取配置文件
+const configuration = window.configuration;
+// 基本信息配置
+const dataSource = configuration.basic.data;
+const keys = getKeys(dataSource);
 
 interface P {
   loading?: boolean;
@@ -141,18 +144,14 @@ class BasicInfo extends PureComponent<P, S> {
       <div className="page">
         <StepBar current={1} />
         <form className={styles.form}>
-          <FormFields form={form} dataSource={basic.data} onChange={this.onChange} />
+          <FormFields form={form} dataSource={dataSource} onChange={this.onChange} />
         </form>
         <div className="bottom_button">
           <Button type="primary" onClick={this.onSubmit}>
             保存
           </Button>
         </div>
-        <ActivityIndicator
-          toast
-          text="Loading..."
-          animating={this.state.isLoading}
-        />
+        <ActivityIndicator toast text="Loading..." animating={this.state.isLoading} />
       </div>
     );
   }

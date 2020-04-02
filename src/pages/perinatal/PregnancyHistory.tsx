@@ -9,9 +9,12 @@ import { Accordion, Modal } from 'antd-mobile';
 import { Button, IconFont } from '@/components/antd-mobile';
 import StepBar from './StepBar';
 import GravidityForm from './GravidityForm';
-import { history } from './config';
-
 import styles from './styles.less'
+
+// 读取配置文件
+const configuration = window.configuration;
+// 基本信息配置
+const history = configuration.history;
 
 interface P {
   loading?: boolean
@@ -33,18 +36,26 @@ class PregnancyHistory extends React.PureComponent<P, S> {
   }
 
   accordion = (data: any[]) => {
+    const activeKeys = data.map(e => e.id);
     return (
-      <Accordion defaultActiveKey={['1']}>
+      <Accordion activeKey={activeKeys}>
         {data.map((item, i) => {
           return (
             <Accordion.Panel
-              key={(i + 1).toString()}
+              key={item.id}
               header={
                 <div style={{ position: 'relative' }}>
-                  {`孕次 ${i + 1}`}
+                  <span style={{ color: '#ff6084', fontSize: '0.3rem', fontWeight: 600 }}>{`孕次记录 ${i + 1}`}</span>
                   <span
-                    style={{ width: '0.88rem', height: '0.88rem', background: '#fff', textAlign: 'center', position: 'absolute', right: '-0.6rem' }}
-                    onClick={(e) => this.remove(e, item.id)}
+                    style={{
+                      width: '0.88rem',
+                      height: '0.88rem',
+                      background: '#fff',
+                      textAlign: 'center',
+                      position: 'absolute',
+                      right: '-0.6rem',
+                    }}
+                    onClick={e => this.remove(e, item.id)}
                   >
                     <img style={{ width: '0.36rem' }} src={require('../../assets/icons/delete.png')} />
                   </span>
@@ -62,7 +73,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
   add = () => {
     const { dataSource } = this.state;
     const newD = [...dataSource];
-    newD.push({ id: `NEW${Math.floor(Math.random() * 100 + 1)}`, ...history });
+    newD.push({ id: `NEW${Math.floor(Math.random() * 10000 + 1)}`, ...history });
     this.setState({ dataSource: newD })
   };
 

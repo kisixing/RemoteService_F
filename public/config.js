@@ -1,45 +1,45 @@
 /*
- * @Author: ZHONG JUN
- * @Date: 2020-03-14 00:36:48
- * @Description:
+ * @Description: 表单配置文件
+ * @Author: Zhong Jun
+ * @Date: 2020-04-02 16:52:31
  */
 
 let areas = [
-  { code: "11", name: "北京市" },
-  { code: "12", name: "天津市" },
-  { code: "13", name: "河北省" },
-  { code: "14", name: "山西省" },
-  { code: "15", name: "内蒙古自治区" },
-  { code: "21", name: "辽宁省" },
-  { code: "22", name: "吉林省" },
-  { code: "23", name: "黑龙江省" },
-  { code: "31", name: "上海市" },
-  { code: "32", name: "江苏省" },
-  { code: "33", name: "浙江省" },
-  { code: "34", name: "安徽省" },
-  { code: "35", name: "福建省" },
-  { code: "36", name: "江西省" },
-  { code: "37", name: "山东省" },
-  { code: "41", name: "河南省" },
-  { code: "42", name: "湖北省" },
-  { code: "43", name: "湖南省" },
-  { code: "44", name: "广东省" },
-  { code: "45", name: "广西壮族自治区" },
-  { code: "46", name: "海南省" },
-  { code: "50", name: "重庆市" },
-  { code: "51", name: "四川省" },
-  { code: "52", name: "贵州省" },
-  { code: "53", name: "云南省" },
-  { code: "54", name: "西藏自治区" },
-  { code: "61", name: "陕西省" },
-  { code: "62", name: "甘肃省" },
-  { code: "63", name: "青海省" },
-  { code: "64", name: "宁夏回族自治区" },
-  { code: "65", name: "新疆维吾尔自治区" },
-  { code: "71", name: "台湾地区" },
-  { code: "81", name: "香港特别行政区" },
-  { code: "82", name: "澳门特别行政区" },
-  { code: "91", name: "国外" },
+  { code: '11', name: '北京市' },
+  { code: '12', name: '天津市' },
+  { code: '13', name: '河北省' },
+  { code: '14', name: '山西省' },
+  { code: '15', name: '内蒙古自治区' },
+  { code: '21', name: '辽宁省' },
+  { code: '22', name: '吉林省' },
+  { code: '23', name: '黑龙江省' },
+  { code: '31', name: '上海市' },
+  { code: '32', name: '江苏省' },
+  { code: '33', name: '浙江省' },
+  { code: '34', name: '安徽省' },
+  { code: '35', name: '福建省' },
+  { code: '36', name: '江西省' },
+  { code: '37', name: '山东省' },
+  { code: '41', name: '河南省' },
+  { code: '42', name: '湖北省' },
+  { code: '43', name: '湖南省' },
+  { code: '44', name: '广东省' },
+  { code: '45', name: '广西壮族自治区' },
+  { code: '46', name: '海南省' },
+  { code: '50', name: '重庆市' },
+  { code: '51', name: '四川省' },
+  { code: '52', name: '贵州省' },
+  { code: '53', name: '云南省' },
+  { code: '54', name: '西藏自治区' },
+  { code: '61', name: '陕西省' },
+  { code: '62', name: '甘肃省' },
+  { code: '63', name: '青海省' },
+  { code: '64', name: '宁夏回族自治区' },
+  { code: '65', name: '新疆维吾尔自治区' },
+  { code: '71', name: '台湾地区' },
+  { code: '81', name: '香港特别行政区' },
+  { code: '82', name: '澳门特别行政区' },
+  { code: '91', name: '国外' },
 ];
 areas = areas.map(e => ({ label: e.name, value: e.name }));
 
@@ -102,7 +102,7 @@ const ethnics = [
   '珞巴族',
   '基诺族',
   '其他',
-].map(e => ({ label: e, value: e }));;
+].map(e => ({ label: e, value: e }));
 
 // 职业种类
 const profession = [
@@ -151,14 +151,14 @@ const illness = [
 // 证件类型
 const IDType = [
   { label: '二代身份证', value: 0 },
-  { label: '港澳台居民居住证', value: 4},
-  { label: '回乡证', value: 2},
-  { label: '台胞证', value: 3},
-  { label: '护照', value: 1},
+  { label: '港澳台居民居住证', value: 4 },
+  { label: '回乡证', value: 2 },
+  { label: '台胞证', value: 3 },
+  { label: '护照', value: 1 },
   { label: '其他', value: 5 },
 ];
 
-export const basic = {
+const basic = {
   description: '基本信息',
   data: [
     {
@@ -232,7 +232,7 @@ export const basic = {
           format: 'YYYY-MM-DD', // 显示格式
           valueFormat: 'string', // 返回value值格式
           minDate: new Date(1960, 1, 1, 0, 0, 0),
-          maxDate: new Date()
+          maxDate: new Date(),
         },
         {
           id: 'age',
@@ -284,7 +284,7 @@ export const basic = {
           data: maritalstatus,
           valueFormat: 'number',
         },
-      ]
+      ],
     },
     {
       id: 'part-3',
@@ -309,7 +309,7 @@ export const basic = {
           label: '伴侣证件类型',
           type: 'picker',
           required: true,
-          cols:1,
+          cols: 1,
           data: IDType,
           valueFormat: 'number',
         },
@@ -328,7 +328,7 @@ export const basic = {
           mode: 'date',
           format: 'YYYY-MM-DD',
           minDate: new Date(1960, 1, 1, 0, 0, 0),
-          maxDate: new Date()
+          maxDate: new Date(),
         },
         {
           id: 'partnerAge',
@@ -371,7 +371,7 @@ export const basic = {
           data: profession,
           valueFormat: 'string',
         },
-      ]
+      ],
     },
     {
       id: 'part-4',
@@ -409,12 +409,12 @@ export const basic = {
           type: 'textarea-input',
           required: true,
         },
-      ]
+      ],
     },
   ],
 };
 
-export const pregnancy = {
+const pregnancy = {
   description: '本孕信息',
   data: [
     {
@@ -426,7 +426,7 @@ export const pregnancy = {
           label: '孕次',
           type: 'stepper-input',
           required: true,
-          min: 0,
+          min: 1,
           max: 10,
         },
         {
@@ -535,14 +535,14 @@ export const pregnancy = {
       desc: '信息块4',
       children: [
         {
-          id: 'yjcuch',
+          id: 'menarche',
           label: '初潮',
           type: 'text-input',
           charactertype: 'digit',
           required: true,
         },
         {
-          id: 'yjzhouq',
+          id: 'menstrualCycle',
           label: '月经周期',
           type: 'text-input',
           suffix: '天',
@@ -550,7 +550,7 @@ export const pregnancy = {
           required: true,
         },
         {
-          id: 'yjchix',
+          id: 'menstrualPeriod',
           label: '月经持续',
           type: 'text-input',
           suffix: '天',
@@ -558,7 +558,7 @@ export const pregnancy = {
           required: true,
         },
         {
-          id: 'yjjingl',
+          id: 'menstrualVolume',
           label: '经量多少',
           type: 'radio',
           charactertype: 'string',
@@ -566,12 +566,23 @@ export const pregnancy = {
           data: ['多', '中', '少'].map(e => ({ label: e, value: e })),
         },
         {
-          id: 'yjtongj',
+          id: 'dysmenorrhea',
           label: '是否痛经',
           type: 'radio',
-          charactertype: 'string',
+          charactertype: 'boolean',
           required: true,
-          data: ['经常', '偶尔', '无'].map(e => ({ label: e, value: e })),
+          data: [
+            { label: '是', value: true },
+            { label: '否', value: false },
+          ],
+        },
+        {
+          id: 'dysmenorrheaNote',
+          label: '痛经说明',
+          type: 'text-input',
+          charactertype: 'text',
+          required: true,
+          hide: true,
         },
         {
           id: 'smoke',
@@ -579,11 +590,14 @@ export const pregnancy = {
           type: 'radio',
           charactertype: 'boolean',
           required: true,
-          data: [{ label: '有', value: true }, { label: '无', value: false }],
+          data: [
+            { label: '有', value: true },
+            { label: '无', value: false },
+          ],
         },
         {
           id: 'smokeNote',
-          label: '每天吸烟量',
+          label: '烟量',
           suffix: '支/天',
           type: 'text-input',
           charactertype: 'digit',
@@ -593,13 +607,14 @@ export const pregnancy = {
           id: 'alcohol',
           label: '嗜好-酒',
           type: 'mix-picker',
+          placeholder: '请选择酒的种类',
           multiple: true,
           required: true,
           data: ['无', '白酒', '啤酒', '葡萄酒', '药酒'],
         },
         {
           id: 'alcoholNote',
-          label: '饮酒量',
+          label: '酒量',
           suffix: 'ml/天',
           type: 'text-input',
           charactertype: 'digit',
@@ -613,8 +628,8 @@ export const pregnancy = {
       children: [
         {
           id: 'maritalYears',
-          label: '结婚年龄',
-          suffix: '岁',
+          label: '结婚年数',
+          suffix: '年',
           type: 'text-input',
           charactertype: 'digit',
           required: true,
@@ -625,18 +640,32 @@ export const pregnancy = {
           type: 'radio',
           charactertype: 'boolean',
           required: true,
-          data: [{ label: '是', value: true }, { label: '否', value: false }],
+          data: [
+            { label: '是', value: true },
+            { label: '否', value: false },
+          ],
         },
         {
-          id: 'partnerCigarette',
+          id: 'partnerSmoke',
           label: '伴侣嗜好-烟',
+          type: 'radio',
+          charactertype: 'boolean',
+          required: true,
+          data: [
+            { label: '有', value: true },
+            { label: '无', value: false },
+          ],
+        },
+        {
+          id: 'partnerSmokeNote',
+          label: '烟量',
           suffix: '支/天',
           type: 'text-input',
           charactertype: 'digit',
           required: true,
         },
         {
-          id: 'partnerLiquor',
+          id: 'partnerAlcohol',
           label: '伴侣嗜好-酒',
           type: 'mix-picker',
           multiple: true,
@@ -644,7 +673,7 @@ export const pregnancy = {
           data: ['无', '白酒', '啤酒', '葡萄酒', '药酒'],
         },
         {
-          id: 'partnerLiquorCapacity',
+          id: 'partnerAlcoholNote',
           label: '伴侣饮酒量',
           suffix: 'ml/天',
           type: 'text-input',
@@ -652,7 +681,7 @@ export const pregnancy = {
           required: true,
         },
         {
-          id: 'partnerDiseaseHistory',
+          id: 'partnerDisease',
           label: '伴侣疾病史',
           type: 'mix-picker',
           multiple: true,
@@ -676,14 +705,15 @@ export const pregnancy = {
             '贫血',
             '地中海贫血',
             '癫痫',
-            '近视',
+            '血友病',
+            '高度近视',
           ],
         },
       ],
     },
     {
       id: 'part-6',
-      desc: 'part-6',
+      desc: '疾病史、手术史、个人史、家族史',
       children: [
         {
           id: 'diseaseHistory',
@@ -700,6 +730,7 @@ export const pregnancy = {
             '心脏病',
             '肝脏疾病',
             '肾脏疾病',
+            '胃病',
             '脑梗',
             '脑出血',
             '癌症',
@@ -707,12 +738,15 @@ export const pregnancy = {
             '肺结核',
             '甲亢',
             '过敏性疾病',
+            '内分泌病',
             '癫痫病',
             '风湿',
             '贫血',
             '地中海贫血',
             '癫痫',
-            '近视',
+            '心理疾病',
+            '血友病',
+            '高度近视',
           ],
         },
         {
@@ -725,7 +759,7 @@ export const pregnancy = {
         },
         {
           id: 'familyHistory',
-          label: '家庭病史',
+          label: '家庭史',
           type: 'mix-picker',
           multiple: true,
           required: true,
@@ -735,10 +769,13 @@ export const pregnancy = {
             '死胎',
             '死产',
             '畸形',
+            '色盲',
             '遗传病',
             '精神病',
             '痴呆',
             '先天智力低下',
+            '先天愚型',
+            '先天聋哑',
             '肿瘤',
             '糖尿病',
             '高血压',
@@ -747,20 +784,37 @@ export const pregnancy = {
             '甲亢',
             'G6PD',
             '肺结咳',
+            '血友病',
           ],
-        }
+        },
+        {
+          id: 'procedureHistory',
+          label: '手术史',
+          type: 'mix-picker',
+          multiple: true,
+          required: true,
+          data: ['无', '子宫手术', '卵巢手术', '甲状腺手术'],
+        },
       ],
-    }
+    },
   ],
 };
 
-export const history = {
+const history = {
   description: '孕产史信息',
   data: [
     {
-       id: 'part-6',
+      id: 'part-6',
       desc: 'part-6',
       children: [
+        {
+          id: 'gravidityindex',
+          label: '孕次',
+          type: 'stepper-input',
+          required: true,
+          min: 1,
+          max: 10,
+        },
         {
           id: 'deliveryTime',
           label: '妊娠终止时间',
@@ -781,8 +835,12 @@ export const history = {
           id: 'isChildbirth',
           label: '是否分娩',
           type: 'radio',
+          charactertype: 'boolean',
           required: true,
-          data: ['是', '否'].map(e => ({ label: e, value: e })),
+          data: [
+            { label: '是', value: true },
+            { label: '否', value: false },
+          ],
         },
         {
           id: 'hospital',
@@ -790,7 +848,7 @@ export const history = {
           type: 'text-input',
           charactertype: 'text',
           required: true,
-          hide: true
+          hide: true,
         },
         {
           id: 'gestationalWeek',
@@ -798,16 +856,16 @@ export const history = {
           type: 'text-input',
           charactertype: 'text',
           required: true,
-          hide: true
+          hide: true,
         },
         {
-          id: 'fetusNumber',
+          id: 'fetalcount',
           label: '胎数',
           type: 'stepper-input',
           required: true,
           min: 1,
           max: 6,
-          hide: true
+          hide: true,
         },
         {
           id: 'abortion',
@@ -822,9 +880,13 @@ export const history = {
           id: 'currettage',
           label: '清宫',
           type: 'radio',
+          charactertype: 'boolean',
           required: true,
           hide: true,
-          data: ['是', '否'].map(e => ({ label: e, value: e })),
+          data: [
+            { label: '有', value: true },
+            { label: '无', value: false },
+          ],
         },
         {
           id: 'unhealth',
@@ -832,7 +894,10 @@ export const history = {
           type: 'picker',
           required: true,
           cols: 1,
-          data: ['异位妊娠', '葡萄糖等滋养细胞疾病', '胚胎停育', '胎儿畸形', '死胎', '死产', '不清楚'].map(e => ({ label: e, value: e }))
+          data: ['异位妊娠', '葡萄糖等滋养细胞疾病', '胚胎停育', '胎儿畸形', '死胎', '死产', '不清楚'].map(e => ({
+            label: e,
+            value: e,
+          })),
         },
         {
           id: 'deliveryWay',
@@ -841,25 +906,210 @@ export const history = {
           required: true,
           hide: true,
           cols: 1,
-          data: ['顺产', '剖宫产', '吸引', '钳产', '臀助产'].map(e => ({ label: e, value: e }))
+          data: ['顺产', '剖宫产', '吸引', '钳产', '臀助产'].map(e => ({ label: e, value: e })),
         },
         {
-          id: 'fever',
-          label: '产后发热',
+          id: 'puerperalFever',
+          label: '产溽热',
           type: 'radio',
+          charactertype: 'boolean',
           required: true,
           hide: true,
-          data: ['是', '否'].map(e => ({ label: e, value: e })),
+          data: [
+            { label: '有', value: true },
+            { label: '无', value: false },
+          ],
         },
         {
           id: 'hemorrhage',
           label: '产后出血',
           type: 'radio',
+          charactertype: 'boolean',
           required: true,
           hide: true,
-          data: ['是', '否'].map(e => ({ label: e, value: e })),
+          data: [
+            { label: '有', value: true },
+            { label: '无', value: false },
+          ],
         },
-      ]
-    }
-  ]
-}
+        {
+          id: 'child',
+          label: '胎儿信息',
+          type: 'list',
+          children: [
+            {
+              id: 'childGender',
+              label: '胎儿性别',
+              type: 'radio',
+              required: true,
+              hide: true,
+              data: [
+                { label: '男', value: 0 },
+                { label: '女', value: 1 },
+              ],
+            },
+            {
+              id: 'neonateWeight',
+              label: '新生儿体重',
+              suffix: 'kg',
+              type: 'text-input',
+              charactertype: 'digit',
+              required: true,
+            },
+            {
+              id: 'childLiving',
+              label: '新生儿当前状况',
+              type: 'radio',
+              required: true,
+              data: [
+                { label: '健在', value: 1 },
+                { label: '死亡', value: 0 },
+              ],
+            },
+            {
+              id: 'childDeathNote',
+              label: '死亡原因',
+              type: 'text-input',
+              charactertype: 'text',
+              required: true,
+              hide: true,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+const ENTRANCE = [
+  {
+    key: '1',
+    label: '围产档案',
+    icon: 'i1.png',
+    route: '/perinatal',
+    color: 'linear-gradient(-45deg, #FFBFD9 0%, #FF6B70 100%)',
+  },
+  {
+    key: '4',
+    label: '套餐服务',
+    icon: 'i7.png',
+    route: '',
+    color: 'linear-gradient(-45deg, #FFBA8D 0%, #FF7D34 100%)',
+  },
+  {
+    key: '3',
+    label: '远程监护',
+    icon: 'i8.png',
+    route: '/packages',
+    color: 'linear-gradient(-45deg, #3BF7FF 0%, #00B9FF 100%)',
+  },
+  {
+    key: '88',
+    label: '我的订单',
+    icon: 'i4.png',
+    route: '/orders',
+    color: '',
+  },
+  {
+    key: '8',
+    label: '在线咨询',
+    icon: 'i3.png',
+    route: '/consultation',
+    color: '',
+  },
+  {
+    key: '5',
+    label: '产检本',
+    icon: 'i6.png',
+    route: '/reports/preview', // '/reports',
+    color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
+  },
+  {
+    key: '6',
+    label: '孕妇学校',
+    icon: 'i5.png',
+    route: '', // '/school?type=article',
+    color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
+  },
+  {
+    key: '7',
+    label: '随访记录',
+    icon: 'i1.png',
+    route: '',
+    color: 'linear-gradient(-45deg, #FFC4EF 0%, #FF445B 100%)',
+  },
+  {
+    key: '2',
+    label: '产检记录',
+    icon: 'i2.png',
+    route: '',
+    color: 'linear-gradient(-45deg, #FFD52B 0%, #FFA002 100%)',
+  },
+];
+
+const TOOLS = [
+  {
+    key: '0',
+    label: '体征管理',
+    icon: 'i000.png',
+    route: '/signs',
+  },
+  {
+    key: '1',
+    label: '体重管理',
+    icon: 'i001.png',
+    route: '/signs/weight/input',
+  },
+  // {
+  //   key: '2',
+  //   label: '血糖管理',
+  //   icon: 'i002.png',
+  //   route: '',
+  // },
+  // {
+  //   key: '3',
+  //   label: '血压管理',
+  //   icon: 'i007.png',
+  //   route: '',
+  // },
+  {
+    key: '4',
+    label: '胎动计数',
+    icon: 'i003.png',
+    route: '',
+  },
+  {
+    key: '5',
+    label: '我的收藏',
+    icon: 'i004.png',
+    route: '',
+  },
+  {
+    key: '6',
+    label: '我的提醒',
+    icon: 'i005.png',
+    route: '',
+  },
+  // {
+  //   key: '7',
+  //   label: '其他',
+  //   icon: 'i006.png',
+  //   route: '',
+  // },
+  // {
+  //   key: '8',
+  //   label: '其他',
+  //   icon: 'i008.png',
+  //   route: '/example',
+  // },
+];
+
+window.configuration = {
+  basic: basic,
+  pregnancy: pregnancy,
+  history: history,
+  // 主入口
+  mains: ENTRANCE,
+  // 工具栏入口
+  tools: TOOLS,
+};

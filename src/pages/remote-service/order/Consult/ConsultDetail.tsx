@@ -5,7 +5,6 @@
  */
 
 import React,{ReactNode} from 'react';
-import BackButton from '@/components/BackButton';
 import { Button } from 'antd-mobile';
 import { ServiceOrderItem } from '@/pages/remote-service/order/interface';
 
@@ -86,7 +85,6 @@ function ConsultDetail(props: ConsultDetailProp) {
         </div>
       </div>
       <br/>
-      <BackButton/>
     </div>
   )
 }

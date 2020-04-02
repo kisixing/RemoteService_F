@@ -35,14 +35,14 @@ const GlobalModel: GlobalModelType = {
 
   state: {
     locale: 'cn', // cn/en
-    hospital: '深圳第三人民医院',
-    mpuid: '',
-    access_token: '',
-    currentPregnancy: {},
-    // mpuid: 'oONcg1d-i8OrskBrnOndjMpct0TM',
-    // access_token:
-    //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFkLWk4T3Jza0Jybk9uZGpNcGN0MFRNIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU4ODE1NjYzNX0.ddF3qtSn6IXMDAfQMG_M0QWHz66Y_ml2fObLb3mEhEsI-4mzwpPyn2_9Dz2wVHShQ5Y5cJoOQnTI_3hc1lZswQ',
-    // currentPregnancy: { id: 3 },
+    hospital: '',
+    // mpuid: '',
+    // access_token: '',
+    // currentPregnancy: {},
+    mpuid: 'oONcg1d-i8OrskBrnOndjMpct0TM',
+    access_token:
+      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFkLWk4T3Jza0Jybk9uZGpNcGN0MFRNIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU4ODE1NjYzNX0.ddF3qtSn6IXMDAfQMG_M0QWHz66Y_ml2fObLb3mEhEsI-4mzwpPyn2_9Dz2wVHShQ5Y5cJoOQnTI_3hc1lZswQ',
+    currentPregnancy: { id: 3 },
   },
 
   effects: {
@@ -69,6 +69,7 @@ const GlobalModel: GlobalModelType = {
             payload: {
               currentPregnancy: data,
               mpuid: data.mpuid || response.openId,
+              hospital: data.organization && data.organization.name,
             },
           });
           return data;
@@ -83,6 +84,7 @@ const GlobalModel: GlobalModelType = {
         type: 'updateState',
         payload: {
           currentPregnancy: data,
+          hospital: data.organization && data.organization.name,
         },
       });
       return data;

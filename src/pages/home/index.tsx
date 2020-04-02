@@ -7,7 +7,6 @@ import { WhiteSpace, IconFont } from '@/components/antd-mobile';
 import Footer from '@/components/Footer';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { router } from '@/utils/utils';
-import { ENTRANCE, TOOLS } from './config';
 
 // 业务组件
 import Banner from './Banner';
@@ -16,6 +15,9 @@ import Notification from './Notification';
 import AntenatalCare from './AntenatalCare';
 import Tools from './Tools';
 import NewsListView from './NewsListView';
+
+// 读取配置文件
+const configuration = window.configuration;
 
 import styles from './index.less';
 
@@ -60,7 +62,7 @@ function Home(props: IProps) {
       <div className={styles.content}>
         <div className="module">
           <Banner dataSource={bannerProps} />
-          <Entrance dataSource={ENTRANCE} />
+          <Entrance dataSource={configuration.mains} />
           {/* 消息提醒 */}
           {/* <Notification /> */}
         </div>
@@ -68,7 +70,7 @@ function Home(props: IProps) {
         <Card full>
           <Card.Header
             title={
-              <div  className={styles.cardTitle}>
+              <div className={styles.cardTitle}>
                 <IconFont type="1" />
                 <span>孕产工具</span>
               </div>
@@ -78,26 +80,30 @@ function Home(props: IProps) {
           />
           <Card.Body>
             <AntenatalCare />
-            <Tools dataSource={TOOLS} />
+            <Tools dataSource={configuration.tools} />
           </Card.Body>
         </Card>
         <WhiteSpace size="md" />
-        {/* <Card full>
+        <Card full>
           <Card.Header
             title={
-              <div  className={styles.cardTitle}>
+              <div className={styles.cardTitle}>
                 <IconFont type="zhishiku" />
                 <span>今日知识</span>
               </div>
             }
             // thumb={require('../../assets/icons/knowledge.png')}
             thumbStyle={{ width: '.36rem' }}
-            extra={<span className={styles.more} onClick={() => router('/school')}>更多</span>}
+            extra={
+              <span className={styles.more} onClick={() => router('/school')}>
+                更多
+              </span>
+            }
           />
           <Card.Body style={{ paddingTop: 0 }}>
             <NewsListView dataSource={news} loading={loading.effects['news/getPersonNews']} />
           </Card.Body>
-        </Card> */}
+        </Card>
       </div>
       <Footer />
     </div>

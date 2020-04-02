@@ -5,7 +5,7 @@ function RadioGroup({ id, data, value, onChange, charactertype, error }: any) {
   const handleChange = (e: any) => {
     const value = e.target.value;
     if (charactertype === 'boolean') {
-      const flag = value === 'false' ? false : true;
+      const flag = value === 'true' ? true : false;
       return onChange(flag);
     }
     onChange(value);

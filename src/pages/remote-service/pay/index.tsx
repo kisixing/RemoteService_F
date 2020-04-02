@@ -2,7 +2,6 @@
 import React,{useState } from 'react';
 import { connect } from 'dva';
 import { Button, Checkbox, WingBlank, Toast } from 'antd-mobile';
-import BackButton from '@/components/BackButton';
 import { wxpay } from '@/services/pay';
 import { ConnectState } from '@/models/connect';
 import Router from 'umi/router';
@@ -23,7 +22,7 @@ interface PayProp{
 
 function Pay(props:PayProp) {
 
-  
+
   const [payType, setPayType] = useState('');
   const [isAgree, setIsAgree] = useState(false);
 
@@ -130,21 +129,21 @@ function Pay(props:PayProp) {
                 </div>
               </div>
               <div className={styles.detail}>
-                <div>   
+                <div>
                   <div><span>套餐胎监判图次数</span></div>
                   <div><span>{currentPackageData.service1amount}次</span></div>
                 </div>
                 <div>
                   <div><span>套餐图文咨询次数</span></div>
-                  <div><span>{currentPackageData.service2amount}次</span></div>    
+                  <div><span>{currentPackageData.service2amount}次</span></div>
                 </div>
                 {currentPackageData.products.map(v => (
                   <div>
                     <div><span>{v.name}</span></div>
-                    <div><span>租用</span></div>    
+                    <div><span>租用</span></div>
                   </div>
                 ))}
-                
+
               </div>
               <div className={styles.price}>
                 <div>
@@ -192,7 +191,6 @@ function Pay(props:PayProp) {
           </Button>
         </div>
       </div>
-      <BackButton/>
     </div>
   )
 }

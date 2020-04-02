@@ -29,8 +29,8 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
 
   const inputItem = (object: any) => {
     const { getFieldDecorator, getFieldError } = form;
-    const { id, label, type, charactertype, hide, required, value, ...rest } = object;
-    let placeholder = object.placeholder || type && type.includes('input') ? `请输入${label}` : `请选择${label}`;
+    const { id, label, type = 'input', charactertype, hide = false, required, value, ...rest } = object;
+    let placeholder = object.placeholder || type.includes('input') ? `请输入${label}` : `请选择${label}`;
 
     if (hide) {
       return null;
@@ -42,12 +42,11 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
           <InputItem
-            {...object}
-            id={id}
             key={id}
             type={charactertype}
             placeholder={placeholder}
-            onChange={(e) => onChange(id, e)}
+            onChange={e => onChange(id, e)}
+            {...rest}
           >
             {label}
           </InputItem>,
@@ -57,7 +56,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <TextareaItem id={id} key={id} placeholder={placeholder} {...object}>
+          <TextareaItem key={id} placeholder={placeholder} {...rest}>
             {label}
           </TextareaItem>,
         );
@@ -66,7 +65,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <StepperInput id={id} key={id} {...object}>
+          <StepperInput key={id} {...rest}>
             {label}
           </StepperInput>,
         );
@@ -76,7 +75,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           valuePropName: 'checked',
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <Switch id={id} key={id} {...object}>
+          <Switch key={id} {...rest}>
             {label}
           </Switch>,
         );
@@ -85,7 +84,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <Radio id={id} key={id} {...object}>
+          <Radio key={id} charactertype={charactertype} {...rest}>
             {label}
           </Radio>,
         );
@@ -94,7 +93,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <Picker id={id} key={id} placeholder={placeholder} {...object}>
+          <Picker key={id} placeholder={placeholder} {...rest}>
             {label}
           </Picker>,
         );
@@ -103,7 +102,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <DatePicker {...object} id={id} key={id} placeholder={placeholder} onChange={e => onChange(id, e)}>
+          <DatePicker key={id} placeholder={placeholder} onChange={e => onChange(id, e)} {...rest}>
             {label}
           </DatePicker>,
         );
@@ -112,7 +111,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <MixPicker id={id} key={id} placeholder={placeholder} {...object}>
+          <MixPicker key={id} placeholder={placeholder} {...rest}>
             {label}
           </MixPicker>,
         );
@@ -121,7 +120,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <AddressPicker id={id} key={id} placeholder={placeholder} {...object}>
+          <AddressPicker key={id} placeholder={placeholder} {...rest}>
             {label}
           </AddressPicker>,
         );

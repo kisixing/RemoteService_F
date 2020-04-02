@@ -81,7 +81,7 @@ function MixPicker(
       okText="确定"
       value={value}
     >
-      <CustomItem arrow="horizontal" extra={value || placeholder}>
+      <CustomItem arrow="horizontal" extra={value && value.length ? value : placeholder}>
         {required ? <i className={styles.required}>*</i> : null}
         <span className={styles.label}>{children}</span>
       </CustomItem>

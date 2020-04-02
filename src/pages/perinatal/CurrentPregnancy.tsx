@@ -17,8 +17,12 @@ import FormFields from './FormFields';
 import StepBar from './StepBar';
 import styles from './styles.less';
 
-const { pregnancy } = require('./config');
-const keys = getKeys(pregnancy.data);
+// 读取配置文件
+const configuration = window.configuration;
+// 基本信息配置
+// const originalDataSource = configuration.pregnancy.data; // _.cloneDeep()
+const dataSource = configuration.pregnancy.data;
+const keys = getKeys(dataSource);
 
 interface P {
   loading?: boolean;
@@ -47,8 +51,66 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
   }
 
   componentWillReceiveProps() {
+    // const { dataSource } = this.state;
+    // 获取需要监听的key键value
+    // { dysmenorrhea, smoke, alcohol, partnerSmoke, partnerAlcohol }
+    const values = this.props.form.getFieldsValue([
+      'dysmenorrhea',
+      'smoke',
+      'alcohol',
+      'partnerSmoke',
+      'partnerAlcohol',
+      'lmp',
+    ]);
+    console.log('listen change', values);
+    // 痛经说明
+    const dysmenorrheaNoteIndex = this.getKeyIndex('dysmenorrheaNote');
+    if (values.dysmenorrhea && dysmenorrheaNoteIndex.length) {
+      this.show(dysmenorrheaNoteIndex);
+    } else {
+      this.hide(dysmenorrheaNoteIndex);
+    }
+
+    // 烟
+    const smokeNoteIndex = this.getKeyIndex('smokeNote');
+    if (values.smoke && smokeNoteIndex.length) {
+      this.show(smokeNoteIndex);
+    } else {
+      this.hide(smokeNoteIndex);
+    }
+
+    // 酒
+    const alcoholNoteIndex = this.getKeyIndex('alcoholNote');
+    if (values.alcohol && values.alcohol[0] !== '无' && alcoholNoteIndex.length) {
+      this.show(alcoholNoteIndex);
+    } else {
+      this.hide(alcoholNoteIndex);
+    }
 
   }
+
+  // 确定key位置
+  getKeyIndex = (key: string) => {
+    const data = _.cloneDeep(dataSource);
+    let index = [];
+    for (let i = 0; i < data.length; i++) {
+      const children = data[i]['children'];
+      for (let j = 0; j < children.length; j++) {
+        if (children[j]['id'] === key) {
+          index = [i, j];
+        }
+      }
+    }
+    return index;
+  };
+
+  show = (array: number[]) => {
+    dataSource[array[0]]['children'][array[1]]['hide'] = false;
+  };
+
+  hide = (array: number[]) => {
+    dataSource[array[0]]['children'][array[1]]['hide'] = true;
+  };
 
   initValue = () => {
     const { form, currentPregnancy } = this.props;
@@ -85,7 +147,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
       const {
         form: { setFieldsValue, getFieldsValue },
       } = this.props;
-      const lmp = moment(value).format('YYYY-MM-DD')
+      const lmp = moment(value).format('YYYY-MM-DD');
       const EDD = KG.getEdd(lmp);
       const GES = KG.getGesweek(lmp);
       const values = getFieldsValue(['gestationalWeek', 'edd', 'sureEdd']);
@@ -101,7 +163,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
       }
       setFieldsValue(params);
     }
-  }
+  };
 
   render() {
     const { form } = this.props;
@@ -109,7 +171,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
       <div className="page">
         <StepBar current={2} />
         <form className={styles.form}>
-          <FormFields form={form} dataSource={pregnancy.data} onChange={this.onChange} />
+          <FormFields form={form} dataSource={dataSource} onChange={this.onChange} />
         </form>
         <div className="bottom_button">
           <Button type="primary" onClick={this.onSubmit}>
