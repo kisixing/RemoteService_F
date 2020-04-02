@@ -125,7 +125,7 @@ function BloodPressureInput(props: {userid: number}) {
       />
       <WhiteSpace />
       <div className={styles.content}>
-        <div className={styles.text} onClick={() => router('/signs/blood-pressure/record')}>
+        <div className={styles.text} onClick={() => router('/signs/record?type=blood-pressure')}>
           <IconFont type="record" size="28px" />
           <span>历史记录</span>
         </div>

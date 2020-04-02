@@ -255,7 +255,7 @@ function BloodOxygenRecord(props: {userid: number}) {
               </div>
             )}
             <div className={styles.date}>
-              <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
+              <span>{item.timestamp.slice(0, 10)}</span>
               </div>
           </div>
           <div className={styles.content}>
@@ -282,7 +282,7 @@ function BloodOxygenRecord(props: {userid: number}) {
       <div className={styles['canvas-block']}>
         <div  className={styles.switch}>
           <div className={styles.title}>
-            {isHistory ? <span>今日血氧曲线</span> : <span>历史血氧曲线</span>}
+            {isHistory ? <span>历史血氧曲线</span> : <span>今日血氧曲线</span>}
             <small>(单位:%)</small>
           </div>
           <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>

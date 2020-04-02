@@ -272,15 +272,15 @@ function BloodGlucoseRecord(props: { userid: number }) {
           <div className={styles.header}>
             {item.src === 1 ? (
               <div className={styles.src} onClick={() => toEdit(item)}>
-                <IconFont type="synchronization" /><span>同步</span>
+                <IconFont type="synchronization"/><span>同步</span>
               </div>
             ) : (
               <div className={styles.src} onClick={() => toEdit(item)}>
-                <IconFont type="edite" /><span>录入</span>
+                <IconFont type="edite"/><span>录入</span>
               </div>
             )}
             <div className={styles.date}>
-              <span>{item.timestamp.slice(0, 10)}/{item.timestamp.slice(11, 19)}</span>
+              <span>{item.timestamp.slice(0, 10)}</span>
             </div>
           </div>
           <div className={styles.content}>
@@ -342,7 +342,7 @@ function BloodGlucoseRecord(props: { userid: number }) {
       <div className={styles['canvas-block']}>
         <div className={styles.switch}>
         <div className={styles.title}>
-            {isHistory ? <span>今日血糖曲线</span> : <span>历史血糖曲线</span>}
+            {isHistory ? <span>历史血糖曲线</span> : <span>今日血糖曲线</span>}
             <small>(单位:mmol/L)</small>
           </div>
           <div onClick={() => setIsHistory(isHistory => !isHistory)} className={styles.text}>

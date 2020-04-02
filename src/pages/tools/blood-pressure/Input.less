@@ -1,4 +1,6 @@
 @import '../../../utils/theme.less';
+@inputBlockWidth: 4.8rem;
+@circleWidth: 3.6rem; 
 
 .container {
   // height: 100%;
@@ -29,26 +31,29 @@
 
     .input-block {
       display: block;
-      height: 4.4rem;
-      width: 4.4rem;
+      height: @inputBlockWidth;
+      width: @inputBlockWidth;
       margin: 0 auto;
       margin-bottom: .48rem;
       position: relative;
       .dashboard{
         position: absolute;
         z-index: 999;
-        .ant-progress-inner {
-          width: 4rem !important;
-          height: 4rem !important;
+        width: @inputBlockWidth;
+        height: @inputBlockWidth;
+        // top: .2rem;
+        // left: .2rem;
+        > * {
+          margin: 0 auto;
         }
       } 
       .circle {
         z-index: 1000;
         position: absolute;
-        width: 3.6rem;
-        height: 3.6rem;
-        top: .4rem;
-        left: .4rem;
+        width: @circleWidth;
+        height: @circleWidth;
+        top: (@inputBlockWidth - @circleWidth)/2;
+        left: (@inputBlockWidth - @circleWidth)/2;
         // margin: 0 auto;
         // margin-bottom: .48rem;
         border-radius: 50%;

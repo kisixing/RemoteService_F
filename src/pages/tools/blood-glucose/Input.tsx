@@ -6,7 +6,6 @@
 
  // TODO 血压这里的period有问题
 import React, { useState, useEffect } from 'react';
-import { Progress } from 'antd';
 import { Tabs, List, InputItem, TextareaItem, Toast, Checkbox } from 'antd-mobile';
 import { connect } from 'dva';
 import Router from 'umi/router';
@@ -18,6 +17,8 @@ import { PERIOD_CODE } from './config';
 import { ConnectState } from '@/models/connect'
 import { setBloodGlucose, editBloodGlucose, getBloodGlucose, getRecordNum, GetProp } from '@/services/tools';
 import { Range } from "@/pages/tools/signs/config";
+import CircleProgress from '../components/CricleProgress';
+
 import styles from '../blood-pressure/Input.less';
 
 const nowTimeStamp = Date.now();
@@ -129,7 +130,7 @@ function BloodGlucoseInput(props: {userid: number}) {
           const { data } = res;
           console.log(data);
           const formatDate = moment(now).format('YYYY-MM-DD');
-          const tarData = data.filter(v => v.timestamp.slice(0,10) === formatDate );
+          const tarData = data.filter((v: {timestamp: string}) => v.timestamp.slice(0,10) === formatDate );
           let newValues = JSON.parse(JSON.stringify(values));
           console.log(tarData);
           tarData.forEach((v: any) => {
@@ -247,7 +248,7 @@ function BloodGlucoseInput(props: {userid: number}) {
       <div
         className={styles.record}
         style={{ width: '100%', position: 'absolute', top: '1.76rem', zIndex: 9 }}
-        onClick={() => router('/signs/blood-glucose/record')}
+        onClick={() => router('/signs/record?type=blood-glucose')}
       >
         <IconFont type="record" size="28px" />
         <span>历史记录</span>
@@ -268,15 +269,15 @@ function BloodGlucoseInput(props: {userid: number}) {
           <div className={styles.content} style={{ paddingTop: '0.6rem' }}>
             <div className={styles['input-block']}>
             <div className={styles.dashboard}>
-              <Progress
-                type="dashboard"
+              <CircleProgress
                 gapDegree={150}
-                strokeWidth={2}
-                width={4.4*Number(fontSize.slice(0,fontSize.length-2))}
-                showInfo={false}
+                width={4.8*Number(fontSize.slice(0,fontSize.length-2))}
+                height={4.8*Number(fontSize.slice(0,fontSize.length-2))}
                 // TODO 暂时以2~9为区间
-                percent={(Number(current.bloodGlucose)  ) * 100 / 7}
+                rotate={0}
                 strokeColor="#ffbe2d"
+                percent={(Number(current.bloodGlucose)  ) * 100 / 7}
+                textArray={['2','3','4','5','6','7','8','9']}
               />
             </div>
             <div className={styles.circle}>

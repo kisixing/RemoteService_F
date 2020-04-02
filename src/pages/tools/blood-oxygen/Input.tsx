@@ -5,7 +5,6 @@
  */
 
 import React,{useEffect} from 'react';
-import { Progress } from 'antd';
 import { InputItem, List, Toast } from 'antd-mobile';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
@@ -16,6 +15,8 @@ import { router } from '@/utils/utils';
 import DatePicker from '../components/DatePicker';
 import { setBloodOxygens, editBloodOxygens } from '@/services/tools';
 import { Range } from '@/pages/tools/signs/config';
+
+import CircleProgress from '../components/CricleProgress';
 
 import styles from '../blood-pressure/Input.less';
 
@@ -103,20 +104,20 @@ function BloodOxygenInput(props: {userid: number}) {
       />
       <WhiteSpace />
       <div className={styles.content}>
-        <div className={styles.text} onClick={() => router('/signs/blood-oxygen/record')}>
+        <div className={styles.text} onClick={() => router('/signs/record?type=blood-oxygen')}>
           <IconFont type="record" size="28px" />
           <span>历史记录</span>
         </div>
         <div className={styles['input-block']}>
-          <div className={styles.dashboard}>
-            <Progress
-              type="dashboard"
+          <div className={styles.dashboard} >
+            <CircleProgress
+              width={4.8*Number(fontSize.slice(0,fontSize.length-2))}
+              height={4.8*Number(fontSize.slice(0,fontSize.length-2))}
               gapDegree={150}
-              strokeWidth={2}
-              width={4.4*Number(fontSize.slice(0,fontSize.length-2))}
-              showInfo={false}
-              percent={Number(bloodOxygen)}
+              rotate={0}
               strokeColor="#ffbe2d"
+              percent={Number(bloodOxygen)}
+              textArray={['0','20','40','60','80','100']}
             />
           </div>
           <div className={styles.circle}>
