@@ -8,7 +8,7 @@ interface IProps {
   data: string[]
   value?: any[]
   multiple?: boolean
-  onChange?: any // React.Dispatch<any> | () => void
+  onChange?: any
   placeholder?: string
 }
 

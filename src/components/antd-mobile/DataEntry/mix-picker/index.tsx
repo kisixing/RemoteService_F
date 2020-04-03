@@ -43,7 +43,6 @@ function MixPicker(
   { required, children, data, value, placeholder, onChange, multiple }: IProps,
   ref: any,
 ) {
-  const [visible, setVisible] = useState(false);
   const [cacheValue, setCacheValue] = useState(value);
 
   useEffect(() => {
@@ -54,14 +53,13 @@ function MixPicker(
     onChange(cacheValue);
   };
 
-  const onOpen = () => setVisible(true);
-
   const onDismiss = () => {
     setCacheValue(value);
   };
 
   return (
     <Popup
+      ref={ref}
       className={styles.popup}
       transitionName="rmc-picker-popup-slide-fade"
       maskTransitionName="rmc-picker-popup-fade"
@@ -79,9 +77,8 @@ function MixPicker(
       onDismiss={onDismiss}
       onOk={onOk}
       okText="确定"
-      value={value}
     >
-      <CustomItem arrow="horizontal" extra={value && value.length ? value : placeholder}>
+      <CustomItem arrow="horizontal" extra={value || placeholder}>
         {required ? <i className={styles.required}>*</i> : null}
         <span className={styles.label}>{children}</span>
       </CustomItem>

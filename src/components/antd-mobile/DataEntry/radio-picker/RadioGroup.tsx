@@ -1,24 +1,25 @@
 import React from 'react';
+import classNames from 'classnames';
 import styles from './RadioGroup.less';
 
-function RadioGroup({ id, data, value, onChange, charactertype, error }: any) {
+function RadioGroup({ id, data, value, onChange, error }: any) {
   const handleChange = (e: any) => {
-    const value = e.target.value;
-    if (charactertype === 'boolean') {
-      const flag = value === 'true' ? true : false;
-      return onChange(flag);
-    }
-    onChange(value);
+    let flag = e.target.value;
+    const checked = data.filter((e: any) => e.value.toString() === flag)[0];
+    onChange(checked.value);
   };
 
   return (
     <div className={styles.group}>
       {data.map((item: { label: string; value: any }, index: any) => {
         return (
-          <span key={item.value || index} className={styles.item}>
+          <div key={item.value} className={styles.item}>
             <input
-              id={`${id}-${index}`}
-              className={styles.radio}
+              id={item.value.toString()}
+              className={classNames(styles.radio, {
+                [styles.dot]: true,
+                [styles.tick]: false,
+              })}
               type="radio"
               value={item.value}
               checked={item.value === value}
@@ -27,7 +28,7 @@ function RadioGroup({ id, data, value, onChange, charactertype, error }: any) {
             <label htmlFor={item.value.toString()} className={styles.label}>
               {item.label}
             </label>
-          </span>
+          </div>
         );
       })}
       {error ? <div className="am-input-error-extra" /> : null}

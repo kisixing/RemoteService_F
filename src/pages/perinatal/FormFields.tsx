@@ -43,6 +43,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
         })(
           <InputItem
             key={id}
+            required={required}
             type={charactertype}
             placeholder={placeholder}
             onChange={e => onChange(id, e)}
@@ -56,7 +57,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <TextareaItem key={id} placeholder={placeholder} {...rest}>
+          <TextareaItem key={id} required={required} placeholder={placeholder} {...rest}>
             {label}
           </TextareaItem>,
         );
@@ -65,7 +66,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <StepperInput key={id} {...rest}>
+          <StepperInput key={id} required={required} {...rest}>
             {label}
           </StepperInput>,
         );
@@ -75,7 +76,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           valuePropName: 'checked',
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <Switch key={id} {...rest}>
+          <Switch key={id} required={required} {...rest}>
             {label}
           </Switch>,
         );
@@ -84,7 +85,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <Radio key={id} charactertype={charactertype} {...rest}>
+          <Radio key={id} required={required} charactertype={charactertype} {...rest}>
             {label}
           </Radio>,
         );
@@ -93,7 +94,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <Picker key={id} placeholder={placeholder} {...rest}>
+          <Picker key={id} required={required} placeholder={placeholder} {...rest}>
             {label}
           </Picker>,
         );
@@ -102,7 +103,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <DatePicker key={id} placeholder={placeholder} onChange={e => onChange(id, e)} {...rest}>
+          <DatePicker key={id} required={required} placeholder={placeholder} onChange={e => onChange(id, e)} {...rest}>
             {label}
           </DatePicker>,
         );
@@ -111,7 +112,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <MixPicker key={id} placeholder={placeholder} {...rest}>
+          <MixPicker key={id} required={required} placeholder={placeholder} {...rest}>
             {label}
           </MixPicker>,
         );
@@ -120,7 +121,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <AddressPicker key={id} placeholder={placeholder} {...rest}>
+          <AddressPicker key={id} required={required} placeholder={placeholder} {...rest}>
             {label}
           </AddressPicker>,
         );

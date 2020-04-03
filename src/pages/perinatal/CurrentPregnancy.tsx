@@ -60,7 +60,8 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
       'alcohol',
       'partnerSmoke',
       'partnerAlcohol',
-      'lmp',
+      'radioactivity',
+      'medicine',
     ]);
     console.log('listen change', values);
     // 痛经说明
@@ -85,6 +86,38 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
       this.show(alcoholNoteIndex);
     } else {
       this.hide(alcoholNoteIndex);
+    }
+
+    // 伴侣-烟
+    const partnerSmokeNoteIndex = this.getKeyIndex('partnerSmokeNote');
+    if (values.partnerSmoke && partnerSmokeNoteIndex.length) {
+      this.show(partnerSmokeNoteIndex);
+    } else {
+      this.hide(partnerSmokeNoteIndex);
+    }
+
+    // 伴侣-酒
+    const partnerAlcoholNoteIndex = this.getKeyIndex('partnerAlcoholNote');
+    if (values.partnerAlcohol && values.partnerAlcohol[0] !== '无' && partnerAlcoholNoteIndex.length) {
+      this.show(partnerAlcoholNoteIndex);
+    } else {
+      this.hide(partnerAlcoholNoteIndex);
+    }
+
+    // 放射线
+    const radioactivityNoteIndex = this.getKeyIndex('radioactivityNote');
+    if (values.radioactivity && radioactivityNoteIndex.length) {
+      this.show(radioactivityNoteIndex);
+    } else {
+      this.hide(radioactivityNoteIndex);
+    }
+
+    // 药物
+    const medicineNoteIndex = this.getKeyIndex('medicineNote');
+    if (values.medicine && medicineNoteIndex.length) {
+      this.show(medicineNoteIndex);
+    } else {
+      this.hide(medicineNoteIndex);
     }
 
   }

@@ -31,7 +31,7 @@
   content: '';
   width: 100%;
   height: 100%;
-  border: 2px solid #666;
+  border: 2px solid #686868;
   display: inline-block;
   border-radius: 50%;
 }
@@ -40,11 +40,24 @@
   width: 100%;
   height: 100%;
   border: 2px solid @primary-color;
-  background: @primary-color;
-  display: inline-block;
-  border-radius: 50%;
 }
-.radio:checked:after {
+.radio.dot:checked:after {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: @primary-color;
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  margin-top: -9px;
+  margin-right: -9px;
+}
+// CheckBox样式
+.radio.tick:checked:before {
+  background: @primary-color;
+}
+.radio.tick:checked:after {
   content: '';
   width: 16px;
   height: 8px;
@@ -59,5 +72,5 @@
   transform: rotate(-45deg);
 }
 .radio:checked + label {
-    color: @primary-color;
+  color: @primary-color;
 }

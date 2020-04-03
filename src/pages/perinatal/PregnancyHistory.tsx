@@ -6,6 +6,8 @@
 
 import React from 'react';
 import { Accordion, Modal } from 'antd-mobile';
+import _ from 'lodash';
+import { generateUUID } from '@/utils';
 import { Button, IconFont } from '@/components/antd-mobile';
 import StepBar from './StepBar';
 import GravidityForm from './GravidityForm';
@@ -13,16 +15,14 @@ import styles from './styles.less'
 
 // 读取配置文件
 const configuration = window.configuration;
-// 基本信息配置
-const history = configuration.history;
+// 拷贝单个孕产史信息数据结构
+const history = _.cloneDeep(configuration.history);
 
 interface P {
   loading?: boolean
 }
 
-interface S {
-  dataSource: any[]
-};
+interface S {};
 
 class PregnancyHistory extends React.PureComponent<P, S> {
   state = {
@@ -30,9 +30,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
   };
 
   componentDidMount() {
-    this.setState({
-      dataSource: [],
-    });
+
   }
 
   accordion = (data: any[]) => {
@@ -73,7 +71,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
   add = () => {
     const { dataSource } = this.state;
     const newD = [...dataSource];
-    newD.push({ id: `NEW${Math.floor(Math.random() * 10000 + 1)}`, ...history });
+    newD.push({ id: `NEW${generateUUID(16)}`, ...history });
     this.setState({ dataSource: newD })
   };
 
@@ -92,7 +90,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
   }
 
   render() {
-    const { dataSource } = this.state;
+    const { dataSource } = this.state;;
     return (
       <div className="page">
         <StepBar current={3} />

@@ -96,7 +96,7 @@ export function getTimeDistance(type: string) {
  * @param radix 基数
  * @returns {string}
  */
-export function generateUUID(len: number, radix: number) {
+export function generateUUID(len: number, radix?: number) {
   const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
   const uuid = [];
   let i;
