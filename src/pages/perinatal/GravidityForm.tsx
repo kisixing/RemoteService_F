@@ -4,23 +4,35 @@
  * @Description: 单次孕次情况表单
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import createDOMForm from 'rc-form/lib/createDOMForm';
 import _ from 'lodash';
 import FormFields from './FormFields';
 
 interface IProps {
+  id: string
   form: any
   fields?: any[]
+  values: object
 }
 
-function GravidityForm({ form, fields = [] }: IProps) {
-  const [dataSource, setDataSource] = useState(fields);
+const GravidityForm = forwardRef(({ id, form, fields = [], values = {} }: IProps, ref: any) => {
+  useImperativeHandle(ref, () => ({
+    form,
+  }));
+
+  const [dataSource, setDataSource] = useState([...fields]);
   // 显示隐藏处理
   useEffect(() => {
     handleData();
+    // form.setFieldsValue({ isBirth: false })
     return () => {};
   }, [form]);
+
+  useEffect(() => {
+    // 初始化赋值
+    form.setFieldsValue({ ...values})
+  }, []);
 
   const handleData = () => {
     const values = form.getFieldsValue([
@@ -64,8 +76,7 @@ function GravidityForm({ form, fields = [] }: IProps) {
       abortionIndex.length && hide(abortionIndex);
       unhealthIndex.length && hide(unhealthIndex);
       currettageIndex.length && hide(currettageIndex);
-    }
-    if (values.isBirth === false) {
+    } else if (values.isBirth === false) {
       hospitalIndex.length && hide(hospitalIndex);
       gestationalWeekIndex.length && hide(gestationalWeekIndex);
       fetalcountIndex.length && hide(fetalcountIndex);
@@ -76,13 +87,24 @@ function GravidityForm({ form, fields = [] }: IProps) {
       abortionIndex.length && show(abortionIndex);
       unhealthIndex.length && show(unhealthIndex);
       currettageIndex.length && show(currettageIndex);
+    } else {
+      hospitalIndex.length && hide(hospitalIndex);
+      gestationalWeekIndex.length && hide(gestationalWeekIndex);
+      fetalcountIndex.length && hide(fetalcountIndex);
+      deliveryWayIndex && hide(deliveryWayIndex);
+      puerperalFeverIndex.length && hide(puerperalFeverIndex);
+      hemorrhageIndex.length && hide(hemorrhageIndex);
+      // 未分娩下
+      abortionIndex.length && hide(abortionIndex);
+      unhealthIndex.length && hide(unhealthIndex);
+      currettageIndex.length && hide(currettageIndex);
     }
   }
 
   // 确定key位置
   const getKeyIndex = (key: string) => {
     const data = _.cloneDeep(dataSource);
-    let index = [];
+    let index: number[] = [];
     for (let i = 0; i < data.length; i++) {
       const children = data[i]['children'];
       for (let j = 0; j < children.length; j++) {
@@ -95,23 +117,23 @@ function GravidityForm({ form, fields = [] }: IProps) {
   };
 
   const show = (array: number[]) => {
-    let r = [...dataSource];
+    const r = [...dataSource];
     r[array[0]]['children'][array[1]]['hide'] = false;
     setDataSource(r);
   };
 
   const hide = (array: number[]) => {
-    let r = [...dataSource];
+    const r = [...dataSource];
     r[array[0]]['children'][array[1]]['hide'] = true;
     setDataSource(r);
   };
 
   return (
     <form>
-      <FormFields form={form} dataSource={dataSource} />
+      <FormFields key={id} form={form} dataSource={dataSource} />
     </form>
   );
-}
+})
 
 
 export default createDOMForm()(GravidityForm);

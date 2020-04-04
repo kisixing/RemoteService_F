@@ -13,9 +13,9 @@ function RadioGroup({ id, data, value, onChange, error }: any) {
     <div className={styles.group}>
       {data.map((item: { label: string; value: any }, index: any) => {
         return (
-          <div key={item.value} className={styles.item}>
+          <div key={`${id}-${item.value.toString()}`} className={styles.item}>
             <input
-              id={item.value.toString()}
+              id={`${id}-${item.value.toString()}`}
               className={classNames(styles.radio, {
                 [styles.dot]: true,
                 [styles.tick]: false,
