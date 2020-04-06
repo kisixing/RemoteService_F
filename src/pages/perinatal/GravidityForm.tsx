@@ -1,108 +1,128 @@
 /*
  * @Author: ZHONG JUN
- * @Date: 2020-03-23 00:08:59
- * @Description: 单次孕次情况表单
+ * @Date: 2020-04-04 18:12:43
+ * @Description: 孕产史列表，弃用
  */
 
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { PureComponent } from 'react';
 import createDOMForm from 'rc-form/lib/createDOMForm';
-import _ from 'lodash';
 import FormFields from './FormFields';
+import FetusComponent from './fetus/FetusComponent';
+import _ from 'lodash';
 
-interface IProps {
-  id: string
+// 读取配置文件
+const configuration = window.configuration;
+const dataSource = _.cloneDeep(configuration.history.data);
+const fetus = configuration.history.data[0]['children'].filter((e: any) => e.id === 'fetus');
+
+interface P {
+  loading?: boolean;
   form: any
-  fields?: any[]
+  id: string
   values: object
 }
 
-const GravidityForm = forwardRef(({ id, form, fields = [], values = {} }: IProps, ref: any) => {
-  useImperativeHandle(ref, () => ({
-    form,
-  }));
+interface S {
+  visible: boolean
+};
 
-  const [dataSource, setDataSource] = useState([...fields]);
-  // 显示隐藏处理
-  useEffect(() => {
-    handleData();
-    // form.setFieldsValue({ isBirth: false })
-    return () => {};
-  }, [form]);
+class GravidityForm extends PureComponent<P, S> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false
+    }
+  }
 
-  useEffect(() => {
-    // 初始化赋值
-    form.setFieldsValue({ ...values})
-  }, []);
-
-  const handleData = () => {
-    const values = form.getFieldsValue([
+  componentDidMount() {
+    this.initValue();
+  }
+  componentWillReceiveProps() {
+    const values = this.props.form.getFieldsValue([
       'isBirth',
+      'fetalcount'
     ]);
     console.log('是否分娩', values);
     //////////////////////////////////////////////////////////////
     //////////////// 分娩情况下的表单 ///////////////////////////////
     //////////////////////////////////////////////////////////////
     // 分娩医院
-    const hospitalIndex = getKeyIndex('hospital');
+    const hospitalIndex = this.getKeyIndex('hospital');
     // 分娩孕周
-    const gestationalWeekIndex = getKeyIndex('gestationalWeek');
+    const gestationalWeekIndex = this.getKeyIndex('gestationalWeek');
     // 分娩胎数
-    const fetalcountIndex = getKeyIndex('fetalcount');
+    const fetalcountIndex = this.getKeyIndex('fetalcount');
     // 分娩方式
-    const deliveryWayIndex = getKeyIndex('deliveryWay');
+    const deliveryWayIndex = this.getKeyIndex('deliveryWay');
     // 产溽热
-    const puerperalFeverIndex = getKeyIndex('puerperalFever');
+    const puerperalFeverIndex = this.getKeyIndex('puerperalFever');
     // 产后出血
-    const hemorrhageIndex = getKeyIndex('hemorrhage');
+    const hemorrhageIndex = this.getKeyIndex('hemorrhage');
+
     //////////////////////////////////////////////////////////////
     //////////////// 未分娩情况下的表单 ///////////////////////////////
     //////////////////////////////////////////////////////////////
     // 流产方式
-    const abortionIndex = getKeyIndex('abortion');
+    const abortionIndex = this.getKeyIndex('abortion');
     // 不良生育史
-    const unhealthIndex = getKeyIndex('unhealth');
+    const unhealthIndex = this.getKeyIndex('unhealth');
     // 是否清宫
-    const currettageIndex = getKeyIndex('currettage');
+    const currettageIndex = this.getKeyIndex('currettage');
 
-    // 显示隐藏处理
+    // 根据是否分娩isBirth显示隐藏处理
     if (values.isBirth === true) {
-      hospitalIndex && show(hospitalIndex);
-      gestationalWeekIndex.length && show(gestationalWeekIndex);
-      fetalcountIndex.length && show(fetalcountIndex);
-      deliveryWayIndex && show(deliveryWayIndex);
-      puerperalFeverIndex.length && show(puerperalFeverIndex);
-      hemorrhageIndex.length && show(hemorrhageIndex);
+      hospitalIndex && this.show(hospitalIndex);
+      gestationalWeekIndex.length && this.show(gestationalWeekIndex);
+      fetalcountIndex.length && this.show(fetalcountIndex);
+      deliveryWayIndex && this.show(deliveryWayIndex);
+      puerperalFeverIndex.length && this.show(puerperalFeverIndex);
+      hemorrhageIndex.length && this.show(hemorrhageIndex);
       // 未分娩下
-      abortionIndex.length && hide(abortionIndex);
-      unhealthIndex.length && hide(unhealthIndex);
-      currettageIndex.length && hide(currettageIndex);
+      abortionIndex.length && this.hide(abortionIndex);
+      unhealthIndex.length && this.hide(unhealthIndex);
+      currettageIndex.length && this.hide(currettageIndex);
     } else if (values.isBirth === false) {
-      hospitalIndex.length && hide(hospitalIndex);
-      gestationalWeekIndex.length && hide(gestationalWeekIndex);
-      fetalcountIndex.length && hide(fetalcountIndex);
-      deliveryWayIndex && hide(deliveryWayIndex);
-      puerperalFeverIndex.length && hide(puerperalFeverIndex);
-      hemorrhageIndex.length && hide(hemorrhageIndex);
+      hospitalIndex.length && this.hide(hospitalIndex);
+      gestationalWeekIndex.length && this.hide(gestationalWeekIndex);
+      fetalcountIndex.length && this.hide(fetalcountIndex);
+      deliveryWayIndex && this.hide(deliveryWayIndex);
+      puerperalFeverIndex.length && this.hide(puerperalFeverIndex);
+      hemorrhageIndex.length && this.hide(hemorrhageIndex);
       // 未分娩下
-      abortionIndex.length && show(abortionIndex);
-      unhealthIndex.length && show(unhealthIndex);
-      currettageIndex.length && show(currettageIndex);
+      abortionIndex.length && this.show(abortionIndex);
+      unhealthIndex.length && this.show(unhealthIndex);
+      currettageIndex.length && this.show(currettageIndex);
     } else {
-      hospitalIndex.length && hide(hospitalIndex);
-      gestationalWeekIndex.length && hide(gestationalWeekIndex);
-      fetalcountIndex.length && hide(fetalcountIndex);
-      deliveryWayIndex && hide(deliveryWayIndex);
-      puerperalFeverIndex.length && hide(puerperalFeverIndex);
-      hemorrhageIndex.length && hide(hemorrhageIndex);
+      hospitalIndex.length && this.hide(hospitalIndex);
+      gestationalWeekIndex.length && this.hide(gestationalWeekIndex);
+      fetalcountIndex.length && this.hide(fetalcountIndex);
+      deliveryWayIndex && this.hide(deliveryWayIndex);
+      puerperalFeverIndex.length && this.hide(puerperalFeverIndex);
+      hemorrhageIndex.length && this.hide(hemorrhageIndex);
       // 未分娩下
-      abortionIndex.length && hide(abortionIndex);
-      unhealthIndex.length && hide(unhealthIndex);
-      currettageIndex.length && hide(currettageIndex);
+      abortionIndex.length && this.hide(abortionIndex);
+      unhealthIndex.length && this.hide(unhealthIndex);
+      currettageIndex.length && this.hide(currettageIndex);
+    }
+
+    // 根据是否有胎数fetalcount显示新生儿情况表单
+    if (values.isBirth && values.fetalcount) {
+      this.setState({ visible: true })
+    } else {
+      this.setState({ visible: false })
     }
   }
 
+  initValue = () => {
+    const { form, values } = this.props;
+    form.setFieldsValue({ isBirth: true });
+    setTimeout(() => {
+      form.setFieldsValue({ ...values, fetalcount: 1 });
+    }, 200);
+  }
+
   // 确定key位置
-  const getKeyIndex = (key: string) => {
+  getKeyIndex = (key: string) => {
     const data = _.cloneDeep(dataSource);
     let index: number[] = [];
     for (let i = 0; i < data.length; i++) {
@@ -116,24 +136,33 @@ const GravidityForm = forwardRef(({ id, form, fields = [], values = {} }: IProps
     return index;
   };
 
-  const show = (array: number[]) => {
-    const r = [...dataSource];
-    r[array[0]]['children'][array[1]]['hide'] = false;
-    setDataSource(r);
+  show = (array: number[]) => {
+    dataSource[array[0]]['children'][array[1]]['hide'] = false;
   };
 
-  const hide = (array: number[]) => {
-    const r = [...dataSource];
-    r[array[0]]['children'][array[1]]['hide'] = true;
-    setDataSource(r);
+  hide = (array: number[]) => {
+    dataSource[array[0]]['children'][array[1]]['hide'] = true;
   };
 
-  return (
-    <form>
-      <FormFields key={id} form={form} dataSource={dataSource} />
-    </form>
-  );
-})
-
+  render() {
+    const { form } = this.props;
+    const { visible } = this.state;
+    console.log('visible', visible);
+    return (
+      <form>
+        <FormFields form={form} dataSource={dataSource} />
+        {visible ? form.getFieldDecorator('fetus', {
+            initialValue: [],
+            rules: [{ required: true, message: '请填写完整的胎儿信息！' }],
+          })(
+            <FetusComponent key={'fetus'} required={true} data={fetus[0]['data']}>
+              {'胎儿信息'}
+            </FetusComponent>,
+          ) : null
+        }
+      </form>
+    )
+  }
+}
 
 export default createDOMForm()(GravidityForm);

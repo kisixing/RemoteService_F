@@ -1,5 +1,6 @@
 import React from 'react';
 import Touchable, { ITouchable } from 'rc-touchable';
+// import Touchable from 'rmc-feedback';
 
 interface Iprops extends ITouchable {
   children: React.ReactNode

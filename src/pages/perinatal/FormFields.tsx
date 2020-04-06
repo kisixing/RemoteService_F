@@ -15,6 +15,7 @@ import {
   Switch,
   Radio,
   MixPicker,
+  MultiplePicker,
   AddressPicker,
 } from '@/components/antd-mobile';
 import styles from './FormFields.less';
@@ -115,6 +116,15 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           <MixPicker key={id} required={required} placeholder={placeholder} {...rest}>
             {label}
           </MixPicker>,
+        );
+      case 'multiple-picker':
+        return getFieldDecorator(id, {
+          initialValue: value,
+          rules: [{ required: required, message: `${placeholder}!` }],
+        })(
+          <MultiplePicker key={id} required={required} placeholder={placeholder} {...rest}>
+            {label}
+          </MultiplePicker>,
         );
       case 'address-picker':
         return getFieldDecorator(id, {

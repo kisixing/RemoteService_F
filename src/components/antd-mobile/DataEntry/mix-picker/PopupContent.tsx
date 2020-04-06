@@ -151,15 +151,15 @@ function PopupContent({ data, value = [], multiple = false, placeholder, onChang
       <div className={styles.wrapper}>
         {dataSource &&
           dataSource.length > 0 &&
-          dataSource.map(({ value, selected }) => (
-            <div
-              key={value}
-              className={classNames(styles.item, { [styles.selected]: selected })}
-              onClick={() => handleSelect({ value, selected })}
-            >
-              {value}
-            </div>
-          ))}
+            dataSource.map(({ value, selected }) => (
+              <div
+                key={value}
+                className={classNames(styles.item, { [styles.selected]: selected })}
+                onClick={() => handleSelect({ value, selected })}
+              >
+                {value}
+              </div>
+            ))}
       </div>
       <div className={styles.textarea}>
         <TextareaItem

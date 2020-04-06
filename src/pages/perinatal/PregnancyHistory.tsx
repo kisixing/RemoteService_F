@@ -8,22 +8,27 @@ import React from 'react';
 import { connect } from 'dva';
 import Router from 'umi/router';
 import _ from 'lodash';
-import { generateUUID } from '@/utils';
+import { generateUUID, getKeys } from '@/utils';
 import { Accordion, Modal, Toast } from 'antd-mobile';
 import { Button, IconFont } from '@/components/antd-mobile';
+import { getPregnancy, updatePregnancy } from '@/services/user';
 import StepBar from './StepBar';
 import GravidityForm from './GravidityForm';
 import { ConnectState, ConnectProps } from '@/models/connect';
-import styles from './styles.less'
+import styles from './styles.less';
 
 // 读取配置文件
 const configuration = window.configuration;
-// 拷贝单个孕产史信息数据结构
-const history = _.cloneDeep(configuration.history);
+// 基本信息配置
+// const originalDataSource = configuration.pregnancy.data; // _.cloneDeep()
+const history = configuration.history.data;
+const keys = getKeys(history);
 
 interface P {
   loading?: boolean
   dispatch: any,
+  form: any
+  currentPregnancy?: any
 }
 
 interface S {};
@@ -36,12 +41,32 @@ class PregnancyHistory extends React.PureComponent<P, S> {
 
   state = {
     dataSource: [],
-    activeKey: []
+    activeKey: [],
+    values: []
   };
 
   componentDidMount() {
-
+    const { currentPregnancy: { id } } = this.props;
+    this.initValue(id)
   }
+
+  initValue = (id: string) => {
+    getPregnancy(id).then((res: any) => {
+      if (res && res.id) {
+        const values = res.pregnancyHistories || [];
+        console.log('孕产史信息初始值：', values);
+        // 初始化Accordion
+        let ids = values.map((e: any) => e.id);
+        if (!values.length) {
+          ids = [];
+        }
+        this.setState({
+          values,
+          dataSource: ids
+        });
+      }
+    });
+  };
 
   accordion = (data: any[]) => {
     const activeKey = data.map(e => e.id);
@@ -71,9 +96,9 @@ class PregnancyHistory extends React.PureComponent<P, S> {
               }
             >
               <GravidityForm
-                key={item.id}
+                id={item.id}
                 wrappedComponentRef={(inst: any) => this[`formRef${item.id}`] = inst}
-                fields={item.data}
+                values={this.state.values[item.id] || {}}
               />
             </Accordion.Panel>
           );
@@ -90,7 +115,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
   add = () => {
     const { dataSource } = this.state;
     const newD = [...dataSource];
-    newD.push({ id: `NEW${generateUUID(16)}`, data: [...history.data ] });
+    newD.push({ id: `NEW${generateUUID(16)}` });
     this.setState({ dataSource: newD })
   };
 
@@ -133,7 +158,11 @@ class PregnancyHistory extends React.PureComponent<P, S> {
 
   getValues = (inst: string, index: number) => {
     let result: object | boolean = {};
-    this[inst].form.validateFieldsAndScroll((error: any[], values: any) => {
+    console.log('object', this[inst]);
+    // function无状态组件
+    // this[inst].form.validateFieldsAndScroll((error: any[], values: any) => {
+    // CustomizedForm
+    this[inst].props.form.validateFieldsAndScroll((error: any[], values: any) => {
       if (error) {
         Toast.info(`孕册记录${index + 1}未填写完整`, 2)
         return result = false;
@@ -175,7 +204,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
         )}
         <div className="bottom_button">
           <Button type="primary" className={styles.addButton} onClick={this.add}>
-            <IconFont type="add2" />
+            <IconFont type="add" size=".54rem" />
           </Button>
           <Button type="primary" disabled={dataSource && !dataSource.length} onClick={this.onSubmit}>
             保存

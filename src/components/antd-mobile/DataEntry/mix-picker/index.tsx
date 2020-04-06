@@ -19,7 +19,7 @@ const CustomItem = (props: any) => {
             color: props.extra && props.extra.includes('请') ? '#bbb' : '#000',
           }}
         >
-          {typeof props.extra === 'object' ? props.extra.filter(e => !!e).join(',') : props.extra}
+          {typeof props.extra === 'object' ? props.extra.filter((e: any) => !!e).join(',') : props.extra}
         </span>
       }
       onClick={props.onClick}

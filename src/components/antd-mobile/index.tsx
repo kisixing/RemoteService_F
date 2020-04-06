@@ -14,6 +14,7 @@ import DatePicker from './dataEntry/date-picker';
 import Switch from './dataEntry/switch';
 import Radio from './dataEntry/radio-picker';
 import MixPicker from './dataEntry/mix-picker';
+import MultiplePicker from './dataEntry/multiple-picker';
 import AddressPicker from './dataEntry/address-picker';
 
 export {
@@ -34,5 +35,6 @@ export {
   Switch,
   Radio,
   MixPicker,
+  MultiplePicker,
   AddressPicker,
 };

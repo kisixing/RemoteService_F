@@ -125,7 +125,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
   // 确定key位置
   getKeyIndex = (key: string) => {
     const data = _.cloneDeep(dataSource);
-    let index = [];
+    let index: number[] = [];
     for (let i = 0; i < data.length; i++) {
       const children = data[i]['children'];
       for (let j = 0; j < children.length; j++) {
@@ -159,7 +159,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
           values.sureEdd = EDD;
         }
         console.log('本孕信息初始值：', values);
-        form.setFieldsValue({ ...values });
+        form.setFieldsValue({ ...values, smoke: true });
         this.setState({ values });
       }
     });

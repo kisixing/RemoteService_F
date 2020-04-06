@@ -6,11 +6,11 @@
 import React from 'react';
 
 const IconFont = (props: any )=> {
-  const { type, style, size = '.44rem', className } = props;
+  const { type, style, size = '.44rem', color, className } = props;
   // am-icon
   return (
     <i
-      style={{ fontSize: size, lineHeight: 1, ...style }}
+      style={{ fontSize: size, lineHeight: 1, color: color, ...style }}
       className={`iconfont icon-${type} ${className}`}
     />
   );

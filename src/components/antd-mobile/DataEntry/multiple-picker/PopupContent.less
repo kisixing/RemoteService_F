@@ -10,28 +10,33 @@
   padding-top: .2rem;
 }
 
-.item {
-  box-sizing: border-box;
-  min-width: calc((100vw - 5 * 0.2rem) / 4);
-  max-width: calc((100vw - 3 * 0.2rem) / 2);
-  height: .72rem;
-  line-height: .72rem;
-  font-size: @font-size-base;
-  text-align: center;
-  border-radius: .36rem;
-  border: 1px solid #e6e6e6;
-  margin: 0 0 0.2rem 0.2rem;
-  padding: 0 .18rem;
-  color: #333;
+.list {
+  padding-top: .16rem;
 }
 
-.selected {
-  border-color: @primary-color;
-  background-color: @primary-color;
-  color: #fff;
+.item {
+  display: inline-block;
+  box-sizing: border-box;
+  min-width: calc((100vw - 5 * 0.16rem) / 4);
+  max-width: calc((100vw - 3 * 0.16rem) / 2);
+  height: .68rem;
+  line-height: .68rem;
+  font-size: @font-size-base;
+  text-align: center;
+  border-radius: .34rem;
+  border: 1px solid #e6e6e6;
+  margin: 0 0 0.16rem 0.16rem;
+  color: #333;
+
+  &.selected {
+    border-color: @primary-color;
+    background-color: @primary-color;
+    color: #fff;
+  }
 }
 
 .textarea {
+  height: 1.14rem;
   border-top: 1px solid #ddd;
 
   textarea {

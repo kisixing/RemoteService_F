@@ -42,7 +42,7 @@
       height: 0.36rem;
       line-height: 0.36rem;
       border-width: 2PX;
-      border-color: #999;;
+      border-color: #999;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -63,6 +63,11 @@
 
 .popup {
   :global {
+    .rmc-picker-popup-header {
+      border-bottom: 1px solid #e6e6e6;
+      background-image: none;
+    }
+
     .rmc-picker-popup-item {
       color: @primary-color;
       font-size: @font-size-base + 2;
