@@ -10,14 +10,18 @@ import PageLoading from '@/components/Loader';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 
-function index(props:any) {
-  const {pregnancy} = props;
+const TYPE_NAME = 'XICCO-aVS02';
+
+function index(props: any) {
+  const { pregnancy } = props;
   const [loading, setLoading] = React.useState(true);
   // 是否绑定设备， true已绑定 false未绑定
   const [state, setState] = React.useState(false);
   // const [state, setState] = React.useState(true);
   React.useEffect(() => {
-    const isBind = pregnancy.devices && pregnancy.devices.length !== 0;
+    // 需要判断设备的type
+    const isBind = pregnancy.devices && pregnancy.devices.length !== 0 && pregnancy.devices.findIndex((v: any) => v.type === TYPE_NAME) !== -1;
+
     let a = setTimeout(() => {
       setState(isBind);
       setLoading(false);
@@ -36,6 +40,6 @@ function index(props:any) {
   return <PageLoading fullScreen spinning />;
 }
 
-export default connect(({global}: ConnectState) => ({
+export default connect(({ global }: ConnectState) => ({
   pregnancy: global.currentPregnancy
 }))(index);

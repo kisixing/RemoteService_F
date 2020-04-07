@@ -20,7 +20,6 @@ function PopupContent({ data, value = [], multiple = false, placeholder, onChang
   useEffect(() => {
     transformData(data, value);
     separatedData(data, value);
-    separatedData(data, value);
   }, []);
 
   const transformData = (data = [], value = []) => {

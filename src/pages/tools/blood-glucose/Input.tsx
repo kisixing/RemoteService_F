@@ -34,14 +34,15 @@ const tabs:Array<any> = [
 ];
 
 // 数据结构
+// isEdited 用于对于判断是否为服务器返回的数据
 const json:Array<any> = [
-  { key: PERIOD_CODE.FASTING, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '' },
-  { key: PERIOD_CODE.AFTER_B , bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '' },
-  { key: PERIOD_CODE.BEFORE_L, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '' },
-  { key: PERIOD_CODE.AFTER_L, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '' },
-  { key: PERIOD_CODE.BEFORE_D, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '' },
-  { key: PERIOD_CODE.AFTER_D, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '' },
-  { key: PERIOD_CODE.BEFORE_S, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '' }
+  { key: PERIOD_CODE.FASTING, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '', isEdited: false, id: -1 },
+  { key: PERIOD_CODE.AFTER_B , bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '', isEdited: false, id: -1 },
+  { key: PERIOD_CODE.BEFORE_L, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '', isEdited: false, id: -1 },
+  { key: PERIOD_CODE.AFTER_L, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '', isEdited: false, id: -1 },
+  { key: PERIOD_CODE.BEFORE_D, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '', isEdited: false, id: -1 },
+  { key: PERIOD_CODE.AFTER_D, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '', isEdited: false, id: -1 },
+  { key: PERIOD_CODE.BEFORE_S, bloodGlucose: '', isInsulin: null, quantity: '', dietaryStatus: '', exercise: '', isEdited: false, id: -1 }
 ];
 
 const fontSize = document.getElementsByTagName('html')[0].style.fontSize;
@@ -61,7 +62,6 @@ function BloodGlucoseInput(props: {userid: number}) {
     key: 0
   });
 
-  const [id,setId] = React.useState(-1);
 
   useEffect(() => {
     let obj = {};
@@ -85,7 +85,7 @@ function BloodGlucoseInput(props: {userid: number}) {
           newValues.splice(i,1,tar);
           return newValues;
         });
-        setId(Number(obj['id']));
+        // setId(Number(obj['id']));
         setActivatedTab(Number(obj['period']));
         setDate(new Date(obj['timestamp']));
       }else{
@@ -139,7 +139,10 @@ function BloodGlucoseInput(props: {userid: number}) {
             newValues[v.period].quantity = Number(v.insulinnote);
             newValues[v.period].exercise = v.exercise;
             newValues[v.period].dietaryStatus = v.diet;
+            newValues[v.period].isEdited = true;
+            newValues[v.period].id = v.id
           });
+          console.log(newValues);
           setValues(newValues);
         })
       }
@@ -162,44 +165,60 @@ function BloodGlucoseInput(props: {userid: number}) {
       }
     }
     let reqFlag = true;
-    if(id !== -1){
-      console.log(current);
-      // const reqData = {values.find((v:any) => v.)}
-      const reqData = {
-        timestamp: d,
-        result: Number(current.bloodGlucose),
-        pregnancy:{id: props.userid},
-        period: current.key,
-        insulin: current.isInsulin,
-        insulinnote: Number(current.quantity),
-        diet: current.dietaryStatus,
-        exercise: current.exercise,
-        status: 0,
-        id:id
-      };
-      const res = await editBloodGlucose(reqData);
-      console.log(res);
-      if(res.response.status >= 200 && res.response.status < 300){
-        // 合法
-        Toast.info(`血糖信息修改成功`);
-        Router.push('/signs/record?type=blood-glucose');
-      }
-    }else{
+    // if(id !== -1){
+    //   console.log(current);
+    //   // const reqData = {values.find((v:any) => v.)}
+    //   const reqData = {
+    //     timestamp: d,
+    //     result: Number(current.bloodGlucose),
+    //     pregnancy:{id: props.userid},
+    //     period: current.key,
+    //     insulin: current.isInsulin,
+    //     insulinnote: Number(current.quantity),
+    //     diet: current.dietaryStatus,
+    //     exercise: current.exercise,
+    //     status: 0,
+    //     id:id
+    //   };
+    //   const res = await editBloodGlucose(reqData);
+    //   console.log(res);
+    //   if(res.response.status >= 200 && res.response.status < 300){
+    //     // 合法
+    //     Toast.info(`血糖信息修改成功`);
+    //     Router.push('/signs/record?type=blood-glucose');
+    //   }
+    // }else{
       for(let i = 0 ; i < values.length ; i++){
         if(!values[i].bloodGlucose){
           continue;
         }
-        const res = await setBloodGlucose({
-          timestamp: d,
-          result: Number(values[i].bloodGlucose),
-          pregnancy:{id: props.userid},
-          period: values[i].key,
-          insulin: values[i].isInsulin,
-          insulinnote: Number(values[i].quantity),
-          diet: values[i].dietaryStatus,
-          exercise: values[i].exercise,
-          status: 0
-        });
+        if(values[i].isEdited){
+          var res = await editBloodGlucose({
+            timestamp: d,
+            result: Number(values[i].bloodGlucose),
+            pregnancy:{id: props.userid},
+            period: values[i].key,
+            insulin: values[i].isInsulin,
+            insulinnote: Number(values[i].quantity),
+            diet: values[i].dietaryStatus,
+            exercise: values[i].exercise,
+            status: 0,
+            id: values[i].id
+          });
+        }else{  
+          var res = await setBloodGlucose({
+            timestamp: d,
+            result: Number(values[i].bloodGlucose),
+            pregnancy:{id: props.userid},
+            period: values[i].key,
+            insulin: values[i].isInsulin,
+            insulinnote: Number(values[i].quantity),
+            diet: values[i].dietaryStatus,
+            exercise: values[i].exercise,
+            status: 0
+          });
+        }
+        await console.log(res);
         if(res.response.status >= 200 && res.response.status < 300){
           // 合法
         }else {
@@ -211,7 +230,7 @@ function BloodGlucoseInput(props: {userid: number}) {
         Toast.info(`血糖信息保存成功`);
         Router.push('/signs/record?type=blood-glucose');
       }
-    }
+    
   };
 
   const onChange = (key: string, value: any) => {
@@ -276,7 +295,7 @@ function BloodGlucoseInput(props: {userid: number}) {
                 // TODO 暂时以2~9为区间
                 rotate={0}
                 strokeColor="#ffbe2d"
-                percent={(Number(current.bloodGlucose)  ) * 100 / 7}
+                percent={(Number(current.bloodGlucose) - 2 ) * 100 / 7}
                 textArray={['2','3','4','5','6','7','8','9']}
               />
             </div>

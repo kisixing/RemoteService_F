@@ -738,8 +738,16 @@ const pregnancy = {
           data: ['无', '白酒', '啤酒', '葡萄酒', '药酒'],
         },
         {
+          id: 'partnerAlcoholNote',
+          label: '伴侣饮酒量',
+          suffix: 'ml/天',
+          type: 'text-input',
+          charactertype: 'digit',
+          required: true,
+        },
+        {
           id: 'partnerABO',
-          label: '血型',
+          label: '伴侣血型',
           type: 'radio',
           required: true,
           data: [
@@ -748,14 +756,6 @@ const pregnancy = {
             { label: 'AB型', value: 'AB' },
             { label: 'O型', value: 'O' },
           ],
-        },
-        {
-          id: 'partnerAlcoholNote',
-          label: '伴侣饮酒量',
-          suffix: 'ml/天',
-          type: 'text-input',
-          charactertype: 'digit',
-          required: true,
         },
         {
           id: 'partnerDisease',

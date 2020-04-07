@@ -22,6 +22,7 @@ import styles from './PopupContent.less';
 
 interface IProps {
   dataSource?: string[]
+  onChange?: (value: any) => void
   onTabsChange?: (value: any) => void
   onTextChange?: (value: string) => void
   onDismiss?: () => void
@@ -30,19 +31,27 @@ interface IProps {
   textValue?: string
 }
 
-function PopupContent({ dataSource = [], tabsvalue = [], textValue = '', placeholder, onDismiss = () => {}, onChange = () => {} }: IProps) {
+function PopupContent({
+  dataSource = [],
+  tabsvalue = [],
+  textValue = '',
+  placeholder,
+  onDismiss = () => {},
+  onTabsChange = () => {},
+  onTextChange = () => {},
+  onChange = () => {},
+}: IProps) {
   const inputRef = useRef(null);
   const tabs = [{ label: '无', value: 'nothing' }, ...dataSource];
   const [selectedTags, setSelectedTags] = useState<any>(tabs);
   const [text, setText] = useState(textValue);
 
-  useEffect(() => {
-
-  }, [])
+  useEffect(() => {}, []);
 
   const handleTagSelect = (value: string, selected: boolean, index: number) => {
     if (value === 'nothing') {
       setSelectedTags([{ label: '无', value: 'nothing', selected: !selected }, ...dataSource]);
+      onChange([]);
       onDismiss();
     } else if (value === 'other') {
       const t: any = [...tabs];
@@ -54,12 +63,12 @@ function PopupContent({ dataSource = [], tabsvalue = [], textValue = '', placeho
     } else {
       const t = [...selectedTags];
       const item = t[index];
-      t[0] = { label: '无', value: 'nothing', selected: false};
-      t[t.length - 1] = { label: '其他', value: 'other', selected: false};
+      t[0] = { label: '无', value: 'nothing', selected: false };
+      t[t.length - 1] = { label: '其他', value: 'other', selected: false };
       t[index] = { ...item, selected: !selected };
       setSelectedTags(t);
     }
-  }
+  };
 
   const handleTextChange = (value: any) => setText(value);
 
@@ -70,21 +79,20 @@ function PopupContent({ dataSource = [], tabsvalue = [], textValue = '', placeho
       <ul className={styles.list}>
         {selectedTags &&
           selectedTags.length > 0 &&
-            selectedTags.map(({ value, label, selected }: any, index: number) => (
-              <TouchFeedback key={value} activeClassName="rmc-picker-popup-item-active">
-                <li
-                  style={{ fontSize: label.length > 4 ? '.24rem' : '.26rem' }}
-                  className={classNames(styles.item, { [styles.selected]: selected })}
-                  onClick={() => handleTagSelect(value, selected, index)}
-                >
-                  {label}
-                </li>
-              </TouchFeedback>
-
-            ))}
+          selectedTags.map(({ value, label, selected }: any, index: number) => (
+            <TouchFeedback key={value} activeClassName="rmc-picker-popup-item-active">
+              <li
+                style={{ fontSize: label.length > 4 ? '.24rem' : '.26rem' }}
+                className={classNames(styles.item, { [styles.selected]: selected })}
+                onClick={() => handleTagSelect(value, selected, index)}
+              >
+                {label}
+              </li>
+            </TouchFeedback>
+          ))}
       </ul>
       <div className={styles.textarea} style={{ visibility: visible ? 'visible' : 'hidden' }}>
-        {visible? (
+        {visible ? (
           <TextareaItem
             ref={inputRef}
             rows={2}
@@ -92,10 +100,10 @@ function PopupContent({ dataSource = [], tabsvalue = [], textValue = '', placeho
             value={text}
             onChange={handleTextChange}
           />
-        ) : null }
+        ) : null}
       </div>
     </div>
-  )
+  );
 }
 
 export default PopupContent

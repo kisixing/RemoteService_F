@@ -159,7 +159,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
           values.sureEdd = EDD;
         }
         console.log('本孕信息初始值：', values);
-        form.setFieldsValue({ ...values, smoke: true });
+        form.setFieldsValue({ ...values, smoke: true, smokeNote: 10 });
         this.setState({ values });
       }
     });
