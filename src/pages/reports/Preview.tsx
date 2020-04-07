@@ -17,8 +17,8 @@ import styles from './Preview.less';
 const options = {
   // 有pdf不支持的字体格式，可以通过引入pdf.js的字体来解决该问题
   // 1.cdn --> https://cdn.jsdelivr.net/npm/pdfjs-dist@2.1.266/cmaps/
-  // 2.本地 --> /pdfjs-dist/cmaps/
-  cMapUrl: '/pdfjs-dist/cmaps/',
+  // 2.本地 --> ./pdfjs-dist/cmaps/
+  cMapUrl: './pdfjs-dist/cmaps/',
   cMapPacked: true,
 };
 const SAMPLE = 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';

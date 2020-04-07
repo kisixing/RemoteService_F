@@ -10,8 +10,9 @@ import routes from './router.config';
 const config: IConfig = {
   treeShaking: true,
   history: 'browser', // 'hash'部署到非根目录 会有url/#/
-  base: '/',
-  publicPath: '/',
+  base: '/webapp/',
+  publicPath: './',
+  outputPath: './dist/webapp',
   hash: true, // 开启 hash 文件后缀
   routes: routes,
   minimizer: 'terserjs',

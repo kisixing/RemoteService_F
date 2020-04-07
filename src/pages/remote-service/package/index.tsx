@@ -43,7 +43,7 @@ function Packages({ dispatch, packages }: PackageProps) {
           <Touchable key={item.id}>
             <div className={styles.card} onClick={() => onClick(item)}>
               <div className={styles.thumbnail}>
-                <img src={`/images/slice/pic_${Math.floor(Math.random() * 3 + 1)}.png`} />
+                <img src={`./images/slice/pic_${Math.floor(Math.random() * 3 + 1)}.png`} />
               </div>
               <div className={styles.content}>
                 <div className={styles.first}>

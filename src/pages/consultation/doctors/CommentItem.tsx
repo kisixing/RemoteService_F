@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { Rate } from 'antd';
+import pic from '../../../assets/icons/boy.png';
 import styles from './CommentItem.less';
 
 interface IProps {
@@ -25,7 +26,7 @@ export default function CommentItem({
   return (
     <div className={styles.item}>
       <div className={styles.thumbnail}>
-        <img alt={name} src={thumbnail || '/images/icon/girl.png'} />
+        <img alt={name} src={thumbnail || pic} />
       </div>
       <div className={styles.content}>
         <div className={styles.header}>

@@ -31,7 +31,7 @@ function Card({ data = {}, hideOverPrint, hideList, onClick = () => {} }: any) {
           className={styles.overprint}
           style={{
             display: `${hideOverPrint ? 'none' : 'inline-block'}`,
-            backgroundImage: `url(/images/icon/overprint_${!!data.state ? data.state : 1}@3x.png)`,
+            backgroundImage: `url(./images/icon/overprint_${!!data.state ? data.state : 1}@3x.png)`,
           }}
         />
       </div>

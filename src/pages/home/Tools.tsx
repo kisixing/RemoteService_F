@@ -53,7 +53,7 @@ function Item({ dataSource, index }: ItemProps) {
           marginRight: index % ROW === 0 ? 0 : `calc((100% - 5*${width}rem) / (${ROW} - 1))`
         }}
       >
-        <div className={styles.icon} style={{ backgroundImage: `url(/images/icon/${dataSource.icon})` }} />
+        <div className={styles.icon} style={{ backgroundImage: `url(./images/icon/${dataSource.icon})` }} />
         <div className={styles.label}>{dataSource.label}</div>
       </div>
 
