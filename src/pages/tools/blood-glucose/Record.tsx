@@ -256,7 +256,7 @@ function BloodGlucoseRecord(props: { userid: number }) {
     for(let i = 0; i < listData.length; i++) {
       let isFind = false;
       for(let j = 0 ; j < tarData.length ; j++){
-        if(listData[i].timestamp === tarData[j].timestamp){
+        if(listData[i].timestamp.slice(0,10) === tarData[j].timestamp.slice(0,10)){
           tarData[j].children.push({result: listData[i].result, period: listData[i].period});
           isFind = true;
         }
@@ -289,7 +289,7 @@ function BloodGlucoseRecord(props: { userid: number }) {
             item.children.map((v,index) => (
               <div key={index}>
                 <div className={styles.period}><span>{PERIOD_TEXT[v.period]}</span></div>
-                <div><span>{item.result} mmol/L</span></div>
+                <div><span>{v.result} mmol/L</span></div>
                 <div>
                   {item.period === PERIOD_CODE.FASTING || item.period === PERIOD_CODE.BEFORE_S ? (
                     <div>

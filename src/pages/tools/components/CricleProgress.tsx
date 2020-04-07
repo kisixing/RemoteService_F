@@ -55,7 +55,7 @@ export default function CircleProgress(props: CircleProgressProps) {
       const currentRadian = lineRadian/(textArray.length-1) * i + startAngle;
       const cX = (radius-35) * Math.cos(currentRadian) + width/2;
       const cY = (radius-35) * Math.sin(currentRadian) + height/2;
-      ctx.font = "40px Arial";
+      ctx.font = "30px Arial";
       ctx.fillStyle = "#C8C8C8";
       ctx.textAlign = "center";
       ctx.fillText(textArray[i],cX,cY);
