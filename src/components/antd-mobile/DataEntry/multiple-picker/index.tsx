@@ -42,7 +42,7 @@ interface IProps {
   data: string[]
   value?: any[]
   valueForm?: 'string' | 'array'
-  onChange: () => void
+  onChange: any
   placeholder?: string
 }
 
@@ -63,7 +63,13 @@ function MultiplePicker({ required, disabled, children, data, value = [], placeh
     setVisible(false)
   };
 
-  const onDismiss = () => setVisible(false);
+  const onDismiss = (change: boolean | undefined = true) => {
+    setVisible(false);
+    if (change) {
+      setTextValue('');
+      onChange([]);
+    }
+  };
 
   return (
     <Popup
