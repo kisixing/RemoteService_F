@@ -13,13 +13,17 @@ export default (props: IProps) => {
     dataSource = [],
     loading
   } = props;
+  console.log('object', dataSource);
 
   if (loading) {
     return (
       <div className={styles['loading-container']}>
-        <ActivityIndicator color="#FFBE2D" text="正在加载..." />
+        <ActivityIndicator text="正在加载..." />
       </div>
     );
+  }
+  if (!dataSource || !dataSource.length) {
+    return <div className={styles.empty}>暂无内容...</div>;
   }
   return (
     <List className={styles.list}>
