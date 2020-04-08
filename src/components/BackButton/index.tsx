@@ -29,8 +29,8 @@ export default function BackButton({ children, route, type = 'back' }: Iprops) {
     return Router.goBack();
   };
   return (
-    <Touchable delayPressOut={0} onPress={onPress}>
-      <div className={styles.wrapper}>
+    <Touchable>
+      <div className={styles.wrapper} onClick={onPress}>
         <span className={styles.push}>{children || '返回'}</span>
         {redirect && <Redirect to="/" />}
       </div>

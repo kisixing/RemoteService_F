@@ -64,14 +64,14 @@ function Home(props: IProps) {
           <Banner dataSource={bannerProps} />
           <Entrance dataSource={configuration.mains} />
           {/* 消息提醒 */}
-          {/* <Notification /> */}
+          <Notification />
         </div>
         <WhiteSpace size="md" />
         <Card full>
           <Card.Header
             title={
               <div className={styles.cardTitle}>
-                <IconFont type="1" />
+                <span className={styles.icon} />
                 <span>孕产工具</span>
               </div>
             }
@@ -88,7 +88,7 @@ function Home(props: IProps) {
           <Card.Header
             title={
               <div className={styles.cardTitle}>
-                <IconFont type="zhishiku" />
+                <span className={styles.icon} />
                 <span>今日知识</span>
               </div>
             }

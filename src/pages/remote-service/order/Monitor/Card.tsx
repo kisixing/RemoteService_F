@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { Tag, IconFont } from '@/components/antd-mobile';
+import constant from '@/utils/constants';
 import styles from './Card.less';
 
 function Card({ data = {}, hideOverPrint, hideList, onClick = () => {} }: any) {
@@ -9,7 +10,9 @@ function Card({ data = {}, hideOverPrint, hideList, onClick = () => {} }: any) {
       <div className={styles.header}>
         <div className={styles.title}>
           <IconFont type="order" size="0.36rem" />
-          <span className={styles.name}>{(data.servicepackage && data.servicepackage.name) || data.name}</span>
+          <span className={styles.name}>
+            {(data.servicepackage && data.servicepackage.name) || data.name}
+          </span>
           <Tag size="middle" bgcolor="#d9f0f8" color="#3fb6dc">
             {'单胎'}
           </Tag>
@@ -31,7 +34,9 @@ function Card({ data = {}, hideOverPrint, hideList, onClick = () => {} }: any) {
           className={styles.overprint}
           style={{
             display: `${hideOverPrint ? 'none' : 'inline-block'}`,
-            backgroundImage: `url(./images/icon/overprint_${!!data.state ? data.state : 1}@3x.png)`,
+            backgroundImage: `url(${constant.aliyuncs}/icons/overprint_${
+              !!data.state ? data.state : 1
+            }@3x.png)`,
           }}
         />
       </div>

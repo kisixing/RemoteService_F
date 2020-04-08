@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import classnames from 'classnames';
-import { Button, WhiteSpace, Tag, IconFont } from '@/components/antd-mobile';
+import { Button, Tag, IconFont } from '@/components/antd-mobile';
 import { getPackageOrders } from '@/services/remote-service';
 import { getPageKeyValue, router } from '@/utils/utils';
 import styles from './index.less';

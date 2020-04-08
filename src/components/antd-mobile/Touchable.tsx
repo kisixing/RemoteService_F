@@ -1,23 +1,23 @@
 import React from 'react';
-import Touchable, { ITouchable } from 'rc-touchable';
-// import Touchable from 'rmc-feedback';
+import Touchable from 'rmc-feedback';
+import { ITouchProps } from 'rmc-feedback/lib/PropTypes';
 
-interface Iprops extends ITouchable {
+interface IProps extends ITouchProps {
   children: React.ReactNode
 }
 
-export default function(props: Iprops) {
-  const { delayPressIn = 60, delayPressOut = 60 } = props;
+export default function({
+  disabled = false,
+  activeClassName = "",
+  activeStyle = {},
+  children
+}: IProps) {
   return (
     <Touchable
-      activeStopPropagation
-      activeStyle={{ background: 'rgba(0, 0, 0, 0.12)' }}
-      delayPressIn={delayPressIn}
-      delayPressOut={delayPressOut}
-      onPress={props.onPress}
-      onLongPress={props.onLongPress}
+      activeClassName={activeClassName}
+      activeStyle={{ background: '#eee' }}
     >
-      {props.children}
+      {children}
     </Touchable>
   )
 }

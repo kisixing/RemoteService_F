@@ -12,6 +12,7 @@ import { Button, Tag, IconFont, WhiteSpace } from '@/components/antd-mobile';
 import { CTGApply, getPackageOrders, getApplyPrice } from '@/services/remote-service';
 import { webpay } from '@/services/pay';
 import { router } from '@/utils/utils';
+import constant from '@/utils/constants';
 import styles from './index.less';
 
 // 初始化值为一个对象时
@@ -134,9 +135,11 @@ function Apply(props: any) {
               <i>{!!validdate ? moment(validdate).format('YYYY-MM-DD HH:mm:dd') : '分娩前'}</i>{' '}
             </div>
             <div
-              className={classnames(styles.stamp, {
-                [styles.finished]: service1amount === 0,
-              })}
+              className={styles.stamp}
+              style={{
+                backgroundImage: `url(${constant.aliyuncs}/icons/overprint_${service1amount ===
+                  0 ? '3' : '6'}@3x.png)`,
+              }}
             >
               <span>{service1amount === 0 ? '' : service1amount}</span>
             </div>

@@ -10,32 +10,33 @@ import { WingBlank } from 'antd-mobile';
 import { Touchable } from '@/components/antd-mobile';
 
 import { ConnectState, ConnectProps } from '@/models/connect';
-import { router } from '@/utils/utils';
+import { router } from '@/utils';
+import constant from '@/utils/constants';
 import styles from './MapList.less';
 
 export const MAPS = [
-  {
-    title: '基本信息',
-    name: 'basic',
-    icon: require('../../assets/icons/icon_wc_jiben.png'),
-    finished: false,
-    route: '/perinatal/basic-info',
-  },
-  {
-    title: '本孕信息',
-    name: 'pregnancy',
-    icon: require('../../assets/icons/icon_wc_benyun.png'),
-    finished: false,
-    route: '/perinatal/current-pregnancy',
-  },
-  {
-    title: '孕产史信息',
-    name: 'history',
-    icon: require('../../assets/icons/icon_wc_changshi.png'),
-    finished: 'none',
-    route: '/perinatal/pregnancy-history',
-  }
-];
+         {
+           title: '基本信息',
+           name: 'basic',
+           icon: 'icon_wc_jiben',
+           finished: false,
+           route: '/perinatal/basic-info',
+         },
+         {
+           title: '本孕信息',
+           name: 'pregnancy',
+           icon: 'icon_wc_benyun',
+           finished: false,
+           route: '/perinatal/current-pregnancy',
+         },
+         {
+           title: '孕产史信息',
+           name: 'history',
+           icon: 'icon_wc_changshi',
+           finished: 'none',
+           route: '/perinatal/pregnancy-history',
+         },
+       ];
 
 interface P extends ConnectProps {
 
@@ -95,18 +96,22 @@ class MapList extends React.Component<P, S> {
       <WingBlank className={styles.container}>
         {this.state.dataSource.map(item => {
           return (
-            <Touchable key={item.name} onPress={() => router(item.route)}>
-              <div className={styles.item}>
+            <Touchable key={item.name}>
+              <div className={styles.item} onClick={() => router(item.route)}>
                 <div className={styles.content}>
-                  <img alt={item.title} src={item.icon} />
+                  <div
+                    className={styles.thumbnails}
+                    style={{
+                      backgroundImage: `url(${constant.aliyuncs}/icons/${item.icon}@3x.png)`,
+                    }}
+                  />
                   <div>
                     <div className={styles.title}>{item.title}</div>
                     {this.status(item.finished)}
                   </div>
                 </div>
-                <img
-                  alt="arrow"
-                  src={require('../../assets/icons/icon_wc_next.png')}
+                <span
+                  style={{ backgroundImage: `url(${constant.aliyuncs}/icons/icon_wc_next@3x.png)` }}
                   className={styles.arrow}
                 />
               </div>

@@ -37,32 +37,32 @@
 
     &:nth-of-type(1) {
       width: 100%;
-      .card-bg(#f9ddd0, '../../assets/slices/D.svg');
+      .card-bg(#f9ddd0, 'D');
       background-size: contain;
     }
 
     &:nth-of-type(2) {
-      .card-bg(#fff0ca, '../../assets/slices/fast_inlustrator.svg');
+      .card-bg(#fff0ca, fast_inlustrator);
       background-size: 1.6rem;
     }
 
     &:nth-of-type(3) {
-      .card-bg(#ddf8f1, '../../assets/slices/diabetes.svg')
+      .card-bg(#ddf8f1, 'diabetes')
     }
 
     &:nth-of-type(4) {
-      .card-bg(#eff0ff, '../../assets/slices/High-risk.svg')
+      .card-bg(#eff0ff, 'High-risk')
     }
 
     &:nth-of-type(5) {
-      .card-bg(#f2e9fb, '../../assets/slices/High-risk.svg')
+      .card-bg(#f2e9fb, 'High-risk')
     }
   }
 }
 
-.card-bg(@color, @url) {
+.card-bg(@color, @icon) {
   background-color: @color;
-  background-image: url(@url);
+  background-image: url(~'https://obcdn.oss-cn-shenzhen.aliyuncs.com/assets/slices/@{icon}.svg');
   background-repeat: no-repeat;
   background-position: bottom right;
   background-size: auto 1rem;

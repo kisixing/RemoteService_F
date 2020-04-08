@@ -10,9 +10,9 @@ import routes from './router.config';
 const config: IConfig = {
   treeShaking: true,
   history: 'browser', // 'hash'部署到非根目录 会有url/#/
-  base: '/webapp/',
-  publicPath: './',
-  outputPath: './dist/webapp',
+  base: process.env.NODE_ENV === 'development' ? '/' : '/H5/',
+  publicPath: process.env.NODE_ENV === 'development' ? '/' : '/H5/',
+  outputPath: './dist/H5',
   hash: true, // 开启 hash 文件后缀
   routes: routes,
   minimizer: 'terserjs',
@@ -39,11 +39,16 @@ const config: IConfig = {
           default: 'zh-CN',
         },
         // chunks: ['react', 'umi'],
-        // scripts: [
-        //   'https://cdn.bootcss.com/react/16.8.6/umd/react.production.min.js',
-        //   'https://cdn.bootcss.com/react-dom/16.8.6/umd/react-dom.production.min.js',
-        //   'https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js',
-        // ],
+        headScripts: [
+          // 'https://cdn.bootcss.com/react/16.8.6/umd/react.production.min.js',
+          // 'https://cdn.bootcss.com/react-dom/16.8.6/umd/react-dom.production.min.js',
+          // 'https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js',
+        ],
+        scripts: [{ src: '<%= PUBLIC_PATH %>config.js' }],
+        links: [
+          { rel: 'stylesheet', href: '<%= PUBLIC_PATH %>loaders.min.css' },
+          { rel: 'stylesheet', href: '<%= PUBLIC_PATH %>iconfont/iconfont.css' },
+        ],
         routes: {
           exclude: [
             /models\//,
@@ -66,7 +71,7 @@ const config: IConfig = {
     javascriptEnabled: true,
   },
   extraBabelPlugins: [
-    ['import', { libraryName: 'antd-mobile', style: true }], //按需加载antd-mobile样式文件
+    ['import', { libraryName: 'antd-mobile', style: true }], // 按需加载antd-mobile样式文件
   ],
   proxy: {
     '/api': {
@@ -94,11 +99,9 @@ const config: IConfig = {
       to: 'pdfjs-dist/cmaps/',
     },
   ],
-  // externals: {
-  //   react: 'window.React',
-  //   'react-dom': 'window.ReactDOM',
-  //   moment: 'moment',
-  // },
+  externals: {
+    // 'react-dom': 'window.ReactDOM',
+  },
   chainWebpack: process.env.NODE_ENV === 'development' ? undefined : webpackPlugin,
   uglifyJSOptions: {
     parallel: true,

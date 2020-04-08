@@ -9,6 +9,7 @@
 
 import * as React from 'react';
 import { KG } from '@/utils';
+import constant from '@/utils/constants';
 import styles from './Banner.less';
 
 interface IProps {
@@ -47,11 +48,12 @@ export default (props: IProps) => {
     if (week < 37) return 'M9';
     if (week <= 38) return 'M9-1';
     if (week >= 39) return 'M10';
+    return 'M0';
   }
   return (
     <div className={styles.banner}>
       <div className={styles.innerBanner}>
-        <img alt="banner" src={`./images/banner/${bannerbg(gesweek)}.png`} />
+        <img alt="banner" src={`${constant.aliyuncs}/banners/${bannerbg(gesweek)}.png`} />
         <div className={styles.userinfo}>
           <div className={styles.name}>{name}</div>
           <div className={styles.gesweek}>孕 {gesweek} 周</div>

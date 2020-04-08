@@ -117,7 +117,10 @@ function PackagePay(props: any) {
         <p>订单详情</p>
         <Card hideOverPrint={true} data={props.currentPackage} />
       </div>
-      <List className={styles.payment} renderHeader={() => <span style={{ fontSize: '0.24rem' }}>支付方式</span>}>
+      <List
+        className={styles.payment}
+        renderHeader={() => <span style={{ fontSize: '0.24rem' }}>支付方式</span>}
+      >
         <RadioItem id="wechat" name="wechat" checked={payment === 'wechat'} onChange={onChange}>
           <div className={styles.label}>
             <img alt="wechat" src={require('../../../assets/icons/wechat-pay-fill.svg')} />
@@ -142,7 +145,10 @@ function PackagePay(props: any) {
           onClose={() => setVisible(false)}
           className={styles.modal}
         >
-          <iframe width="100%" src="/useragree.html" />
+          <iframe
+            width="100%"
+            src={process.env.NODE_ENV === 'development' ? '/useragree.html' : '/H5/useragree.html'}
+          />
         </Modal>
         <Checkbox checked={agree} onChange={(e: any) => setAgree(e.target.checked)}>
           <span style={{ marginLeft: '0.16rem' }}>我同意</span>
