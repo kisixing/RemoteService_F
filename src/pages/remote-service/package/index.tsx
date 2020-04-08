@@ -43,12 +43,19 @@ function Packages({ dispatch, packages }: PackageProps) {
           <Touchable key={item.id}>
             <div className={styles.card} onClick={() => onClick(item)}>
               <div className={styles.thumbnail}>
-                <img src={`./images/slice/pic_${Math.floor(Math.random() * 3 + 1)}.png`} />
+                <img
+                  src={
+                    item.picture ||
+                    require(`../../../assets/icons/pic_${Math.floor(Math.random() * 3 + 1)}.png`)
+                  }
+                />
               </div>
               <div className={styles.content}>
                 <div className={styles.first}>
                   <div className={styles.name}>{item.name}</div>
-                  <Tag size="middle" color="#3fb6dc" bgcolor="#d9f0f8">单胎</Tag>
+                  <Tag size="middle" color="#3fb6dc" bgcolor="#d9f0f8">
+                    单胎
+                  </Tag>
                 </div>
                 <div className={styles.second}>
                   <div>
