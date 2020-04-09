@@ -1,0 +1,92 @@
+@import '../../../utils/theme.less';
+@inputBlockWidth: 4.8rem;
+@circleWidth: 3.6rem; 
+
+.container {
+  width: 100%;
+  
+  .content {
+    margin-top: .3rem;
+    min-height: 4rem;
+    padding-bottom: .3rem;
+    background-color: #fff;
+
+    .text {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: .16rem .3rem ;
+      color: @primary-color;
+
+      span {
+        margin-left: .1rem;
+      }
+    }
+
+    .countdown {
+      height: 1rem;
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .circle {
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto;
+    margin-bottom: .48rem;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 12px 19px 0 rgba(206,201,202,0.25);
+    border: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: @text-color;
+
+    .pre {
+      color: @primary-color;
+      font-size: .6rem;
+    }
+
+    .counting {
+      .count {
+        font-size: .6rem;
+        color: @primary-color;
+      }
+    }
+
+  }
+
+  .tips {
+    text-align: center;
+    padding: .3rem;
+    color: @text-color;
+  }
+
+  .refresh {
+    width: 1.5rem;
+    height: 1rem;
+    background-color: @primary-color;
+    position: absolute;
+    right: 0;
+    top: 40vh;
+    padding-top: .1rem;
+    padding-left: .3rem;
+    border-top-left-radius: .5rem;
+    border-bottom-left-radius: .5rem;
+    
+    // 这里是一个iconfont size: 1rem color: white
+  }
+}
+
+.clock {
+  font-size: .3rem;
+  > span {
+    background-color: #999999;
+    padding: .1rem;
+    color: #ffffff;
+    border-radius: .1rem; 
+  }
+}
