@@ -46,6 +46,7 @@ function BloodOxygenInput(props: {userid: number}) {
     const reqData ={
       result: Number(bloodOxygen),
       timestamp: d,
+      src: 0,
       pregnancy: {id: props.userid},
       pulserate: Number(pulseRate),
       status: 0

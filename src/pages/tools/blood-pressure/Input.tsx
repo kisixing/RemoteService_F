@@ -47,6 +47,7 @@ function BloodPressureInput(props: {userid: number}) {
       systolic: Number(systolic),
       diastolic: Number(diastolic),
       timestamp: d,
+      src: 0,
       pregnancy: {id: props.userid},
       pulserate: Number(heartRate),
       status:0,

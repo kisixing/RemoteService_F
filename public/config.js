@@ -1144,7 +1144,7 @@ const TOOLS = [
     key: '4',
     label: '胎动计数',
     icon: 'i003.png',
-    route: '',
+    route: '/fetusmovement',
   },
   {
     key: '5',
