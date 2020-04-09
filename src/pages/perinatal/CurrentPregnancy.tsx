@@ -9,8 +9,9 @@ import { connect } from 'dva';
 import _ from 'lodash';
 import moment from 'moment';
 import createDOMForm from 'rc-form/lib/createDOMForm';
+import { Modal, ActivityIndicator } from 'antd-mobile';
 import { Button } from '@/components/antd-mobile';
-import { getKeys, KG } from '@/utils';
+import { getKeys, getFields, KG } from '@/utils';
 import { getPregnancy, updatePregnancy } from '@/services/user';
 import { ConnectState } from '@/models/connect';
 import FormFields from './FormFields';
@@ -22,7 +23,6 @@ const configuration = window.configuration;
 // 基本信息配置
 // const originalDataSource = configuration.pregnancy.data; // _.cloneDeep()
 const dataSource = configuration.pregnancy.data;
-const keys = getKeys(dataSource);
 
 interface P {
   loading?: boolean;
@@ -43,6 +43,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
     super(props);
     this.state = {
       values: {},
+      isLoading: true,
     };
   }
 
@@ -64,62 +65,6 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
       'medicine',
     ]);
     console.log('listen change', values);
-    // 痛经说明
-    const dysmenorrheaNoteIndex = this.getKeyIndex('dysmenorrheaNote');
-    if (values.dysmenorrhea && dysmenorrheaNoteIndex.length) {
-      this.show(dysmenorrheaNoteIndex);
-    } else {
-      this.hide(dysmenorrheaNoteIndex);
-    }
-
-    // 烟
-    const smokeNoteIndex = this.getKeyIndex('smokeNote');
-    if (values.smoke && smokeNoteIndex.length) {
-      this.show(smokeNoteIndex);
-    } else {
-      this.hide(smokeNoteIndex);
-    }
-
-    // 酒
-    const alcoholNoteIndex = this.getKeyIndex('alcoholNote');
-    if (values.alcohol && values.alcohol[0] !== '无' && alcoholNoteIndex.length) {
-      this.show(alcoholNoteIndex);
-    } else {
-      this.hide(alcoholNoteIndex);
-    }
-
-    // 伴侣-烟
-    const partnerSmokeNoteIndex = this.getKeyIndex('partnerSmokeNote');
-    if (values.partnerSmoke && partnerSmokeNoteIndex.length) {
-      this.show(partnerSmokeNoteIndex);
-    } else {
-      this.hide(partnerSmokeNoteIndex);
-    }
-
-    // 伴侣-酒
-    const partnerAlcoholNoteIndex = this.getKeyIndex('partnerAlcoholNote');
-    if (values.partnerAlcohol && values.partnerAlcohol[0] !== '无' && partnerAlcoholNoteIndex.length) {
-      this.show(partnerAlcoholNoteIndex);
-    } else {
-      this.hide(partnerAlcoholNoteIndex);
-    }
-
-    // 放射线
-    const radioactivityNoteIndex = this.getKeyIndex('radioactivityNote');
-    if (values.radioactivity && radioactivityNoteIndex.length) {
-      this.show(radioactivityNoteIndex);
-    } else {
-      this.hide(radioactivityNoteIndex);
-    }
-
-    // 药物
-    const medicineNoteIndex = this.getKeyIndex('medicineNote');
-    if (values.medicine && medicineNoteIndex.length) {
-      this.show(medicineNoteIndex);
-    } else {
-      this.hide(medicineNoteIndex);
-    }
-
   }
 
   // 确定key位置
@@ -145,11 +90,18 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
     dataSource[array[0]]['children'][array[1]]['hide'] = true;
   };
 
+  // form表单初始化
   initValue = () => {
     const { form, currentPregnancy } = this.props;
     getPregnancy(currentPregnancy.id).then((res: any) => {
+      this.setState({ isLoading: false });
       if (res && res.id) {
-        const values = _.pick(res, keys);
+        // 获取field配置的key
+        const keys = getKeys(dataSource);
+        const originalValues = _.pick(res, keys);
+        console.log('keys', keys, originalValues);
+        const values: any = this.processData(keys, originalValues);
+        console.log('keys', values);
         // 初始化预产期
         const EDD = values.lmp && KG.getEdd(values.lmp);
         if (!values.edd) {
@@ -159,11 +111,36 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
           values.sureEdd = EDD;
         }
         console.log('本孕信息初始值：', values);
-        form.setFieldsValue({ ...values, smoke: true, smokeNote: 10 });
+        form.setFieldsValue({
+          ...values,
+          partnerDisease: ['高血压', '糖尿病', '心脏病'],
+          partnerDisease1: '高血压,糖尿病,心脏病',
+          'smoke&smokeNote': { smoke: true, smokeNote: 10 },
+        });
         this.setState({ values });
       }
     });
   };
+
+  // 处理value初始化结构
+  processData = (keys: string[] = [], values: object = {}) => {
+    let result = { ...values };
+    for (let i = 0; i < keys.length; i++) {
+      const ele = keys[i];
+      if (ele.includes('&')) {
+        // key带有&字符
+        const ids = ele.split('&');
+        const obj = {
+          [ids[0]]: values[ids[0]],
+          [ids[1]]: values[ids[1]]
+        };
+        result = { ...result, [ele]: obj };
+        delete result[ids[0]];
+        delete result[ids[1]];
+      }
+    }
+    return result;
+  }
 
   onSubmit = () => {
     const { form, dispatch } = this.props;
@@ -211,6 +188,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
             确定
           </Button>
         </div>
+        <ActivityIndicator toast text="Loading..." animating={this.state.isLoading} />
       </div>
     );
   }

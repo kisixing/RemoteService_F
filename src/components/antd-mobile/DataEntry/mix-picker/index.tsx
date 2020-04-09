@@ -32,22 +32,34 @@ const CustomItem = (props: any) => {
 interface IProps {
   required?: boolean
   children?: any
-  data: string[]
-  value?: any[]
+  options: string[]
+  value?: any[] | string
   multiple?: boolean
-  onChange?: any // React.Dispatch<any> | () => void
+  onChange?: (value?: any) => void
   placeholder?: string
+  valueFormat?: 'array' | 'string'
 }
 
 function MixPicker(
-  { required, children, data, value, placeholder, onChange, multiple }: IProps,
+  {
+    required,
+    children,
+    options = [],
+    value,
+    valueFormat = 'array',
+    placeholder,
+    onChange = () => {},
+    multiple,
+  }: IProps,
   ref: any,
 ) {
   const [cacheValue, setCacheValue] = useState(value);
+  const [tabsValue, setTabsValue] = useState([]);
+  const [textValue, setTextValue] = useState('');
 
   useEffect(() => {
     setCacheValue(value || []);
-  }, [])
+  }, []);
 
   const onOk = () => {
     onChange(cacheValue);
@@ -66,7 +78,7 @@ function MixPicker(
       content={
         <PopupContent
           multiple={multiple}
-          data={data}
+          options={options}
           value={cacheValue}
           placeholder={children}
           onChange={setCacheValue}

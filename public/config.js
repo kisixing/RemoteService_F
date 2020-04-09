@@ -178,14 +178,14 @@ const basic = {
           placeholder: '请输入您的姓名',
         },
         {
-          id: 'telephone',
+          id: 'mobile',
           label: '手机号码',
           type: 'text-input',
           charactertype: 'phone',
           required: true,
         },
         {
-          id: 'workPhone',
+          id: 'telephone',
           label: '固话',
           type: 'text-input',
           charactertype: 'tel',
@@ -302,7 +302,7 @@ const basic = {
           required: true,
         },
         {
-          id: 'partnerTelephone',
+          id: 'partnerMobile',
           label: '伴侣电话',
           type: 'text-input',
           charactertype: 'phone',
@@ -520,7 +520,7 @@ const pregnancy = {
           required: true,
         },
         {
-          id: ' diastolicPressure',
+          id: 'diastolicPressure',
           label: '舒张压',
           type: 'text-input',
           suffix: 'mmHg',
@@ -565,30 +565,35 @@ const pregnancy = {
           required: true,
         },
         {
-          id: 'menstrualVolume',
+          id: 'menstrualVolume', // radio-input
           label: '经量',
           type: 'radio',
           charactertype: 'string',
           required: true,
-          data: ['多', '中', '少'].map(e => ({ label: e, value: e })),
+          options: ['多', '中', '少'].map(e => ({ label: e, value: e })),
         },
         {
-          id: 'dysmenorrhea',
-          label: '是否痛经',
-          type: 'radio',
-          required: true,
-          data: [
-            { label: '是', value: true },
-            { label: '否', value: false },
+          id: 'dysmenorrhea&dysmenorrheaNote',
+          label: '是否痛经&痛经说明',
+          type: 'radio-input',
+          // value: { dysmenorrhea: true, dysmenorrheaNote: 'note' },
+          props: [
+            {
+              id: 'dysmenorrhea',
+              label: '是否痛经',
+              required: true,
+              options: [
+                { label: '是', value: true },
+                { label: '否', value: false },
+              ],
+            },
+            {
+              id: 'dysmenorrheaNote',
+              label: '痛经说明',
+              required: true,
+              charactertype: 'text',
+            },
           ],
-        },
-        {
-          id: 'dysmenorrheaNote',
-          label: '痛经说明',
-          type: 'text-input',
-          charactertype: 'text',
-          required: true,
-          hide: true,
         },
       ],
     },
@@ -597,46 +602,58 @@ const pregnancy = {
       desc: '个人情况',
       children: [
         {
-          id: 'smoke',
-          label: '嗜好-烟',
-          type: 'radio',
-          required: true,
-          data: [
-            { label: '有', value: true },
-            { label: '无', value: false },
+          id: 'smoke&smokeNote',
+          label: '嗜好-烟&烟量',
+          type: 'radio-input',
+          props: [
+            {
+              id: 'smoke',
+              label: '嗜好-烟',
+              required: true,
+              options: [
+                { label: '有', value: true },
+                { label: '无', value: false },
+              ],
+            },
+            {
+              id: 'smokeNote',
+              label: '烟量',
+              required: true,
+              charactertype: 'digit',
+              suffix: '支/天',
+            },
           ],
         },
         {
-          id: 'smokeNote',
-          label: '烟量',
-          suffix: '支/天',
-          type: 'text-input',
-          charactertype: 'digit',
-          required: true,
-        },
-        {
-          id: 'alcohol',
-          label: '嗜好-酒',
-          type: 'mix-picker',
-          placeholder: '请选择酒的种类',
-          multiple: true,
-          required: true,
-          data: ['无', '白酒', '啤酒', '葡萄酒', '药酒'],
-        },
-        {
-          id: 'alcoholNote',
-          label: '酒量',
-          suffix: 'ml/天',
-          type: 'text-input',
-          charactertype: 'digit',
-          required: true,
+          id: 'alcohol&alcoholNote',
+          label: '嗜好-酒&酒量',
+          type: 'picker-input',
+          props: [
+            {
+              id: 'alcohol',
+              label: '嗜好-酒',
+              type: 'mix-picker',
+              placeholder: '请选择酒的种类',
+              multiple: true,
+              required: true,
+              options: ['无', '白酒', '啤酒', '葡萄酒', '药酒'],
+            },
+            {
+              id: 'alcoholNote',
+              label: '酒量',
+              type: 'text-input',
+              required: true,
+              charactertype: 'digit',
+              suffix: '毫升/天',
+            },
+          ],
         },
         {
           id: 'ABO',
           label: 'ABO血型',
           type: 'radio',
           required: true,
-          data: [
+          options: [
             { label: 'A型', value: 'A' },
             { label: 'B型', value: 'B' },
             { label: 'AB型', value: 'AB' },
@@ -648,44 +665,58 @@ const pregnancy = {
           label: 'Rh血型',
           type: 'radio',
           required: true,
-          data: [
+          options: [
             { label: '阳性', value: 1 },
             { label: '阴性', value: 0 },
           ],
         },
         {
-          id: 'radioactivity',
-          label: '是否接触放射性物质',
-          type: 'radio',
-          required: true,
-          data: [
-            { label: '是', value: true },
-            { label: '否', value: false },
+          id: 'radioactivity&radioactivityNote',
+          label: '接触放射性物质&放射性物质名称',
+          type: 'picker-input',
+          props: [
+            {
+              id: 'radioactivity',
+              label: '接触放射性物质',
+              type: 'radio',
+              required: true,
+              options: [
+                { label: '是', value: true },
+                { label: '否', value: false },
+              ],
+            },
+            {
+              id: 'radioactivityNote',
+              label: '放射性物质名称',
+              type: 'text-input',
+              required: true,
+              charactertype: 'text',
+            },
           ],
         },
         {
-          id: 'radioactivityNote',
-          label: '放射性物质名称',
-          type: 'text-input',
-          charactertype: 'text',
-          required: false,
-        },
-        {
-          id: 'medicine',
-          label: '近期是否吃药',
-          type: 'radio',
-          required: true,
-          data: [
-            { label: '是', value: true },
-            { label: '否', value: false },
+          id: 'medicine&medicineNote',
+          label: '近期是否吃药&药物名称',
+          type: 'picker-input',
+          props: [
+            {
+              id: 'medicine',
+              label: '近期是否吃药',
+              type: 'radio',
+              required: true,
+              options: [
+                { label: '是', value: true },
+                { label: '否', value: false },
+              ],
+            },
+            {
+              id: 'medicineNote',
+              label: '药物名称',
+              type: 'text-input',
+              required: true,
+              charactertype: 'text',
+            },
           ],
-        },
-        {
-          id: 'medicineNote',
-          label: '药物名称',
-          type: 'text-input',
-          charactertype: 'text',
-          required: false,
         },
       ],
     },
@@ -706,51 +737,64 @@ const pregnancy = {
           label: '是否近亲',
           type: 'radio',
           required: true,
-          data: [
+          options: [
             { label: '是', value: true },
             { label: '否', value: false },
           ],
         },
         {
-          id: 'partnerSmoke',
-          label: '伴侣嗜好-烟',
-          type: 'radio',
-          required: true,
-          data: [
-            { label: '有', value: true },
-            { label: '无', value: false },
+          id: 'partnerSmoke&partnerSmokeNote',
+          label: '伴侣嗜好-烟&伴侣烟量',
+          type: 'picker-input',
+          props: [
+            {
+              id: 'partnerSmoke',
+              label: '伴侣嗜好-烟',
+              type: 'radio',
+              required: true,
+              options: [
+                { label: '有', value: true },
+                { label: '无', value: false },
+              ],
+            },
+            {
+              id: 'partnerSmokeNote',
+              label: '伴侣烟量',
+              type: 'text-input',
+              required: true,
+              charactertype: 'digit',
+            },
           ],
         },
         {
-          id: 'partnerSmokeNote',
-          label: '伴侣烟量',
-          suffix: '支/天',
-          type: 'text-input',
-          charactertype: 'digit',
-          required: true,
-        },
-        {
-          id: 'partnerAlcohol',
-          label: '伴侣嗜好-酒',
-          type: 'mix-picker',
-          multiple: true,
-          required: true,
-          data: ['无', '白酒', '啤酒', '葡萄酒', '药酒'],
-        },
-        {
-          id: 'partnerAlcoholNote',
-          label: '伴侣饮酒量',
-          suffix: 'ml/天',
-          type: 'text-input',
-          charactertype: 'digit',
-          required: true,
+          id: 'partnerAlcohol&partnerAlcoholNote',
+          label: '伴侣嗜好-酒&伴侣饮酒量',
+          type: 'picker-input',
+          props: [
+            {
+              id: 'partnerAlcohol',
+              label: '伴侣嗜好-烟',
+              type: 'mix-picker',
+              required: true,
+              multiple: true,
+              options: ['无', '白酒', '啤酒', '葡萄酒', '药酒'],
+            },
+            {
+              id: 'partnerAlcoholNote',
+              label: '伴侣饮酒量',
+              type: 'text-input',
+              required: true,
+              charactertype: 'digit',
+              suffix: '毫升/天',
+            },
+          ],
         },
         {
           id: 'partnerABO',
           label: '伴侣血型',
           type: 'radio',
           required: true,
-          data: [
+          options: [
             { label: 'A型', value: 'A' },
             { label: 'B型', value: 'B' },
             { label: 'AB型', value: 'AB' },
@@ -763,7 +807,36 @@ const pregnancy = {
           type: 'mix-picker',
           multiple: true,
           required: true,
-          data: [
+          options: [
+            '无',
+            '高血压',
+            '糖尿病',
+            '心脏病',
+            '肝脏疾病',
+            '肾脏疾病',
+            '脑梗',
+            '脑出血',
+            '癌症',
+            '哮喘',
+            '肺结核',
+            '甲亢',
+            '过敏性疾病',
+            '癫痫病',
+            '风湿',
+            '贫血',
+            '地中海贫血',
+            '癫痫',
+            '血友病',
+            '高度近视',
+          ],
+        },
+        {
+          id: 'partnerDisease1',
+          label: '伴侣疾病史1',
+          type: 'mix-picker',
+          multiple: true,
+          required: true,
+          options: [
             '无',
             '高血压',
             '糖尿病',
@@ -899,14 +972,22 @@ const history = {
           type: 'mix-picker',
           multiple: true,
           required: true,
-          data: ['无', '妊娠期高血压', '妊娠期糖尿病', '前置胎盘', '巨大儿', '妊娠期肝内胆汁淤积症', '不记得'],
+          options: [
+            '无',
+            '妊娠期高血压',
+            '妊娠期糖尿病',
+            '前置胎盘',
+            '巨大儿',
+            '妊娠期肝内胆汁淤积症',
+            '不记得',
+          ],
         },
         {
           id: 'isBirth',
           label: '是否分娩',
           type: 'radio',
           required: true,
-          data: [
+          options: [
             { label: '是', value: true },
             { label: '否', value: false },
           ],
@@ -951,7 +1032,7 @@ const history = {
           type: 'radio',
           required: true,
           hide: true,
-          data: [
+          options: [
             { label: '有', value: true },
             { label: '无', value: false },
           ],
@@ -963,7 +1044,15 @@ const history = {
           required: true,
           hide: true,
           cols: 1,
-          data: ['异位妊娠', '葡萄糖等滋养细胞疾病', '胚胎停育', '胎儿畸形', '死胎', '死产', '不清楚'].map(e => ({
+          data: [
+            '异位妊娠',
+            '葡萄糖等滋养细胞疾病',
+            '胚胎停育',
+            '胎儿畸形',
+            '死胎',
+            '死产',
+            '不清楚',
+          ].map(e => ({
             label: e,
             value: e,
           })),
@@ -983,7 +1072,7 @@ const history = {
           type: 'radio',
           required: true,
           hide: true,
-          data: [
+          options: [
             { label: '有', value: true },
             { label: '无', value: false },
           ],
@@ -994,7 +1083,7 @@ const history = {
           type: 'radio',
           required: true,
           hide: true,
-          data: [
+          options: [
             { label: '有', value: true },
             { label: '无', value: false },
           ],
@@ -1011,7 +1100,7 @@ const history = {
               label: '胎儿性别',
               type: 'radio',
               required: true,
-              data: [
+              options: [
                 { label: '男', value: 0 },
                 { label: '女', value: 1 },
               ],
@@ -1029,7 +1118,7 @@ const history = {
               label: '新生儿当前状况',
               type: 'radio',
               required: true,
-              data: [
+              options: [
                 { label: '健在', value: 1 },
                 { label: '死亡', value: 0 },
               ],

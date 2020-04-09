@@ -16,6 +16,8 @@ import Radio from './dataEntry/radio-picker';
 import MixPicker from './dataEntry/mix-picker';
 import MultiplePicker from './dataEntry/multiple-picker';
 import AddressPicker from './dataEntry/address-picker';
+import RadioInput from './dataEntry/radio-input';
+import PickerInput from './dataEntry/picker-input';
 
 export {
   Button,
@@ -37,4 +39,6 @@ export {
   MixPicker,
   MultiplePicker,
   AddressPicker,
+  RadioInput,
+  PickerInput,
 };

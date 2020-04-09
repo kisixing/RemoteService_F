@@ -204,7 +204,7 @@ export function sortDate<T>(arr: Array<T> | Set<T>, key: string = ""): Array<T> 
  * 获取建档表单的每一个key
  *
  * @export
- * @param {any[]} fields
+ * @param {array} fields
  * @returns
  */
 export function getKeys(fields: any[]) {
@@ -219,4 +219,19 @@ export function getKeys(fields: any[]) {
     }
   }
   return keys;
-};
+}
+
+export function getFields(fields: any[]) {
+  let result = [];
+  for (let i = 0; i < fields.length; i++) {
+    const element = fields[i];
+    const obj = { id: element.id, type: element.type }
+    if (element.type) {
+      result.push(obj);
+    }
+    if (element.children) {
+      result.push(...getFields(element.children));
+    }
+  }
+  return result;
+}

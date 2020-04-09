@@ -2,16 +2,16 @@ import React from 'react';
 import classNames from 'classnames';
 import styles from './RadioGroup.less';
 
-function RadioGroup({ id, data, value, onChange, error }: any) {
+function RadioGroup({ id, options, value, onChange = () => {}, error }: any) {
   const handleChange = (e: any) => {
     let flag = e.target.value;
-    const checked = data.filter((e: any) => e.value.toString() === flag)[0];
+    const checked = options.filter((e: any) => e.value.toString() === flag)[0];
     onChange(checked.value);
   };
 
   return (
     <div className={styles.group}>
-      {data.map((item: { label: string; value: any }, index: any) => {
+      {options.map((item: { label: string; value: any }, index: any) => {
         return (
           <div key={`${id}-${item.value.toString()}`} className={styles.item}>
             <input

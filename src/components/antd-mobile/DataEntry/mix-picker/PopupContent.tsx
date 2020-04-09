@@ -5,21 +5,27 @@ import classNames from 'classnames';
 import styles from './PopupContent.less';
 
 interface IProps {
-  data: string[]
+  options: string[]
   value?: any[]
   multiple?: boolean
   onChange?: any
   placeholder?: string
 }
 
-function PopupContent({ data, value = [], multiple = false, placeholder, onChange = () => {} }: IProps) {
+function PopupContent({
+  options = [],
+  value = [],
+  multiple = false,
+  placeholder,
+  onChange = () => {},
+}: IProps) {
   const [dataSource, setDataSource] = useState([]);
   const [textarea, setTextarea] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
 
   useEffect(() => {
-    transformData(data, value);
-    separatedData(data, value);
+    transformData(options, value);
+    separatedData(options, value);
   }, []);
 
   const transformData = (data = [], value = []) => {
@@ -55,7 +61,7 @@ function PopupContent({ data, value = [], multiple = false, placeholder, onChang
     // return result;
   };
 
-  const getTextarea = (d = data, v = value) => {
+  const getTextarea = (d = options, v = value) => {
     let result = '';
     v.forEach((i: string) => {
       const isTag = d.find((j: string) => j === i);
@@ -66,7 +72,7 @@ function PopupContent({ data, value = [], multiple = false, placeholder, onChang
     return result;
   };
 
-  const getSelectedTags = (d = data, v = value) => {
+  const getSelectedTags = (d = options, v = value) => {
     let result: any[] = [];
     v.forEach((i: string) => {
       const isTag = d.find((j: string) => j === i);
@@ -77,7 +83,10 @@ function PopupContent({ data, value = [], multiple = false, placeholder, onChang
     return result;
   };
 
-  interface P { value: string, selected: boolean };
+  interface P {
+    value: string;
+    selected: boolean;
+  }
 
   const handleSelect = (object: P) => {
     const clickTag = object.value;
@@ -116,7 +125,7 @@ function PopupContent({ data, value = [], multiple = false, placeholder, onChang
       newSelectedTags = filterValue.map(({ value }) => value);
       // value值
       newValue = [...newSelectedTags];
-      newValue.push(textarea)
+      newValue.push(textarea);
       setDataSource(newDataSource);
       setSelectedTags(newSelectedTags);
       onChange(newValue);
@@ -150,15 +159,15 @@ function PopupContent({ data, value = [], multiple = false, placeholder, onChang
       <div className={styles.wrapper}>
         {dataSource &&
           dataSource.length > 0 &&
-            dataSource.map(({ value, selected }) => (
-              <div
-                key={value}
-                className={classNames(styles.item, { [styles.selected]: selected })}
-                onClick={() => handleSelect({ value, selected })}
-              >
-                {value}
-              </div>
-            ))}
+          dataSource.map(({ value, selected }) => (
+            <div
+              key={value}
+              className={classNames(styles.item, { [styles.selected]: selected })}
+              onClick={() => handleSelect({ value, selected })}
+            >
+              {value}
+            </div>
+          ))}
       </div>
       <div className={styles.textarea}>
         <TextareaItem
