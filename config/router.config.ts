@@ -320,6 +320,12 @@ export default [
               { component: './404' },
             ],
           },
+          {
+            path: '/fetusmovement',
+            name: 'fetusmovement',
+            title: '胎动记录',
+            component: './tools/fetus-movement'
+          }
         ],
       },
       { component: './404' },

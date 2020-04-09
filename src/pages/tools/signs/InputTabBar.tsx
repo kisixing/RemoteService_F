@@ -18,7 +18,7 @@ import styles from './TabBar.less'
 
 function InputTabBar(props:any) {
   const { query } = props.history.location;
-  const [activeTab, setActiveTab] = useState("blood-pressure");
+  const [activeTab, setActiveTab] = useState("weight");
   const onTabClick = (tab: any, index: number) => {
     const key = tab.key;
     if (key === activeTab) {

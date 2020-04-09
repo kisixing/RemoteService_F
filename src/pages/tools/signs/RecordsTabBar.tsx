@@ -18,7 +18,7 @@ import styles from './TabBar.less';
 
 function RecordsTabBar({ location: { query } }: any) {
 
-  const type = query.type || 'blood-pressure';
+  const type = query.type || 'weight';
   const [activeTab, setActiveTab] = useState(type);
 
   const onTabClick = (tab: any, index: number) => {
