@@ -1,181 +1,131 @@
 import React, { useState, useEffect } from 'react';
 import { TextareaItem } from 'antd-mobile';
 import classNames from 'classnames';
-
+import { intersection } from 'lodash';
+import TouchFeedback from 'rmc-feedback';
+import { labelValue } from './index';
 import styles from './PopupContent.less';
 
+const RADIO_TAGS = ['无', '没有', '不清楚', '不知道', '不了解'];
+
 interface IProps {
-  options: string[]
-  value?: any[]
+  options: labelValue[]
   multiple?: boolean
-  onChange?: any
   placeholder?: string
+  tagsValue?: string[]
+  textValue?: string
+  onTagChange?: (value: any) => void
+  onTextChange?: (value: any) => void
 }
 
 function PopupContent({
   options = [],
-  value = [],
-  multiple = false,
   placeholder,
-  onChange = () => {},
+  onTagChange = () => {},
+  onTextChange = () => {},
+  textValue = '',
+  tagsValue = [],
 }: IProps) {
   const [dataSource, setDataSource] = useState([]);
-  const [textarea, setTextarea] = useState('');
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    transformData(options, value);
-    separatedData(options, value);
-  }, []);
+    const data = transformData(options, tagsValue);
+    setDataSource(data);
+    // 判断是否有选择'无'，'没有'等选项
+    setDisabled(isInput(data));
+  }, [tagsValue]);
 
-  const transformData = (data = [], value = []) => {
-    let result = [];
-    for (let i = 0; i < data.length; i++) {
-      const element_i = data[i];
+  /**
+   * 处理options，增加delected属性
+   * @param options all tabs
+   * @param value selected tabs
+   */
+  const transformData = (options: labelValue[], value: string[]) => {
+    let result: any = [];
+    for (let i = 0; i < options.length; i++) {
+      const element_i = options[i];
       let selected = false;
       for (let j = 0; j < value.length; j++) {
         const element_j = value[j];
-        if (element_i === element_j) {
+        if (element_j === element_i.value) {
           selected = true;
         }
       }
-      result.push({ value: element_i, selected });
+      result.push({ ...element_i, selected });
     }
-    setDataSource(result);
-    // return result;
-  };
-
-  const separatedData = (data = [], value = []) => {
-    let selectedTags: any = [];
-    let textarea = '';
-    value.forEach((i: string) => {
-      const isTag = data.find((j: string) => j === i);
-      if (!isTag) {
-        textarea = i;
-      } else {
-        selectedTags.push(i);
-      }
-    });
-    setTextarea(textarea);
-    setSelectedTags(selectedTags);
-    // return result;
-  };
-
-  const getTextarea = (d = options, v = value) => {
-    let result = '';
-    v.forEach((i: string) => {
-      const isTag = d.find((j: string) => j === i);
-      if (!isTag) {
-        result = i;
-      }
-    });
     return result;
   };
 
-  const getSelectedTags = (d = options, v = value) => {
-    let result: any[] = [];
-    v.forEach((i: string) => {
-      const isTag = d.find((j: string) => j === i);
-      if (isTag) {
-        result.push(i);
+  // 判断input组件是否可输入
+  const isInput = (options: labelValue[]) => {
+    let selectedTags: string[] = [];
+    options.forEach((element: labelValue) => {
+      const { label, selected } = element;
+      if (selected) {
+        selectedTags.push(label);
       }
     });
-    return result;
-  };
-
-  interface P {
-    value: string;
-    selected: boolean;
+    const common = intersection(selectedTags, RADIO_TAGS);
+    if (common.length) {
+      return true;
+    }
+    return false;
   }
 
-  const handleSelect = (object: P) => {
-    const clickTag = object.value;
-    let newDataSource = [];
-    let newSelectedTags = [];
-    let newValue = [];
-    if (['无', '没有', '不清楚', '不知道', '不了解'].includes(clickTag)) {
-      // tab === '无'/'没有'/'不清楚'/'不知道'
-      newDataSource = dataSource.map((e: P) => {
-        let selected = false;
-        if (e.value === clickTag) {
-          selected = true;
-        }
-        return { value: e.value, selected };
-      });
-      newSelectedTags = [clickTag];
-      newValue = [...newSelectedTags];
-      setDataSource(newDataSource);
-      setSelectedTags(newSelectedTags);
-      setTextarea('');
-      onChange(newValue);
-    } else if (multiple) {
-      // 多选
-      newDataSource = dataSource.map((e: P) => {
-        let selected = e.selected;
-        if (['无', '没有', '不清楚', '不知道', '不了解'].includes(e.value)) {
-          selected = false;
-        }
-        if (e.value === clickTag) {
-          selected = !e.selected;
-        }
-        return { value: e.value, selected };
-      });
-      // 取选中的array value
-      let filterValue = newDataSource.filter(({ selected }) => selected);
-      newSelectedTags = filterValue.map(({ value }) => value);
-      // value值
-      newValue = [...newSelectedTags];
-      newValue.push(textarea);
-      setDataSource(newDataSource);
-      setSelectedTags(newSelectedTags);
-      onChange(newValue);
-    } else {
-      // 单选
-      newDataSource = dataSource.map((e: P) => {
-        let selected = false;
-        if (e.value === clickTag) {
-          selected = true;
-        }
-        return { value: e.value, selected };
-      });
-      newSelectedTags = [clickTag];
-      newValue = [clickTag];
-      newValue.push(textarea);
-      setDataSource(newDataSource);
-      setSelectedTags(newSelectedTags);
-      onChange(newValue);
+  const handleTabs = ({ label, value, selected }: labelValue, index: number) => {
+    const clickTag = options[index];
+    if (RADIO_TAGS.includes(label)) {
+      const newTagsValue = [clickTag.value];
+      onTagChange(newTagsValue);
+      onTextChange('');
+      return;
     }
-  };
-
-  const handleChange = (v: string) => {
-    setTextarea(v);
-    const value = [...selectedTags];
-    value.push(v);
-    onChange(value);
+    let newTagsValue = [...tagsValue];
+    // 取消’无‘，’没有‘等的选择
+    dataSource.forEach((element: labelValue) => {
+      const { label, value, selected } = element;
+      if (selected && RADIO_TAGS.includes(label)) {
+        newTagsValue.splice(newTagsValue.findIndex(e => e === value), 1);
+      }
+    });
+    // tagsValue是否含有clicktag，有(i > -1)则取消选择，无(i === -1)则增加选择
+    const i = tagsValue.findIndex((e: string) => e === clickTag.value);
+    if (i > -1) {
+      // tagsValue含有clickTag，取消选择
+      newTagsValue = [...newTagsValue.slice(0, i), ...newTagsValue.slice(i + 1)];
+    } else {
+      // tagsValue无clickTag，增加选择
+      newTagsValue.push(clickTag.value);
+    }
+    onTagChange(newTagsValue);
   };
 
   return (
     <>
-      <div className={styles.wrapper}>
+      <ul className={styles.wrapper}>
         {dataSource &&
           dataSource.length > 0 &&
-          dataSource.map(({ value, selected }) => (
-            <div
-              key={value}
-              className={classNames(styles.item, { [styles.selected]: selected })}
-              onClick={() => handleSelect({ value, selected })}
-            >
-              {value}
-            </div>
+          dataSource.map((item: labelValue, index: number) => (
+            <TouchFeedback key={item.value} activeClassName="rmc-picker-popup-item-active">
+              <li
+                className={classNames(styles.item, { [styles.selected]: item.selected })}
+                style={{ fontSize: item.label.length > 4 ? '0.24rem' : '0.26rem' }}
+                onClick={() => handleTabs(item, index)}
+              >
+                {item.label}
+              </li>
+            </TouchFeedback>
           ))}
-      </div>
+      </ul>
       <div className={styles.textarea}>
         <TextareaItem
           rows={3}
           labelNumber={3}
-          placeholder={`其他${placeholder}...`}
-          value={textarea}
-          onChange={handleChange}
+          placeholder={`请输入其他${placeholder}...`}
+          value={textValue}
+          onChange={onTextChange}
+          disabled={disabled}
         />
       </div>
     </>

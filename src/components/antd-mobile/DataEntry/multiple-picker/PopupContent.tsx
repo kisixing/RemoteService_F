@@ -17,23 +17,24 @@ import React, { useState, useEffect, useRef } from 'react';
 import { TextareaItem } from 'antd-mobile';
 import TouchFeedback from 'rmc-feedback';
 import classNames from 'classnames';
+import { labelValue } from './index';
 
 import styles from './PopupContent.less';
 
 interface IProps {
-  dataSource?: string[]
+  dataSource?: labelValue[]
   onChange?: (value: any) => void
   onTabsChange?: (value: any) => void
   onTextChange?: (value: string) => void
-  onDismiss?: () => void
+  onDismiss?: (value?: any) => void
   placeholder?: string
-  tabsvalue?: any[]
+  tagsValue?: any[]
   textValue?: string
 }
 
 function PopupContent({
   dataSource = [],
-  tabsvalue = [],
+  tagsValue = [],
   textValue = '',
   placeholder,
   onDismiss = () => {},
@@ -42,8 +43,8 @@ function PopupContent({
   onChange = () => {},
 }: IProps) {
   const inputRef = useRef(null);
-  const tabs = [{ label: '无', value: 'nothing' }, ...dataSource];
-  const [selectedTags, setSelectedTags] = useState<any>(tabs);
+  const tags = [{ label: '无', value: 'nothing' }, ...dataSource];
+  const [selectedTags, setSelectedTags] = useState<any>(tags);
   const [text, setText] = useState(textValue);
 
   useEffect(() => {}, []);
@@ -54,7 +55,7 @@ function PopupContent({
       onChange([]);
       onDismiss();
     } else if (value === 'other') {
-      const t: any = [...tabs];
+      const t: any = [...tags];
       t[index] = { label: '其他', value: 'other', selected: !selected };
       setSelectedTags(t);
       setTimeout(() => {
@@ -72,7 +73,8 @@ function PopupContent({
 
   const handleTextChange = (value: any) => setText(value);
 
-  const visible = selectedTags && selectedTags.length > 0 && selectedTags[selectedTags.length - 1]['selected'];
+  const visible =
+    selectedTags && selectedTags.length > 0 && selectedTags[selectedTags.length - 1]['selected'];
 
   return (
     <div className={styles.content}>

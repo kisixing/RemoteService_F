@@ -203,10 +203,14 @@ class PregnancyHistory extends React.PureComponent<P, S> {
           <div className={styles.empty}> 暂无孕产史信息... </div>
         )}
         <div className="bottom_button">
-          <Button type="primary" className={styles.addButton} onClick={this.add}>
+          <Button type="warning" className={styles.addButton} onClick={this.add}>
             <IconFont type="add" size=".54rem" />
           </Button>
-          <Button type="primary" disabled={dataSource && !dataSource.length} onClick={this.onSubmit}>
+          <Button
+            type="warning"
+            disabled={dataSource && !dataSource.length}
+            onClick={this.onSubmit}
+          >
             保存
           </Button>
         </div>

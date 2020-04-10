@@ -27,7 +27,7 @@ function RadioInput(
   const label = children && children.split('&');
   const ids = id && id.split('&');
 
-  const visible = value[ids[0]] !== '无' && value[ids[0]] !== '否' && value[ids[0]] === true;
+  const visible = value[ids[0]] && value[ids[0]] !== '无' && value[ids[0]] !== '否';
 
   const handleRadio = (val: any) => {
     let result = { ...value };

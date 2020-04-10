@@ -633,10 +633,10 @@ const pregnancy = {
               id: 'alcohol',
               label: '嗜好-酒',
               type: 'mix-picker',
+              valueFormat: 'string',
               placeholder: '请选择酒的种类',
-              multiple: true,
               required: true,
-              options: ['无', '白酒', '啤酒', '葡萄酒', '药酒'],
+              options: ['无', '白酒', '啤酒', '葡萄酒', '药酒'].map(e => ({ label: e, value: e })),
             },
             {
               id: 'alcoholNote',
@@ -775,9 +775,9 @@ const pregnancy = {
               id: 'partnerAlcohol',
               label: '伴侣嗜好-烟',
               type: 'mix-picker',
+              valueFormat: 'string',
               required: true,
-              multiple: true,
-              options: ['无', '白酒', '啤酒', '葡萄酒', '药酒'],
+              options: ['无', '白酒', '啤酒', '葡萄酒', '药酒'].map(e => ({ label: e, value: e })),
             },
             {
               id: 'partnerAlcoholNote',
@@ -828,36 +828,7 @@ const pregnancy = {
             '癫痫',
             '血友病',
             '高度近视',
-          ],
-        },
-        {
-          id: 'partnerDisease1',
-          label: '伴侣疾病史1',
-          type: 'mix-picker',
-          multiple: true,
-          required: true,
-          options: [
-            '无',
-            '高血压',
-            '糖尿病',
-            '心脏病',
-            '肝脏疾病',
-            '肾脏疾病',
-            '脑梗',
-            '脑出血',
-            '癌症',
-            '哮喘',
-            '肺结核',
-            '甲亢',
-            '过敏性疾病',
-            '癫痫病',
-            '风湿',
-            '贫血',
-            '地中海贫血',
-            '癫痫',
-            '血友病',
-            '高度近视',
-          ],
+          ].map(e => ({ label: e, value: e })),
         },
       ],
     },
@@ -872,7 +843,7 @@ const pregnancy = {
           multiple: true,
           required: true,
           disabled: false,
-          data: [
+          options: [
             { label: '高血压', value: 'hypertension' },
             { label: '肾病', value: 'nephropathy' },
             { label: '呼吸系统疾病', value: 'respiratoryDisease' },
@@ -894,7 +865,7 @@ const pregnancy = {
           type: 'multiple-picker',
           multiple: true,
           required: true,
-          data: [
+          options: [
             { label: '青霉素', value: 'penicillin' },
             { label: '头孢', value: 'cephalosporin' },
             { label: '磺胺类', value: 'sulfa' },
@@ -909,7 +880,7 @@ const pregnancy = {
           type: 'multiple-picker',
           multiple: true,
           required: true,
-          data: [
+          options: [
             { label: '高血压', value: 'hypertension' },
             { label: '肾病', value: 'nephropathy' },
             { label: '呼吸系统疾病', value: 'respiratoryDisease' },
@@ -931,7 +902,7 @@ const pregnancy = {
           type: 'multiple-picker',
           multiple: true,
           required: true,
-          data: [
+          options: [
             { label: '子宫手术', value: 'uterus' },
             { label: '卵巢手术', value: 'ovaries' },
             { label: '甲状腺手术', value: 'thyroid' },
@@ -980,7 +951,7 @@ const history = {
             '巨大儿',
             '妊娠期肝内胆汁淤积症',
             '不记得',
-          ],
+          ].map(e => ({ label: e, value: e })),
         },
         {
           id: 'isBirth',
@@ -1052,10 +1023,7 @@ const history = {
             '死胎',
             '死产',
             '不清楚',
-          ].map(e => ({
-            label: e,
-            value: e,
-          })),
+          ].map(e => ({ label: e, value: e })),
         },
         {
           id: 'deliveryWay',

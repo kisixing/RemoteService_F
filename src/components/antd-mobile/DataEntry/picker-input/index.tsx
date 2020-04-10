@@ -4,7 +4,7 @@
  * @Date: 2020-04-08 18:08:32
  */
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import Picker from '../picker';
 import RadioPicker from '../radio-picker';
 import MixPicker from '../mix-picker';
@@ -16,7 +16,7 @@ interface IProps {
   id: string
   children: string;
   value?: object;
-  onChange?: () => void;
+  onChange?: (value: object) => void;
   props?: any[]
 }
 
@@ -27,25 +27,7 @@ function PickerInput({ id, children, value = {}, props = initProps, onChange = (
   const label = children && children.split('&');
   const ids = id && id.split('&');
 
-
-  const visible = value[ids[0]] !== '无' && value[ids[0]] !== '否' && value[ids[0]] === true;
-
-  const visible1 = () => {
-    let result = false;
-    const pickerValue = value[ids[0]];
-    if (pickerValue === true) {
-      result = true;
-    }
-    if (pickerValue !== '无') {
-      result = true;
-    }
-    if (pickerValue !== '否') {
-      result = true;
-    }
-    return result;
-  };
-
-  console.log('123', value[ids[0]], visible1());
+  const visible = value[ids[0]] && value[ids[0]] !== '无' && value[ids[0]] !== '否';
 
   const handlePicker = (val: any) => {
     let result = { ...value };
@@ -75,9 +57,9 @@ function PickerInput({ id, children, value = {}, props = initProps, onChange = (
           required={props[0]['required']}
           value={value[ids[0]]}
           options={props[0]['options']}
+          valueFormat={props[0]['valueFormat']}
           onChange={handlePicker}
           placeholder={props[0]['placeholder'] || `请选择${label[0]}`}
-          multiple={props[0]['multiple']}
         >
           {label[0]}
         </MixPicker>

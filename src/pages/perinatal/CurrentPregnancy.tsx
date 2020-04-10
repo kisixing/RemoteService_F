@@ -113,8 +113,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
         console.log('本孕信息初始值：', values);
         form.setFieldsValue({
           ...values,
-          partnerDisease: ['高血压', '糖尿病', '心脏病'],
-          partnerDisease1: '高血压,糖尿病,心脏病',
+          partnerDisease: ['高血压', '糖尿病', '其他疾病'],
           'smoke&smokeNote': { smoke: true, smokeNote: 10 },
         });
         this.setState({ values });
