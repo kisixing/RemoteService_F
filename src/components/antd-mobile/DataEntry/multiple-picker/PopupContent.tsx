@@ -22,9 +22,9 @@ import { labelValue } from './index';
 import styles from './PopupContent.less';
 
 interface IProps {
-  dataSource?: labelValue[]
+  options?: labelValue[]
   onChange?: (value: any) => void
-  onTabsChange?: (value: any) => void
+  onTagsChange?: (value: any) => void
   onTextChange?: (value: string) => void
   onDismiss?: (value?: any) => void
   placeholder?: string
@@ -33,21 +33,29 @@ interface IProps {
 }
 
 function PopupContent({
-  dataSource = [],
+  options = [],
   tagsValue = [],
   textValue = '',
   placeholder,
   onDismiss = () => {},
-  onTabsChange = () => {},
+  onTagsChange = () => {},
   onTextChange = () => {},
   onChange = () => {},
 }: IProps) {
   const inputRef = useRef(null);
-  const tags = [{ label: '无', value: 'nothing' }, ...dataSource];
+  const tags = [{ label: '无', value: 'nothing' }, ...options];
+  const [dataSource, setDataSource] = useState([]);
   const [selectedTags, setSelectedTags] = useState<any>(tags);
   const [text, setText] = useState(textValue);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const data = transformData(options, tagsValue);
+    // setDataSource(data);
+  }, [tagsValue]);
+
+  const transformData = (options: labelValue[], value: string[]) => {
+    return []
+  };
 
   const handleTagSelect = (value: string, selected: boolean, index: number) => {
     if (value === 'nothing') {

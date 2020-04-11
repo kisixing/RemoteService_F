@@ -2,6 +2,7 @@
  * @Author: ZHONG JUN
  * @Date: 2020-04-06 14:14:49
  * @Description: multiple select多选组件
+ *
  */
 
 import React, { forwardRef, useEffect, useState } from 'react';
@@ -47,6 +48,8 @@ const separatedLabels = (options: any[], value: any) => {
 };
 
 const CustomItem = ({ arrow, children, extra, value, onClick, options, disabled }: any) => {
+  // value值约定格式
+  // [{ label: 'tag1', value: true/false }, ..., { label: '其他', value: true/false, note: '其他说明' }]
   let text = '';
   const labels = separatedLabels(options, value);
   if (labels) {
@@ -54,6 +57,9 @@ const CustomItem = ({ arrow, children, extra, value, onClick, options, disabled 
   }
   if (value && value.length === 0) {
     text = '无';
+  }
+  if (value && value.length === 1 && value[0]['label'] === '其他') {
+    text = value[0]['note'];
   }
   return (
     <List.Item
@@ -87,24 +93,31 @@ interface IProps {
   children?: any
   options: labelValue[]
   value?: any[]
-  valueForm?: 'string' | 'array'
   onChange: any
   placeholder?: string
 }
 
 function MultiplePicker(
-  { required, disabled, children, options, value = [], placeholder, onChange }: IProps,
+  {
+    required,
+    disabled,
+    children,
+    options,
+    value = [],
+    placeholder,
+    onChange,
+  }: IProps,
   ref: any,
 ) {
   const [visible, setVisible] = useState(false);
-  const [tabsValue, setTabsValue] = useState([]);
+  const [tagsValue, setTagsValue] = useState([]);
   const [textValue, setTextValue] = useState('');
 
   useEffect(() => {
     // value = [{ label: '' , value: true }， { label: 'otherNote', value: '其他疾病' }]
-    const tabs: any = value.filter((e: any) => e.label !== 'otherNote');
+    const tags: any = value.filter((e: any) => e.label !== 'otherNote');
     const text = value.filter((e: any) => e.label === 'otherNote');
-    setTabsValue(tabs);
+    setTagsValue(tags);
     setTextValue(text.length && text[0]['value']);
   }, []);
 
@@ -124,11 +137,11 @@ function MultiplePicker(
       maskTransitionName="rmc-picker-popup-fade"
       content={
         <PopupContent
-          dataSource={options}
-          tabsValue={tabsValue}
+          options={options}
+          tagsValue={tagsValue}
           textValue={textValue}
           placeholder={`其他${children}`}
-          onTabsChange={setTabsValue}
+          onTagsChange={setTagsValue}
           onTextChange={setTextValue}
           onChange={onChange}
           onDismiss={onDismiss}

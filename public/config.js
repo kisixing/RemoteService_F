@@ -840,7 +840,6 @@ const pregnancy = {
           id: 'diseaseHistory',
           label: '疾病史',
           type: 'multiple-picker',
-          multiple: true,
           required: true,
           disabled: false,
           options: [
@@ -863,7 +862,6 @@ const pregnancy = {
           id: 'allergyHistory',
           label: '过敏史',
           type: 'multiple-picker',
-          multiple: true,
           required: true,
           options: [
             { label: '青霉素', value: 'penicillin' },
@@ -878,7 +876,6 @@ const pregnancy = {
           id: 'familyHistory',
           label: '家庭史',
           type: 'multiple-picker',
-          multiple: true,
           required: true,
           options: [
             { label: '高血压', value: 'hypertension' },
@@ -900,7 +897,6 @@ const pregnancy = {
           id: 'procedureHistory',
           label: '手术史',
           type: 'multiple-picker',
-          multiple: true,
           required: true,
           options: [
             { label: '子宫手术', value: 'uterus' },

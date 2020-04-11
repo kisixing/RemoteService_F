@@ -37,7 +37,7 @@ function PopupContent({
   }, [tagsValue]);
 
   /**
-   * 处理options，增加delected属性
+   * 处理options，增加selected属性
    * @param options all tabs
    * @param value selected tabs
    */
