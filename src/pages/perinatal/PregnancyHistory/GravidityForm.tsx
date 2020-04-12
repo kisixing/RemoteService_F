@@ -6,14 +6,13 @@
 
 import React, { PureComponent } from 'react';
 import createDOMForm from 'rc-form/lib/createDOMForm';
-import FormFields from './FormFields';
-import FetusComponent from './fetus/FetusComponent';
-import _ from 'lodash';
+import FormFields from '../FormFields';
+import FetusesComponent from './FetusesComponent';
 
 // 读取配置文件
 const configuration = window.configuration;
-const dataSource = _.cloneDeep(configuration.history.data);
-const fetus = configuration.history.data[0]['children'].filter((e: any) => e.id === 'fetus');
+const dataSource = configuration.history.data;
+const fetusData = configuration.history.data[0]['children'].filter((e: any) => e.id === 'fetus')[0]['data'];
 
 interface P {
   loading?: boolean;
@@ -24,13 +23,15 @@ interface P {
 
 interface S {
   visible: boolean
+  number?: number
 };
 
 class GravidityForm extends PureComponent<P, S> {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false
+      visible: false,
+      number: 0
     }
   }
 
@@ -107,7 +108,7 @@ class GravidityForm extends PureComponent<P, S> {
 
     // 根据是否有胎数fetalcount显示新生儿情况表单
     if (values.isBirth && values.fetalcount) {
-      this.setState({ visible: true })
+      this.setState({ visible: true, number: values.fetalcount })
     } else {
       this.setState({ visible: false })
     }
@@ -118,12 +119,15 @@ class GravidityForm extends PureComponent<P, S> {
     form.setFieldsValue({ isBirth: true });
     setTimeout(() => {
       form.setFieldsValue({ ...values, fetalcount: 1 });
+    }, 100);
+    setTimeout(() => {
+      form.setFieldsValue({ ...values, fetalcount: 1, fetus: [{ childGender: 1 }] });
     }, 200);
   }
 
   // 确定key位置
   getKeyIndex = (key: string) => {
-    const data = _.cloneDeep(dataSource);
+    const data = dataSource;
     let index: number[] = [];
     for (let i = 0; i < data.length; i++) {
       const children = data[i]['children'];
@@ -146,7 +150,7 @@ class GravidityForm extends PureComponent<P, S> {
 
   render() {
     const { form } = this.props;
-    const { visible } = this.state;
+    const { visible, number } = this.state;
     console.log('visible', visible);
     return (
       <form>
@@ -155,9 +159,9 @@ class GravidityForm extends PureComponent<P, S> {
             initialValue: [],
             rules: [{ required: true, message: '请填写完整的胎儿信息！' }],
           })(
-            <FetusComponent key={'fetus'} required={true} data={fetus[0]['data']}>
+            <FetusesComponent key="fetus" required={true} data={fetusData} number={number}>
               {'胎儿信息'}
-            </FetusComponent>,
+            </FetusesComponent>,
           ) : null
         }
       </form>

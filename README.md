@@ -40,7 +40,7 @@
 
   1. rc-form方案[参考链接](http://react-component.github.io/form/) 简单的根据表单配置文件config.js循环出各类组件。根据antd-mobile Data Entry组件进行二次封装
 
-  2. UForm方案[参考链接](https://uformjs.org/#/MpI2Ij/dNFzFyTb)
+  2. UForm方案[参考链接](https://uformjs.org/#/MpI2Ij/dNFzFyTb)，后期升级react hook语法，考虑react-hook-form[链接](https://react-hook-form.com/get-started#Quickstart)
    
   3. 难点
     表单域联动、动态表单

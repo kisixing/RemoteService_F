@@ -92,7 +92,7 @@ export default [
         path: '/perinatal/pregnancy-history',
         name: 'pregnancy history',
         title: '孕产史信息',
-        component: './perinatal/PregnancyHistory',
+        component: './perinatal/PregnancyHistory/index',
       },
       { component: './404' },
     ],

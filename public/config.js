@@ -292,25 +292,25 @@ const basic = {
     },
     {
       id: 'part-3',
-      desc: '伴侣基本信息',
+      desc: '男方基本信息',
       children: [
         {
           id: 'partnerName',
-          label: '伴侣姓名',
+          label: '男方姓名',
           type: 'text-input',
           charactertype: 'text',
           required: true,
         },
         {
           id: 'partnerMobile',
-          label: '伴侣电话',
+          label: '男方电话',
           type: 'text-input',
           charactertype: 'phone',
           required: true,
         },
         {
           id: 'partnerIdType',
-          label: '伴侣证件类型',
+          label: '男方证件类型',
           type: 'picker',
           required: true,
           cols: 1,
@@ -319,14 +319,14 @@ const basic = {
         },
         {
           id: 'partnerIdNO',
-          label: '伴侣证件号码',
+          label: '男方证件号码',
           type: 'text-input',
           charactertype: 'text',
           required: true,
         },
         {
           id: 'partnerDob',
-          label: '伴侣出生日期',
+          label: '男方出生日期',
           type: 'date-picker',
           required: true,
           mode: 'date',
@@ -336,21 +336,21 @@ const basic = {
         },
         {
           id: 'partnerAge',
-          label: '伴侣年龄',
+          label: '男方年龄',
           type: 'text-input',
           charactertype: 'digit',
           required: true,
         },
         {
           id: 'partnerNationality',
-          label: '伴侣国籍',
+          label: '男方国籍',
           type: 'text-input',
           charactertype: 'text',
           required: true,
         },
         {
           id: 'partnerNativeplace',
-          label: '伴侣籍贯',
+          label: '男方籍贯',
           type: 'picker',
           required: true,
           cols: 1,
@@ -359,7 +359,7 @@ const basic = {
         },
         {
           id: 'partnerEthnic',
-          label: '伴侣民族',
+          label: '男方民族',
           type: 'picker',
           required: true,
           cols: 1,
@@ -368,7 +368,7 @@ const basic = {
         },
         {
           id: 'partnerOccupation',
-          label: '伴侣职业',
+          label: '男方职业',
           type: 'picker',
           required: true,
           cols: 1,
@@ -382,14 +382,14 @@ const basic = {
       desc: '地址信息',
       children: [
         {
-          id: 'registeredAddress',
+          id: 'permanentResidenceAddress',
           label: '户口地址',
           type: 'address-picker',
           valueFormat: 'string',
           required: true,
         },
         {
-          id: 'registeredAddressDetail',
+          id: 'permanentResidenceAddressDetail',
           label: '户口详细地址',
           type: 'textarea-input',
           required: true,
@@ -744,12 +744,12 @@ const pregnancy = {
         },
         {
           id: 'partnerSmoke&partnerSmokeNote',
-          label: '伴侣嗜好-烟&伴侣烟量',
+          label: '男方嗜好-烟&男方烟量',
           type: 'picker-input',
           props: [
             {
               id: 'partnerSmoke',
-              label: '伴侣嗜好-烟',
+              label: '男方嗜好-烟',
               type: 'radio',
               required: true,
               options: [
@@ -759,7 +759,7 @@ const pregnancy = {
             },
             {
               id: 'partnerSmokeNote',
-              label: '伴侣烟量',
+              label: '男方烟量',
               type: 'text-input',
               required: true,
               charactertype: 'digit',
@@ -768,12 +768,12 @@ const pregnancy = {
         },
         {
           id: 'partnerAlcohol&partnerAlcoholNote',
-          label: '伴侣嗜好-酒&伴侣饮酒量',
+          label: '男方嗜好-酒&男方饮酒量',
           type: 'picker-input',
           props: [
             {
               id: 'partnerAlcohol',
-              label: '伴侣嗜好-烟',
+              label: '男方嗜好-烟',
               type: 'mix-picker',
               valueFormat: 'string',
               required: true,
@@ -781,7 +781,7 @@ const pregnancy = {
             },
             {
               id: 'partnerAlcoholNote',
-              label: '伴侣饮酒量',
+              label: '男方饮酒量',
               type: 'text-input',
               required: true,
               charactertype: 'digit',
@@ -791,7 +791,7 @@ const pregnancy = {
         },
         {
           id: 'partnerABO',
-          label: '伴侣血型',
+          label: '男方血型',
           type: 'radio',
           required: true,
           options: [
@@ -803,7 +803,7 @@ const pregnancy = {
         },
         {
           id: 'partnerDisease',
-          label: '伴侣疾病史',
+          label: '男方疾病史',
           type: 'mix-picker',
           multiple: true,
           required: true,
@@ -1233,4 +1233,8 @@ window.configuration = {
   mains: ENTRANCE,
   // 工具栏入口
   tools: TOOLS,
+  // 建档时是否进行顺序控制
+  sequentialControl: false,
+  // 孕产史是否根据本孕信息的孕次数量自动生成列表
+  autoMapPregnancyHistory: false,
 };

@@ -13,7 +13,6 @@ export default (props: IProps) => {
     dataSource = [],
     loading
   } = props;
-  console.log('object', dataSource);
 
   if (loading) {
     return (

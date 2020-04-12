@@ -7,7 +7,7 @@
 import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import createDOMForm from 'rc-form/lib/createDOMForm';
 import _ from 'lodash';
-import FormFields from './FormFields';
+import FormFields from '../FormFields';
 
 // 读取配置文件
 const configuration = window.configuration;

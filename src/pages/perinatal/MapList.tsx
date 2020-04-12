@@ -6,27 +6,38 @@
 
 import React from 'react';
 import { connect } from 'dva';
-import { WingBlank } from 'antd-mobile';
+import Router from 'umi/router';
+import { WingBlank, Toast } from 'antd-mobile';
 import { Touchable } from '@/components/antd-mobile';
 
 import { ConnectState, ConnectProps } from '@/models/connect';
-import { router } from '@/utils';
 import constant from '@/utils/constants';
 import styles from './MapList.less';
 
-export const MAPS = [
+// 读取配置文件
+const { sequentialControl } = window.configuration;
+
+interface LabelProps {
+  title: string
+  name: string
+  icon: string
+  finished: string
+  route: string
+}
+
+export const MAPS: LabelProps[] = [
          {
            title: '基本信息',
            name: 'basic',
            icon: 'icon_wc_jiben',
-           finished: false,
+           finished: 'false',
            route: '/perinatal/basic-info',
          },
          {
            title: '本孕信息',
            name: 'pregnancy',
            icon: 'icon_wc_benyun',
-           finished: false,
+           finished: 'false',
            route: '/perinatal/current-pregnancy',
          },
          {
@@ -64,27 +75,52 @@ class MapList extends React.Component<P, S> {
         const data = [...this.state.dataSource];
         const { residenceAddress, maritalYears } = res;
         if (!!residenceAddress) {
-          data[0]['finished'] = true;
+          data[0]['finished'] = 'true';
         }
         if (!!maritalYears) {
-          data[1]['finished'] = true;
+          data[1]['finished'] = 'true';
         }
         this.setState({ dataSource: data });
       }
     });
   }
 
-  onPress = (e: any) => {
+  onClick = (e: any, item: any) => {
     e.stopPropagation();
-    console.log(e.type, e.target.id);
+    const { route, name } = item;
+    const { dataSource } = this.state;
+    console.log('object', sequentialControl && name !== 'basic');
+
+    if (sequentialControl && name !== 'basic') {
+      // 是否做顺序控制
+      if (name === 'pregnancy') {
+        // 进入本孕信息pregnancy时，检验基本信息basic是否已经填写完整
+        const isAllow = dataSource[0]['finished'] === 'true';
+        if (!isAllow) {
+          return Toast.info('请填写完整的基本信息', 2)
+        }
+      }
+      if (name === 'history') {
+        // 进入本孕信息history时，检验基本信息basic，本孕信息pregnancy是否已经填写完整
+        const isAllow1 = dataSource[0]['finished'] === 'true';
+        const isAllow2 = dataSource[1]['finished'] === 'true';
+        if (isAllow1) {
+          return Toast.info('请填写完整的基本信息', 2)
+        }
+        if (isAllow2) {
+          return Toast.info('请填写完整的本孕信息', 2)
+        }
+      }
+    }
+    Router.push(route);
   };
 
   // 表单完成状态
   status = (state: any) => {
-    if (state === true) {
+    if (state === 'true') {
       return <div className={styles.finished}>资料已完成</div>;
     }
-    if (state === false) {
+    if (state === 'false') {
       return <div className={styles.unfinished}>资料未完善，请立即前往 ></div>;
     }
     return;
@@ -97,7 +133,7 @@ class MapList extends React.Component<P, S> {
         {this.state.dataSource.map(item => {
           return (
             <Touchable key={item.name}>
-              <div className={styles.item} onClick={() => router(item.route)}>
+              <div className={styles.item} onClick={e => this.onClick(e, item)}>
                 <div className={styles.content}>
                   <div
                     className={styles.thumbnails}
