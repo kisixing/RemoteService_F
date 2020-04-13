@@ -51,6 +51,10 @@ function Example() {
         <IconFont type="device" />
       </div>
 
+      <div style={{ marginTop: '.3rem' }}>
+
+      </div>
+
       <BackButton />
     </div>
   );

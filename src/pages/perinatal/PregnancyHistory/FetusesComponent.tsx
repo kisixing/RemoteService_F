@@ -16,21 +16,21 @@ const dataSource = history.data[0]['children'].filter((e: any) => e.id === 'fetu
 
 interface P {
   required?: boolean
-  data: any[]
   number?: number | undefined
   value?: object
   children?: React.ReactNode
   onChange?: () => void
 }
 
-function FetusesComponent({ children, required, value = [], number = 0, onChange = () => {}}: P, ref: any) {
-  console.log('object-value', value);
-
+function FetusesComponent(
+  { children, required, value = [], number = 0, onChange = () => {} }: P,
+  ref: any,
+) {
   const handleChange = (val: any, index: number) => {
     let newValue = value;
     newValue[index] = val;
-    onChange(newValue)
-  }
+    onChange(newValue);
+  };
 
   const loop = (number: number) => {
     let node: React.ReactNode[] = [];
@@ -38,7 +38,11 @@ function FetusesComponent({ children, required, value = [], number = 0, onChange
       const element = (
         <div key={i + 1} className={styles.formWrap}>
           <p>{`胎儿${i + 1}`}</p>
-          <FetusForm dataSource={dataSource} value={value[i]} onChange={(e: any) => handleChange(e, i)} />
+          <FetusForm
+            dataSource={dataSource}
+            value={value[i]}
+            onChange={(e: any) => handleChange(e, i)}
+          />
         </div>
       );
       node.push(element);
@@ -56,7 +60,7 @@ function FetusesComponent({ children, required, value = [], number = 0, onChange
       </List.Item>
       {loop(number)}
     </div>
-  )
+  );
 }
 
 export default forwardRef(FetusesComponent);

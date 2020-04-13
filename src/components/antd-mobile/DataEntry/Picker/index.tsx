@@ -12,7 +12,9 @@ interface IProps extends PickerPropsType {
   placeholder?: string
   pickerType?: any
   addressPicker?: boolean
-  valueFormat?: 'string' | 'array' | 'number'
+  valueFormat?: 'string' | 'array' | 'number' | 'labelInValue'
+  value: any
+  options?: any[]
 }
 
 const CustomItem = (props: any) => {
@@ -37,26 +39,35 @@ const CustomItem = (props: any) => {
   );
 };
 
-function Picker({
-  required,
-  children,
-  data,
-  placeholder,
-  title,
-  addressPicker,
-  valueFormat = 'array',
-  onChange = () => {},
-  value,
-  ...rest
-}: IProps, ref: any) {
+function Picker(
+  {
+    required,
+    children,
+    options = [],
+    placeholder,
+    title,
+    addressPicker,
+    valueFormat = 'array',
+    onChange = () => {},
+    value,
+    ...rest
+  }: IProps,
+  ref: any,
+) {
   // 是否选择地址组件
-  let dataSource = data;
+  let dataSource = options;
   if (addressPicker) {
     dataSource = options;
   }
   // value格式转化
   // 判断value字符类型，默认array同antd-mobile
-  let correctValue = value;
+  let correctValue = [];
+  if (Object.prototype.toString.call(value) === '[object Array]') {
+    correctValue = [...value];
+    if (value[0]['value']) {
+      correctValue = value.map((e: any) => e.value);
+    }
+  }
   if (Object.prototype.toString.call(value) === '[object Number]') {
     correctValue = [value];
   }
@@ -72,8 +83,17 @@ function Picker({
     if (valueFormat === 'number') {
       val = value[0];
     }
-    onChange(val)
-  }
+    if (valueFormat === 'labelInValue') {
+      const duplicate = dataSource.filter((e: any) => {
+        const isInclude = value.includes(e.value);
+        return isInclude;
+      });
+      console.log('object', duplicate);
+      val = [...duplicate];
+      console.log('picker123', val);
+    }
+    onChange(val);
+  };
 
   return (
     <AntdPicker

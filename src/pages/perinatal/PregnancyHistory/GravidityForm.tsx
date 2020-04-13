@@ -6,19 +6,33 @@
 
 import React, { PureComponent } from 'react';
 import createDOMForm from 'rc-form/lib/createDOMForm';
+import { Toast } from 'antd-mobile';
+import _ from 'lodash';
 import FormFields from '../FormFields';
 import FetusesComponent from './FetusesComponent';
+import { getKeys } from '../utils';
 
 // 读取配置文件
-const configuration = window.configuration;
-const dataSource = configuration.history.data;
-const fetusData = configuration.history.data[0]['children'].filter((e: any) => e.id === 'fetus')[0]['data'];
+const { history } = window.configuration;
+const dataSource = history.data;
+const formFields = history.data[0]['children'];
+
+// 获取需要进行value取值转换的key
+export function getSpecialKeys(data = []) {
+  const result = data.filter((e: any) => {
+    const type = e.type === 'picker' || e.type === 'multiple-picker';
+    const format = e.valueFormat === 'labelInValue';
+    return type && format;
+  });
+  return result;
+}
 
 interface P {
   loading?: boolean;
   form: any
   id: string
   values: object
+  index?: number
 }
 
 interface S {
@@ -64,7 +78,7 @@ class GravidityForm extends PureComponent<P, S> {
     //////////////// 未分娩情况下的表单 ///////////////////////////////
     //////////////////////////////////////////////////////////////
     // 流产方式
-    const abortionIndex = this.getKeyIndex('abortion');
+    const abortionIndex = this.getKeyIndex('abortionWay');
     // 不良生育史
     const unhealthIndex = this.getKeyIndex('unhealth');
     // 是否清宫
@@ -107,7 +121,7 @@ class GravidityForm extends PureComponent<P, S> {
     }
 
     // 根据是否有胎数fetalcount显示新生儿情况表单
-    if (values.isBirth && values.fetalcount) {
+    if (values.isBirth) {
       this.setState({ visible: true, number: values.fetalcount })
     } else {
       this.setState({ visible: false })
@@ -116,13 +130,57 @@ class GravidityForm extends PureComponent<P, S> {
 
   initValue = () => {
     const { form, values } = this.props;
+    // 初始化values
+    this.setValues(values);
+
     form.setFieldsValue({ isBirth: true });
     setTimeout(() => {
-      form.setFieldsValue({ ...values, fetalcount: 1 });
-    }, 100);
-    setTimeout(() => {
       form.setFieldsValue({ ...values, fetalcount: 1, fetus: [{ childGender: 1 }] });
-    }, 200);
+    }, 100);
+  }
+
+  setValues = (values: any) => {
+    // 特殊取值的属性
+    const specialKeys = getSpecialKeys(formFields);
+    // 配置上有的key属性
+    const configKeys = getKeys(dataSource);
+    const result = _.pick(values, configKeys);
+
+    for (let i = 0; i < specialKeys.length; i++) {
+      const id = specialKeys[i]['id'];
+      const options: any[] = specialKeys[i]['options'];
+      const filtered = options.filter((e: any) => {
+        const key = e.value;
+        const value = values[key];
+        return !!value;
+      });
+      result[id] = filtered;
+    }
+  }
+
+  getValues = () => {
+    const { form: { validateFieldsAndScroll }, index } = this.props;
+    let result: any = false;
+    validateFieldsAndScroll((error: any[], values: any) => {
+      if (!error) {
+        Toast.info(`孕册记录${index}未填写完整`, 2)
+        return result = false;
+      }
+      let obj = {...values};
+      // 特殊取值的属性
+      const specialKeys = getSpecialKeys(formFields);
+      for (let i = 0; i < specialKeys.length; i++) {
+        const id = specialKeys[i]['id'];
+        const options: any[] = specialKeys[i]['options'];
+        delete(obj[id]);
+        options.forEach(e => {
+          const key = e.value;
+          obj[key] = values[key]
+        });
+      }
+      result = {...obj};
+    })
+    return result;
   }
 
   // 确定key位置
@@ -151,7 +209,6 @@ class GravidityForm extends PureComponent<P, S> {
   render() {
     const { form } = this.props;
     const { visible, number } = this.state;
-    console.log('visible', visible);
     return (
       <form>
         <FormFields form={form} dataSource={dataSource} />
@@ -159,7 +216,7 @@ class GravidityForm extends PureComponent<P, S> {
             initialValue: [],
             rules: [{ required: true, message: '请填写完整的胎儿信息！' }],
           })(
-            <FetusesComponent key="fetus" required={true} data={fetusData} number={number}>
+            <FetusesComponent key="fetus" required={true} number={number}>
               {'胎儿信息'}
             </FetusesComponent>,
           ) : null

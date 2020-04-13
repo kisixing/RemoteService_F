@@ -13,7 +13,8 @@ import { Modal, ActivityIndicator } from 'antd-mobile';
 import { Button } from '@/components/antd-mobile';
 import { getPregnancy, updatePregnancy } from '@/services/user';
 import { ConnectState, ConnectProps } from '@/models/connect';
-import { checkIdCard, getKeys } from '@/utils';
+import { checkIdCard } from '@/utils';
+import { getKeys } from './utils';
 import FormFields from './FormFields';
 import StepBar from './StepBar';
 

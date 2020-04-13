@@ -38,11 +38,12 @@ const config: IConfig = {
           enable: true,
           default: 'zh-CN',
         },
-        // chunks: ['react', 'umi'],
+        chunks: ['vendors', 'umi'],
         headScripts: [
-          // 'https://cdn.bootcss.com/react/16.8.6/umd/react.production.min.js',
-          // 'https://cdn.bootcss.com/react-dom/16.8.6/umd/react-dom.production.min.js',
+          // 'https://cdn.bootcss.com/react/16.12.0/umd/react.production.min.js',
+          // 'https://cdn.bootcss.com/react-dom/16.12.0/umd/react-dom.production.min.js',
           // 'https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js',
+          // 'https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js',
         ],
         scripts: [{ src: '<%= PUBLIC_PATH %>config.js' }],
         links: [
@@ -101,6 +102,9 @@ const config: IConfig = {
   ],
   externals: {
     // 'react-dom': 'window.ReactDOM',
+    // react: 'window.React',
+    // moment: 'window.moment',
+    // lodash: 'window.lodash',
   },
   chainWebpack: process.env.NODE_ENV === 'development' ? undefined : webpackPlugin,
   uglifyJSOptions: {

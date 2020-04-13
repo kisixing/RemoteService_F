@@ -49,12 +49,11 @@ function MapList({ id, label, type, charactertype, required, placeholder, onChan
 }
 
 const FetusForm = ({ value = {}, dataSource = [], onChange = () => {} }: any) => {
-  // const data = setValues(dataSource, value);
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
 
-  useEffect(() => {
-    setValues(dataSource, value);
-  }, [onChange]);
+  // useEffect(() => {
+  //   setValues(dataSource, value);
+  // }, []);
 
   // 赋值
   const setValues = (data: any, value: any) => {
@@ -63,19 +62,18 @@ const FetusForm = ({ value = {}, dataSource = [], onChange = () => {} }: any) =>
       const id = data[i]['id'];
       newData[i]['value'] = value[id];
     }
-    console.log('ooooooooo', value, newData);
-    setData(newData);
-    // return newData;
+    // setData(newData);
+    return newData;
   }
 
   const handleChange = (val: any, id: string) => {
-    console.log('value', val, id);
     let newValue = { ...value };
     newValue[id] = val;
     // rc-form onChange
     onChange(newValue);
   };
 
+  const data = setValues(dataSource, value);
   return (
     <List className={'styles.list'}>
       {data && data.map((item: any) => {

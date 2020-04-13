@@ -8,7 +8,7 @@ import React from 'react';
 import { connect } from 'dva';
 import Router from 'umi/router';
 import _ from 'lodash';
-import { generateUUID, getKeys } from '@/utils';
+import { generateUUID } from '@/utils';
 import { Accordion, Modal, Toast } from 'antd-mobile';
 import { Button, IconFont } from '@/components/antd-mobile';
 import { getPregnancy, updatePregnancy } from '@/services/user';
@@ -16,13 +16,6 @@ import StepBar from '../StepBar';
 import GravidityForm from './GravidityForm';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import styles from '../styles.less';
-
-// 读取配置文件
-const configuration = window.configuration;
-// 基本信息配置
-// const originalDataSource = configuration.pregnancy.data; // _.cloneDeep()
-const history = configuration.history.data;
-const keys = getKeys(history);
 
 interface P {
   loading?: boolean
@@ -97,6 +90,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
             >
               <GravidityForm
                 id={item.id}
+                index={i + 1}
                 wrappedComponentRef={(inst: any) => this[`formRef${item.id}`] = inst}
                 values={this.state.values[item.id] || {}}
               />
@@ -139,8 +133,9 @@ class PregnancyHistory extends React.PureComponent<P, S> {
     let successed: boolean = false;
     dataSource.map((e: any, i: number) => {
       const inst: string = 'formRef' + e.id;
-      const values: any = this.getValues(inst, i);
-
+      // const values: any = this.getValues(inst, i);
+      const values = this[inst].getValues();
+      console.log('99999999999', values);
       successed = false;
       if (values) {
         successed = true;
@@ -158,9 +153,8 @@ class PregnancyHistory extends React.PureComponent<P, S> {
 
   getValues = (inst: string, index: number) => {
     let result: object | boolean = {};
-    console.log('object', this[inst]);
-    // function无状态组件
-    // this[inst].form.validateFieldsAndScroll((error: any[], values: any) => {
+    // console.log('object', this[inst]);
+
     // CustomizedForm
     this[inst].props.form.validateFieldsAndScroll((error: any[], values: any) => {
       if (error) {

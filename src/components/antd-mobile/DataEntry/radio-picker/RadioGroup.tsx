@@ -4,6 +4,7 @@ import styles from './RadioGroup.less';
 
 function RadioGroup({ id, options, value, onChange = () => {}, error }: any) {
   const handleChange = (e: any) => {
+    console.log('444444444', e.target.checked);
     let flag = e.target.value;
     const checked = options.filter((e: any) => e.value.toString() === flag)[0];
     onChange(checked.value);
@@ -13,9 +14,8 @@ function RadioGroup({ id, options, value, onChange = () => {}, error }: any) {
     <div className={styles.group}>
       {options.map((item: { label: string; value: any }, index: any) => {
         return (
-          <div key={`${id}-${item.value.toString()}`} className={styles.item}>
+          <label key={index} className={styles.item}>
             <input
-              id={`${id}-${item.value.toString()}`}
               className={classNames(styles.radio, {
                 [styles.dot]: true,
                 [styles.tick]: false,
@@ -25,10 +25,10 @@ function RadioGroup({ id, options, value, onChange = () => {}, error }: any) {
               checked={item.value === value}
               onChange={handleChange}
             />
-            <label htmlFor={item.value.toString()} className={styles.label}>
+            <span className={styles.label}>
               {item.label}
-            </label>
-          </div>
+            </span>
+          </label>
         );
       })}
       {error ? <div className="am-input-error-extra" /> : null}

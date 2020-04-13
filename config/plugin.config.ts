@@ -1,6 +1,6 @@
 import * as IWebpackChainConfig from 'webpack-chain';
 
-const webpackPlugin = (config: IWebpackChainConfig) => {
+const webpackPlugin = (config: IWebpackChainConfig, { webpack }) => {
   config.merge({
     optimization: {
       minimize: true,
@@ -22,7 +22,6 @@ const webpackPlugin = (config: IWebpackChainConfig) => {
           },
           'react-pdf': {
             name: 'react-pdf',
-            chunks: 'async',
             priority: 20,
             test: /[\\/]node_modules[\\/](react-pdf\/dist|pdfjs-dist)[\\/]/,
           },
@@ -38,7 +37,7 @@ const webpackPlugin = (config: IWebpackChainConfig) => {
           },
           async: {
             chunks: 'async',
-            minChunks: 2,
+            minChunks: 5,
             name: 'async',
             maxInitialRequests: 1,
             minSize: 0,
