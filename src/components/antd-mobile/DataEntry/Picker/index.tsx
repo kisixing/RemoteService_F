@@ -64,7 +64,7 @@ function Picker(
   let correctValue = [];
   if (Object.prototype.toString.call(value) === '[object Array]') {
     correctValue = [...value];
-    if (value[0]['value']) {
+    if (value[0] && value[0]['value']) {
       correctValue = value.map((e: any) => e.value);
     }
   }

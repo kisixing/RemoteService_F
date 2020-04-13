@@ -162,7 +162,7 @@ class GravidityForm extends PureComponent<P, S> {
     const { form: { validateFieldsAndScroll }, index } = this.props;
     let result: any = false;
     validateFieldsAndScroll((error: any[], values: any) => {
-      if (!error) {
+      if (error) {
         Toast.info(`孕册记录${index}未填写完整`, 2)
         return result = false;
       }

@@ -24,7 +24,11 @@ interface P {
   currentPregnancy?: any
 }
 
-interface S { };
+interface S {
+  dataSource?: any[]
+  activeKey?: any[]
+  values?: any[]
+};
 
 @connect(({ global, loading }: ConnectState) => ({
   currentPregnancy: global.currentPregnancy,
@@ -46,23 +50,25 @@ class PregnancyHistory extends React.PureComponent<P, S> {
   initValue = (id: string) => {
     getPregnancy(id).then((res: any) => {
       if (res && res.id) {
-        const values = res.pregnancyHistories || [];
+        const values: any[] = res.pregnancyHistories || [];
         console.log('孕产史信息初始值：', values);
         // 初始化Accordion
-        let ids = values.map((e: any) => e.id);
+        let dataSource = values.map((e: any) => ({ id: e.id }));
+        let ids = values.map((e: any) => e.id.toString());
         if (!values.length) {
           ids = [];
         }
         this.setState({
           values,
-          dataSource: ids
+          dataSource,
+          activeKey: ids
         });
       }
     });
   };
 
   accordion = (data: any[]) => {
-    const activeKey = data.map(e => e.id);
+    const { activeKey } = this.state;
     return (
       <Accordion activeKey={activeKey} onChange={this.onAccordionChange}>
         {data.map((item, i) => {
@@ -101,8 +107,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
     );
   };
 
-  onAccordionChange = (key: string) => {
-    console.log('object', key);
+  onAccordionChange = (key: string[]) => {
     this.setState({ activeKey: key })
   }
 
@@ -110,7 +115,8 @@ class PregnancyHistory extends React.PureComponent<P, S> {
     const { dataSource } = this.state;
     const newD = [...dataSource];
     newD.push({ id: `NEW${generateUUID(16)}` });
-    this.setState({ dataSource: newD })
+    const activeKey = newD.map((e: any) => e.id.toString());
+    this.setState({ dataSource: newD, activeKey  })
   };
 
   remove = (e: any, id: string) => {
@@ -188,6 +194,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
 
   render() {
     const { dataSource } = this.state;
+    console.log('pppppppp', this.state);
     return (
       <div className="page">
         <StepBar current={3} />
