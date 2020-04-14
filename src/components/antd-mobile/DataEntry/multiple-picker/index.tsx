@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, useEffect, useState } from 'react';
-import { List } from 'antd-mobile';
+import { List, Toast } from 'antd-mobile';
 import Popup from 'rmc-picker/lib/Popup';
 import PopupContent from './PopupContent';
 
@@ -20,47 +20,29 @@ import 'rmc-picker/assets/popup.css';
  * @param value selected tabs
  * @return 返回label值
  */
-const separatedLabels = (options: any[], value: any) => {
+const concatLabels = (values: any) => {
   // 判断value数据类型，分string和array
-  let val: string[] = [];
-  let tags: string[] = [];
   let text = '';
-  if (!value) {
-    return null;
+  if (values && values.length === 0) {
+    text = '无';
   }
-  if (Object.prototype.toString.call(value) === '[object String]') {
-    val = value.split(',')
-  }
-  if (Object.prototype.toString.call(value) === '[object Array]') {
-    val = [...value]
-  }
-  val.forEach((i: string) => {
-    const index = options.findIndex((j: labelValue) => j.value === i);
-    if (index === -1) {
-      // text值不拆分，只当一个string
-      text = i;
-    } else {
-      const label = options[index]['label'];
-      tags.push(label);
+  if (values && values.length) {
+    for (let i = 0; i < values.length; i++) {
+      const element = values[i];
+      if (element.value === 'other') {
+        text = text + ',' + element.note;
+      } else {
+        text = text + ',' + element.label;
+      }
     }
-  });
-  return { tags: tags.join(','), text };
+  }
+  return text;
 };
 
 const CustomItem = ({ arrow, children, extra, value, onClick, options, disabled }: any) => {
   // value值约定格式
-  // [{ label: 'tag1', value: true/false }, ..., { label: '其他', value: true/false, note: '其他说明' }]
-  let text = '';
-  const labels = separatedLabels(options, value);
-  if (labels) {
-    text = labels.text ? `${labels.tags}${labels.tags ? ',' : ''}${labels.text}` : labels.tags;
-  }
-  if (value && value.length === 0) {
-    text = '无';
-  }
-  if (value && value.length === 1 && value[0]['label'] === '其他') {
-    text = value[0]['note'];
-  }
+  // [{ label: '高血压', value: 'hypertension' }, ..., { label: '其他', value: 'other', note: '其他说明' }]
+  let text = concatLabels(value);
   return (
     <List.Item
       className={styles.customList}
@@ -82,16 +64,16 @@ const CustomItem = ({ arrow, children, extra, value, onClick, options, disabled 
   );
 };
 
-export interface labelValue {
-  label: string;
-  value: string;
-  selected?: boolean;
+export interface LabelValue {
+  label: string
+  value: string
+  selected?: boolean
 }
 interface IProps {
   disabled?: boolean
   required?: boolean
   children?: any
-  options: labelValue[]
+  options: LabelValue[]
   value?: any
   onChange: any
   placeholder?: string
@@ -121,7 +103,7 @@ function MultiplePicker(
     let tags = value;
     let text = '';
     if (value) {
-      const index = value.findIndex((e: labelValue) => e.value === 'other');
+      const index = value.findIndex((e: LabelValue) => e.value === 'other');
       if (index > -1) {
         // 存在其他选项
         text = value[index]['note'];
@@ -132,6 +114,18 @@ function MultiplePicker(
   }, [value]);
 
   const onOk = () => {
+    if (tagsValue) {
+      let value = tagsValue;
+      // 取other在tagsValue的位置
+      const index = value.findIndex((e: LabelValue) => e.value === 'other');
+      if (index > -1) {
+        if (!textValue) {
+          return Toast.info('请输入其他内容...')
+        }
+        value[index]['note'] = textValue;
+      }
+      onChange(value);
+    }
 
     setVisible(false);
   };

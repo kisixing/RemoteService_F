@@ -17,13 +17,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { TextareaItem } from 'antd-mobile';
 import TouchFeedback from 'rmc-feedback';
 import classNames from 'classnames';
-import { labelValue } from './index';
+import { LabelValue } from './index';
 
 import styles from './PopupContent.less';
-import { LabeledValue } from 'antd/lib/select';
 
 interface IProps {
-  options?: labelValue[]
+  options?: LabelValue[]
   onChange?: (value: any) => void
   onTagsChange?: (value: any) => void
   onTextChange?: (value: string) => void
@@ -45,98 +44,73 @@ function PopupContent({
 }: IProps) {
   const inputRef = useRef(null);
   const initOptions = [{ label: '无', value: 'nothing' }, ...options];
-  const [dataSource, setDataSource] = useState(initOptions);
+  const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
     const data = transformData(options, tagsValue);
-    console.log('select value', tagsValue, initOptions);
     if (tagsValue && tagsValue.length === 0) {
       setDataSource([{ label: '无', value: 'nothing', selected: true }, ...options]);
     }
     if (tagsValue && tagsValue.length) {
-      let newDataSource = [];
-      for (let i = 0; i <  initOptions.length; i++) {
-        const value_i = initOptions[i];
-        for (let j = 0; j < tagsValue.length; j++) {
-          const value_j = tagsValue[j];
-          if (value_i.value === value_j.value) {
-            newDataSource.push({ ...value_i, selected: true });
-          } else {
-            newDataSource.push(value_i);
-          }
+      let newDataSource = initOptions.map((ele: LabelValue) => {
+        const value = ele.value;
+        const isSelected = tagsValue.findIndex((e: LabelValue) => e.value === value);
+        if (isSelected > -1) {
+          return { ...ele, selected: true };
         }
-      }
-      console.log('77777777777', newDataSource);
+        return ele;
+      });
       setDataSource(newDataSource);
+    }
+    if (!tagsValue) {
+      setDataSource(initOptions);
     }
     // setDataSource(data);
   }, [tagsValue]);
 
-  const transformData = (options: labelValue[], value: string[]) => {
+  const transformData = (options: LabelValue[], value: string[]) => {
     return []
   };
 
-  // const handleTagSelect = (value: string, selected: boolean, index: number) => {
-  //   if (value === 'nothing') {
-  //     setSelectedTags([{ label: '无', value: 'nothing', selected: !selected }, ...dataSource]);
-  //     onChange([]);
-  //     onDismiss();
-  //   } else if (value === 'other') {
-  //     const t: any = [...tags];
-  //     t[index] = { label: '其他', value: 'other', selected: !selected };
-  //     setSelectedTags(t);
-  //     setTimeout(() => {
-  //       inputRef && inputRef.current && inputRef.current.focus();
-  //     }, 100);
-  //   } else {
-  //     const t = [...selectedTags];
-  //     const item = t[index];
-  //     t[0] = { label: '无', value: 'nothing', selected: false };
-  //     t[t.length - 1] = { label: '其他', value: 'other', selected: false };
-  //     t[index] = { ...item, selected: !selected };
-  //     setSelectedTags(t);
-  //   }
-  // };
-
-  const handleTag = (tag: labelValue, index: number) => {
+  const handleTag = (tag: LabelValue, index: number) => {
     const { label, value, selected } = tag;
     if (value === 'nothing') {
-      setDataSource([{ label, value, selected: !selected }, ...options]);
       onChange([]);
-      onDismiss();
-    } else if (value === 'other') {
-      const newData = [...initOptions];
-      newData[index] = { ...tag, selected: !selected };
-      setDataSource(newData);
-      // 提取已经选择的obj
-      const selectedTags = [{ label: tag.label, value: tag.value }];
-      const value = selectedTags.length ? selectedTags : null;
-      console.log('456789', value);
-      onTagsChange(value);
-      setTimeout(() => {
-        inputRef && inputRef.current && inputRef.current.focus();
-      }, 100);
-    } else {
-      const newData = [...dataSource];
-      const firstObj = newData[0];
-      const lastObj = newData[newData.length - 1];
-      newData[0] = { ...firstObj, selected: false };
-      newData[newData.length - 1] = { ...lastObj, selected: false };
-      newData[index] = { ...tag, selected: !selected };
-      setDataSource(newData);
-      // 提取已经选择的obj
-      let selectedTags = [];
-      for (let i = 0; i < newData.length; i++) {
-        const element = newData[i];
-        if (element.selected) {
-          selectedTags.push({ label: element.label, value: element.value });
-        }
-      }
-      const value = selectedTags.length ? selectedTags : null;
-      onTagsChange(value);
-      // 清空input text
-      onTextChange('');
+      return onDismiss();
     }
+    if (value === 'other') {
+      if (!selected) {
+        setTimeout(() => {
+          inputRef && inputRef.current && inputRef.current.focus();
+        }, 100);
+      }
+      if (selected) {
+        // 清空input text
+        onTextChange('');
+      }
+    }
+    const newData = [...dataSource];
+    const firstObj = newData[0];
+    const lastObj = newData[newData.length - 1];
+    newData[0] = { ...firstObj, selected: false };
+    newData[newData.length - 1] = { ...lastObj, selected: false };
+    newData[index] = { ...tag, selected: !selected };
+    // 提取已经选择的obj
+    let selectedTags = filterData(newData)
+    const result = selectedTags.length ? selectedTags : null;
+    onTagsChange(result);
+  }
+
+  // 筛选selected
+  const filterData = (data: LabelValue[]) => {
+    let result = [];
+    for (let i = 0; i < data.length; i++) {
+      const element = data[i];
+      if (element.selected) {
+        result.push({ label: element.label, value: element.value });
+      }
+    }
+    return result;
   }
 
   const handleTextChange = (value: any) => onTextChange(value);
@@ -149,7 +123,7 @@ function PopupContent({
       <ul className={styles.list}>
         {dataSource &&
           dataSource.length > 0 &&
-          dataSource.map(({ value, label, selected }: labelValue, index: number) => (
+          dataSource.map(({ value, label, selected }: LabelValue, index: number) => (
             <TouchFeedback key={value|| label} activeClassName="rmc-picker-popup-item-active">
               <li
                 style={{ fontSize: label.length > 4 ? '.24rem' : '.26rem' }}
