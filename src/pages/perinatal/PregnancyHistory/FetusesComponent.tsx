@@ -10,10 +10,6 @@ import FetusForm from './FetusForm';
 
 import styles from './FetusesComponent.less';
 
-// 读取配置文件
-const { history } = window.configuration;
-const dataSource = history.data[0]['children'].filter((e: any) => e.id === 'fetus')[0]['data'];
-
 interface P {
   required?: boolean
   number?: number | undefined
@@ -38,11 +34,7 @@ function FetusesComponent(
       const element = (
         <div key={i + 1} className={styles.formWrap}>
           <p>{`胎儿${i + 1}`}</p>
-          <FetusForm
-            dataSource={dataSource}
-            value={value[i]}
-            onChange={(e: any) => handleChange(e, i)}
-          />
+          <FetusForm value={value[i]} onChange={(e: any) => handleChange(e, i)} />
         </div>
       );
       node.push(element);

@@ -92,7 +92,7 @@ interface IProps {
   required?: boolean
   children?: any
   options: labelValue[]
-  value?: any[]
+  value?: any
   onChange: any
   placeholder?: string
 }
@@ -103,25 +103,36 @@ function MultiplePicker(
     disabled,
     children,
     options,
-    value = [],
+    value,
     placeholder,
     onChange,
   }: IProps,
   ref: any,
 ) {
   const [visible, setVisible] = useState(false);
-  const [tagsValue, setTagsValue] = useState([]);
+  const [tagsValue, setTagsValue] = useState(null);
   const [textValue, setTextValue] = useState('');
 
   useEffect(() => {
-    // value = [{ label: '' , value: true }， { label: 'otherNote', value: '其他疾病' }]
-    const tags: any = value.filter((e: any) => e.label !== 'otherNote');
-    const text = value.filter((e: any) => e.label === 'otherNote');
+    // value = [
+    //   { label: '高血压' , value: 'hypertension' },
+    //   { label: '其他', value: 'other', note: '其他疾病史一' },
+    // ]
+    let tags = value;
+    let text = '';
+    if (value) {
+      const index = value.findIndex((e: labelValue) => e.value === 'other');
+      if (index > -1) {
+        // 存在其他选项
+        text = value[index]['note'];
+      }
+    }
     setTagsValue(tags);
-    setTextValue(text.length && text[0]['value']);
-  }, []);
+    setTextValue(text);
+  }, [value]);
 
   const onOk = () => {
+
     setVisible(false);
   };
 
