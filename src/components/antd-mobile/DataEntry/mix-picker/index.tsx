@@ -148,7 +148,6 @@ function MixPicker(
         value = [...tagsValue, textValue].join(',');
       }
     }
-    console.log('value', value);
     onChange(value);
   };
 

@@ -6,13 +6,12 @@
 
 import React from 'react';
 import { connect } from 'dva';
-import _ from 'lodash';
 import moment from 'moment';
 import createDOMForm from 'rc-form/lib/createDOMForm';
 import { Modal, ActivityIndicator } from 'antd-mobile';
 import { Button } from '@/components/antd-mobile';
 import { KG } from '@/utils';
-import { getKeys, getFields } from './utils';
+import { getKeys, getFields, assignmentData, submittedData } from './utils';
 import { getPregnancy, updatePregnancy } from '@/services/user';
 import { ConnectState } from '@/models/connect';
 import FormFields from './FormFields';
@@ -20,19 +19,19 @@ import StepBar from './StepBar';
 import styles from './styles.less';
 
 // 读取配置文件
-const configuration = window.configuration;
-// 基本信息配置
-// const originalDataSource = configuration.pregnancy.data; // _.cloneDeep()
-const dataSource = configuration.pregnancy.data;
+const { pregnancy } = window.configuration;
+const dataSource = pregnancy.data;
 
 interface P {
   loading?: boolean;
   form: any
   currentPregnancy?: any
+  dispatch?: any
 }
 
 interface S {
-
+  values?: object
+  isLoading?: boolean
 };
 
 @connect(({ global, loading }: ConnectState) => ({
@@ -70,7 +69,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
 
   // 确定key位置
   getKeyIndex = (key: string) => {
-    const data = _.cloneDeep(dataSource);
+    const data = [...dataSource];
     let index: number[] = [];
     for (let i = 0; i < data.length; i++) {
       const children = data[i]['children'];
@@ -98,11 +97,8 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
       this.setState({ isLoading: false });
       if (res && res.id) {
         // 获取field配置的key
-        const keys = getKeys(dataSource);
-        const originalValues = _.pick(res, keys);
-        console.log('keys', keys, originalValues);
-        const values: any = this.processData(keys, originalValues);
-        console.log('keys', values);
+        const values = assignmentData(res, dataSource);
+
         // 初始化预产期
         const EDD = values.lmp && KG.getEdd(values.lmp);
         if (!values.edd) {
@@ -111,44 +107,22 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
         if (!values.sureEdd) {
           values.sureEdd = EDD;
         }
-        console.log('本孕信息初始值：', values);
-        form.setFieldsValue({
-          ...values,
-          partnerDisease: ['高血压', '糖尿病', '其他疾病'],
-          'smoke&smokeNote': { smoke: true, smokeNote: 10 },
-        });
-        this.setState({ values });
+        console.log('本孕信息初始值：', res, values);
+        form.setFieldsValue(values);
+        this.setState({ values: values });
       }
     });
   };
 
-  // 处理value初始化结构
-  processData = (keys: string[] = [], values: object = {}) => {
-    let result = { ...values };
-    for (let i = 0; i < keys.length; i++) {
-      const ele = keys[i];
-      if (ele.includes('&')) {
-        // key带有&字符
-        const ids = ele.split('&');
-        const obj = {
-          [ids[0]]: values[ids[0]],
-          [ids[1]]: values[ids[1]]
-        };
-        result = { ...result, [ele]: obj };
-        delete result[ids[0]];
-        delete result[ids[1]];
-      }
-    }
-    return result;
-  }
-
   onSubmit = () => {
     const { form, dispatch } = this.props;
     form.validateFieldsAndScroll((error: any[], values: any) => {
-      if (error) {
+      if (!error) {
         return;
       }
-      console.log('本孕信息', values);
+      const newValues = submittedData(values, dataSource);
+      console.log('表单本孕信息', values);
+      console.log('提交本孕信息', newValues);
     });
   };
 
@@ -163,7 +137,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
       const values = getFieldsValue(['gestationalWeek', 'edd', 'sureEdd']);
       console.log('object', value, EDD, GES, values);
 
-      const params = {
+      const params: any = {
         gestationalWeek: GES,
         edd: EDD,
       };

@@ -30,9 +30,9 @@ const concatLabels = (values: any) => {
     for (let i = 0; i < values.length; i++) {
       const element = values[i];
       if (element.value === 'other') {
-        text = text + ',' + element.note;
+        text = `${text}${text ? ',' : ''}${element.note}`;
       } else {
-        text = text + ',' + element.label;
+        text = `${text}${text ? ',' : ''}${element.label}`;
       }
     }
   }
