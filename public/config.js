@@ -558,7 +558,6 @@ const pregnancy = {
     {
       id: 'menstrualHistory',
       desc: '月经史',
-      type: 'block',
       children: [
         {
           id: 'menstrualHistory.menarche',

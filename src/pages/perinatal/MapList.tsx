@@ -89,7 +89,6 @@ class MapList extends React.Component<P, S> {
     e.stopPropagation();
     const { route, name } = item;
     const { dataSource } = this.state;
-    console.log('object', sequentialControl && name !== 'basic');
 
     if (sequentialControl && name !== 'basic') {
       // 是否做顺序控制

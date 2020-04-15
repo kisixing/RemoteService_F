@@ -4,7 +4,6 @@ import styles from './RadioGroup.less';
 
 function RadioGroup({ id, options, value, onChange = () => {}, error }: any) {
   const handleChange = (e: any) => {
-    console.log('444444444', e.target.checked);
     let flag = e.target.value;
     const checked = options.filter((e: any) => e.value.toString() === flag)[0];
     onChange(checked.value);

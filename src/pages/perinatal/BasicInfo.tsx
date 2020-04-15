@@ -14,7 +14,7 @@ import { Button } from '@/components/antd-mobile';
 import { getPregnancy, updatePregnancy } from '@/services/user';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { checkIdCard } from '@/utils';
-import { getKeys } from './utils';
+import { getFormKeys } from './utils';
 import FormFields from './FormFields';
 import StepBar from './StepBar';
 
@@ -24,7 +24,7 @@ import styles from './styles.less';
 const configuration = window.configuration;
 // 基本信息配置
 const dataSource = configuration.basic.data;
-const keys = getKeys(dataSource);
+const keys = getFormKeys(dataSource);
 
 interface P {
   loading?: boolean;

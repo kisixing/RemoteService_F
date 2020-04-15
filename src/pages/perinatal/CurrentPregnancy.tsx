@@ -11,7 +11,7 @@ import createDOMForm from 'rc-form/lib/createDOMForm';
 import { Modal, ActivityIndicator } from 'antd-mobile';
 import { Button } from '@/components/antd-mobile';
 import { KG } from '@/utils';
-import { getKeys, getFields, assignmentData, submittedData } from './utils';
+import { getRealData, assignmentData, submittedData } from './utils';
 import { getPregnancy, updatePregnancy } from '@/services/user';
 import { ConnectState } from '@/models/connect';
 import FormFields from './FormFields';
@@ -42,7 +42,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
   constructor(props) {
     super(props);
     this.state = {
-      values: {},
+      values: {}, // 保存api获取的原始values，备表单提交时获取对应表的id值
       isLoading: true,
     };
   }
@@ -53,18 +53,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
 
   componentWillReceiveProps() {
     // const { dataSource } = this.state;
-    // 获取需要监听的key键value
-    // { dysmenorrhea, smoke, alcohol, partnerSmoke, partnerAlcohol }
-    const values = this.props.form.getFieldsValue([
-      'dysmenorrhea',
-      'smoke',
-      'alcohol',
-      'partnerSmoke',
-      'partnerAlcohol',
-      'radioactivity',
-      'medicine',
-    ]);
-    console.log('listen change', values);
+    const values = this.props.form.getFieldsValue(['dysmenorrhea']);
   }
 
   // 确定key位置
@@ -98,7 +87,6 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
       if (res && res.id) {
         // 获取field配置的key
         const values = assignmentData(res, dataSource);
-
         // 初始化预产期
         const EDD = values.lmp && KG.getEdd(values.lmp);
         if (!values.edd) {
@@ -107,9 +95,10 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
         if (!values.sureEdd) {
           values.sureEdd = EDD;
         }
-        console.log('本孕信息初始值：', res, values);
+        const originalValues = getRealData(res, dataSource);
+        console.log('本孕信息初始值：', originalValues, values);
         form.setFieldsValue(values);
-        this.setState({ values: values });
+        this.setState({ values: originalValues });
       }
     });
   };

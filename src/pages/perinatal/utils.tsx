@@ -1,13 +1,12 @@
 import _ from 'lodash';
 
 /**
- * 获取建档表单的每一个key
- *
+ * 获取该建档表单的每一个key
  * @export
  * @param {array} fields
  * @returns
  */
-export function getKeys(fields: any[]) {
+export function getFormKeys(fields: any[]) {
   let keys = [];
   for (let i = 0; i < fields.length; i++) {
     const element = fields[i];
@@ -15,25 +14,51 @@ export function getKeys(fields: any[]) {
       keys.push(element.id);
     }
     if (element.children) {
-      keys.push(...getKeys(element.children));
+      keys.push(...getFormKeys(element.children));
     }
   }
   return keys;
 }
 
-export function getBlock(fields: any) {
+/**
+ * 获取与api获取的values相对应的属性，即实际提交保存的keys
+ * @param keys 表单实际的keys，有方法getFormKeys获取
+ */
+export function getValueKeys(keys: any) {
+  const newKeys = getFormKeys(keys);
+  let result = [];
+  for (let i = 0; i < newKeys.length; i++) {
+    const element = newKeys[i];
+    if (element.includes('.')) {
+      // 以是否有’.‘分隔符判断
+      const prefixKey = element.split('.')[0];
+      result.push(prefixKey);
+    } else {
+      result.push(element);
+    }
+  }
+  // 去重
+  const uniqueResult = Array.from(new Set(result));
+  return uniqueResult;
+}
 
+export function getRealData(values: any, fields: any) {
+  // 获取values实际上的keys
+  const keys = getValueKeys(fields);
+  // 截取本业表单需要的values值
+  let result = _.pick(values, keys);
+  return result;
 }
 
 /**
- * 平铺
+ * 平铺表单配置fields
  * @param fields
  */
 export function getFields(fields: any[]) {
   let result = [];
   for (let i = 0; i < fields.length; i++) {
     const element = fields[i];
-    if (element.type && element.type !== 'block') {
+    if (element.type) {
       result.push(element);
     }
     if (element.children) {
@@ -44,45 +69,66 @@ export function getFields(fields: any[]) {
 }
 
 export function assignmentData(values: any, fields: any[]) {
-  // 对于特殊的表，提取出来比如personalProfile、partnerProfile
-  let newValues = {};
-  for (let i = 0; i < fields.length; i++) {
-    const element = fields[i];
-  }
-
-
-
-  const keys = getKeys(fields);
-  let result = _.pick(values, keys);
-  console.log('12345', result)
+  // 截取本业表单需要的values值
+  let result = getRealData(values, fields);
+  // 平铺表单配置fields
   const fieldsArray = getFields(fields);
   for (let i = 0; i < fieldsArray.length; i++) {
     const element = fieldsArray[i];
     const id = element.id;
-
-    if (element.type === 'radio-input' || element.type === 'picker-input') {
-      // 这类表单赋值格式 --> { dysmenorrhea: boolean | string, dysmenorrheaNote: '' }
-      let obj = {};
-      // 子表单属性
-      const children = element.props;
-      for (let j = 0; j < children.length; j++) {
-        const item = children[j];
-        obj[item.id] = values[item.id]
+    if (id.includes('.')) {
+      // 带'.'标记的id
+      if (element.type === 'radio-input' || element.type === 'picker-input') {
+        // 这类表单赋值格式 --> { dysmenorrhea: boolean | string, dysmenorrheaNote: '' }
+        let obj = {};
+        // 子表单属性
+        const children = element.props;
+        for (let j = 0; j < children.length; j++) {
+          // 以'&'分割id
+          const ids = children[j]['id'].split('.');
+          obj[children[j]['id']] = values[ids[0]][ids[1]];
+        }
+        result = { ...result, [id]: obj }
+      } else {
+        // 其他的type类型（大概率不会出现multiple-picker类型的组件）
+        // 拆分id
+        const ids = id.split('.');
+        result = { ...result, [id]: values[ids[0]][ids[1]] };
       }
-      result = { ...result, [id]: obj }
     }
-    if (element.type === 'multiple-picker') {
-      let array = [];
-      const object = values[id];
-      if (object) {
-        const options = element.options;
-        array = options.filter((e: any) => object[e.value] === true);
+    if (!id.includes('.')) {
+      // 不带'.'标记的id
+      if (element.type === 'radio-input' || element.type === 'picker-input') {
+        // 这类表单赋值格式 --> { dysmenorrhea: boolean | string, dysmenorrheaNote: '' }
+        let obj = {};
+        // 子表单属性
+        const children = element.props;
+        for (let j = 0; j < children.length; j++) {
+          const item = children[j];
+          obj[item.id] = values[item.id]
+        }
+        result = { ...result, [id]: obj }
       }
-      result = { ...result, [id]: array };
+      if (element.type === 'multiple-picker') {
+        let array = [];
+        const object = values[id];
+        if (object) {
+          const options = element.options;
+          array = options.filter((e: any) => object[e.value] === true);
+        }
+        result = { ...result, [id]: array };
+      }
     }
   }
 
-  console.log('初始化赋值', result)
+  // 删除没有对应表单域的对象，如personalProfile、partnerProfile、menstrualHistory
+  for (const key in result) {
+    // 在fieldsArray找到id=key的对象元素
+    const index = fieldsArray.findIndex((e: any) => e.id === key);
+    if (index === -1) {
+      delete result[key]
+    }
+  }
   return result;
 };
 

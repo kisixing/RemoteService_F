@@ -10,7 +10,7 @@ import { Toast } from 'antd-mobile';
 import _ from 'lodash';
 import FormFields from '../FormFields';
 import FetusesComponent from './FetusesComponent';
-import { getKeys } from '../utils';
+import { getFormKeys } from '../utils';
 
 // 读取配置文件
 const { history } = window.configuration;
@@ -143,7 +143,7 @@ class GravidityForm extends PureComponent<P, S> {
     // 特殊取值的属性
     const specialKeys = getSpecialKeys(formFields);
     // 配置上有的key属性
-    const configKeys = getKeys(dataSource);
+    const configKeys = getFormKeys(dataSource);
     const result = _.pick(values, configKeys);
 
     for (let i = 0; i < specialKeys.length; i++) {
