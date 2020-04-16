@@ -78,21 +78,20 @@ export function assignmentData(values: any, fields: any[]) {
     const id = element.id;
     if (id.includes('.')) {
       // 带'.'标记的id
+      const ids = id.split('.');
       if (element.type === 'radio-input' || element.type === 'picker-input') {
         // 这类表单赋值格式 --> { dysmenorrhea: boolean | string, dysmenorrheaNote: '' }
         let obj = {};
-        // 子表单属性
-        const children = element.props;
-        for (let j = 0; j < children.length; j++) {
-          // 以'&'分割id
-          const ids = children[j]['id'].split('.');
-          obj[children[j]['id']] = values[ids[0]][ids[1]];
-        }
+        // 父级属性key
+        const parentKey: string = ids[0];
+        // 子属性childKeys
+        const childKeys: string[] = ids[1].split('&');
+        obj[childKeys[0]] = values[parentKey][childKeys[0]];
+        obj[childKeys[1]] = values[parentKey][childKeys[1]];
         result = { ...result, [id]: obj }
       } else {
         // 其他的type类型（大概率不会出现multiple-picker类型的组件）
         // 拆分id
-        const ids = id.split('.');
         result = { ...result, [id]: values[ids[0]][ids[1]] };
       }
     }
@@ -101,12 +100,10 @@ export function assignmentData(values: any, fields: any[]) {
       if (element.type === 'radio-input' || element.type === 'picker-input') {
         // 这类表单赋值格式 --> { dysmenorrhea: boolean | string, dysmenorrheaNote: '' }
         let obj = {};
-        // 子表单属性
-        const children = element.props;
-        for (let j = 0; j < children.length; j++) {
-          const item = children[j];
-          obj[item.id] = values[item.id]
-        }
+        // 子属性childKeys
+        const childKeys: string[] = id.split('&');
+        obj[childKeys[0]] = values[childKeys[0]];
+        obj[childKeys[1]] = values[childKeys[1]];
         result = { ...result, [id]: obj }
       }
       if (element.type === 'multiple-picker') {
@@ -138,17 +135,32 @@ export function assignmentData(values: any, fields: any[]) {
  * @param fields 表单结构
  */
 export function submittedData(values: any, fields: any[]) {
+  // rc-form获取的原始数据
   let result = { ...values };
   const fieldsArray = getFields(fields);
-
   for (let i = 0; i < fieldsArray.length; i++) {
     const element = fieldsArray[i];
     const id = element.id;
     const value = values[id];
     if (element.type === 'radio-input' || element.type === 'picker-input') {
       // 输入类型type=radio-input时，输出value格式为{ key1: '' , key2: '' }
-      result = { ...result, ...value };
-      delete result[id];
+      if (id.includes('.')) {
+        // 带'.'标记的id
+        const ids = id.split('.');
+        // 父级属性key
+        const parentKey: string = ids[0];
+        // 子属性childKeys，含&字符
+        const childKey: string = ids[1];
+        const parentValue = result[parentKey];
+        const obj = values[parentKey][ids[1]];
+        result = { ...result, [parentKey]: { ...parentValue, ...obj } };
+        delete result[parentKey][childKey];
+      }
+      if (!id.includes('.')) {
+        // 不带'.'标记的id
+        result = { ...result, ...value };
+        delete result[id];
+      }
     }
     if (element.type === 'multiple-picker') {
       let obj = {};
@@ -161,6 +173,18 @@ export function submittedData(values: any, fields: any[]) {
         });
       }
       result = { ...result, [id]: value ? obj : null };
+    }
+  }
+  console.log('rc-form获取的原始数据', values, result);
+  return result;
+}
+
+export function setFormId(original: any, values: any) {
+  let result = { ...values };
+  for (const key in original) {
+    const element = original[key];
+    if (element && element.id) {
+      result[key]['id'] = element.id;
     }
   }
   return result;

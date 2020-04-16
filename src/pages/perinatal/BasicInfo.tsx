@@ -14,17 +14,16 @@ import { Button } from '@/components/antd-mobile';
 import { getPregnancy, updatePregnancy } from '@/services/user';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { checkIdCard } from '@/utils';
-import { getFormKeys } from './utils';
+import { getRealData, assignmentData, submittedData } from './utils';
 import FormFields from './FormFields';
 import StepBar from './StepBar';
 
 import styles from './styles.less';
 
 // 读取配置文件
-const configuration = window.configuration;
+const { basic } = window.configuration;
 // 基本信息配置
-const dataSource = configuration.basic.data;
-const keys = getFormKeys(dataSource);
+const dataSource = basic.data;
 
 interface P {
   loading?: boolean;
@@ -60,7 +59,7 @@ class BasicInfo extends PureComponent<P, S> {
     getPregnancy(currentPregnancy.id).then((res: any) => {
       this.setState({ isLoading: false });
       if (res && res.id) {
-        const values = _.pick(res, keys);
+        const values = getRealData(res, dataSource);
         /**
          * 身份证信息自动获取
          * 如果出生年月、年龄、国籍、籍贯没有值，则根据身份证id自动计算赋值
@@ -76,8 +75,8 @@ class BasicInfo extends PureComponent<P, S> {
           partnerDob: partnerIdNO_info.birth,
           partnerAge: partnerIdNO_info.age,
           partnerNationality: partnerIdNO_info.nationality,
-          partnerNativeplace: partnerIdNO_info.province
-        }
+          partnerNativeplace: partnerIdNO_info.province,
+        };
 
         console.log('基本信息初始值：', values, newValues);
         form.setFieldsValue({ ...newValues });
@@ -92,10 +91,11 @@ class BasicInfo extends PureComponent<P, S> {
       if (error) {
         return;
       }
-      console.log('基本信息', values);
+      const newValues = submittedData(values, dataSource);
+      console.log('基本信息', values, newValues);
       dispatch({
         type: 'global/updatePregnancy',
-        payload: values
+        payload: newValues,
       }).then((res: any) => {
         if (res && res.id) {
           Modal.alert('提示', '基本信息保存成功！', [
@@ -103,7 +103,7 @@ class BasicInfo extends PureComponent<P, S> {
             { text: '下一步', onPress: () => Router.push('/perinatal/current-pregnancy') },
           ]);
         }
-      })
+      });
     });
   };
 

@@ -20,12 +20,10 @@ interface IProps {
   props?: any[]
 }
 
-const initProps = [{ required: false, options: [] }, { required: false }];
-
-function PickerInput({ id, children, value = {}, props = initProps, onChange = () => {} }: IProps, ref: any) {
+function PickerInput({ id, children, value = {}, props = [], onChange = () => {} }: IProps, ref: any) {
   // 拆分label，分布赋值给picker和input
-  const label = children && children.split('&');
-  const ids = id && id.split('&');
+  const labels = props.map((e: any) => e.label);
+  const ids = props.map((e: any) => e.id);
 
   const visible = value[ids[0]] && value[ids[0]] !== '无' && value[ids[0]] !== '否';
 
@@ -44,45 +42,36 @@ function PickerInput({ id, children, value = {}, props = initProps, onChange = (
   return (
     <span>
       {props[0]['type'] === 'radio' ? (
-        <RadioPicker
-          required={props[0]['required']}
-          options={props[0]['options']}
-          value={value[ids[0]]}
-          onChange={handlePicker}
-        >
-          {label[0]}
+        <RadioPicker {...props[0]} value={value[ids[0]]} onChange={handlePicker}>
+          {labels[0]}
         </RadioPicker>
       ) : props[0]['type'] === 'mix-picker' ? (
         <MixPicker
-          required={props[0]['required']}
+          {...props[0]}
+          placeholder={props[0]['placeholder'] || `请选择${labels[0]}`}
           value={value[ids[0]]}
-          options={props[0]['options']}
-          valueFormat={props[0]['valueFormat']}
           onChange={handlePicker}
-          placeholder={props[0]['placeholder'] || `请选择${label[0]}`}
         >
-          {label[0]}
+          {labels[0]}
         </MixPicker>
       ) : (
         <Picker
-          required={props[0]['required']}
+          {...props[0]}
+          placeholder={props[0]['placeholder'] || `请选择${labels[0]}`}
           value={value[ids[0]]}
-          data={props[0]['options']}
           onChange={handlePicker}
-          placeholder={props[0]['placeholder'] || `请选择${label[0]}`}
         >
-          {label[0]}
+          {labels[0]}
         </Picker>
       )}
       {visible ? (
         <TextInput
-          required={props[1]['required']}
+          {...props[1]}
+          placeholder={props[1]['placeholder'] || `请输入${labels[1]}`}
           value={value[ids[1]]}
-          placeholder={props[1]['placeholder'] || `请输入${label[1]}`}
           onChange={handleText}
-          suffix={props[1]['suffix']}
         >
-          {label[1]}
+          {labels[1]}
         </TextInput>
       ) : null}
     </span>

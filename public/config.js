@@ -203,7 +203,7 @@ const basic = {
           label: '准生证号',
           type: 'text-input',
           charactertype: 'text',
-          required: true,
+          required: false,
         },
       ],
     },
@@ -470,7 +470,7 @@ const pregnancy = {
           label: '末次月经',
           type: 'date-picker',
           required: true,
-          disabled: true,
+          disabled: false,
           mode: 'date', // 日期date,时间time,日期+时间datetime,年year,月month
           format: 'YYYY-MM-DD',
           minDate: minDate,
@@ -593,13 +593,13 @@ const pregnancy = {
           options: ['多', '中', '少'].map(e => ({ label: e, value: e })),
         },
         {
-          id: 'menstrualHistory.dysmenorrhea&menstrualHistory.dysmenorrheaNote',
+          id: 'menstrualHistory.dysmenorrhea&dysmenorrheaNote',
           label: '是否痛经&痛经说明',
           type: 'radio-input',
           // value: { dysmenorrhea: true, dysmenorrheaNote: 'note' },
           props: [
             {
-              id: 'menstrualHistory.dysmenorrhea',
+              id: 'dysmenorrhea',
               label: '是否痛经',
               required: true,
               options: [
@@ -608,7 +608,7 @@ const pregnancy = {
               ],
             },
             {
-              id: 'menstrualHistory.dysmenorrheaNote',
+              id: 'dysmenorrheaNote',
               label: '痛经说明',
               required: true,
               charactertype: 'text',
@@ -646,12 +646,12 @@ const pregnancy = {
           required: true,
         },
         {
-          id: 'personalProfile.smoke&personalProfile.smokeNote',
+          id: 'personalProfile.smoke&smokeNote',
           label: '嗜好-烟&烟量',
           type: 'radio-input',
           props: [
             {
-              id: 'personalProfile.smoke',
+              id: 'smoke',
               label: '嗜好-烟',
               required: true,
               options: [
@@ -660,7 +660,7 @@ const pregnancy = {
               ],
             },
             {
-              id: 'personalProfile.smokeNote',
+              id: 'smokeNote',
               label: '烟量',
               required: true,
               charactertype: 'digit',
@@ -669,26 +669,37 @@ const pregnancy = {
           ],
         },
         {
-          id: 'personalProfile.alcohol&personalProfile.alcoholNote',
+          id: 'personalProfile.alcohol&alcoholNote',
           label: '嗜好-酒&酒量',
           type: 'picker-input',
           props: [
+            // {
+            //   id: 'alcohol',
+            //   label: '嗜好-酒',
+            //   type: 'mix-picker',
+            //   valueFormat: 'string',
+            //   placeholder: '请选择酒的种类',
+            //   required: true,
+            //   options: ['无', '白酒', '啤酒', '葡萄酒', '药酒'].map(e => ({ label: e, value: e })),
+            // },
             {
-              id: 'personalProfile.alcohol',
+              id: 'alcohol',
               label: '嗜好-酒',
-              type: 'mix-picker',
-              valueFormat: 'string',
-              placeholder: '请选择酒的种类',
+              type: 'radio',
               required: true,
-              options: ['无', '白酒', '啤酒', '葡萄酒', '药酒'].map(e => ({ label: e, value: e })),
+              options: [
+                { label: '是', value: true },
+                { label: '否', value: false },
+              ],
             },
             {
-              id: 'personalProfile.alcoholNote',
+              id: 'alcoholNote',
               label: '酒量',
               type: 'text-input',
               required: true,
               charactertype: 'digit',
               suffix: '毫升/天',
+              placeholder: '输入本人每天的饮酒量',
             },
           ],
         },
@@ -715,12 +726,12 @@ const pregnancy = {
           ],
         },
         {
-          id: 'personalProfile.radioactivity&personalProfile.radioactivityNote',
+          id: 'personalProfile.radioactivity&radioactivityNote',
           label: '是否接触过放射性物质&放射性物质名称',
           type: 'picker-input',
           props: [
             {
-              id: 'personalProfile.radioactivity',
+              id: 'radioactivity',
               label: '是否接触过放射性物质',
               type: 'radio',
               required: true,
@@ -730,7 +741,7 @@ const pregnancy = {
               ],
             },
             {
-              id: 'personalProfile.radioactivityNote',
+              id: 'radioactivityNote',
               label: '放射性物质名称',
               type: 'text-input',
               required: true,
@@ -740,12 +751,12 @@ const pregnancy = {
           ],
         },
         {
-          id: 'personalProfile.medicine&personalProfile.medicineNote',
+          id: 'personalProfile.medicine&medicineNote',
           label: '近期是否吃药&药物名称',
           type: 'picker-input',
           props: [
             {
-              id: 'personalProfile.medicine',
+              id: 'medicine',
               label: '近期是否吃药',
               type: 'radio',
               required: true,
@@ -755,7 +766,7 @@ const pregnancy = {
               ],
             },
             {
-              id: 'personalProfile.medicineNote',
+              id: 'medicineNote',
               label: '药物名称',
               type: 'text-input',
               required: true,
@@ -765,12 +776,12 @@ const pregnancy = {
           ],
         },
         {
-          id: 'personalProfile.hazardoussubstances&personalProfile.hazardoussubstancesNote',
+          id: 'personalProfile.hazardoussubstances&hazardoussubstancesNote',
           label: '是否接触过有害物质&有害物质名称',
           type: 'picker-input',
           props: [
             {
-              id: 'personalProfile.hazardoussubstances',
+              id: 'hazardoussubstances',
               label: '是否接触过有害物质',
               type: 'radio',
               required: true,
@@ -780,12 +791,12 @@ const pregnancy = {
               ],
             },
             {
-              id: 'personalProfile.hazardoussubstancesNote',
+              id: 'hazardoussubstancesNote',
               label: '有害物质名称',
               type: 'text-input',
               required: true,
               charactertype: 'text',
-              placeholder: '请输入接触有害物质名称的日期、名称',
+              placeholder: '请输入接触该害物质的日期、名称',
             },
           ],
         },
@@ -803,12 +814,12 @@ const pregnancy = {
           required: false,
         },
         {
-          id: 'partnerProfile.smoke&partnerProfile.mokeNote',
+          id: 'partnerProfile.smoke&smokeNote',
           label: '男方嗜好-烟&男方烟量',
           type: 'picker-input',
           props: [
             {
-              id: 'partnerProfile.smoke',
+              id: 'smoke',
               label: '男方嗜好-烟',
               type: 'radio',
               required: true,
@@ -818,34 +829,47 @@ const pregnancy = {
               ],
             },
             {
-              id: 'partnerProfile.smokeNote',
+              id: 'smokeNote',
               label: '男方烟量',
               type: 'text-input',
               required: true,
               charactertype: 'digit',
+              suffix: '支/天',
+              placeholder: '输入男方每天抽烟的量',
             },
           ],
         },
         {
-          id: 'partnerProfile.alcohol&partnerProfile.alcoholNote',
+          id: 'partnerProfile.alcohol&alcoholNote',
           label: '男方嗜好-酒&男方饮酒量',
           type: 'picker-input',
           props: [
+            // {
+            //   id: 'alcohol',
+            //   label: '男方嗜好-酒',
+            //   type: 'mix-picker',
+            //   valueFormat: 'string',
+            //   required: true,
+            //   options: ['无', '白酒', '啤酒', '葡萄酒', '药酒'].map(e => ({ label: e, value: e })),
+            // },
             {
-              id: 'partnerProfile.alcohol',
-              label: '男方嗜好-烟',
-              type: 'mix-picker',
-              valueFormat: 'string',
+              id: 'alcohol',
+              label: '男方嗜好-酒',
+              type: 'radio',
               required: true,
-              options: ['无', '白酒', '啤酒', '葡萄酒', '药酒'].map(e => ({ label: e, value: e })),
+              options: [
+                { label: '是', value: true },
+                { label: '否', value: false },
+              ],
             },
             {
-              id: 'partnerProfile.alcoholNote',
+              id: 'alcoholNote',
               label: '男方饮酒量',
               type: 'text-input',
               required: true,
               charactertype: 'digit',
               suffix: '毫升/天',
+              placeholder: '输入男方每天的饮酒量',
             },
           ],
         },

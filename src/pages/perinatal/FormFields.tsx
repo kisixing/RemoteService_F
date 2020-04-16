@@ -128,7 +128,9 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
       case 'multiple-picker':
         return getFieldDecorator(id, {
           initialValue: value,
-          rules: [{ required: required, message: `${placeholder}!` }],
+          rules: [
+            { type: required ? 'array' : 'any', message: `${placeholder}!` },
+          ],
         })(
           <MultiplePicker key={id} required={required} placeholder={placeholder} {...rest}>
             {label}

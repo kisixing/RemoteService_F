@@ -7,11 +7,12 @@
 import React from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
+import Router from 'umi/router';
 import createDOMForm from 'rc-form/lib/createDOMForm';
 import { Modal, ActivityIndicator } from 'antd-mobile';
 import { Button } from '@/components/antd-mobile';
 import { KG } from '@/utils';
-import { getRealData, assignmentData, submittedData } from './utils';
+import { getRealData, assignmentData, submittedData, setFormId } from './utils';
 import { getPregnancy, updatePregnancy } from '@/services/user';
 import { ConnectState } from '@/models/connect';
 import FormFields from './FormFields';
@@ -53,7 +54,12 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
 
   componentWillReceiveProps() {
     // const { dataSource } = this.state;
-    const values = this.props.form.getFieldsValue(['dysmenorrhea']);
+    const values = this.props.form.getFieldsValue([
+      'dysmenorrhea',
+      'nearRelation&nearRelationNote',
+    ]);
+
+    // console.log('values update', values);
   }
 
   // 确定key位置
@@ -104,14 +110,27 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
   };
 
   onSubmit = () => {
+    const originalValues = this.state.values;
     const { form, dispatch } = this.props;
     form.validateFieldsAndScroll((error: any[], values: any) => {
-      if (!error) {
+      if (error) {
         return;
       }
       const newValues = submittedData(values, dataSource);
-      console.log('表单本孕信息', values);
-      console.log('提交本孕信息', newValues);
+      // console.log('表单本孕信息', values, newValues);
+      // 给各个字表加上id
+      const v = setFormId(originalValues, newValues);
+      dispatch({
+        type: 'global/updatePregnancy',
+        payload: v,
+      }).then((res: any) => {
+        if (res && res.id) {
+          Modal.alert('提示', '本孕信息保存成功！', [
+            { text: '取消', onPress: () => {} },
+            { text: '下一步', onPress: () => Router.push('/perinatal/pregnancy-history') },
+          ]);
+        }
+      });
     });
   };
 

@@ -18,14 +18,12 @@ interface IProps {
   props?: any[]
 }
 
-const initProps = [{ required: false }, { required: false }];
-
 function RadioInput(
-  { id, children, value = {}, onChange = () => {}, props = initProps }: IProps,
+  { id, children, value = {}, onChange = () => {}, props = [] }: IProps,
   ref: any,
 ) {
-  const label = children && children.split('&');
-  const ids = id && id.split('&');
+  const labels = props.map((e: any) => e.label);
+  const ids = props.map((e: any) => e.id);
 
   const visible = value[ids[0]] && value[ids[0]] !== '无' && value[ids[0]] !== '否';
 
@@ -44,22 +42,20 @@ function RadioInput(
   return (
     <span ref={ref}>
       <RadioPicker
-        required={props[0]['required']}
-        options={props[0]['options']}
-        value={value[ids[0]]}
+        {...props[0]}
+        value={value[props[0]['id']]}
         onChange={handleRadio}
       >
-        {label[0]}
+        {labels[0]}
       </RadioPicker>
       {visible ? (
         <TextInput
-          required={props[1]['required']}
-          placeholder={`请输入${label[1]}`}
-          suffix={props[1]['suffix']}
-          value={value[ids[1]]}
+          {...props[1]}
+          placeholder={props[1]['placeholder'] || `请输入${labels[1]}`}
+          value={value[props[1]['id']]}
           onChange={handleText}
         >
-          {label[1]}
+          {labels[1]}
         </TextInput>
       ) : null}
     </span>
