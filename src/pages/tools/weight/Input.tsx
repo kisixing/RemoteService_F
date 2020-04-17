@@ -8,10 +8,12 @@ import React, { useState } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import { Toast } from 'antd-mobile';
+import Router from 'umi/router';
 
 import DatePicker from '../components/DatePicker';
 import { ConnectState } from '@/models/connect';
 import { IconFont, Button, WhiteSpace } from '@/components/antd-mobile';
+import { setWeight as setWeightData, editWeight, SetProp } from '@/services/tools';
 import { router } from '@/utils/utils';
 
 import CircleProgress from '../components/CricleProgress';
@@ -23,20 +25,61 @@ const now = new Date(nowTimeStamp);
 
 const fontSize = document.getElementsByTagName('html')[0].style.fontSize;
 
-function WeightInput() {
+function WeightInput(props: {userid: number}) {
   const [date, setDate] = useState(now);
-  const [weight, setWeight] = useState();
+  const [weight, setWeight] = useState('');
+
+  const [id,setId] = React.useState(-1);
 
   React.useEffect(() => {
-
+    let obj = {};
+    console.log(window.location.search);
+    if(window.location.search){
+       window.location.search.split('?')[1].split('&').forEach((v:string) => {
+      obj[v.split('=')[0]] = v.split('=')[1];
+    });
+      if(obj['timestamp']){
+        setId(Number(obj['id']));
+        setWeight(obj['result']);
+        setDate(new Date(obj['timestamp']));
+      }
+    }
   }, []);
 
   const onSubmit = () => {
-    const d = moment(date).format('YYYY-MM-DD');
+    const d = moment(date).format();
     if (!weight) {
       return Toast.info('请输入体重数值...');
     }
-    console.log({ d, weight });
+    const reqData:SetProp = {
+      result: Number(weight),
+      timestamp: d,
+      src: 0,
+      pregnancy: {id: props.userid},
+    };
+    if(id !== -1) {
+      editWeight({...reqData, id: id}).then(res => {
+        if(!res.data) return
+        if(res.response.status >= 200 && res.response.status < 300){
+          Toast.success('体重数据修改成功');
+          setTimeout(() => {
+            Router.push('/signs/record?type=weight');
+          },500);
+        }
+      })
+    }else{
+      // 异常处理待定 到时统一去做
+      setWeightData(reqData).then((res:any) => {
+        console.log(res);
+        if(!res.data) return
+        if(res.response.status >= 200 && res.response.status < 300){
+          Toast.success('体重数据成功添加');
+          setTimeout(() => {
+            Router.push('/signs/record?type=weight');
+          },500);
+        }
+      })
+    }
   }
 
   return (
@@ -93,4 +136,5 @@ function WeightInput() {
 export default connect(({ global, loading }: ConnectState) => ({
   loading: loading,
   currentPregnancy: global.currentPregnancy,
+  userid: global.currentPregnancy?.id
 }))(WeightInput);

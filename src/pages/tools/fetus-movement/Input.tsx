@@ -1,7 +1,12 @@
 import React,{useState} from 'react';
+import moment from 'moment';
+import { connect } from 'dva';
 import DatePicker from '../components/DatePicker';
 import { Toast } from 'antd-mobile';
 import { IconFont, CountDown } from '@/components/antd-mobile';
+import { ConnectState } from '@/models/connect';
+
+import { setFetusMovement, SetProp } from '@/services/tools'; 
 
 import styles from './Input.less';
 
@@ -18,7 +23,8 @@ function fixedZero(val: number): string {
  *  
  * 
  */
-export default function FetusMovementInput(props: any) {
+function FetusMovementInput(props: any) {
+  let c:any = null;
   
   const [date, setDate] = useState(now);
   const [count,setCount] = useState(0);
@@ -40,7 +46,7 @@ export default function FetusMovementInput(props: any) {
         Toast.info("5分钟内有效次数为1次");
       }
     }else{
-      var c = setInterval(() => {
+      c = setInterval(() => {
         setCanAddCount(true);
       },FIVE_MIN);
       setIsCounting(true);
@@ -49,10 +55,21 @@ export default function FetusMovementInput(props: any) {
     }
   }
 
-  const handleEnd = () => {
+  const handleEnd = () => { 
     clearInterval(c);
+    const d = moment(date).format();
     console.log('end');
     // 这个位置获取一下当前时间取set
+    const reqData:SetProp = {
+      result: count,
+      timestamp: d,
+      pregnancy: {id: props.userid}
+    }
+    setFetusMovement(reqData).then((res:any) => {
+      if(!res.data) return;
+      Toast.info('胎动数据记录成功');
+      setIsCounting(false);
+    })
   }
 
   const reset = () => {
@@ -65,12 +82,12 @@ export default function FetusMovementInput(props: any) {
     const hours = 60 * 60 * 1000;
     const minutes = 60 * 1000;
     const second = 1000;
-
+    // 渲染有延时
     const h = Math.floor(time / hours);
-    const m = Math.floor((time - h * hours) / minutes);
-    const s = Math.floor((time - h * hours - m * minutes) / second);
+    const m = Math.floor((time - h * hours) / minutes)  + h * 60;
+    const s = Math.floor((time - m * minutes) / second);
     // 最后这个只需要2位
-    const ms = Math.floor((time - h * hours - m * minutes - s * second) / 10);
+    const ms = Math.floor((time - m * minutes - s * second) / 10);
     return (
       <div className={styles.clock}>
         <span>{fixedZero(m)}</span>
@@ -78,7 +95,6 @@ export default function FetusMovementInput(props: any) {
         <span>{fixedZero(s)}</span>
         :
         <span>{fixedZero(ms)}</span>
-        {/* {fixedZero(m)}:{fixedZero(s)}:{fixedZero(ms)} */}
       </div>
     );
   }
@@ -126,7 +142,9 @@ export default function FetusMovementInput(props: any) {
           <div className={styles.countdown}>
             {isCounting && 
             <CountDown
-              target={date.getTime() + 3600*1000} // 现在时间+1个小时
+              interval={90}
+              // target={date.getTime() + 3600*1000} // 现在时间+1个小时
+              target={date.getTime() + 30 *1000} 
               format={formatTime}
               onEnd={handleEnd}
             />}
@@ -153,3 +171,8 @@ export default function FetusMovementInput(props: any) {
     </div>
   )
 }
+
+
+export default connect(({global}: ConnectState) => ({
+  userid: global.currentPregnancy?.id
+}))(FetusMovementInput)

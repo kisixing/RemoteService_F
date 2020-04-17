@@ -15,7 +15,6 @@ const initTime = props => {
   } catch (e) {
     throw new Error('invalid target prop', e);
   }
-
   lastTime = targetTime - new Date().getTime();
   return {
     lastTime: lastTime < 0 ? 0 : lastTime,
@@ -46,7 +45,9 @@ class CountDown extends Component {
   }
 
   componentDidMount() {
+    const { interval = 1000 } = this.props;
     this.tick();
+    this.interval = interval;
   }
 
   componentDidUpdate(prevProps) {

@@ -324,12 +324,12 @@ function BloodPressureRecord(props: {userid: number}) {
             {isHistory ? <span>今日记录</span> : <span>历史记录</span>}
           </div>
         </div>
-          <div className={styles.canvas} style={{display: isHistory ? "block" : "none"}}>
-            <canvas ref={hChart}/>
-          </div>
-          <div className={styles.canvas} style={{display: isHistory ? "none" : "block"}}>
-            <canvas ref={tChart}/>
-          </div>
+        <div className={styles.canvas} style={{display: isHistory ? "block" : "none"}}>
+          <canvas ref={hChart}/>
+        </div>
+        <div className={styles.canvas} style={{display: isHistory ? "none" : "block"}}>
+          <canvas ref={tChart}/>
+        </div>
       </div>
       <div className={styles.count}>
         <div>

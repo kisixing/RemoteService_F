@@ -24,7 +24,7 @@ export interface GetProp{
 // 适用于 血糖 血氧 体温 POST
 export interface SetProp{
   result: number,
-  timestamp: Moment,
+  timestamp: Moment|string,
   pregnancy: {
     id: number
   },
@@ -37,7 +37,9 @@ export interface SetProp{
   exercise?: string,
   diet?: string,
   status?:number,
-  id?: number
+  id?: number,
+  // 数据来源
+  src?: number
 }
 // 血糖
 export async function getBloodGlucose(entity: GetProp) {
@@ -137,6 +139,39 @@ export async function setBloodPressures(data: SetBloodPressuresProp) {
 export async function editBloodPressures(data: SetBloodPressuresProp) {
   return request(`/api/blood-pressures`,{
     method: 'PUT',
+    data,
+    getResponse: true
+  })
+}
+
+// 体重
+export async function getWeight(entity:GetProp){
+  return request(`/api/weights?pregnancyId.equals=${entity.pregnancyId}`,{
+    method: 'GET',
+    getResponse: true
+  })
+}
+export async function setWeight(data: SetProp){
+  return request(`/api/weights`,{
+    method: 'POST',
+    data,
+    getResponse: true
+  })
+}
+export async function editWeight(data: SetProp){
+  return request(`/api/weights`,{
+    method: "PUT",
+    data,
+    getResponse: true
+  })
+}
+
+/**
+ * 胎动
+ */
+export async function setFetusMovement(data: SetProp){
+  return request(`/api/fetal-movements`,{
+    method: "POST",
     data,
     getResponse: true
   })

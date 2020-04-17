@@ -9,9 +9,11 @@ import React, { useRef, useState, useEffect } from 'react';
 // import Router from 'umi/router';
 import Chart from 'chart.js';
 import { connect } from 'dva';
+import Router from 'umi/router';
 import { ConnectState } from '@models/connect';
 import moment from 'moment';
 import { IconFont } from '@/components/antd-mobile';
+import { getWeight, getRecordNum, GetProp } from '@/services/tools';
 // import { Range } from '@/pages/tools/signs/config';
 
 import styles from '../signs/RecordsTabBar.less';
@@ -29,14 +31,6 @@ interface ServiceDataItem {
   status:number,
   src?:number
 }
-
-const mockW: Array<ServiceDataItem> = [
-  {timestamp: '2020-04-02T08:52:27+08:00', id: 1, result: 65, src: 0, pregnancy: {id: 4}, status: 1},
-  {timestamp: '2020-04-02T09:52:27+08:00', id: 2, result: 68, src: 1, pregnancy: {id: 4}, status: 1},
-  {timestamp: '2020-04-03T08:52:27+08:00', id: 3, result: 70, src: 0, pregnancy: {id: 4}, status: 1},
-  {timestamp: '2020-04-04T08:52:27+08:00', id: 4, result: 71, src: 1, pregnancy: {id: 4}, status: 1},
-  {timestamp: '2020-04-05T08:52:27+08:00', id: 5, result: 72, src: 0, pregnancy: {id: 4}, status: 1},
-]
 
 const [ defaultColor, errorColor ] = ['#c3c5c6','#dc143c'];
 const [ defaultPointRadius, errorPointRadius ] = [4,8];
@@ -113,7 +107,7 @@ function WeightRecord(props: {userid: number}) {
 
 
   const toEdit = (item: ServiceDataItem) => {
-
+    Router.push(`/signs/weight/input?timestamp=${item.timestamp}&result=${item.result}&id=${item.id}`);
   }
 
   const renderList = (listData: Array<ServiceDataItem>, isHistory: boolean) => {
@@ -218,7 +212,8 @@ function WeightRecord(props: {userid: number}) {
   }
 
   useEffect(() => {
-    setListData(mockW.reverse());
+    const reqData:GetProp = {pregnancyId: props.userid,page:0,size: 40, sort:'timestamp'};
+    getWeight(reqData).then(res => setListData(res.data.reverse()));
   },[props.userid])
 
   useEffect(() => {
