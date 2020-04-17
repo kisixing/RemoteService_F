@@ -101,7 +101,6 @@ function BloodPressureInput(props: {userid: number}) {
         setDate(new Date(obj['timestamp']));
       }
     }
-
   },[]);
 
   const inputStyle = (type:string) => {
