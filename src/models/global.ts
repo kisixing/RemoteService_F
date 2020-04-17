@@ -62,7 +62,7 @@ const GlobalModel: GlobalModelType = {
             },
           });
         }
-        if (data && data.id) {
+        if (data && data.mpuid) {
           store.set('mpuid', data.mpuid);
           yield put({
             type: 'updateState',

@@ -68,6 +68,11 @@ export function getFields(fields: any[]) {
   return result;
 }
 
+/**
+ * 整理适合表单赋值
+ * @param values 接口获取的原始值
+ * @param fields 表单配置信息
+ */
 export function assignmentData(values: any, fields: any[]) {
   // 截取本业表单需要的values值
   let result = getRealData(values, fields);
@@ -106,7 +111,10 @@ export function assignmentData(values: any, fields: any[]) {
         obj[childKeys[1]] = values[childKeys[1]];
         result = { ...result, [id]: obj }
       }
-      if (element.type === 'multiple-picker') {
+      if (
+        element.type === 'multiple-picker' ||
+        (element.type === 'multiple-picker' && element.cols === 1 && element.valueFormat === 'labelInValue')
+      ) {
         let array = [];
         const object = values[id];
         if (object) {
@@ -131,7 +139,7 @@ export function assignmentData(values: any, fields: any[]) {
 
 /**
  * 整理符合提交需要的数据格式
- * @param values 表单域的值
+ * @param values 表单域填写的值
  * @param fields 表单结构
  */
 export function submittedData(values: any, fields: any[]) {
@@ -174,6 +182,9 @@ export function submittedData(values: any, fields: any[]) {
       }
       result = { ...result, [id]: value ? obj : null };
     }
+    // if ((element.type === 'picker' && element.cols === 1 && element.valueFormat === 'labelInValue') || ) {
+
+    // }
   }
   console.log('rc-form获取的原始数据', values, result);
   return result;
@@ -187,5 +198,15 @@ export function setFormId(original: any, values: any) {
       result[key]['id'] = element.id;
     }
   }
+  return result;
+}
+
+// 获取需要进行value取值转换的key
+export function getSpecialKeys(data: any[]) {
+  const result = data.filter((e: any) => {
+    const type = e.type === 'picker' || e.type === 'multiple-picker';
+    const format = e.valueFormat === 'labelInValue';
+    return type && format;
+  });
   return result;
 }

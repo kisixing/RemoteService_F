@@ -75,14 +75,21 @@ textarea {
 }
 
 // 路由动效
-.fade-enter {
-  opacity: 0;
-  z-index: 1;
+.fade-enter{
+   opacity: 0;
 }
-
-.fade-enter.fade-enter-active {
-  opacity: 1;
-  transition: opacity 250ms ease-in;
+.fade-exit{
+   opacity: 1;
+}
+.fade-enter-active{
+   opacity: 1;
+}
+.fade-exit-active{
+   opacity: 0;
+}
+.fade-enter-active,
+.fade-exit-active{
+   transition: opacity 500ms;
 }
 
 :global {

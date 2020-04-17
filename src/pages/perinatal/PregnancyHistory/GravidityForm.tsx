@@ -10,7 +10,7 @@ import { Toast } from 'antd-mobile';
 import _ from 'lodash';
 import FormFields from '../FormFields';
 import FetusesComponent from './FetusesComponent';
-import { getFormKeys } from '../utils';
+import { getFormKeys, getRealData, assignmentData, submittedData } from '../utils';
 
 // 读取配置文件
 const { history } = window.configuration;
@@ -52,6 +52,7 @@ class GravidityForm extends PureComponent<P, S> {
   componentDidMount() {
     this.initValue();
   }
+
   componentWillReceiveProps() {
     const values = this.props.form.getFieldsValue([
       'isBirth',
@@ -131,11 +132,13 @@ class GravidityForm extends PureComponent<P, S> {
   initValue = () => {
     const { form, values } = this.props;
     // 初始化values
-    this.setValues(values);
+    const val = assignmentData(values, dataSource);
 
-    form.setFieldsValue({ isBirth: true });
+    console.log('孕产史初始化', values, val);
+
+    form.setFieldsValue({ isBirth: val.isBirth });
     setTimeout(() => {
-      form.setFieldsValue({ ...values, fetalcount: 1, fetus: [{ childGender: 1 }] });
+      form.setFieldsValue({ ...val });
     }, 100);
   }
 
@@ -143,6 +146,7 @@ class GravidityForm extends PureComponent<P, S> {
     // 特殊取值的属性
     const specialKeys = getSpecialKeys(formFields);
     // 配置上有的key属性
+    // const originalValues = getRealData(res, dataSource);
     const configKeys = getFormKeys(dataSource);
     const result = _.pick(values, configKeys);
 
@@ -156,6 +160,7 @@ class GravidityForm extends PureComponent<P, S> {
       });
       result[id] = filtered;
     }
+    return result;
   }
 
   getValues = () => {
@@ -166,19 +171,8 @@ class GravidityForm extends PureComponent<P, S> {
         Toast.info(`孕册记录${index}未填写完整`, 2)
         return result = false;
       }
-      let obj = {...values};
-      // 特殊取值的属性
-      const specialKeys = getSpecialKeys(formFields);
-      for (let i = 0; i < specialKeys.length; i++) {
-        const id = specialKeys[i]['id'];
-        const options: any[] = specialKeys[i]['options'];
-        delete(obj[id]);
-        options.forEach(e => {
-          const key = e.value;
-          obj[key] = values[key]
-        });
-      }
-      result = {...obj};
+      return result = submittedData(values, dataSource);
+      console.log('111111111111', values, result);
     })
     return result;
   }

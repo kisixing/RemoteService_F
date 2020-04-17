@@ -91,9 +91,9 @@ function PopupContent({
     }
     const newData = [...dataSource];
     const firstObj = newData[0];
-    const lastObj = newData[newData.length - 1];
+    // const lastObj = newData[newData.length - 1];
     newData[0] = { ...firstObj, selected: false };
-    newData[newData.length - 1] = { ...lastObj, selected: false };
+    // newData[newData.length - 1] = { ...lastObj, selected: false };
     newData[index] = { ...tag, selected: !selected };
     // 提取已经选择的obj
     let selectedTags = filterData(newData)
@@ -116,7 +116,10 @@ function PopupContent({
   const handleTextChange = (value: any) => onTextChange(value);
 
   const visible =
-    dataSource && dataSource.length > 0 && dataSource[dataSource.length - 1]['selected'];
+    dataSource &&
+    dataSource.length > 0 &&
+    dataSource[dataSource.length - 1]['selected'] &&
+    dataSource[dataSource.length - 1]['value'] === 'other';
 
   return (
     <div className={styles.content}>

@@ -6,7 +6,7 @@ import withRouter from 'umi/withRouter';
 import { connect } from 'dva';
 import NProgress from 'nprogress';
 import { LocaleProvider } from 'antd-mobile';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { SwitchTransition, CSSTransition } from 'react-transition-group';
 import { ConnectState } from '@/models/connect';
 import enUS from 'antd-mobile/lib/locale-provider/en_US';
 
@@ -29,13 +29,17 @@ const BasicLayout: React.FC<any> = props => {
   }
 
   return (
-    <TransitionGroup>
-      <CSSTransition key={props.location.pathname} classNames="fade" timeout={300}>
-        <LocaleProvider locale={locale === 'en' ? enUS : {}}>
-          {children}
-        </LocaleProvider>
+    <SwitchTransition>
+      <CSSTransition
+        key={props.location.pathname}
+        addEndListener={(node, done) => node.addEventListener('transitionend', done, false)}
+        classNames="fade"
+        timeout={300}
+      >
+        <LocaleProvider locale={locale === 'en' ? enUS : {}}>{children}</LocaleProvider>
       </CSSTransition>
-    </TransitionGroup>
+    </SwitchTransition>
+    // <LocaleProvider locale={locale === 'en' ? enUS : {}}>{children}</LocaleProvider>
   );
 };
 

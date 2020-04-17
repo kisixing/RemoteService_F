@@ -141,7 +141,6 @@ class PregnancyHistory extends React.PureComponent<P, S> {
       const inst: string = 'formRef' + e.id;
       // const values: any = this.getValues(inst, i);
       const values = this[inst].getValues();
-      console.log('99999999999', values);
       successed = false;
       if (values) {
         successed = true;
@@ -179,41 +178,45 @@ class PregnancyHistory extends React.PureComponent<P, S> {
     if (!values) {
       return;
     }
-    dispatch({
-      type: 'global/updatePregnancy',
-      payload: { pregnancyHistories: values }
-    }).then((res: any) => {
-      if (res && res.id) {
-        Modal.alert('提示', '孕产史信息保存成功！', [
-          { text: '取消', onPress: () => { }, style: 'default' },
-          { text: '确定', onPress: () => Router.push('/perinatal/perinatal') },
-        ]);
-      }
-    })
+    // dispatch({
+    //   type: 'global/updatePregnancy',
+    //   payload: { pregnancyHistories: values }
+    // }).then((res: any) => {
+    //   if (res && res.id) {
+    //     Modal.alert('提示', '孕产史信息保存成功！', [
+    //       { text: '取消', onPress: () => { }, style: 'default' },
+    //       { text: '确定', onPress: () => Router.push('/perinatal') },
+    //     ]);
+    //   }
+    // })
   }
 
   render() {
     const { dataSource } = this.state;
-    console.log('pppppppp', this.state);
     return (
       <div className="page">
         <StepBar current={3} />
         {dataSource && dataSource.length > 0 ? (
           this.accordion(dataSource)
         ) : (
-            <div className={styles.empty}> 暂无孕产史信息... </div>
-          )}
+          <div className={styles.empty}>
+            <h4>暂无孕产史信息...</h4>
+            <span className={styles.tip}>
+              若以前曾经怀孕，点击右下角圆形“+”图标按钮补充孕产史信息，若未曾怀孕，直接跳过本页...
+            </span>
+          </div>
+        )}
         <div className="bottom_button">
           <Button type="warning" className={styles.addButton} onClick={this.add}>
             <IconFont type="add" size=".54rem" />
           </Button>
-          <Button
-            type="primary"
-            disabled={dataSource && !dataSource.length}
-            onClick={this.onSubmit}
-          >
-            保存
-          </Button>
+          {dataSource && dataSource.length ? (
+            <Button type="primary" onClick={this.onSubmit}>
+              保存
+            </Button>
+          ) : (
+            <Button onClick={() => Router.push('/perinatal')}>返回首页</Button>
+          )}
         </div>
       </div>
     );

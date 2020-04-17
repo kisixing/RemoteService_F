@@ -1000,8 +1000,8 @@ const history = {
   description: '孕产史信息',
   data: [
     {
-      id: 'part-6',
-      desc: 'part-6',
+      id: 'pregnancyHistories',
+      desc: '单个孕次记录表单',
       children: [
         {
           id: 'gravidityindex',
@@ -1018,6 +1018,9 @@ const history = {
           required: true,
           mode: 'date',
           format: 'YYYY-MM-DD',
+          valueFormat: 'string', // 返回value值格式
+          minDate: new Date(1990, 1, 1, 0, 0, 0),
+          maxDate: new Date(),
         },
         {
           id: 'complication',
@@ -1074,6 +1077,7 @@ const history = {
           id: 'deliveryWay',
           label: '分娩方式',
           type: 'picker',
+          parentNode: 'root', // 父节点
           required: true,
           valueFormat: 'labelInValue',
           hide: true,
@@ -1112,6 +1116,7 @@ const history = {
           id: 'abortionWay', // abortion
           label: '流产方式',
           type: 'picker',
+          parentNode: 'root', // 父节点
           required: true,
           valueFormat: 'labelInValue',
           hide: true,
@@ -1137,6 +1142,7 @@ const history = {
           id: 'unhealth',
           label: '不良生育史',
           type: 'multiple-picker',
+          parentNode: 'root', // 父节点
           required: true,
           hide: true,
           cols: 1,
