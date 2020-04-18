@@ -49,6 +49,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
             required={required}
             type={charactertype}
             placeholder={placeholder}
+            error={getFieldError(id)}
             onChange={e => onChange(id, e)}
             {...rest}
           >
@@ -60,7 +61,13 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <TextareaItem key={id} required={required} placeholder={placeholder} {...rest}>
+          <TextareaItem
+            key={id}
+            required={required}
+            placeholder={placeholder}
+            error={getFieldError(id)}
+            {...rest}
+          >
             {label}
           </TextareaItem>,
         );
@@ -69,7 +76,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <StepperInput key={id} required={required} {...rest}>
+          <StepperInput key={id} required={required} error={getFieldError(id)} {...rest}>
             {label}
           </StepperInput>,
         );
@@ -88,7 +95,13 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <Radio key={id} required={required} charactertype={charactertype} {...rest}>
+          <Radio
+            key={id}
+            required={required}
+            charactertype={charactertype}
+            error={getFieldError(id)}
+            {...rest}
+          >
             {label}
           </Radio>,
         );
@@ -97,7 +110,13 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <Picker key={id} required={required} placeholder={placeholder} {...rest}>
+          <Picker
+            key={id}
+            required={required}
+            placeholder={placeholder}
+            error={getFieldError(id)}
+            {...rest}
+          >
             {label}
           </Picker>,
         );
@@ -110,6 +129,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
             key={id}
             required={required}
             placeholder={placeholder}
+            error={getFieldError(id)}
             onChange={e => onChange(id, e)}
             {...rest}
           >
@@ -121,7 +141,13 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <MixPicker key={id} required={required} placeholder={placeholder} {...rest}>
+          <MixPicker
+            key={id}
+            required={required}
+            placeholder={placeholder}
+            error={getFieldError(id)}
+            {...rest}
+          >
             {label}
           </MixPicker>,
         );
@@ -129,10 +155,25 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
         return getFieldDecorator(id, {
           initialValue: value,
           rules: [
-            { type: required ? 'array' : 'any', message: `${placeholder}!` },
+            {
+              validator: (rule, value, callback) => {
+                const res = required ? !value : !!value;
+                if (res) {
+                  callback(`${placeholder}!`)
+                }
+                // Note: 必须总是返回一个 callback，否则 validateFieldsAndScroll 无法响应
+                callback()
+              }
+            },
           ],
         })(
-          <MultiplePicker key={id} required={required} placeholder={placeholder} {...rest}>
+          <MultiplePicker
+            key={id}
+            required={required}
+            placeholder={placeholder}
+            error={getFieldError(id)}
+            {...rest}
+          >
             {label}
           </MultiplePicker>,
         );

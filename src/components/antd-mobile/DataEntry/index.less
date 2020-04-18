@@ -1,5 +1,31 @@
 @import '../../../utils/theme.less';
 
+:global {
+  .custom-input-item {
+    &.am-input-error {
+      input::placeholder {
+        color: #f50 !important;
+      };
+
+      // .am-input-error-extra {
+      //   display: none;
+      // }
+    }
+
+    &.am-textarea-error {
+      textarea::placeholder {
+        color: #f50 !important;
+      }
+
+      // .am-textarea-error-extra {
+      //   display: none;
+      // }
+    }
+  }
+}
+
+
+
 .required {
   display: inline-block;
   margin-right: 4px;
@@ -27,20 +53,20 @@
 
     .am-list-extra {
       flex: 1 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
     }
   }
 }
 
 .stepperItem {
-  width: 100% !important;
-  height: 0.44rem !important;
-  line-height: 0.44rem !important;
+  height: 0.48rem !important;
+  line-height: 0.48rem !important;
 
   :global {
     .am-stepper-handler {
-      width: 0.36rem;
-      height: 0.36rem;
-      line-height: 0.36rem;
+      width: 0.42rem;
+      height: 0.42rem;
       border-width: 2PX;
       border-color: #999;
       display: flex;
@@ -55,7 +81,7 @@
     }
 
     .am-stepper-input-wrap {
-      height: 100%;
+      height: auto;
       line-height: 1.5;
     }
   }

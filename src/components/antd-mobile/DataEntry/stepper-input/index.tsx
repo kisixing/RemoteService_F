@@ -7,24 +7,29 @@ import styles from '../index.less';
 interface IProps extends StepProps {
   required?: boolean
   children?: React.ReactNode
+  error?: any
 }
 
 function StepperInput(
-  { value, required, children, onChange, ...rest }: IProps ,
+  { value, required, children, onChange, error, ...rest }: IProps ,
   ref: any,
 ) {
   return (
     <List.Item
-      wrap
+      className={styles.customList}
+      error={error}
       extra={
-        <Stepper
-          ref={ref}
-          className={styles.stepperItem}
-          showNumber
-          value={value}
-          onChange={onChange}
-          {...rest}
-        />
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <Stepper
+            ref={ref}
+            className={styles.stepperItem}
+            showNumber
+            value={value}
+            onChange={onChange}
+            {...rest}
+          />
+          {!!error ? <div className="list-item-error-extra" /> : null}
+        </div>
       }
     >
       <>

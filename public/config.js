@@ -914,7 +914,7 @@ const pregnancy = {
             '血友病',
             '高度近视',
           ].map(e => ({ label: e, value: e })),
-        },
+        }
       ],
     },
     {

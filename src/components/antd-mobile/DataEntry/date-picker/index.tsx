@@ -10,27 +10,29 @@ interface IProps extends PropsType  {
   children?: React.ReactNode
   placeholder?: string
   valueFormat?: 'string' | 'date'
+  error?: any
+  format: string
 }
 
-const CustomItem = (props: any) => (
-  <List.Item
-    className={styles.customList}
-    arrow={props.arrow}
-    extra={
-      <span
-        style={{
-          fontSize: '0.3rem',
-          color: props.extra && props.extra.includes('请') ? '#bbb' : '#000',
-        }}
-      >
-        {props.extra}
-      </span>
-    }
-    onClick={props.onClick}
-  >
-    {props.children}
-  </List.Item>
-);
+const CustomItem = ({ arrow, error, extra, onClick, children }: any) => {
+  console.log('date picker', error);
+  const color = extra && extra.includes('请') && !error ? '#bbb' : error ? '' : '#000';
+  return (
+    <List.Item
+      className={styles.customList}
+      arrow={arrow}
+      error={error}
+      extra={
+        <span style={{fontSize: '0.3rem', color }}>
+          {extra}
+        </span>
+      }
+      onClick={onClick}
+    >
+      {children}
+    </List.Item>
+  );
+};
 
 function DatePicker({
   required,
@@ -38,6 +40,7 @@ function DatePicker({
   placeholder,
   value,
   mode,
+  error,
   format = 'YYYY-MM-DD',
   valueFormat = 'date',
   onChange = () => {},
@@ -59,7 +62,7 @@ function DatePicker({
   };
 
   const handleChange = (value: Date) => {
-    let result = value;
+    let result: any = value;
     if (valueFormat === 'string') {
       result = moment(value).format(format);
     }
@@ -77,7 +80,7 @@ function DatePicker({
       format={value => moment(value).format(format)}
       {...rest}
     >
-      <CustomItem arrow="horizontal">
+      <CustomItem arrow="horizontal" error={error}>
         {required ? <i className={styles.required}>*</i> : null}
         <span className={styles.label}>{children}</span>
       </CustomItem>

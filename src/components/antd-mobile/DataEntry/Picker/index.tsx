@@ -7,34 +7,28 @@ import options from '../address-picker/cascader-address-options';
 import styles from '../index.less';
 
 interface IProps extends PickerPropsType {
-  required?: boolean
-  children?: React.ReactNode
-  placeholder?: string
-  pickerType?: any
-  addressPicker?: boolean
-  valueFormat?: 'string' | 'array' | 'number' | 'labelInValue'
-  value: any
-  options?: any[]
+  required?: boolean;
+  children?: React.ReactNode;
+  placeholder?: string;
+  pickerType?: any;
+  addressPicker?: boolean;
+  valueFormat?: 'string' | 'array' | 'number' | 'labelInValue';
+  value: any;
+  options?: any[];
+  error?: any;
 }
 
-const CustomItem = (props: any) => {
+const CustomItem = ({ arrow, error, extra, onClick, children }: any) => {
+  const color = extra && extra.includes('请') && !error ? '#bbb' : error ? '' : '#000';
   return (
     <List.Item
       className={styles.customList}
-      arrow={props.arrow}
-      extra={
-        <span
-          style={{
-            fontSize: '0.3rem',
-            color: props.extra && props.extra.includes('请') ? '#bbb' : '#000',
-          }}
-        >
-          {props.extra}
-        </span>
-      }
-      onClick={props.onClick}
+      arrow={arrow}
+      error={error}
+      extra={<span style={{ fontSize: '0.3rem', color }}>{extra}</span>}
+      onClick={onClick}
     >
-      {props.children}
+      {children}
     </List.Item>
   );
 };
@@ -50,6 +44,7 @@ function Picker(
     valueFormat = 'array',
     onChange = () => {},
     value,
+    error,
     ...rest
   }: IProps,
   ref: any,
@@ -105,7 +100,7 @@ function Picker(
       onOk={handleChange}
       {...rest}
     >
-      <CustomItem arrow="horizontal">
+      <CustomItem arrow="horizontal" error={error}>
         {required ? <i className={styles.required}>*</i> : null}
         <span className={styles.label}>{children}</span>
       </CustomItem>

@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import styles from './RadioGroup.less';
+import common from '../index.less'
 
 function RadioGroup({ id, options, value, onChange = () => {}, error }: any) {
   const handleChange = (e: any) => {
@@ -8,7 +9,6 @@ function RadioGroup({ id, options, value, onChange = () => {}, error }: any) {
     const checked = options.filter((e: any) => e.value.toString() === flag)[0];
     onChange(checked.value);
   };
-
   return (
     <div className={styles.group}>
       {options.map((item: { label: string; value: any }, index: any) => {
@@ -30,7 +30,7 @@ function RadioGroup({ id, options, value, onChange = () => {}, error }: any) {
           </label>
         );
       })}
-      {error ? <div className="am-input-error-extra" /> : null}
+      {!!error ? <div className="list-item-error-extra" /> : null}
     </div>
   );
 }

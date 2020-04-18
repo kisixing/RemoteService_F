@@ -69,24 +69,22 @@ const separatedLabels = (options: any[], value: any) => {
   return { tags: tags.join(','), text };
 };
 
-const CustomItem = ({ arrow, children, extra, value, onClick, options, disabled }: any) => {
+const CustomItem = ({ arrow, children, extra, value, onClick, options, disabled, error }: any) => {
   let text = '';
   const labels = separatedLabels(options, value);
   if (labels) {
     text = labels.text ? `${labels.tags}${labels.tags ? ',' : ''}${labels.text}` : labels.tags;
   }
+  const color = text ? '#000' : error ? '#f50' : '#bbb';
   return (
     <List.Item
       className={styles.customList}
       arrow={arrow}
       extra={
         <span
-          style={{
-            fontSize: '0.3rem',
-            color: value ? '#000' : '#bbb',
-          }}
+          style={{ fontSize: '0.3rem', color }}
         >
-          {value && value.length ? text : extra}
+          {text ? text : extra}
         </span>
       }
       onClick={() => (disabled ? null : onClick())}
@@ -110,6 +108,7 @@ interface IProps {
   placeholder?: string
   valueFormat?: 'array' | 'string'
   disabled?: boolean
+  error?: any
 }
 
 function MixPicker(
@@ -122,6 +121,7 @@ function MixPicker(
     placeholder,
     onChange = () => {},
     disabled,
+    error
   }: IProps,
   ref: any,
 ) {
@@ -181,6 +181,7 @@ function MixPicker(
         value={value}
         options={options}
         disabled={disabled}
+        error={error}
       >
         {required ? <i className={styles.required}>*</i> : null}
         <span className={styles.label}>{children}</span>
