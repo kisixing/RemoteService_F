@@ -31,13 +31,17 @@ interface P {
   loading?: boolean;
   form: any
   id: string
-  values: object
+  values: {
+    id?: string | number | undefined;
+    [propName: string]: any;
+  }
   index?: number
 }
 
 interface S {
   visible: boolean
   number?: number
+  id?: string | number | undefined;
 };
 
 class GravidityForm extends PureComponent<P, S> {
@@ -45,7 +49,8 @@ class GravidityForm extends PureComponent<P, S> {
     super(props);
     this.state = {
       visible: false,
-      number: 0
+      number: 0,
+      id: ''
     }
   }
 
@@ -58,7 +63,7 @@ class GravidityForm extends PureComponent<P, S> {
       'isBirth',
       'fetalcount'
     ]);
-    console.log('是否分娩', values);
+    // console.log('是否分娩', values);
     //////////////////////////////////////////////////////////////
     //////////////// 分娩情况下的表单 ///////////////////////////////
     //////////////////////////////////////////////////////////////
@@ -131,6 +136,8 @@ class GravidityForm extends PureComponent<P, S> {
 
   initValue = () => {
     const { form, values } = this.props;
+    // 保存id，便于取值时拿回已经保存的孕产id
+    this.setState({ id: values.id })
     // 初始化values
     const val = assignmentData(values, dataSource);
 
@@ -172,9 +179,8 @@ class GravidityForm extends PureComponent<P, S> {
         return result = false;
       }
       return result = submittedData(values, dataSource);
-      console.log('111111111111', values, result);
     })
-    return result;
+    return {id: this.state.id, ...result};
   }
 
   // 确定key位置

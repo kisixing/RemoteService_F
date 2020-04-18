@@ -91,13 +91,14 @@ export function assignmentData(values: any, fields: any[]) {
         const parentKey: string = ids[0];
         // 子属性childKeys
         const childKeys: string[] = ids[1].split('&');
-        obj[childKeys[0]] = values[parentKey][childKeys[0]];
-        obj[childKeys[1]] = values[parentKey][childKeys[1]];
+        obj[childKeys[0]] = values[parentKey] ? values[parentKey][childKeys[0]] : null;
+        obj[childKeys[1]] = values[parentKey] ? values[parentKey][childKeys[1]] : null;
         result = { ...result, [id]: obj }
       } else {
+        // TODO 也有可能出现multiple-picker、picker组件
         // 其他的type类型（大概率不会出现multiple-picker类型的组件）
         // 拆分id
-        result = { ...result, [id]: values[ids[0]][ids[1]] };
+        result = { ...result, [id]: values[ids[0]] ? values[ids[0]][ids[1]] : null };
       }
     }
     if (!id.includes('.')) {
@@ -112,10 +113,10 @@ export function assignmentData(values: any, fields: any[]) {
         result = { ...result, [id]: obj }
       }
       if (
-        element.type === 'multiple-picker' ||
+        (element.type === 'multiple-picker' && element.parent) ||
         (element.type === 'multiple-picker' && element.cols === 1 && element.valueFormat === 'labelInValue')
       ) {
-        let array = [];
+        let array = null;
         const object = values[id];
         if (object) {
           const options = element.options;
@@ -147,6 +148,7 @@ export function submittedData(values: any, fields: any[]) {
   let result = { ...values };
   const fieldsArray = getFields(fields);
   for (let i = 0; i < fieldsArray.length; i++) {
+    // 根据form fields配置遍历
     const element = fieldsArray[i];
     const id = element.id;
     const value = values[id];
@@ -170,20 +172,50 @@ export function submittedData(values: any, fields: any[]) {
         delete result[id];
       }
     }
-    if (element.type === 'multiple-picker') {
-      let obj = {};
-      if (value) {
-        value.forEach((ele: any) => {
-          obj[ele.value] = true;
-          if (ele.value === 'other') {
-            obj['otherNote'] = ele.note;
-          }
-        });
+    if (
+      (element.type === 'multiple-picker' && element.parent) ||
+      (element.type === 'picker' && element.cols === 1 && element.valueFormat === 'labelInValue')
+    ) {
+      // 该类型的组件的输出值为[{ label: '', value: '' }, { label: '', value: '' }]
+      // 根据parent父节点决定选择的值放在哪个对象里，root放在根，非root放在parent对象
+      if (element.parent === 'root') {
+        let obj = {};
+        if (value) {
+          value.forEach((ele: any) => {
+            obj[ele.value] = true;
+          });
+        }
+        delete result[id];
+        result = { ...result, ...obj };
       }
-      result = { ...result, [id]: value ? obj : null };
+      if (element.parent !== 'root') {
+        let obj = {};
+        if (value) {
+          value.forEach((ele: any) => {
+            obj[ele.value] = true;
+            if (ele.value === 'other') {
+              // 存在其他’other‘的时候
+              obj['otherNote'] = ele.note;
+            }
+          });
+        }
+        delete result[id];
+        result = { ...result, [element.parent]: value ? obj : null };
+      }
     }
-    // if ((element.type === 'picker' && element.cols === 1 && element.valueFormat === 'labelInValue') || ) {
-
+    // if ((element.type === 'picker' && element.cols === 1 && element.valueFormat === 'labelInValue')) {
+    //   // 单选时，且输出值类型为labelInValue时，根multiple-picker取值一致
+    //   let key = id; // 根据parent父节点决定选择的值放在哪个对象里，root放在根，非root放在parent对象
+    //   if (element.parent !== 'root') {
+    //     key = parent;
+    //   }
+    //   let obj = {};
+    //   if (value) {
+    //     value.forEach((ele: any) => {
+    //       obj[ele.value] = true;
+    //     });
+    //   }
+    //   result = { ...result, [key]: value ? obj : null };
     // }
   }
   console.log('rc-form获取的原始数据', values, result);

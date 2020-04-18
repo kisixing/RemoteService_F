@@ -72,6 +72,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
     return (
       <Accordion activeKey={activeKey} onChange={this.onAccordionChange}>
         {data.map((item, i) => {
+          console.log('1111111111111', this.state.values, data, this.state.values[item.id]);
           return (
             <Accordion.Panel
               key={item.id}
@@ -98,7 +99,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
                 id={item.id}
                 index={i + 1}
                 wrappedComponentRef={(inst: any) => this[`formRef${item.id}`] = inst}
-                values={this.state.values[item.id] || {}}
+                values={this.state.values[i] || {}}
               />
             </Accordion.Panel>
           );
@@ -178,17 +179,17 @@ class PregnancyHistory extends React.PureComponent<P, S> {
     if (!values) {
       return;
     }
-    // dispatch({
-    //   type: 'global/updatePregnancy',
-    //   payload: { pregnancyHistories: values }
-    // }).then((res: any) => {
-    //   if (res && res.id) {
-    //     Modal.alert('提示', '孕产史信息保存成功！', [
-    //       { text: '取消', onPress: () => { }, style: 'default' },
-    //       { text: '确定', onPress: () => Router.push('/perinatal') },
-    //     ]);
-    //   }
-    // })
+    dispatch({
+      type: 'global/updatePregnancy',
+      payload: { pregnancyHistories: values }
+    }).then((res: any) => {
+      if (res && res.id) {
+        Modal.alert('提示', '孕产史信息保存成功！', [
+          { text: '取消', onPress: () => { }, style: 'default' },
+          { text: '确定', onPress: () => Router.push('/perinatal') },
+        ]);
+      }
+    })
   }
 
   render() {

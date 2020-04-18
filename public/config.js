@@ -925,6 +925,7 @@ const pregnancy = {
           id: 'diseaseHistory',
           label: '疾病史',
           type: 'multiple-picker',
+          parent: 'diseaseHistory', // 存在parent，root时把所有属性放在根，非root时放在parent对象里；不存在parent时，不做处理，即是id属性的value值
           required: true,
           disabled: false,
           options: [
@@ -947,6 +948,7 @@ const pregnancy = {
           id: 'allergyHistory',
           label: '过敏史',
           type: 'multiple-picker',
+          parent: 'allergyHistory',
           required: true,
           options: [
             { label: '青霉素', value: 'penicillin' },
@@ -961,6 +963,7 @@ const pregnancy = {
           id: 'familyHistory',
           label: '家庭史',
           type: 'multiple-picker',
+          parent: 'familyHistory',
           required: true,
           options: [
             { label: '高血压', value: 'hypertension' },
@@ -983,6 +986,7 @@ const pregnancy = {
           id: 'procedureHistory',
           label: '手术史',
           type: 'multiple-picker',
+          parent: 'procedureHistory',
           required: true,
           options: [
             { label: '子宫手术', value: 'uterus' },
@@ -1077,7 +1081,7 @@ const history = {
           id: 'deliveryWay',
           label: '分娩方式',
           type: 'picker',
-          parentNode: 'root', // 父节点
+          parent: 'root', // 父节点
           required: true,
           valueFormat: 'labelInValue',
           hide: true,
@@ -1116,7 +1120,7 @@ const history = {
           id: 'abortionWay', // abortion
           label: '流产方式',
           type: 'picker',
-          parentNode: 'root', // 父节点
+          parent: 'root', // 父节点
           required: true,
           valueFormat: 'labelInValue',
           hide: true,
@@ -1142,7 +1146,7 @@ const history = {
           id: 'unhealth',
           label: '不良生育史',
           type: 'multiple-picker',
-          parentNode: 'root', // 父节点
+          parent: 'root', // 父节点
           required: true,
           hide: true,
           cols: 1,
