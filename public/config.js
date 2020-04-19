@@ -175,7 +175,7 @@ const basic = {
           type: 'text-input',
           charactertype: 'text',
           pattern: /(^(?:[\u4e00-\u9fa5·]{2,16})$)|(^[a-zA-Z]{1}[a-zA-Z\s]{0,20}[a-zA-Z]{1}$)/,
-          patternMessage: '请输入符合规范的姓名',
+          patternMessage: '请输入符合规范的姓名，全中文或全英文',
           required: true,
           placeholder: '请输入您的姓名',
         },
@@ -259,6 +259,7 @@ const basic = {
           type: 'text-input',
           charactertype: 'digit',
           maxLength: 2,
+          min: 13,
           required: true,
         },
         {
@@ -316,7 +317,7 @@ const basic = {
           type: 'text-input',
           charactertype: 'text',
           pattern: /(^(?:[\u4e00-\u9fa5·]{2,16})$)|(^[a-zA-Z]{1}[a-zA-Z\s]{0,20}[a-zA-Z]{1}$)/,
-          patternMessage: '请输入符合规范的姓名',
+          patternMessage: '请输入符合规范的姓名，全中文或全英文',
           required: true,
         },
         {
@@ -358,6 +359,8 @@ const basic = {
           label: '男方年龄',
           type: 'text-input',
           charactertype: 'digit',
+          maxLength: 2,
+          min: 13,
           required: true,
         },
         {
@@ -466,6 +469,8 @@ const pregnancy = {
           suffix: '年',
           type: 'text-input',
           charactertype: 'digit',
+          placeholder: '请输入您结婚了多少年',
+          maxLength: 2,
           required: true,
         },
         {
@@ -500,6 +505,9 @@ const pregnancy = {
           label: '孕周',
           type: 'text-input',
           charactertype: 'text',
+          maxLength: 4,
+          pattern: /(^[1-9]{1,2}$)|(^[1-9]{1,2}[+]{1}[1-6]{1}$)/,
+          patternMessage: '请输入类似下面的孕周格式，12或12+2，不允许中间有空格',
           required: true,
         },
         {
@@ -584,7 +592,8 @@ const pregnancy = {
           type: 'text-input',
           suffix: '岁',
           charactertype: 'digit',
-          placeholder: '请输入月经初潮时间',
+          placeholder: '请输入月经初潮的时间',
+          maxLength: 2,
           required: true,
         },
         {
@@ -593,6 +602,7 @@ const pregnancy = {
           type: 'text-input',
           suffix: '天',
           charactertype: 'digit',
+          maxLength: 2,
           required: true,
         },
         {
@@ -601,6 +611,7 @@ const pregnancy = {
           type: 'text-input',
           suffix: '天',
           charactertype: 'digit',
+          maxLength: 2,
           required: true,
         },
         {
@@ -646,6 +657,9 @@ const pregnancy = {
           type: 'text-input',
           suffix: 'cm',
           charactertype: 'digit',
+          maxLength: 6,
+          pattern: /(^[1-2]{1}[0-9]{1,2}$)|(^[1-2]{1}[0-9]{1,2}[.]{1}[0-9]{1,2}$)/,
+          patternMessage: '请输入合乎实际的身高数值，可以保留两位小数',
           required: true,
         },
         {
@@ -654,6 +668,9 @@ const pregnancy = {
           type: 'text-input',
           suffix: 'kg',
           charactertype: 'digit',
+          pattern: /(^[1-9]{1}[0-9]{1,2}$)|(^[1-9]{1}[1-9]{1,2}[.]{1}[0-9]{1,2}$)/,
+          patternMessage: '请输入合乎实际的体重数值，可以保留两位小数',
+          maxLength: 6,
           required: true,
         },
         {
@@ -662,6 +679,7 @@ const pregnancy = {
           type: 'text-input',
           suffix: 'kg/㎡',
           charactertype: 'digit',
+          maxLength: 5,
           required: true,
         },
         {
@@ -683,6 +701,7 @@ const pregnancy = {
               label: '烟量',
               required: true,
               charactertype: 'digit',
+              maxLength: 2,
               suffix: '支/天',
             },
           ],
@@ -719,6 +738,7 @@ const pregnancy = {
               charactertype: 'digit',
               suffix: '毫升/天',
               placeholder: '输入本人每天的饮酒量',
+              maxLength: 5,
             },
           ],
         },
@@ -854,6 +874,7 @@ const pregnancy = {
               required: true,
               charactertype: 'digit',
               suffix: '支/天',
+              maxLength: 2,
               placeholder: '输入男方每天抽烟的量',
             },
           ],
@@ -888,6 +909,7 @@ const pregnancy = {
               required: true,
               charactertype: 'digit',
               suffix: '毫升/天',
+              maxLength: 5,
               placeholder: '输入男方每天的饮酒量',
             },
           ],
@@ -1032,7 +1054,7 @@ const history = {
           type: 'stepper-input',
           required: true,
           min: 1,
-          max: 10,
+          max: 20,
         },
         {
           id: 'deliveryTime',
@@ -1084,6 +1106,9 @@ const history = {
           label: '分娩孕周',
           type: 'text-input',
           charactertype: 'text',
+          pattern: /(^[1-9]{1,2}$)|(^[1-9]{1,2}[+]{1}[1-6]{1}$)/,
+          patternMessage: '请输入类似下面的孕周格式，12或12+2，不允许中间有空格',
+          maxLength: 4,
           required: true,
           hide: true,
         },
@@ -1178,9 +1203,9 @@ const history = {
           ],
         },
         {
-          id: 'fetus',
+          id: 'child',
           label: '胎儿信息',
-          type: 'fetus',
+          type: 'child',
           required: true,
           hide: true,
           data: [
@@ -1200,6 +1225,8 @@ const history = {
               suffix: 'kg',
               type: 'text-input',
               charactertype: 'digit',
+              maxLength: 4,
+              max: 20,
               required: true,
             },
             {
@@ -1208,6 +1235,8 @@ const history = {
               suffix: 'cm',
               type: 'text-input',
               charactertype: 'digit',
+              maxLength: 5,
+              max: 99,
               required: false,
             },
             {

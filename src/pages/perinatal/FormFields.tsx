@@ -42,9 +42,8 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
       value,
       pattern,
       patternMessage,
-      length,
       maxLength,
-      minLength,
+      len,
       max,
       min,
       ...rest
@@ -58,14 +57,14 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
     if (pattern) {
       rules.push({ pattern, message: patternMessage ? patternMessage : `请输入符合规则的${label}` })
     }
-    if (length) {
-      rules.push({ len: length, message: `${label}允许输入的最大长度为${len}` })
+    if (len) {
+      rules.push({ len, message: `${label}允许输入的长度为${len}` })
     }
-    if (maxLength) {
-      rules.push({ max: maxLength, message: `${label}的最大值为${max}` })
+    if (max) {
+      rules.push({ max, message: `${label}的最大值为${max}` })
     }
-    if (minLength) {
-      rules.push({ min: minLength, message: `${label}的最新值为${min}` })
+    if (min) {
+      rules.push({ min, message: `${label}的最新值为${min}` })
     }
 
     if (hide) {
@@ -102,6 +101,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
             key={id}
             required={required}
             placeholder={placeholder}
+            maxLength={maxLength}
             error={getFieldError(id)}
             {...rest}
           >
