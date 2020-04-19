@@ -155,10 +155,10 @@ const illness = [
 // 证件类型
 const IDType = [
   { label: '二代身份证', value: 0 },
-  { label: '港澳台居民居住证', value: 4 },
+  { label: '港澳台居民居住证', value: 1 },
   { label: '回乡证', value: 2 },
   { label: '台胞证', value: 3 },
-  { label: '护照', value: 1 },
+  { label: '护照', value: 4 },
   { label: '其他', value: 5 },
 ];
 
@@ -174,6 +174,8 @@ const basic = {
           label: '姓名',
           type: 'text-input',
           charactertype: 'text',
+          pattern: /(^(?:[\u4e00-\u9fa5·]{2,16})$)|(^[a-zA-Z]{1}[a-zA-Z\s]{0,20}[a-zA-Z]{1}$)/,
+          patternMessage: '请输入符合规范的姓名',
           required: true,
           placeholder: '请输入您的姓名',
         },
@@ -189,6 +191,14 @@ const basic = {
           label: '固话',
           type: 'text-input',
           charactertype: 'tel',
+          // TODO 暂时弃用
+          // rules: [
+          //   { required: true, message: '请输入固定电话号码' },
+          //   { pattern: /(^0\d{2,3}\-\d{7,8}$)/, meaasge: '请输入符合规范的固定电话格式，如020-88889999' }
+          // ],
+          pattern: /(^0\d{2,3}\-\d{7,8}$)/,
+          patternMessage: '请输入符合规范的固定电话格式，如020-88889999',
+          maxLength: 12, // 大陆地区固话长度020-88889999
           required: true,
         },
         {
@@ -196,6 +206,8 @@ const basic = {
           label: '就诊卡号',
           type: 'text-input',
           charactertype: 'text',
+          pattern: /^[a-zA-Z0-9_-]{4,16}$/,
+          patternMessage: '就诊卡号由4到16位（字母，数字，下划线，减号）',
           required: true,
         },
         {
@@ -203,6 +215,8 @@ const basic = {
           label: '准生证号',
           type: 'text-input',
           charactertype: 'text',
+          pattern: /^[a-zA-Z0-9_-]{4,16}$/,
+          patternMessage: '就诊卡号由4到16位（字母，数字，下划线，减号）',
           required: false,
         },
       ],
@@ -225,6 +239,7 @@ const basic = {
           label: '证件号码',
           type: 'text-input',
           charactertype: 'text',
+          maxLength: 18,
           required: true,
         },
         {
@@ -243,6 +258,7 @@ const basic = {
           label: '年龄',
           type: 'text-input',
           charactertype: 'digit',
+          maxLength: 2,
           required: true,
         },
         {
@@ -299,6 +315,8 @@ const basic = {
           label: '男方姓名',
           type: 'text-input',
           charactertype: 'text',
+          pattern: /(^(?:[\u4e00-\u9fa5·]{2,16})$)|(^[a-zA-Z]{1}[a-zA-Z\s]{0,20}[a-zA-Z]{1}$)/,
+          patternMessage: '请输入符合规范的姓名',
           required: true,
         },
         {
@@ -322,6 +340,7 @@ const basic = {
           label: '男方证件号码',
           type: 'text-input',
           charactertype: 'text',
+          maxLength: 18,
           required: true,
         },
         {
@@ -1381,4 +1400,5 @@ window.configuration = {
   sequentialControl: false,
   // 孕产史是否根据本孕信息的孕次数量自动生成列表
   autoMapPregnancyHistory: false,
+  idtype: IDType,
 };

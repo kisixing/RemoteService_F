@@ -21,13 +21,47 @@ interface IProps {
 
 interface IState {}
 
+// 手机号码格式转化为 344 格式 （188 3886 9199）
+function phoneSeparated(phoneNumber: string) {
+  // 去掉字符串中所有空格
+  let str = phoneNumber.replace(/\s+/g, '');
+  const len = str.length;
+  switch (true) {
+    case len > 11:
+      str = str.substr(0, 3) + ' ' + str.substr(3, 4) + ' ' + str.substr(7, 4);
+      break;
+    case len > 7:
+      str = str.substr(0, 3) + ' ' + str.substr(3, 4) + ' ' + str.substr(7);
+      break;
+    case len > 3:
+      str = str.substr(0, 3) + ' ' + str.substr(3);
+      break;
+    default:
+      str = str;
+  }
+  return str;
+}
+
 export default class InputItem extends React.Component<IProps, IState> {
   handleChange = (event: any) => {
-    const value = event.target.value;
-    this.props.onchange(value)
+    event.preventDefault();
+    const { type, onChange = () => {} } = this.props;
+    let value = event.target.value;
+    if (value) {
+      value.trim()
+    }
+    if (type === 'phone') {
+      value = phoneSeparated(value);
+      if (value.length > 13) {
+        return;
+      }
+    }
+    onChange(value)
   }
   render () {
-    const { icon, extra, type, placeholder, value = '', onchange, ...rest } = this.props;
+    const { icon, extra, type, placeholder, value = '', onChange, ...rest } = this.props;
+    const t = type === 'phone' ? 'tel' : type;
+
     return (
       <div className={styles.inputItem}>
         {icon ? (
@@ -39,7 +73,7 @@ export default class InputItem extends React.Component<IProps, IState> {
               [styles.hasIcon]: !!icon,
               [styles.hasExtra]: !!extra,
             })}
-          type={type}
+          type={t}
           placeholder={placeholder}
           onChange={this.handleChange}
           value={value}

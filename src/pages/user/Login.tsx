@@ -18,16 +18,12 @@ import Footer from '@/components/Footer';
 import { Button, IconFont } from '@/components/antd-mobile';
 import styles from './Login.less';
 
-const reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
-const IDType = [
-  { label: '二代身份证', value: 0 },
-  { label: '港澳台居民居住证', value: 1 },
-  { label: '回乡证', value: 2 },
-  { label: '台胞证', value: 3 },
-  { label: '护照', value: 4 },
-  { label: '其他', value: 5 },
-];
-// ['二代身份证', '港澳台居民居住证', '回乡证', '台胞证', '护照', '其他'].map(e => ({ label: e, value: e }));
+// 读取配置文件
+const { idtype } = window.configuration;
+
+const mobileReg = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
+const idReg = /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/;
+
 interface P {
   form: any
   dispatch: any
@@ -58,7 +54,7 @@ class Login extends Component<P, S> {
     setFieldsValue({
       // mobile: '13657721210',
       // captcha: '5566',
-      // idType: '二代身份证',
+      // idType: 0,
       // idNo: '110101199003071348',
     });
   }
@@ -69,8 +65,8 @@ class Login extends Component<P, S> {
       form: { getFieldValue },
     } = this.props;
     const mobile = getFieldValue('mobile');
-    if (!reg.test(mobile)) {
-      return Toast.info('请输入正确的手机号码!');
+    if (!mobileReg.test(mobile)) {
+      return Toast.info('请输入正确的手机号码，必须以13,14,15,16,17,18,19开头。');
     }
     dispatch({
       type: 'user/getCaptcha',
@@ -85,44 +81,52 @@ class Login extends Component<P, S> {
 
   onSubmit = () => {
     const { form, dispatch } = this.props;
-    form.validateFields((error: Array<any>, values: any) => {
-      console.log(error, values);
+    form.validateFields((error: Array<any>, { mobile, captcha, idType, idNo }: any) => {
       if (error) {
-        // 数据错误提示
-        if (!reg.test(values.mobile)) {
-          return Toast.info('请输入正确的手机号码!', 2);
-        }
-        if (!values.captcha || values.captcha.length < 3) {
-          return Toast.info('请输入四位数字的短信验证码!', 2);
-        }
-        // TODO 身份证验证规则
-        // if (values.idNo > 0) {
-        //   return Toast.info('请输入正确的证件号码！', 2);
-        // }
+        return Toast.info('请输入完整的信息。', 2);
       }
-      dispatch({
-        type: 'user/bindUser',
-        payload: values,
-      }).then((res: any) => {
-        if (res && res.id) {
-          // 有绑定信息，返回最近的一个档案
-          // 弹出alter提示框，1.新建、2.直接进入主页
-          return this.alter(res, values);
-        }
-        if (res && res.status) {
-          // 返回错误信息
-          if (res.status === 400) {
-            return Toast.info('验证码失效');
-          }
-          return;
-        }
-        if (!res) {
-          // TODO 没有返回任何信息
-          // 没有任何的个人绑定信息，跳转新建档案页进行新建
-          const queryString = stringify({ ...values });
-          return router.push(`/user/register?${queryString}`);
-        }
-      });
+      // 数据错误提示
+      if (!mobileReg.test(mobile.replace(/\s+/g, ''))) {
+        return Toast.info('请输入正确的手机号码!', 2);
+      }
+      if (captcha.length < 3) {
+        return Toast.info('请输入四位数字的短信验证码!', 2);
+      }
+      // TODO 证件号码验证规则
+      if (!idReg.test(idNo) && idType === 0) {
+        // 身份证
+        return Toast.info('请输入正确的身份证号码！', 2);
+      }
+      if (!idReg.test(idNo) && idType === 4) {
+        // 护照
+        return Toast.info('请输入正确的护照号码！', 2);
+      }
+      const queryString = stringify({ mobile, captcha, idType, idNo });
+      router.push(`/user/register?${queryString}`);
+      // 校验通过，进行数据提交
+      // dispatch({
+      //   type: 'user/bindUser',
+      //   payload: { mobile, captcha, idType, idNo },
+      // }).then((res: any) => {
+      //   if (res && res.id) {
+      //     // 有绑定信息，返回最近的一个档案
+      //     // 弹出alter提示框，1.新建、2.直接进入主页
+      //     return this.alter(res, { mobile, captcha, idType, idNo});
+      //   }
+      //   if (res && res.status) {
+      //     // 返回错误信息
+      //     if (res.status === 400) {
+      //       return Toast.info('验证码失效');
+      //     }
+      //     return;
+      //   }
+      //   if (!res) {
+      //     // TODO 没有返回任何信息
+      //     // 没有任何的个人绑定信息，跳转新建档案页进行新建
+      //     const queryString = stringify({ mobile, captcha, idType, idNo });
+      //     return router.push(`/user/register?${queryString}`);
+      //   }
+      // });
     });
   };
 
@@ -191,17 +195,23 @@ class Login extends Component<P, S> {
           <span className={styles.logo} />
           <h1>登 录</h1>
         </div>
-        <form className={styles.content} onSubmit={this.onSubmit}>
+        <form className={styles.content}>
           {getFieldDecorator('mobile', {
             rules: [
               { required: true, message: '请输入手机号码' },
-              { pattern: /^1\d{10}$/, message: '请输入合法的手机号码' },
             ],
-          })(<InputItem icon={<IconFont type="mobile1" size="0.44rem" />} type="number" placeholder="请输入手机号" />)}
+          })(
+            <InputItem
+              icon={<IconFont type="mobile1" size="0.44rem" />}
+              type="phone"
+              pattern="[0-9]*"
+              placeholder="请输入手机号"
+            />
+          )}
           {getFieldDecorator('captcha', {
             rules: [
               { required: true, message: '请输入手机号码' },
-              { pattern: /^[a-zA-Z0-9]{1,20}$/, message: '请输入数字和英文字母' },
+              { pattern: /^\d{1,}$/, message: '请输入纯数字' },
             ],
           })(
             <InputItem
@@ -240,17 +250,27 @@ class Login extends Component<P, S> {
               cols={1}
               extra="请选择证件类型"
               placeholder="请选择证件类型"
-              title="请选择医院"
-              options={IDType}
+              title="证件类型"
+              options={idtype}
               icon={<IconFont type="duomeitiicon-" size="0.44rem" />}
             />,
           )}
           {getFieldDecorator('idNo', {
             rules: [{ required: true }],
           })(
-            <InputItem icon={<IconFont type="cc-card" size="0.44rem" />} type="number" placeholder="请输入证件号码" />,
+            <InputItem
+              icon={<IconFont type="cc-card" size="0.44rem" />}
+              type="tel"
+              pattern="[0-9]*"
+              placeholder="请输入证件号码"
+            />,
           )}
-          <Button type="primary" loading={submitting} onClick={this.onSubmit} style={{ margin: '.6rem 0' }}>
+          <Button
+            type="primary"
+            loading={submitting}
+            onClick={this.onSubmit}
+            style={{ margin: '.6rem 0' }}
+          >
             登录
           </Button>
         </form>

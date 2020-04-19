@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { TextareaItem as AntdTextareaItem } from 'antd-mobile';
+import { TextareaItem as AntdTextareaItem, Toast } from 'antd-mobile';
 import { TextareaItemProps } from 'antd-mobile/es/textarea-item';
 
 import styles from '../index.less';
@@ -13,6 +13,13 @@ function TextareaItem({
   error,
   ...rest
 }: TextareaItemProps, ref: any) {
+  const errorText = (error: any) => {
+    if (error) {
+      const text = error.join(',');
+      return Toast.info(text)
+    }
+    return null;
+  };
   return (
     <AntdTextareaItem
       ref={ref}
@@ -28,6 +35,7 @@ function TextareaItem({
       clear={clear}
       labelNumber={7}
       error={error}
+      onErrorClick={() => errorText(error)}
       {...rest}
     />
   );

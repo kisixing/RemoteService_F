@@ -12,14 +12,14 @@ import store from 'store';
 import { createForm } from 'rc-form';
 import moment from 'moment';
 import { ConnectState } from '@/models/connect';
-import { InputItem, DatePicker, /* Picker */ } from 'antd-mobile';
+import { InputItem, DatePicker, Toast, /* Picker */ } from 'antd-mobile';
 import zhCN from 'antd-mobile/lib/date-picker/locale/zh_CN';
 
 import { Button, List } from '@/components/antd-mobile';
 import Footer from '@/components/Footer';
 import styles from './Register.less';
 
-
+const nameRes = /(^(?:[\u4e00-\u9fa5·]{2,16})$)|(^[a-zA-Z]{1}[a-zA-Z\s]{0,20}[a-zA-Z]{1}$)/;
 const nowTimeStamp = Date.now();
 const minDate = new Date(nowTimeStamp - 1000 * 60 * 60 * 24 * 365);
 const maxDate = new Date(nowTimeStamp + 1e7);
@@ -63,17 +63,18 @@ class Register extends Component<P, S> {
       location: { query },
     } = this.props;
     form.validateFields((error: Array<any>, value: any) => {
-      console.log(error, value);
       if (error) {
-        return;
+        return Toast.info('请输入完整的信息。', 2);
+      }
+      if (!nameRes.test(value.name)) {
+        return Toast.info('请输入规范的姓名，纯中文（可用·分隔）或英文', 2);
       }
       const data = {
-        name: value.username,
-        telephone: value.mobile,
+        ...value,
         lmp: moment(value.LMP).format('YYYY-MM-DD'),
-        idNO: value.idNo,
         idType: Number(query.idType),
         mpuid: mpuid || store.get('mpuid'),
+        // TODO 可考虑计算出预产期进行提交，
       };
       this.createPregnancy(data);
     });
@@ -100,10 +101,10 @@ class Register extends Component<P, S> {
         <div className={styles.header}>新建孕册</div>
         <form className={styles.content} onSubmit={this.onSubmit}>
           <List>
-            {getFieldDecorator('username', {
+            {getFieldDecorator('name', {
               rules: [{ required: true }],
             })(
-              <InputItem clear type="text" placeholder="输入姓名">
+              <InputItem clear type="text" placeholder="请输入姓名">
                 姓名
               </InputItem>,
             )}
@@ -114,24 +115,24 @@ class Register extends Component<P, S> {
                 mode="date"
                 locale={zhCN}
                 title="选择末次月经"
-                extra="请输入末次月经"
+                extra="请选择末次月经"
                 minDate={minDate}
                 maxDate={maxDate}
               >
-                <List.Item arrow="horizontal">末次月经</List.Item>
+                <List.Item>末次月经</List.Item>
               </DatePicker>,
             )}
             {getFieldDecorator('mobile', {
               rules: [{ required: true }],
             })(
-              <InputItem clear type="phone" placeholder="输入手机号码" disabled={true}>
+              <InputItem clear disabled type="phone" placeholder="请输入手机号码">
                 手机号
               </InputItem>,
             )}
             {getFieldDecorator('idNo', {
               rules: [{ required: true }],
             })(
-              <InputItem clear type="digit" placeholder="输入身份证" disabled={true}>
+              <InputItem clear disabled type="text" placeholder="请输入身份证">
                 证件号码
               </InputItem>,
             )}

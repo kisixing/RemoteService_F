@@ -32,8 +32,41 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
 
   const inputItem = (object: any) => {
     const { getFieldDecorator, getFieldError } = form;
-    const { id, label, type = 'input', charactertype, hide = false, required, value, ...rest } = object;
+    const {
+      id,
+      label,
+      type = 'input',
+      charactertype,
+      hide = false,
+      required,
+      value,
+      pattern,
+      patternMessage,
+      length,
+      maxLength,
+      minLength,
+      max,
+      min,
+      ...rest
+    } = object;
+
     let placeholder = object.placeholder || type.includes('input') ? `请输入${label}` : `请选择${label}`;
+    let rules = [];
+    if (required && type !== 'multiple-picker') {
+      rules.push({ required: required, message: placeholder })
+    }
+    if (pattern) {
+      rules.push({ pattern, message: patternMessage ? patternMessage : `请输入符合规则的${label}` })
+    }
+    if (length) {
+      rules.push({ len: length, message: `${label}允许输入的最大长度为${len}` })
+    }
+    if (maxLength) {
+      rules.push({ max: maxLength, message: `${label}的最大值为${max}` })
+    }
+    if (minLength) {
+      rules.push({ min: minLength, message: `${label}的最新值为${min}` })
+    }
 
     if (hide) {
       return null;
@@ -42,13 +75,17 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
       case 'text-input':
         return getFieldDecorator(id, {
           initialValue: value,
-          rules: [{ required: required, message: `${placeholder}!` }],
+          validateFirst: true,
+          rules: rules,
         })(
           <InputItem
             key={id}
             required={required}
             type={charactertype}
             placeholder={placeholder}
+            maxLength={maxLength}
+            max={max}
+            min={min}
             error={getFieldError(id)}
             onChange={e => onChange(id, e)}
             {...rest}
@@ -59,7 +96,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
       case 'textarea-input':
         return getFieldDecorator(id, {
           initialValue: value,
-          rules: [{ required: required, message: `${placeholder}!` }],
+          rules: rules,
         })(
           <TextareaItem
             key={id}
@@ -76,7 +113,14 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <StepperInput key={id} required={required} error={getFieldError(id)} {...rest}>
+          <StepperInput
+            key={id}
+            required={required}
+            max={max}
+            min={min}
+            error={getFieldError(id)}
+            {...rest}
+          >
             {label}
           </StepperInput>,
         );
@@ -152,20 +196,18 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           </MixPicker>,
         );
       case 'multiple-picker':
+        const _rules = required ? [{
+          validator: (rule, value, callback) => {
+            const res = required ? !value : !!value;
+            if (res) {
+              callback(`${placeholder}!`)
+            }
+            // Note: 必须总是返回一个 callback，否则 validateFieldsAndScroll 无法响应
+            callback()
+          } }] : [];
         return getFieldDecorator(id, {
           initialValue: value,
-          rules: [
-            {
-              validator: (rule, value, callback) => {
-                const res = required ? !value : !!value;
-                if (res) {
-                  callback(`${placeholder}!`)
-                }
-                // Note: 必须总是返回一个 callback，否则 validateFieldsAndScroll 无法响应
-                callback()
-              }
-            },
-          ],
+          rules: _rules,
         })(
           <MultiplePicker
             key={id}
