@@ -13,6 +13,7 @@ import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { IconFont } from '@/components/antd-mobile';
 import { Range } from '@/pages/tools/signs/config';
+import RecordCard from '@/pages/tools/components/RecordCard';
 import { arrFill } from '../signs/utils';
 import styles from '../signs/RecordsTabBar.less';
 interface ServiceDataItem {
@@ -241,38 +242,34 @@ function BloodOxygenRecord(props: {userid: number}) {
     if(!isHistory){
       listData = listData.filter((v:ServiceDataItem) => v.timestamp.slice(0,10) == todayStr);
     }
-    return(
+    const contents = [
+      {name: '血氧值', key: 'result',unit: '%', max: NORMAL_MAX, min: NORMAL_MIN, normalText: <span>正常</span>, errorText: <span style={{color: 'red'}}>异常</span>},
+      {name: '脉率', key: 'pulserate',unit: '次/min', max: PULSE_MAX, min: PULSE_MIN, normalText: <span>正常</span>, errorText: <span style={{color: 'red'}}>异常</span>},
+    ]
+    const title = (item: ServiceDataItem) => {
+      if(item.src === 1){
+        return (
+          <span>
+            <IconFont type="synchronization"/><span>同步</span>
+          </span>
+        )
+      }else{
+        return (
+          <span onClick={() => toEdit(item)}>
+            <IconFont type="edite"/><span>录入</span>
+          </span>
+        )
+      }
+    }
+    return (
       listData.map((item: ServiceDataItem) => (
-        <div className={styles.card} key={item.id}>
-          <div className={styles.header}>
-            {item.src === 1 ? (
-              <div className={styles.src}>
-                <IconFont type="synchronization"/><span>同步</span>
-              </div>
-            ) : (
-              <div className={styles.src} onClick={() => toEdit(item)}>
-                <IconFont type="edite"/><span>录入</span>
-              </div>
-            )}
-            <div className={styles.date}>
-              <span>{item.timestamp.slice(0, 10)}</span>
-              </div>
-          </div>
-          <div className={styles.content}>
-            <div>
-              <div><span>血氧值</span></div>
-              <div><span>{item.result}%</span></div>
-              <div>{item.result < NORMAL_MIN || item.result > NORMAL_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
-            </div>
-            {item.pulserate ? (
-              <div>
-                <div><span>脉率</span></div>
-                <div><span>{item.pulserate}</span></div>
-                <div>{item.pulserate < PULSE_MIN || item.pulserate > PULSE_MAX ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
-              </div>
-            ) : null}
-          </div>
-        </div>
+        <RecordCard
+          key={item.id}
+          title={title(item)}
+          titleExact={item.timestamp.slice(0, 10)}
+          contents={contents}
+          dataSource={item}
+        />
       ))
     )
   };
