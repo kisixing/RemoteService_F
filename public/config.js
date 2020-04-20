@@ -259,7 +259,7 @@ const basic = {
           type: 'text-input',
           charactertype: 'digit',
           maxLength: 2,
-          min: 13,
+          // min: 13,
           required: true,
         },
         {
@@ -360,7 +360,7 @@ const basic = {
           type: 'text-input',
           charactertype: 'digit',
           maxLength: 2,
-          min: 13,
+          // min: 13,
           required: true,
         },
         {

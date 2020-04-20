@@ -64,7 +64,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
       rules.push({ max, message: `${label}的最大值为${max}` })
     }
     if (min) {
-      rules.push({ min, message: `${label}的最新值为${min}` })
+      rules.push({ min, message: `${label}的最小值为${min}` })
     }
 
     if (hide) {

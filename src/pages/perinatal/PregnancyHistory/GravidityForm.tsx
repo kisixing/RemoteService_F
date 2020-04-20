@@ -212,17 +212,18 @@ class GravidityForm extends PureComponent<P, S> {
     return (
       <form>
         <FormFields form={form} dataSource={dataSource} />
-        {visible ? form.getFieldDecorator('fetus', {
-            initialValue: [],
-            rules: [{ required: true, message: '请填写完整的胎儿信息！' }],
-          })(
-            <FetusesComponent key="fetus" required={true} number={number}>
-              {'胎儿信息'}
-            </FetusesComponent>,
-          ) : null
-        }
+        {visible
+          ? form.getFieldDecorator('child', {
+              initialValue: [],
+              rules: [{ required: true, message: '请填写完整的胎儿信息！' }],
+            })(
+              <FetusesComponent key="child" required={true} number={number}>
+                {'胎儿信息'}
+              </FetusesComponent>,
+            )
+          : null}
       </form>
-    )
+    );
   }
 }
 
