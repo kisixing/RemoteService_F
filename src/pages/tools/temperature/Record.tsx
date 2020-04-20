@@ -13,6 +13,7 @@ import { getTemperatures, getRecordNum, GetProp } from '@/services/tools';
 import moment from 'moment';
 import { IconFont } from '@/components/antd-mobile';
 import { Range } from '@/pages/tools/signs/config';
+import RecordCard from '../components/RecordCard';
 
 import styles from '../signs/RecordsTabBar.less';
 
@@ -234,31 +235,34 @@ function TemperatureRecord(props: {userid: number}) {
     if(!isHistory){
       listData = listData.filter((v:ServiceDataItem) => v.timestamp.slice(0,10) == todayStr);
     }
-    return(
+
+    const title = (item: ServiceDataItem) => {
+      if(item.src === 1){
+        return (
+          <span>
+            <IconFont type="synchronization"/><span>同步</span>
+          </span>
+        )
+      }else{
+        return (
+          <span onClick={() => toEdit(item)}>
+            <IconFont type="edite"/><span>录入</span>
+          </span>
+        )
+      }
+    }
+    const contents = [
+      {name: '体温', key: 'result',unit: '℃', max: NORMAL_MAX, min: NORMAL_MIN, normalText: <span>正常</span>, errorText: <span style={{color: 'red'}}>异常</span>}
+    ]
+    return (
       listData.map((item: ServiceDataItem) => (
-        <div className={styles.card} key={item.id}>
-          <div className={styles.header}>
-            {item.src === 1 ? (
-              <div className={styles.src}>
-                <IconFont type="synchronization"/><span>同步</span>
-              </div>
-            ) : (
-              <div className={styles.src} onClick={() => toEdit(item)}>
-                <IconFont type="edite"/><span>录入</span>
-              </div>
-            )}
-            <div className={styles.date}>
-              <span>{item.timestamp.slice(0, 10)}</span>
-            </div>
-          </div>
-          <div className={styles.content}>
-            <div>
-              <div><span>体温</span></div>
-              <div><span>{item.result}℃</span></div>
-              <div>{item.result > NORMAL_MAX || item.result < NORMAL_MIN ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
-            </div>
-          </div>
-        </div>
+        <RecordCard
+          key={item.id}
+          title={title(item)}
+          titleExact={item.timestamp.slice(0, 10)}
+          contents={contents}
+          dataSource={item}
+        />
       ))
     )
   }

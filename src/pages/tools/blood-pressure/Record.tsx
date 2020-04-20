@@ -13,6 +13,7 @@ import moment from 'moment';
 import { getBloodPressures, getRecordNum, GetProp } from '@/services/tools';
 import { Range } from '@/pages/tools/signs/config';
 import { IconFont } from '@/components/antd-mobile';
+import RecordCard from '../components/RecordCard';
 import styles from '../signs/RecordsTabBar.less';
 
 // const CheckboxItem = Checkbox.CheckboxItem;
@@ -205,46 +206,6 @@ function BloodPressureRecord(props: {userid: number}) {
     Router.push(`/signs/blood-pressure/input?timestamp=${item.timestamp}&systolic=${item.systolic}&diastolic=${item.diastolic}&pulserate=${item.pulserate}&id=${item.id}`);
   }
 
-
-  // const renderList = (errData: Array<ServiceDataItem>) => (
-  //   <List>
-  //     {errData.map((v:ServiceDataItem) => (
-  //     <CheckboxItem key={v.id}
-  //       onChange={(e:any) => handleCheckBoxChange(e, v.id)}
-  //     >
-  //       {`${v.timestamp.slice(5,10)}/${v.timestamp.slice(11,16)}  血压：${v.systolic}/${v.diastolic}`}
-  //     </CheckboxItem>
-  //   ))}
-  //   </List>
-  // )
-
-  // const handleCheckBoxChange = (e:any, id:number) => {
-  //   if(e.target.checked){
-  //     setSelection(selection => {
-  //       //@ts-ignore
-  //       selection.push(id);
-  //       return selection;
-  //     });
-  //   }else{
-  //     const i = selection.findIndex((v:number) => v === id);
-  //     setSelection(selection => {
-  //       selection.splice(i,1);
-  //       return selection;
-  //     });
-  //   }
-  // }
-
-  // const handleConfirm = () => {
-  //   for(let i = 0 ;i < selection.length ; i++){
-  //     let t:ServiceDataItem|false = listData.find((v:ServiceDataItem) => v.id === selection[i]) || false;
-  //     if(t){
-  //       // @ts-ignore
-  //       t.status = 0;
-  //       editBloodPressures(t).then(res => console.log(res));
-  //     }
-  //   }
-  // }
-
   // 请求
   useEffect(() => {
     getRecordNum({type: 'blood-pressures',pregnancyId: props.userid}).then(res => {
@@ -271,42 +232,47 @@ function BloodPressureRecord(props: {userid: number}) {
   },[listData])
 
   const renderList = (listData: Array<ServiceDataItem>, isHistory: boolean) => {
+    console.log('1');
     if(!isHistory){
       listData = listData.filter((v:ServiceDataItem) => v.timestamp.slice(0,10) == todayStr);
     }
-    return(
+    const title = (item: ServiceDataItem) => {
+      if(item.src === 1){
+        return (
+          <span>
+            <IconFont type="synchronization"/><span>同步</span>
+          </span>
+        )
+      }else{
+        return (
+          <span onClick={() => toEdit(item)}>
+            <IconFont type="edite"/><span>录入</span>
+          </span>
+        )
+      }
+    }
+    const contents = [
+      {
+        name: '血压',
+        render:(item: ServiceDataItem) => {
+          console.log(item);
+          return [
+            <div><span>{item.systolic}/{item.diastolic}&nbsp; mmHg</span></div>,
+            <div>{(item.systolic < SYS_MIN || item.systolic > SYS_MAX || item.diastolic < DIA_MIN || item.diastolic > DIA_MAX) ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
+          ]
+        } 
+      },
+      {name: '脉率', key: 'pulserate',unit: '次/min', max: PULSE_MAX, min: PULSE_MIN, normalText: <span>正常</span>, errorText: <span style={{color: 'red'}}>异常</span>},
+    ]
+    return (
       listData.map((item: ServiceDataItem) => (
-        <div className={styles.card} key={item.id}>
-          <div className={styles.header}>
-            {item.src === 1 ? (
-              <div className={styles.src}>
-                <IconFont type="synchronization"/><span>同步</span>
-              </div>
-            ) : (
-              <div className={styles.src} onClick={() => toEdit(item)}>
-                <IconFont type="edite"/><span>录入</span>
-              </div>
-            )}
-            <div className={styles.date}>
-              <span>{item.timestamp.slice(0, 10)}</span>
-              </div>
-          </div>
-          <div className={styles.content}>
-            <div>
-              <div><span>血压</span></div>
-              <div><span>{item.systolic}/{item.diastolic}&nbsp; mmHg</span></div>
-              <div>{(item.systolic < SYS_MIN || item.systolic > SYS_MAX || item.diastolic < DIA_MIN || item.diastolic > DIA_MAX) ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
-            </div>
-            {item.pulserate ? (
-              <div>
-                <div><span>脉率</span></div>
-                <div><span>{item.pulserate}&nbsp; 次/分</span></div>
-                <div>{item.pulserate > PULSE_MAX || item.pulserate < PULSE_MIN ? <span className={styles['err-text']}>异常</span> : <span>正常</span>}</div>
-              </div>
-            ) : null}
-
-          </div>
-        </div>
+        <RecordCard
+          key={item.id}
+          contents={contents}
+          dataSource={item}
+          title={title(item)}
+          titleExact={item.timestamp.slice(0, 10)}
+        />
       ))
     )
   }

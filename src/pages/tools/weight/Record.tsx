@@ -213,7 +213,7 @@ function WeightRecord(props: {userid: number}) {
 
   useEffect(() => {
     const reqData:GetProp = {pregnancyId: props.userid,page:0,size: 40, sort:'timestamp'};
-    getWeight(reqData).then(res => setListData(res.data.reverse()));
+    // getWeight(reqData).then(res => setListData(res.data.reverse()));
   },[props.userid])
 
   useEffect(() => {
