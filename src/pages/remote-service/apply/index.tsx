@@ -11,7 +11,7 @@ import classnames from 'classnames';
 import { Button, Tag, IconFont, WhiteSpace } from '@/components/antd-mobile';
 import { CTGApply, getPackageOrders, getApplyPrice } from '@/services/remote-service';
 import { webpay } from '@/services/pay';
-import { router } from '@/utils/utils';
+import { router } from '@/utils';
 import constant from '@/utils/constants';
 import styles from './index.less';
 

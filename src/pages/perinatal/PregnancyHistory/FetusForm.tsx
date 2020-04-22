@@ -4,7 +4,7 @@ import { InputItem, DatePicker, Radio } from '@/components/antd-mobile';
 
 // 读取配置文件
 const { history } = window.configuration;
-const fields = history.data[0]['children'].filter((e: any) => e.id === 'child')[0]['data'];
+const fields = history.data[0]['children'].filter((e: any) => e.id === 'children')[0]['data'];
 
 function MapList({
   id,

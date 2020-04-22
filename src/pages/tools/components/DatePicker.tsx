@@ -26,7 +26,7 @@ interface ChildrenIProps {
 const CustomChildren = ({ extra, onClick }: ChildrenIProps) => (
   <div onClick={onClick} className={styles.list}>
     <span>{extra}</span>
-    <IconFont type="date" size="0.4rem" />
+    <IconFont type="date" size="0.36rem" color="#8d8dac" />
   </div>
 );
 

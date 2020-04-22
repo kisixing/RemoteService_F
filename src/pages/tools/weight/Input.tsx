@@ -14,7 +14,7 @@ import DatePicker from '../components/DatePicker';
 import { ConnectState } from '@/models/connect';
 import { IconFont, Button, WhiteSpace } from '@/components/antd-mobile';
 import { setWeight as setWeightData, editWeight, SetProp } from '@/services/tools';
-import { router } from '@/utils/utils';
+import { router } from '@/utils';
 
 import CircleProgress from '../components/CricleProgress';
 
@@ -112,7 +112,7 @@ function WeightInput(props: {userid: number}) {
           <div className={styles.circle}>
             <span>体重</span>
             <div className={styles.input}>
-              <input 
+              <input
                 type="number"
                 placeholder="输入..."
                 value={weight}

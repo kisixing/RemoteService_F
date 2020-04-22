@@ -72,7 +72,6 @@ class PregnancyHistory extends React.PureComponent<P, S> {
     return (
       <Accordion activeKey={activeKey} onChange={this.onAccordionChange}>
         {data.map((item, i) => {
-          console.log('1111111111111', this.state.values, data, this.state.values[item.id]);
           return (
             <Accordion.Panel
               key={item.id}

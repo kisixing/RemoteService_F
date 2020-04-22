@@ -218,7 +218,7 @@ export function submittedData(values: any, fields: any[]) {
     //   result = { ...result, [key]: value ? obj : null };
     // }
   }
-  console.log('rc-form获取的原始数据', values, result);
+  // console.log('rc-form获取的原始数据', values, result);
   return result;
 }
 

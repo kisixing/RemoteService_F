@@ -13,7 +13,7 @@ import { IconFont, Tag, Button } from '@/components/antd-mobile';
 import CommentItem from './CommentItem';
 import styles from './Detail.less';
 
-function DoctorDetail({ dispatch, comments, match, pregnancyId }: any) {
+function DoctorDetail({ dispatch, comments, match, currentPregnancy }: any) {
   useEffect(() => {
     const doctorId = match.params.id;
     dispatch({
@@ -25,7 +25,7 @@ function DoctorDetail({ dispatch, comments, match, pregnancyId }: any) {
   }, []);
 
   const onClick = () => {
-    if (!pregnancyId) {
+    if (currentPregnancy && !currentPregnancy.id) {
       return Modal.alert('温馨提示', '本院仅支持建档且已审核的孕妇线上咨询，是否开始建档？', [
         { text: '取消', onPress: () => {} },
         { text: '确定', onPress: () => Router.push('/perinatal/basic-info') },
@@ -35,8 +35,8 @@ function DoctorDetail({ dispatch, comments, match, pregnancyId }: any) {
     return Router.push({
       pathname: '/consultation/consulting-details',
       query: {
-        doctorId: '123'
-      }
+        doctorId: '123',
+      },
     });
   };
 
@@ -88,7 +88,8 @@ function DoctorDetail({ dispatch, comments, match, pregnancyId }: any) {
               <IconFont type="dropdown" size="0.36rem" />
             </div>
           </div>
-          {comments.length > 0 &&
+          {comments &&
+            comments.length > 0 &&
             comments.map((e: any) => (
               <CommentItem
                 key={e.id}
@@ -118,5 +119,5 @@ function DoctorDetail({ dispatch, comments, match, pregnancyId }: any) {
 export default connect(({ loading, consultation, global }: ConnectState) => ({
   loading: loading,
   comments: consultation.comments,
-  pregnancyId: global.currentPregnancy.id,
+  currentPregnancy: global.currentPregnancy,
 }))(DoctorDetail);

@@ -11,7 +11,7 @@ import { Toast } from 'antd-mobile';
 import Router from 'umi/router';
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
-import { router } from '@/utils/utils';
+import { router } from '@/utils';
 import DatePicker from '../components/DatePicker';
 import { setTemperatures, editTemperatures } from '@/services/tools';
 import { Range } from '@/pages/tools/signs/config';
@@ -69,7 +69,7 @@ function TemperatureInput(props: {userid: number}) {
       let obj = {};
       window.location.search.split('?')[1].split('&').forEach((v:string) => {
         obj[v.split('=')[0]] = v.split('=')[1];
-      });    
+      });
       if(obj['timestamp']){
         setId(Number(obj['id']));
         setTemperature(obj['result'])

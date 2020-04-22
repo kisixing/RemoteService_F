@@ -11,7 +11,7 @@ import { ConnectState } from '@/models/connect';
 import { Picker, WingBlank, SearchBar } from 'antd-mobile';
 import { IconFont, Tag } from '@/components/antd-mobile';
 import DoctorItem from './Item';
-import { router } from '@/utils/utils';
+import { router } from '@/utils';
 import styles from './List.less';
 
 const HOSPITALS = ['复旦大学附属妇产科医院', '暨南大学附属第一医院', '中山大学附属第一医院'].map(e => ({ label: e, value: e }));

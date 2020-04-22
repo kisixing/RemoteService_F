@@ -65,7 +65,7 @@ class Login extends Component<P, S> {
       form: { getFieldValue },
     } = this.props;
     const mobile = getFieldValue('mobile');
-    if (!mobileReg.test(mobile)) {
+    if (!mobileReg.test(mobile.replace(/\s+/g, ''))) {
       return Toast.info('请输入正确的手机号码，必须以13,14,15,16,17,18,19开头。');
     }
     dispatch({
@@ -101,32 +101,31 @@ class Login extends Component<P, S> {
         // 护照
         return Toast.info('请输入正确的护照号码！', 2);
       }
-      const queryString = stringify({ mobile, captcha, idType, idNo });
-      router.push(`/user/register?${queryString}`);
+
       // 校验通过，进行数据提交
-      // dispatch({
-      //   type: 'user/bindUser',
-      //   payload: { mobile, captcha, idType, idNo },
-      // }).then((res: any) => {
-      //   if (res && res.id) {
-      //     // 有绑定信息，返回最近的一个档案
-      //     // 弹出alter提示框，1.新建、2.直接进入主页
-      //     return this.alter(res, { mobile, captcha, idType, idNo});
-      //   }
-      //   if (res && res.status) {
-      //     // 返回错误信息
-      //     if (res.status === 400) {
-      //       return Toast.info('验证码失效');
-      //     }
-      //     return;
-      //   }
-      //   if (!res) {
-      //     // TODO 没有返回任何信息
-      //     // 没有任何的个人绑定信息，跳转新建档案页进行新建
-      //     const queryString = stringify({ mobile, captcha, idType, idNo });
-      //     return router.push(`/user/register?${queryString}`);
-      //   }
-      // });
+      dispatch({
+        type: 'user/bindUser',
+        payload: { mobile, captcha, idType, idNo },
+      }).then((res: any) => {
+        if (res && res.id) {
+          // 有绑定信息，返回最近的一个档案
+          // 弹出alter提示框，1.新建、2.直接进入主页
+          return this.alter(res, { mobile, captcha, idType, idNo});
+        }
+        if (res && res.status) {
+          // 返回错误信息
+          if (res.status === 400) {
+            return Toast.info('验证码失效');
+          }
+          return;
+        }
+        if (!res) {
+          // TODO 没有返回任何信息
+          // 没有任何的个人绑定信息，跳转新建档案页进行新建
+          const queryString = stringify({ mobile, captcha, idType, idNo });
+          return router.push(`/user/register?${queryString}`);
+        }
+      });
     });
   };
 

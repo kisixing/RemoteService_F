@@ -10,12 +10,16 @@ import { SwitchTransition, CSSTransition } from 'react-transition-group';
 import { ConnectState } from '@/models/connect';
 import enUS from 'antd-mobile/lib/locale-provider/en_US';
 
+NProgress.configure({ showSpinner: false });
 let currentHref = '';
 
-NProgress.configure({ showSpinner: false });
+interface IProps {
+  loading: any;
+  [key: string]: any;
+}
 
-const BasicLayout: React.FC<any> = props => {
-  const { children, loading, locale } = props;
+const BasicLayout: React.FC<IProps> = props => {
+  const { children, loading, location: { pathname = '/' }, locale } = props;
   const { href } = window.location; // 浏览器地址栏中地址
 
   if (currentHref !== href) {
@@ -31,7 +35,7 @@ const BasicLayout: React.FC<any> = props => {
   return (
     <SwitchTransition>
       <CSSTransition
-        key={props.location.pathname}
+        key={pathname}
         addEndListener={(node, done) => node.addEventListener('transitionend', done, false)}
         classNames="fade"
         timeout={300}
@@ -39,7 +43,6 @@ const BasicLayout: React.FC<any> = props => {
         <LocaleProvider locale={locale === 'en' ? enUS : {}}>{children}</LocaleProvider>
       </CSSTransition>
     </SwitchTransition>
-    // <LocaleProvider locale={locale === 'en' ? enUS : {}}>{children}</LocaleProvider>
   );
 };
 

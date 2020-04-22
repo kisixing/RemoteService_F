@@ -6,7 +6,6 @@ import { extend } from 'umi-request';
 import store from 'store';
 import Router from 'umi/router';
 import { notification } from 'antd';
-import { Toast } from 'antd-mobile';
 
 const custom_url = window.baseurl || 'http://transfer.lian-med.com';
 const base_url =
@@ -90,7 +89,7 @@ request.interceptors.request.use((url, options) => {
   let access_token = '';
   const state = window.g_app._store.getState();
   if (state) {
-    access_token = state.global.access_token;
+    access_token = state.global.access_token || store.get('lianmp-token');
   }
   options.headers = {
     Accept: 'application/json',

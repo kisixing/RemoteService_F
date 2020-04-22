@@ -21,7 +21,7 @@ function Tag({ children, style, size, bgcolor, color, ...rest }: IProps) {
     sizeStyle = { lineHeight: '0.28rem' };
   }
   if (size === 'middle') {
-    sizeStyle = { height: '.4rem', lineHeight: '0.4rem', padding: '0 .24rem', fontSize: '.2rem' };
+    sizeStyle = { height: '.4rem', lineHeight: '0.38rem', padding: '0 .24rem', fontSize: '.2rem' };
   }
   let colorStyle: object = {};
   if (!!bgcolor) {
@@ -40,6 +40,7 @@ function Tag({ children, style, size, bgcolor, color, ...rest }: IProps) {
       small={size === 'small' ? true : false}
       style={{
         borderRadius: '50px',
+        letterSpacing: '2px',
         ...sizeStyle,
         ...bgcolorStyle,
         ...colorStyle,

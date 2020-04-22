@@ -11,7 +11,7 @@ import { ConnectState } from '@/models/connect';
 import Router from 'umi/router'
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
-import { router } from '@/utils/utils';
+import { router } from '@/utils';
 import DatePicker from '../components/DatePicker';
 import { setBloodOxygens, editBloodOxygens } from '@/services/tools';
 import { Range } from '@/pages/tools/signs/config';

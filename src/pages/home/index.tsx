@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Card } from 'antd-mobile';
 import { connect } from 'dva';
 // import { formatMessage } from 'umi-plugin-locale';
 
-import { WhiteSpace, IconFont } from '@/components/antd-mobile';
+import { WhiteSpace } from '@/components/antd-mobile';
 import Footer from '@/components/Footer';
-import { ConnectState, ConnectProps } from '@/models/connect';
-import { router } from '@/utils/utils';
+import { ConnectState } from '@/models/connect';
+import { router } from '@/utils';
 
 // 业务组件
 import Banner from './Banner';
@@ -93,7 +93,7 @@ function Home(props: IProps) {
               </div>
             }
             // thumb={require('../../assets/icons/knowledge.png')}
-            thumbStyle={{ width: '.36rem' }}
+            thumbStyle={{ width: '0.36rem' }}
             extra={
               <span className={styles.more} onClick={() => router('/school')}>
                 更多

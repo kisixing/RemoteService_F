@@ -33,17 +33,16 @@ const config: IConfig = {
         hd: true,
         fastClick: true,
         title: '围产保健',
-        dll: true,
+        dll: false,
         locale: {
           enable: true,
           default: 'zh-CN',
         },
         chunks: ['vendors', 'umi'],
         headScripts: [
-          // 'https://cdn.bootcss.com/react/16.12.0/umd/react.production.min.js',
-          // 'https://cdn.bootcss.com/react-dom/16.12.0/umd/react-dom.production.min.js',
+          'https://cdn.bootcss.com/react/16.12.0/umd/react.production.min.js',
+          'https://cdn.bootcss.com/react-dom/16.12.0/umd/react-dom.production.min.js',
           // 'https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js',
-          // 'https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js',
         ],
         scripts: [{ src: '<%= PUBLIC_PATH %>config.js' }],
         links: [
@@ -85,11 +84,6 @@ const config: IConfig = {
       changeOrigin: false,
       // pathRewrite: { '^/mock/api': '' },
     },
-    '/test/api': {
-      target: 'http://jsonplaceholder.typicode.com/',
-      changeOrigin: true,
-      pathRewrite: { '^/test/api': '' },
-    },
   },
   alias: {
     '@': resolve(__dirname, './src'),
@@ -97,14 +91,13 @@ const config: IConfig = {
   copy: [
     {
       from: 'node_modules/pdfjs-dist/cmaps/',
-      to: 'pdfjs-dist/cmaps/',
+      to: 'cmaps/',
     },
   ],
   externals: {
-    // 'react-dom': 'window.ReactDOM',
-    // react: 'window.React',
+    react: 'window.React',
+    'react-dom': 'window.ReactDOM',
     // moment: 'window.moment',
-    // lodash: 'window.lodash',
   },
   chainWebpack: process.env.NODE_ENV === 'development' ? undefined : webpackPlugin,
   uglifyJSOptions: {

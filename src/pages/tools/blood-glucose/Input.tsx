@@ -12,7 +12,7 @@ import Router from 'umi/router';
 import moment from 'moment';
 import { Button, IconFont } from '@/components/antd-mobile';
 import DatePicker from '../components/DatePicker';
-import { router } from '@/utils/utils';
+import { router } from '@/utils';
 import { PERIOD_CODE } from './config';
 import { ConnectState } from '@/models/connect'
 import { setBloodGlucose, editBloodGlucose, getBloodGlucose, getRecordNum, GetProp } from '@/services/tools';
@@ -205,7 +205,7 @@ function BloodGlucoseInput(props: {userid: number}) {
             status: 0,
             id: values[i].id
           });
-        }else{  
+        }else{
           var res = await setBloodGlucose({
             timestamp: d,
             result: Number(values[i].bloodGlucose),
@@ -230,7 +230,7 @@ function BloodGlucoseInput(props: {userid: number}) {
         Toast.info(`血糖信息保存成功`);
         Router.push('/signs/record?type=blood-glucose');
       }
-    
+
   };
 
   const onChange = (key: string, value: any) => {

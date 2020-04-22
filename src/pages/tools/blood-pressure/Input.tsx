@@ -10,7 +10,7 @@ import { InputItem, List, Toast } from 'antd-mobile';
 import Router from 'umi/router';
 import moment from 'moment';
 import { Button, WhiteSpace, IconFont } from '@/components/antd-mobile';
-import { router } from '@/utils/utils';
+import { router } from '@/utils';
 import DatePicker from '../components/DatePicker';
 import { setBloodPressures, editBloodPressures } from '@/services/tools';
 import { ConnectState } from '@/models/connect';
@@ -136,8 +136,8 @@ function BloodPressureInput(props: {userid: number}) {
               type="number"
               placeholder="收缩压"
               value={systolic}
-              onChange={e => handleInput('systolic',e.target.value)}
-              style={{ width: '1.2rem',...inputStyle('systolic') }}
+              onChange={e => handleInput('systolic', e.target.value)}
+              style={{ width: '1.3rem', ...inputStyle('systolic') }}
               ref={systolicInput}
             />
             /
@@ -145,8 +145,8 @@ function BloodPressureInput(props: {userid: number}) {
               type="number"
               placeholder="舒张压"
               value={diastolic}
-              onChange={e => handleInput('diastolic',e.target.value)}
-              style={{ width: '1.2rem',...inputStyle('diastolic') }}
+              onChange={e => handleInput('diastolic', e.target.value)}
+              style={{ width: '1.3rem', ...inputStyle('diastolic') }}
               ref={diastolicInput}
             />
             <IconFont type="editor-line" size="0.36rem" />
@@ -166,7 +166,7 @@ function BloodPressureInput(props: {userid: number}) {
             <div className={styles.label}>
               <span className={styles.required}>*</span>
               心率
-              <span className={styles.unit}>(次/分)</span>
+              <span className={styles.unit}>（次/分）</span>
             </div>
           </InputItem>
         </List>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { router } from '@/utils/utils';
+import { router } from '@/utils';
 import constant from '@/utils/constants';
 import styles from './Entrance.less';
 

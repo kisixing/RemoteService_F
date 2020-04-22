@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import Router from 'umi/router';
 import { Radio, List, Toast } from 'antd-mobile';
 import { IconFont, Button } from '@/components/antd-mobile';
-import { isWeixin, getPageKeyValue } from '@/utils/utils';
+import { isWeixin, getPageKeyValue } from '@/utils';
 
 import styles from './PaymentPage.less';
 

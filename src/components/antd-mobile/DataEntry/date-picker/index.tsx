@@ -15,7 +15,6 @@ interface IProps extends PropsType  {
 }
 
 const CustomItem = ({ arrow, error, extra, onClick, children }: any) => {
-  console.log('date picker', error);
   const color = extra && extra.includes('请') && !error ? '#bbb' : error ? '' : '#000';
   return (
     <List.Item

@@ -9,7 +9,7 @@ import moment from 'moment';
 import classnames from 'classnames';
 import { Button, Tag, IconFont } from '@/components/antd-mobile';
 import { getPackageOrders } from '@/services/remote-service';
-import { getPageKeyValue, router } from '@/utils/utils';
+import { getPageKeyValue, router } from '@/utils';
 import styles from './index.less';
 
 interface IState {

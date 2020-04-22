@@ -6,7 +6,8 @@
 
 import React from 'react';
 import { Redirect } from 'umi';
-import PageLoading from '@/components/Loader';
+// import PageLoading from '@/components/Loader';
+import { ActivityIndicator } from 'antd-mobile';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 
@@ -20,7 +21,10 @@ function index(props: any) {
   // const [state, setState] = React.useState(true);
   React.useEffect(() => {
     // 需要判断设备的type
-    const isBind = pregnancy.devices && pregnancy.devices.length !== 0 && pregnancy.devices.findIndex((v: any) => v.type === TYPE_NAME) !== -1;
+    const isBind =
+      pregnancy.devices &&
+      pregnancy.devices.length !== 0 &&
+      pregnancy.devices.findIndex((v: any) => v.type === TYPE_NAME) !== -1;
 
     let a = setTimeout(() => {
       setState(isBind);
@@ -37,7 +41,7 @@ function index(props: any) {
   if (!state && !loading) {
     return <Redirect to={`/signs/input`} />;
   }
-  return <PageLoading fullScreen spinning />;
+  return <ActivityIndicator toast animating={loading} />;
 }
 
 export default connect(({ global }: ConnectState) => ({

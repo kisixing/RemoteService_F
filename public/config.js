@@ -133,25 +133,6 @@ const maritalstatus = [
   { label: '再婚', value: 4 },
 ];
 
-const illness = [
-  '无',
-  '妊娠糖尿病',
-  '糖尿病',
-  '高血压',
-  '甲亢',
-  'G6PD',
-  '肝炎',
-  '肺结核',
-  '肾炎',
-  '风湿',
-  '贫血',
-  '地中海贫血',
-  '癫痫',
-  '心脏病',
-  '肝脏疾病',
-  '肾脏疾病',
-];
-
 // 证件类型
 const IDType = [
   { label: '二代身份证', value: 0 },
@@ -506,7 +487,7 @@ const pregnancy = {
           type: 'text-input',
           charactertype: 'text',
           maxLength: 4,
-          pattern: /(^[1-9]{1,2}$)|(^[1-9]{1,2}[+]{1}[1-6]{1}$)/,
+          pattern: /(^[1-5]{1}[0-9]{1}$)|(^[1-5]{1}[0-9]{1}[+]{1}[1-6]{1}$)/,
           patternMessage: '请输入类似下面的孕周格式，12或12+2，不允许中间有空格',
           required: true,
         },
@@ -955,7 +936,7 @@ const pregnancy = {
             '血友病',
             '高度近视',
           ].map(e => ({ label: e, value: e })),
-        }
+        },
       ],
     },
     {
@@ -1057,7 +1038,7 @@ const history = {
           max: 20,
         },
         {
-          id: 'deliveryTime',
+          id: 'terminationDate',
           label: '妊娠终止时间',
           type: 'date-picker',
           required: true,
@@ -1106,7 +1087,7 @@ const history = {
           label: '分娩孕周',
           type: 'text-input',
           charactertype: 'text',
-          pattern: /(^[1-9]{1,2}$)|(^[1-9]{1,2}[+]{1}[1-6]{1}$)/,
+          pattern: /(^[1-5]{1}[0-9]{1}$)|(^[1-5]{1}[0-9]{1}[+]{1}[1-6]{1}$)/,
           patternMessage: '请输入类似下面的孕周格式，12或12+2，不允许中间有空格',
           maxLength: 4,
           required: true,
@@ -1203,7 +1184,7 @@ const history = {
           ],
         },
         {
-          id: 'child',
+          id: 'children',
           label: '胎儿信息',
           type: 'child',
           required: true,

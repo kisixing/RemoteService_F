@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { List, ActivityIndicator } from 'antd-mobile';
 
-import { router } from '@/utils/utils';
+import { router } from '@/utils';
 import styles from './NewsListView.less';
 
 interface IProps {

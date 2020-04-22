@@ -7,18 +7,20 @@
 import React from 'react';
 import router from 'umi/router';
 import { ActivityIndicator, Modal } from 'antd-mobile';
-import { Document, Page } from 'react-pdf/dist/entry.webpack';
+import { Document, Page, pdfjs } from 'react-pdf';
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+// 備用`cdnhttps://cdn.bootcss.com/pdf.js/${pdfjs.version}/pdf.worker.min.js`
 import 'react-pdf/dist/Page/AnnotationLayer.css';
-
-import { getPageKeyValue } from '@/utils/utils';
-
+// import { Document, Page } from 'react-pdf/dist/entry.webpack';
+import { getPageKeyValue } from '@/utils';
 import styles from './Preview.less';
 
 const options = {
   // 有pdf不支持的字体格式，可以通过引入pdf.js的字体来解决该问题
   // 1.cdn --> https://cdn.jsdelivr.net/npm/pdfjs-dist@2.1.266/cmaps/
-  // 2.本地 --> ./pdfjs-dist/cmaps/
-  cMapUrl: '/pdfjs-dist/cmaps/',
+  // 2.cdn --> https://cdn.bootcss.com/pdf.js/2.4.456/pdf.min.js
+  // 2.本地 --> ./cmaps/
+  cMapUrl: `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/cmaps/`, // '/pdfjs-dist/cmaps/',
   cMapPacked: true,
 };
 const SAMPLE = 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
@@ -30,7 +32,7 @@ export default function Preview() {
 
   React.useEffect(() => {
     const file = getPageKeyValue('file');
-    const pdf_url = file ? file : SAMPLE;
+    const pdf_url: any = file ? file : SAMPLE;
     setFile(pdf_url)
   }, [])
 
@@ -52,7 +54,7 @@ export default function Preview() {
       <Document
         className={styles.document}
         file={file}
-        // options={options}
+        options={options}
         onLoadSuccess={onDocumentLoadSuccess}
         onLoadError={onDocumentLoadError}
         loading={

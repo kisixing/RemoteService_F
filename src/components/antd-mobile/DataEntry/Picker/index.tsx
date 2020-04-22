@@ -83,9 +83,7 @@ function Picker(
         const isInclude = value.includes(e.value);
         return isInclude;
       });
-      console.log('object', duplicate);
       val = [...duplicate];
-      console.log('picker123', val);
     }
     onChange(val);
   };

@@ -5,8 +5,8 @@
  */
 
 import { Toast, Modal } from 'antd-mobile';
-import initWx from '@/utils/wx-config';
-import debug from '@/utils/debug';
+// import initWx from '@/utils/wx-config';
+// import debug from '@/utils/debug';
 
 function isWeixn() {
   return /micromessenger/.test(navigator.userAgent.toLowerCase());
@@ -15,7 +15,7 @@ function isWeixn() {
 if (!isWeixn()) {
   // 需要在微信端运行的时候 开启下面的注释
   // alert('请在微信客户端打开');
-  // window.location.replace('#/404');
+  // window.location.replace('/404');
 } else {
   // debug().then(() => {
   //   initWx({

@@ -7,7 +7,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { router } from '@/utils/utils';
+import { router } from '@/utils';
 import { MAPS } from './MapList';
 import styles from './styles.less';
 

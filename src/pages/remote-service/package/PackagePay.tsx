@@ -12,7 +12,7 @@ import wx from 'weixin-js-sdk';
 import { IconFont, Button } from '@/components/antd-mobile';
 import Card from '../order/Monitor/Card';
 import { wechatPay } from '@/services/remote-service';
-import { isWeixin, getPageQuery } from '@/utils/utils';
+import { isWeixin, getPageQuery } from '@/utils';
 import { ConnectState } from '@/models/connect';
 import styles from './PackagePay.less';
 

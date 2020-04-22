@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Redirect } from 'umi';
-import store from 'store';
 import { stringify } from 'querystring';
-import { Toast } from 'antd-mobile';
+import { ActivityIndicator } from 'antd-mobile';
 
-import PageLoading from '@/components/Loader';
+// import PageLoading from '@/components/Loader';
 import { ConnectState, ConnectProps } from '@/models/connect';
 
 interface SecurityLayoutProps extends ConnectProps {
@@ -83,7 +82,8 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     });
 
     if (loading || !isReady) {
-      return <PageLoading fullScreen spinning />;
+      // return <PageLoading fullScreen spinning />;
+      return <ActivityIndicator toast animating={loading} />;
     }
     if (!currentPregnancy.id) {
       return <Redirect to={`/user/login?${queryString}`} />;
