@@ -36,13 +36,13 @@ const GlobalModel: GlobalModelType = {
   state: {
     locale: 'cn', // cn/en
     hospital: '',
-    mpuid: '',
-    access_token: '',
-    currentPregnancy: {},
-    // mpuid: 'oONcg1d-i8OrskBrnOndjMpct0TM',
-    // access_token:
-    //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFkLWk4T3Jza0Jybk9uZGpNcGN0MFRNIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU4OTY0NDg1M30.-5u83B9gfN4WtP8x-lXGgbHHpArnLMfvpY6X1xb4UA9Zk05mjfN375gNg65_lWEC4IiVy49SJVTlYrz_PcJoTw',
-    // currentPregnancy: { id: 101 },
+    // mpuid: '',
+    // access_token: '',
+    // currentPregnancy: {},
+    mpuid: 'oONcg1d-i8OrskBrnOndjMpct0TM',
+    access_token:
+      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFkLWk4T3Jza0Jybk9uZGpNcGN0MFRNIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU4OTY0NDg1M30.-5u83B9gfN4WtP8x-lXGgbHHpArnLMfvpY6X1xb4UA9Zk05mjfN375gNg65_lWEC4IiVy49SJVTlYrz_PcJoTw',
+    currentPregnancy: { id: 101 },
   },
 
   effects: {

@@ -6,12 +6,12 @@
 
 import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import createDOMForm from 'rc-form/lib/createDOMForm';
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import FormFields from '../FormFields';
 
 // 读取配置文件
 const configuration = window.configuration;
-const history = _.cloneDeep(configuration.history.data);
+const history = cloneDeep(configuration.history.data);
 interface IProps {
   id: string
   form: any

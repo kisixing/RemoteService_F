@@ -6,7 +6,7 @@
 
 import React from 'react';
 import classnames from 'classnames';
-import _ from 'lodash';
+import sample from 'lodash/sample';
 import moment from 'moment';
 
 import { IMessage } from '@lianmed/im/lib/hooks/new/types';
@@ -19,7 +19,7 @@ interface IProps {
 }
 function Message(props: IProps) {
   const { message: { bySelf, id, isHead, msg, receiver, sender, timestamp, type, unread }} = props;
-  const isSelf = _.sample([true, false]);
+  const isSelf = sample([true, false]);
   return (
     <>
       {isHead && (

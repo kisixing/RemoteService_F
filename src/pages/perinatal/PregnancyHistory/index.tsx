@@ -7,7 +7,6 @@
 import React from 'react';
 import { connect } from 'dva';
 import Router from 'umi/router';
-import _ from 'lodash';
 import { generateUUID } from '@/utils';
 import { Accordion, Modal, Toast } from 'antd-mobile';
 import { Button, IconFont } from '@/components/antd-mobile';

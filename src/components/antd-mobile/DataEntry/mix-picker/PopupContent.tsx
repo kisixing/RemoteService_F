@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextareaItem } from 'antd-mobile';
 import classNames from 'classnames';
-import { intersection } from 'lodash';
+import intersection from 'lodash/intersection';
 import TouchFeedback from 'rmc-feedback';
 import { labelValue } from './index';
 import styles from './PopupContent.less';

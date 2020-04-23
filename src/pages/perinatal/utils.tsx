@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import pick from 'lodash/pick';
 
 /**
  * 获取该建档表单的每一个key
@@ -46,7 +46,7 @@ export function getRealData(values: any, fields: any) {
   // 获取values实际上的keys
   const keys = getValueKeys(fields);
   // 截取本业表单需要的values值
-  let result = _.pick(values, keys);
+  let result = pick(values, keys);
   return result;
 }
 

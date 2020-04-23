@@ -7,7 +7,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import Router from 'umi/router';
-import _ from 'lodash';
 import createDOMForm from 'rc-form/lib/createDOMForm';
 import { Modal, ActivityIndicator } from 'antd-mobile';
 import { Button } from '@/components/antd-mobile';

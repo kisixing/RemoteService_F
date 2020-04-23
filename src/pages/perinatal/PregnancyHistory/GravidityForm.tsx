@@ -7,7 +7,7 @@
 import React, { PureComponent } from 'react';
 import createDOMForm from 'rc-form/lib/createDOMForm';
 import { Toast } from 'antd-mobile';
-import _ from 'lodash';
+import pick from 'lodash/pick';
 import FormFields from '../FormFields';
 import FetusesComponent from './FetusesComponent';
 import { getFormKeys, getRealData, assignmentData, submittedData } from '../utils';
@@ -155,7 +155,7 @@ class GravidityForm extends PureComponent<P, S> {
     // 配置上有的key属性
     // const originalValues = getRealData(res, dataSource);
     const configKeys = getFormKeys(dataSource);
-    const result = _.pick(values, configKeys);
+    const result = pick(values, configKeys);
 
     for (let i = 0; i < specialKeys.length; i++) {
       const id = specialKeys[i]['id'];
