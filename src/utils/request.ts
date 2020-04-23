@@ -3,13 +3,10 @@
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
 import { extend } from 'umi-request';
-import store from 'store';
 import Router from 'umi/router';
 import { notification } from 'antd';
 
-const custom_url = window.baseurl || 'http://transfer.lian-med.com';
-const base_url =
-  process.env.NODE_ENV === 'development' ? '' : custom_url;
+const base_url = process.env.NODE_ENV === 'development' ? '' : window.configuration.url;
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -89,7 +86,7 @@ request.interceptors.request.use((url, options) => {
   let access_token = '';
   const state = window.g_app._store.getState();
   if (state) {
-    access_token = state.global.access_token || store.get('lianmp-token');
+    access_token = state.global.access_token;
   }
   options.headers = {
     Accept: 'application/json',
@@ -112,16 +109,16 @@ request.interceptors.request.use((url, options) => {
  * response拦截器, 处理response
  * 每次请求都更新token信息
  */
-request.interceptors.response.use((response, options) => {
-  let token = response.headers.get('Authorization');
-  if (token) {
-    // 修改token值
-    if (token.includes('captcha')) {
-      token = token.replace(/captcha /, '');
-    }
-    store.set('lianmp-token', token);
-  }
-  return response;
-});
+// request.interceptors.response.use((response, options) => {
+//   let token = response.headers.get('Authorization');
+//   if (token) {
+//     // 修改token值
+//     if (token.includes('captcha')) {
+//       token = token.replace(/captcha /, '');
+//     }
+//     store.set('lianmp-token', token);
+//   }
+//   return response;
+// });
 
 export default request;

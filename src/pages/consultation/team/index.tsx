@@ -83,7 +83,8 @@ function TeamDetail({ dispatch, comments, match, location, ...rest }: any) {
               <IconFont type="dropdown" size="0.36rem" />
             </div>
           </div>
-          {comments.length > 0 &&
+          {comments &&
+            comments.length > 0 &&
             comments.map((e: any) => (
               <CommentItem
                 key={e.id}

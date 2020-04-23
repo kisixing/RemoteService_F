@@ -1399,6 +1399,8 @@ const TOOLS = [
 ];
 
 window.configuration = {
+  // 后台服务地址
+  url: 'http://transfer.lian-med.com',
   basic: basic,
   pregnancy: pregnancy,
   history: history,

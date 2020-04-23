@@ -8,7 +8,6 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 // import { parse } from 'querystring';
-import store from 'store';
 import { createForm } from 'rc-form';
 import moment from 'moment';
 import { ConnectState } from '@/models/connect';
@@ -71,9 +70,9 @@ class Register extends Component<P, S> {
       }
       const data = {
         ...value,
+        mpuid,
         lmp: moment(value.LMP).format('YYYY-MM-DD'),
         idType: Number(query.idType),
-        mpuid: mpuid || store.get('mpuid'),
         // TODO 可考虑计算出预产期进行提交，
       };
       this.createPregnancy(data);

@@ -1,5 +1,4 @@
 import { Reducer } from 'redux';
-import store from 'store';
 import { Effect } from './connect';
 // import { ConnectState } from './connect.d';
 import { mpauth, getPregnancy, updatePregnancy } from '@/services/user';
@@ -51,6 +50,7 @@ const GlobalModel: GlobalModelType = {
       try {
         const { response, data } = yield call(mpauth, payload);
         //  已在request封装处理
+        // 在响应体获取token，保存到session storage
         let token = response && response.headers.get('Authorization');
         if (token) {
           const access_token = token.replace(/captcha /, '');
@@ -63,7 +63,6 @@ const GlobalModel: GlobalModelType = {
           });
         }
         if (data && data.mpuid) {
-          store.set('mpuid', data.mpuid);
           yield put({
             type: 'updateState',
             payload: {

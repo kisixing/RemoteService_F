@@ -34,7 +34,7 @@ const ConsultationModel: NewsModelType = {
       yield put({
         type: 'updateState',
         payload: {
-          doctors: response.data,
+          doctors: response ? response.data : [],
         },
       });
     },
@@ -43,7 +43,7 @@ const ConsultationModel: NewsModelType = {
       yield put({
         type: 'updateState',
         payload: {
-          comments: response.data,
+          comments: response ? response.data : [],
         },
       });
     },
