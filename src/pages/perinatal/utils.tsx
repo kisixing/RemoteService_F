@@ -102,7 +102,7 @@ export function assignmentData(values: any, fields: any[]) {
       }
     }
     if (!id.includes('.')) {
-      // 不带'.'标记的id
+      // 不带'.'标记的id, 都是根目录下的
       if (element.type === 'radio-input' || element.type === 'picker-input') {
         // 这类表单赋值格式 --> { dysmenorrhea: boolean | string, dysmenorrheaNote: '' }
         let obj = {};
@@ -112,15 +112,28 @@ export function assignmentData(values: any, fields: any[]) {
         obj[childKeys[1]] = values[childKeys[1]];
         result = { ...result, [id]: obj }
       }
-      if (
-        (element.type === 'multiple-picker' && element.parent) ||
-        (element.type === 'multiple-picker' && element.cols === 1 && element.valueFormat === 'labelInValue')
-      ) {
+      if (element.type === 'multiple-picker' && element.parent) {
         let array = null;
         const object = values[id];
         if (object) {
           const options = element.options;
           array = options.filter((e: any) => object[e.value] === true);
+          result = { ...result, [id]: array };
+        } else {
+          const options = element.options;
+          array = options.filter((e: any) => values[e.value] === true);
+          result = { ...result, [id]: array };
+        }
+      }
+      if (
+        element.type === 'picker' &&
+        element.cols === 1 &&
+        element.valueFormat === 'labelInValue'
+      ) {
+        const options = element.options;
+        let array = options.filter((e: any) => values[e.value] === true);
+        if (array && !array.length) {
+          array = null;
         }
         result = { ...result, [id]: array };
       }

@@ -77,6 +77,12 @@ function Example() {
         <LMRadio>示例1</LMRadio>
         <LMRadio>示例2</LMRadio>
       </div>
+      <div style={{ marginTop: '.3rem' }}>
+        <LMRadio.Group>
+          <LMRadio>示例1</LMRadio>
+          <LMRadio>示例2</LMRadio>
+        </LMRadio.Group>
+      </div>
 
       <BackButton />
     </div>

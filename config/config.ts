@@ -40,11 +40,12 @@ const config: IConfig = {
         },
         chunks: ['vendors', 'umi'],
         headScripts: [
-          'https://cdn.bootcss.com/react/16.12.0/umd/react.production.min.js',
-          'https://cdn.bootcss.com/react-dom/16.12.0/umd/react-dom.production.min.js',
+          { src: 'https://cdn.bootcss.com/react/16.12.0/umd/react.production.min.js' },
+          { src: 'https://cdn.bootcss.com/react-dom/16.12.0/umd/react-dom.production.min.js' },
           // 'https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js',
+          { src: '<%= PUBLIC_PATH %>config.js' },
         ],
-        scripts: [{ src: '<%= PUBLIC_PATH %>config.js' }],
+        // scripts: [{ src: '<%= PUBLIC_PATH %>config.js' }],
         links: [
           { rel: 'stylesheet', href: '<%= PUBLIC_PATH %>loaders.min.css' },
           { rel: 'stylesheet', href: '<%= PUBLIC_PATH %>iconfont/iconfont.css' },

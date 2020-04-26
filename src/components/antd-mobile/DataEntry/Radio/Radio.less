@@ -1,13 +1,16 @@
-@radio-size: 0.32rem;
+@import '../../../../utils/theme.less';
+@radio-size: 0.34rem;
 
 .group {
 
 }
 
 .radio {
+  position: relative;
   display: inline-flex;
   align-items: center;
   margin-right: 8px;
+  white-space: nowrap;
 }
 
 .wrapper {
@@ -18,30 +21,33 @@
 }
 
 .input {
-  position: absolute;
   opacity: 0;
-  outline: 0;
+  outline: none;
+  position: absolute;
   z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  margin: auto;
 
   &:checked + .inner {
-    color: #f00;
+    border-color: @primary-color;
 
     &::after {
+      width: 0.15rem;
+      height: 0.15rem;
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
       content: '';
-      background-color: currentColor;
-      width: 0.16rem;
-      height: 0.16rem;
-      margin-left: 1px;
-      margin-top: 1px;
-      border: none;
-      box-shadow: 0 0 5px currentColor;
+      background-color: @primary-color;
       animation: fadeIn 300ms ease-out both;
       border-radius: 50%;
+      margin: auto
     }
   }
 }
@@ -54,12 +60,13 @@
   bottom: 0;
   z-index: 1;
   border-radius: 50%;
-  border: 2px solid currentColor;
+  border: 3px solid #333;
   background-color: #fff;
 }
 
 .text {
-  color: #f00;
+  color: #333;
+  font-size: @font-size-base;
 }
 
 @keyframes fadeIn {

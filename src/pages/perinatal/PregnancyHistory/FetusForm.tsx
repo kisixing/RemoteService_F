@@ -74,12 +74,17 @@ const FetusForm = ({ value = {}, onChange = () => {} }: any) => {
   }
 
   const [data, setData] = useState(setValues(fields, value));
+  useEffect(() => {
+    const newData = formVisible('childLiving', value.childLiving);
+    setData(newData);
+  }, [])
 
   const handleChange = (val: any, id: string) => {
     let newValue = { ...value };
     newValue[id] = val;
     onChange(newValue); // rc-form onChange
-    formVisible(id, val) // 表单显示隐藏处理
+    const newData = formVisible(id, val);
+    setData(newData); // 表单显示隐藏处理
   };
 
   // 显示隐藏
@@ -95,10 +100,11 @@ const FetusForm = ({ value = {}, onChange = () => {} }: any) => {
       const childDeathNoteIndex = newData.findIndex((e: any) => e.id === 'childDeathNote');
       newData[childDeathNoteIndex]['hide'] = val;
     }
+    return newData;
   }
 
   return (
-    <List className={'styles.list'}>
+    <List>
       {data && data.map((item: any) => {
         return <MapList key={item.id} onChange={handleChange} {...item} />;
       })}

@@ -1226,8 +1226,8 @@ const history = {
               type: 'radio',
               required: true,
               options: [
-                { label: '健在', value: 1 },
-                { label: '死亡', value: 0 },
+                { label: '健在', value: true },
+                { label: '死亡', value: false },
               ],
             },
             {
@@ -1412,7 +1412,7 @@ const TOOLS = [
 
 window.configuration = {
   // 后台服务地址
-  url: 'http://transfer.lian-med.com:9988',
+  url: 'http://transfer.lian-med.com',
   basic: basic,
   pregnancy: pregnancy,
   history: history,

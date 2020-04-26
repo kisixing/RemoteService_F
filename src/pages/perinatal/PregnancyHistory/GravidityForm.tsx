@@ -61,7 +61,7 @@ class GravidityForm extends PureComponent<P, S> {
   componentWillReceiveProps() {
     const values = this.props.form.getFieldsValue([
       'isBirth',
-      'fetalcount'
+      'fetalcount',
     ]);
     // console.log('是否分娩', values);
     //////////////////////////////////////////////////////////////
@@ -142,8 +142,16 @@ class GravidityForm extends PureComponent<P, S> {
     const val = assignmentData(values, dataSource);
 
     console.log('孕产史初始化', values, val);
+    let isBirth = values.isBirth;
+    if (isBirth === undefined) {
+      isBirth = values.fetalcount
+        ? true
+        : values.medicalAbortion || values.naturalAbortion || values.surgicalAbortion
+        ? false
+        : null;
+    }
 
-    form.setFieldsValue({ isBirth: val.isBirth });
+    form.setFieldsValue({ isBirth });
     setTimeout(() => {
       form.setFieldsValue({ ...val });
     }, 100);
@@ -180,6 +188,9 @@ class GravidityForm extends PureComponent<P, S> {
       }
       return result = submittedData(values, dataSource);
     })
+    if (!result) {
+      return false;
+    }
     return {id: this.state.id, ...result};
   }
 

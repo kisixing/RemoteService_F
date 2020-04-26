@@ -35,10 +35,10 @@ function Radio(props: IProps) {
 
   const handleChange = (e: any) => {
     const checked = e.target.checked;
-    console.log('onchange', checked);
     if (onChange) {
       onChange(checked);
     }
+    setChecked(checked);
   };
   return (
     <label className={classnames(styles.radio, className)} style={style}>

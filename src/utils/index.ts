@@ -151,7 +151,7 @@ export function getHeaders() {
 // 跳转
 export function router(type: string) {
   if (!type) {
-    Toast.info('暂未开通，敬请期待');
+    Toast.info('暂未开通，敬请期待', 2);
   } else if (type === '暂无消息') {
     Toast.info(type, 1);
   } else if (type.indexOf('http') > -1) {
