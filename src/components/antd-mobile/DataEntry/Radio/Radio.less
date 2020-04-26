@@ -1,0 +1,75 @@
+@radio-size: 0.32rem;
+
+.group {
+
+}
+
+.radio {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.wrapper {
+  position: relative;
+  width: @radio-size;
+  height: @radio-size;
+  margin-right: 5px;
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  outline: 0;
+  z-index: -1;
+
+  &:checked + .inner {
+    color: #f00;
+
+    &::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      content: '';
+      background-color: currentColor;
+      width: 0.16rem;
+      height: 0.16rem;
+      margin-left: 1px;
+      margin-top: 1px;
+      border: none;
+      box-shadow: 0 0 5px currentColor;
+      animation: fadeIn 300ms ease-out both;
+      border-radius: 50%;
+    }
+  }
+}
+
+.inner {
+  position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+  bottom: 0;
+  z-index: 1;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  background-color: #fff;
+}
+
+.text {
+  color: #f00;
+}
+
+@keyframes fadeIn {
+  from {
+    box-shadow: 0 0 5px currentColor;
+    transform: scale(0.5);
+  }
+
+  to {
+    box-shadow: none;
+    transform: scale(1);
+  }
+}

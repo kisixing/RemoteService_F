@@ -6,14 +6,15 @@ import styles from './Entrance.less';
 interface IProps {
   dataSource: any[],
 }
-export default (props: IProps) => {
-  const { dataSource = [] } = props;
-  const width = `${1.62 * dataSource.length - 0.2 }rem`;
+export default ({ dataSource = [] }: IProps) => {
+  // 计算所有盒子需要的宽度，hide隐藏的盒子不计算
+  const showData = dataSource.filter(e => !e.hide);
+  const width = `${1.62 * showData.length - 0.06}rem`;
 
   return (
     <div className={styles.entrance}>
-      <ul style={{ width: width }}>
-        {dataSource.map(e => (
+      <ul style={{ width }}>
+        {showData.map(e => (
           <li key={e.key} onClick={() => router(e.route)}>
             <div
               className={styles.icon}
@@ -25,4 +26,4 @@ export default (props: IProps) => {
       </ul>
     </div>
   );
-}
+};

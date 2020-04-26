@@ -1282,6 +1282,7 @@ const ENTRANCE = [
     icon: 'i1.png',
     route: '/perinatal',
     color: 'linear-gradient(-45deg, #FFBFD9 0%, #FF6B70 100%)',
+    hide: false,
   },
   {
     key: '4',
@@ -1339,6 +1340,14 @@ const ENTRANCE = [
     route: '',
     color: 'linear-gradient(-45deg, #FFD52B 0%, #FFA002 100%)',
   },
+  {
+    key: '11',
+    label: '其他',
+    icon: 'i2.png',
+    route: '',
+    color: 'linear-gradient(-45deg, #FFD52B 0%, #FFA002 100%)',
+    hide: true
+  },
 ];
 
 const TOOLS = [
@@ -1354,18 +1363,20 @@ const TOOLS = [
     icon: 'i001.png',
     route: '/signs/weight/input',
   },
-  // {
-  //   key: '2',
-  //   label: '血糖管理',
-  //   icon: 'i002.png',
-  //   route: '',
-  // },
-  // {
-  //   key: '3',
-  //   label: '血压管理',
-  //   icon: 'i007.png',
-  //   route: '',
-  // },
+  {
+    key: '2',
+    label: '血糖管理',
+    icon: 'i002.png',
+    route: '',
+    hide: true,
+  },
+  {
+    key: '3',
+    label: '血压管理',
+    icon: 'i007.png',
+    route: '',
+    hide: true,
+  },
   {
     key: '4',
     label: '胎动计数',
@@ -1384,23 +1395,24 @@ const TOOLS = [
     icon: 'i005.png',
     route: '',
   },
-  // {
-  //   key: '7',
-  //   label: '其他',
-  //   icon: 'i006.png',
-  //   route: '',
-  // },
-  // {
-  //   key: '8',
-  //   label: '其他',
-  //   icon: 'i008.png',
-  //   route: '/example',
-  // },
+  {
+    key: '7',
+    label: '其他',
+    icon: 'i006.png',
+    route: '',
+    hide: true,
+  },
+  {
+    key: '8',
+    label: '其他',
+    icon: 'i008.png',
+    route: '/example',
+  },
 ];
 
 window.configuration = {
   // 后台服务地址
-  url: 'http://transfer.lian-med.com',
+  url: 'http://transfer.lian-med.com:9988',
   basic: basic,
   pregnancy: pregnancy,
   history: history,

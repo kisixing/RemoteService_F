@@ -61,6 +61,9 @@ export default (props: IProps) => {
     <div className={styles.container}>
       <div className={styles.list}>
         {dataSource.map((item, i) => {
+          if (item.hide) {
+            return null;
+          }
           return <Item key={item.key} index={i + 1} dataSource={item} />;
         })}
       </div>

@@ -13,6 +13,7 @@ import Picker from './dataEntry/picker';
 import DatePicker from './dataEntry/date-picker';
 import Switch from './dataEntry/switch';
 import Radio from './dataEntry/radio-picker';
+import LMRadio from './dataEntry/radio';
 import MixPicker from './dataEntry/mix-picker';
 import MultiplePicker from './dataEntry/multiple-picker';
 import AddressPicker from './dataEntry/address-picker';
@@ -36,6 +37,7 @@ export {
   DatePicker,
   Switch,
   Radio,
+  LMRadio,
   MixPicker,
   MultiplePicker,
   AddressPicker,

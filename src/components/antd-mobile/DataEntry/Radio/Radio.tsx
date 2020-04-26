@@ -4,60 +4,55 @@
  * @Date: 2020-04-13 13:12:31
  */
 
-import React from 'react';
-
-import styles from './Radio.less';
+import React, { useState, useEffect } from 'react';
+import classnames from 'classnames';
+import styles from './radio.less';
 
 interface IProps {
   children?: React.ReactNode
-  required?: boolean
   disabled?: boolean
   className?: string
-  id?: string
-  name?: string
   onChange?: (e:any) => void
-  onClick?: () => void
   checked?: boolean
   value?: any
+  style?: object
 }
 
 function Radio(props: IProps) {
-  const { id, children, required, disabled, className, checked, onChange, onClick, value } = props;
+  const {
+    children,
+    disabled,
+    onChange,
+    className = '',
+    checked,
+    style
+  } = props;
+  const [che, setChecked] = useState(!!checked);
+
+  useEffect(() => {
+    setChecked(!!checked);
+  }, [checked]);
+
   const handleChange = (e: any) => {
-    if (disabled) {
-      return;
-    }
+    const checked = e.target.checked;
+    console.log('onchange', checked);
     if (onChange) {
-      onChange({
-        target: {
-          ...props,
-          checked: e.target.checked,
-        },
-        stopPropagation() {
-          e.stopPropagation();
-        },
-        preventDefault() {
-          e.preventDefault();
-        },
-        nativeEvent: e.nativeEvent,
-      });
+      onChange(checked);
     }
   };
   return (
-    <label className={styles.radio}>
-      <input
-        id={id}
-        name={name}
-        type="radio"
-        required={required}
-        disabled={disabled}
-        className={className}
-        checked={!!checked}
-        onClick={onClick}
-        onChange={handleChange}
-        value={value}
-      />
-      <span className={styles['radio-label']}>{children}</span>
+    <label className={classnames(styles.radio, className)} style={style}>
+      <span className={styles.wrapper}>
+        <input
+          type="radio"
+          checked={che}
+          disabled={disabled}
+          className={styles.input}
+          onChange={handleChange}
+        />
+        <span className={styles.inner} />
+      </span>
+      <span className={styles.text}>{children}</span>
     </label>
   );
 }

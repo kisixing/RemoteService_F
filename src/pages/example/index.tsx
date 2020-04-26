@@ -1,5 +1,5 @@
 import React from 'react';
-import { WhiteSpace, Tag, IconFont, Button } from '@/components/antd-mobile';
+import { WhiteSpace, Tag, IconFont, Button, LMRadio } from '@/components/antd-mobile';
 import BackButton from '@/components/BackButton';
 
 function Example() {
@@ -10,8 +10,12 @@ function Example() {
         <Tag color="#ddd">default</Tag>
         <Tag color="#f00">default</Tag>
         <Tag size="small">tag</Tag>
-        <Tag size="small" color="#ddd">tag</Tag>
-        <Tag size="small" color="#f00">tag</Tag>
+        <Tag size="small" color="#ddd">
+          tag
+        </Tag>
+        <Tag size="small" color="#f00">
+          tag
+        </Tag>
       </div>
 
       <p />
@@ -21,21 +25,39 @@ function Example() {
       <WhiteSpace size="sm" />
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button inline>button</Button>
-        <Button inline type="primary">button</Button>
-        <Button inline disabled type="primary">button</Button>
-        <Button inline type="ghost">button</Button>
+        <Button inline type="primary">
+          button
+        </Button>
+        <Button inline disabled type="primary">
+          button
+        </Button>
+        <Button inline type="ghost">
+          button
+        </Button>
       </div>
       <div>small size</div>
       <Button size="small">default button</Button>
       <WhiteSpace />
-      <Button type="primary" size="small">primary button</Button>
+      <Button type="primary" size="small">
+        primary button
+      </Button>
       <WhiteSpace size="sm" />
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '.5rem' }}>
-        <Button inline size="small">inline</Button>
-        <Button inline type="primary" size="small">inline</Button>
-        <Button inline disabled type="primary" size="small">inline</Button>
-        <Button inline type="ghost" size="small">inline</Button>
-        <Button inline type="warning" size="small">inline</Button>
+        <Button inline size="small">
+          inline
+        </Button>
+        <Button inline type="primary" size="small">
+          inline
+        </Button>
+        <Button inline disabled type="primary" size="small">
+          inline
+        </Button>
+        <Button inline type="ghost" size="small">
+          inline
+        </Button>
+        <Button inline type="warning" size="small">
+          inline
+        </Button>
       </div>
       <div>注意type取值</div>
       <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
@@ -52,7 +74,8 @@ function Example() {
       </div>
 
       <div style={{ marginTop: '.3rem' }}>
-
+        <LMRadio>示例1</LMRadio>
+        <LMRadio>示例2</LMRadio>
       </div>
 
       <BackButton />
