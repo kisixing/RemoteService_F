@@ -15,44 +15,49 @@ interface IProps {
   onChange?: (e:any) => void
   checked?: boolean
   value?: any
+  model?: any
   style?: object
 }
 
 function Radio(props: IProps) {
-  const {
-    children,
-    disabled,
-    onChange,
-    className = '',
-    checked,
-    style
-  } = props;
-  const [che, setChecked] = useState(!!checked);
+
+  const getChecked = (props: IProps) => {
+    return props.model == props.value || Boolean(props.checked);
+  };
+
+  const [checked, setChecked] = useState(getChecked(props));
 
   useEffect(() => {
-    setChecked(!!checked);
-  }, [checked]);
+    setChecked(getChecked(props));
+  }, [props.checked]);
 
   const handleChange = (e: any) => {
     const checked = e.target.checked;
-    if (onChange) {
-      onChange(checked);
+    if (props.onChange) {
+      props.onChange(checked);
     }
     setChecked(checked);
   };
   return (
-    <label className={classnames(styles.radio, className)} style={style}>
-      <span className={styles.wrapper}>
+    <label className={styles.radio} style={props.style}>
+      <span
+        className={classnames({
+          [styles.radio__input]: true,
+          'is-checked': checked,
+          'is-disabled': props.disabled,
+          'is-focus': focus,
+        })}
+      >
         <input
           type="radio"
-          checked={che}
-          disabled={disabled}
-          className={styles.input}
+          checked={checked}
+          disabled={props.disabled}
+          className={styles.radio__original}
           onChange={handleChange}
         />
-        <span className={styles.inner} />
+        <span className={styles.radio__inner} />
       </span>
-      <span className={styles.text}>{children}</span>
+      <span className={styles.radio__label}>{props.children}</span>
     </label>
   );
 }

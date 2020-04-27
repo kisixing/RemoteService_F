@@ -55,18 +55,18 @@ function Item({ dataSource, index }: ItemProps) {
 
 export default (props: IProps) => {
   // TODO 增加个性化产检规则提醒
-  const { dataSource = [] } = props;
+  const [dataSource, setDataSource] = React.useState(() => {
+    const initialState = props.dataSource.filter((e: any) => !e.hide);
+    return initialState;
+  });
 
   return (
     <div className={styles.container}>
       <div className={styles.list}>
-        {dataSource.map((item, i) => {
-          if (item.hide) {
-            return null;
-          }
-          return <Item key={item.key} index={i + 1} dataSource={item} />;
-        })}
+        {dataSource.map((item, i) => (
+          <Item key={item.key} index={i + 1} dataSource={item} />
+        ))}
       </div>
     </div>
-  )
+  );
 }

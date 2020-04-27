@@ -101,6 +101,13 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
         if (!values.sureEdd) {
           values.sureEdd = EDD;
         }
+        // 若BMI为空时，计算BMI值
+        if (!values['personalProfile.bmi']) {
+          const height = values['personalProfile.preheight'];
+          const weight = values['personalProfile.preweight'];
+          values['personalProfile.bmi'] = this.getBMI(parseFloat(weight), parseFloat(height));
+        }
+        // 过滤掉不是本页的表单项
         const originalValues = getRealData(res, dataSource);
         console.log('本孕信息初始值：', originalValues, values);
         form.setFieldsValue(values);
@@ -135,15 +142,15 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
   };
 
   onChange = (id: string, value: any) => {
+    const {
+      form: { setFieldsValue, getFieldsValue, getFieldValue },
+    } = this.props;
     if (id === 'lmp') {
-      const {
-        form: { setFieldsValue, getFieldsValue },
-      } = this.props;
       const lmp = moment(value).format('YYYY-MM-DD');
       const EDD = KG.getEdd(lmp);
       const GES = KG.getGesweek(lmp);
       const values = getFieldsValue(['gestationalWeek', 'edd', 'sureEdd']);
-      console.log('object', value, EDD, GES, values);
+      // console.log('object', value, EDD, GES, values);
 
       const params: any = {
         gestationalWeek: GES,
@@ -155,7 +162,36 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
       }
       setFieldsValue(params);
     }
+    // BMI计算
+    if (id === 'personalProfile.preheight') {
+      const weight = getFieldValue('personalProfile.preweight');
+      let bmi = undefined;
+      if (value) {
+        bmi = this.getBMI(parseFloat(weight), parseFloat(value));
+      }
+      setFieldsValue({ 'personalProfile.bmi': bmi });
+    }
+    if (id === 'personalProfile.preweight') {
+      const height = getFieldValue('personalProfile.preheight');
+      let bmi = undefined;
+      if (value) {
+        bmi = this.getBMI(parseFloat(value), parseFloat(height));
+      }
+      setFieldsValue({ 'personalProfile.bmi': bmi });
+    }
   };
+
+  // BMI指数计算 体重（kg）/身高平方（m²）
+  getBMI = (weight: number, height: number) => {
+    // 身高 cm--> m
+    // 标准对照表
+    // 偏瘦 <= 18.4
+    // 正常 18.5 ~ 23.9
+    // 过重 24.0 ~ 27.9
+    // 肥胖 >= 28.0
+    const result = weight / Math.pow(height / 100, 2);
+    return Math.floor(result * 100) / 100;
+  }
 
   render() {
     const { form } = this.props;

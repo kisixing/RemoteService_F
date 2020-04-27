@@ -6,6 +6,8 @@
 
 import React,{ ReactNode, useState, useEffect } from 'react';
 import { connect } from 'dva';
+// input，textarea 等标签，不要直接把 html 文本直接渲染在页面上,使用 xssb 等过滤之后再输出到标签上
+import xss from 'xss';
 import Router from 'umi/router';
 import moment from 'moment';
 import { Tabs, Carousel } from 'antd-mobile';
@@ -24,7 +26,7 @@ const tabs:Array<TAB> = [
 ];
 const format = 'YYYY-MM-DD'
 
-function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
+function Details({ dispatch, location, currentPregnancy, currentPackage }: any) {
   const [images, setImages] = useState([]);
 
   const confirm = () => {
@@ -32,7 +34,7 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
     Router.push({
       pathname: '/packages/payment',
       query: {
-        pregnancyId,
+        pregnancyId: currentPregnancy.id,
         packageId: currentPackage.id,
       },
     });
@@ -58,14 +60,14 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
    * @param {string} type 提取字段 note/introduction/specification
    */
   const concatText = (array = [], type: 'note' | 'introduction' | 'specification') => {
-    let text = '';
+    let htmlContent = '';
     for (let i = 0; i < array.length; i++) {
       const element = array[i];
       // const eleText = `<div style="font-size: 28px; font-weight: 600; padding: 12px 0">${element.name}</div>${element[type]}`;
       const eleText = element[type];
-      text = text + eleText;
+      htmlContent = htmlContent + eleText;
     }
-    return text;
+    return xss(htmlContent);
   };
 
   function renderTabBar(props: any) {
@@ -87,7 +89,7 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
   };
 
   const imageData = (products = []) => {
-    let images = [];
+    let images: any[] = [];
     for (let i = 0; i < products.length; i++) {
       const element = products[i];
       const imgStr = element.picture;
@@ -97,23 +99,23 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
       }
     }
     return images;
-  }
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.banner}>
         <Carousel infinite autoplay={true} className={styles.carousel}>
           {images.map((e: any) => (
-              <div key={e} className={styles.carousel}>
-                <img
-                  src={e}
-                  alt={e}
-                  onLoad={() => {
-                    window.dispatchEvent(new Event('resize'));
-                  }}
-                />
-              </div>
-            ))}
+            <div key={e} className={styles.carousel}>
+              <img
+                src={e}
+                alt={e}
+                onLoad={() => {
+                  window.dispatchEvent(new Event('resize'));
+                }}
+              />
+            </div>
+          ))}
         </Carousel>
         <div className={styles.text}>
           <div className={styles.name}>
@@ -144,8 +146,16 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
           }}
         >
           <div dangerouslySetInnerHTML={{ __html: concatText(currentPackage.products, 'note') }} />
-          <div dangerouslySetInnerHTML={{ __html: concatText(currentPackage.products, 'introduction') }} />
-          <div dangerouslySetInnerHTML={{ __html: concatText(currentPackage.products, 'specification') }} />
+          <div
+            dangerouslySetInnerHTML={{
+              __html: concatText(currentPackage.products, 'introduction'),
+            }}
+          />
+          <div
+            dangerouslySetInnerHTML={{
+              __html: concatText(currentPackage.products, 'specification'),
+            }}
+          />
         </Tabs>
       </StickyContainer>
       <div className={styles.bottom}>
@@ -168,6 +178,6 @@ function Details({ dispatch, location, pregnancyId, currentPackage }: any) {
 
 
 export default connect(({ global, remoteService }: ConnectState) => ({
-  pregnancyId: global.currentPregnancy.id,
+  currentPregnancy: global.currentPregnancy,
   currentPackage: remoteService.currentPackage,
 }))(Details);

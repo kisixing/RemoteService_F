@@ -37,7 +37,8 @@
     "redux-persist": "^6.0.0",
     "store": "^2.0.12",
     "umi-request": "^1.2.17",
-    "weixin-js-sdk": "^1.4.0-test"
+    "weixin-js-sdk": "^1.4.0-test",
+    "xss": "^1.0.6"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.9",

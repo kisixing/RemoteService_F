@@ -10,12 +10,19 @@ interface IProps {
   size?: string
 }
 
-function RadioGroup({ children, defaultValue, value, onChange = () => {}, disabled, size }: IProps) {
+function RadioGroup({ children, defaultValue, value, onChange, disabled, size }: IProps) {
   const [currentValue, setCurrentValue] = useState(defaultValue);
 
   useEffect(() => {
     setCurrentValue(value === undefined ? defaultValue : value);
   }, [value]);
+
+  const handleChange = (value: any) => {
+    if (onChange) {
+      onChange(value)
+    }
+    setCurrentValue(value);
+  }
 
   return (
     <div className={styles.group}>
@@ -24,15 +31,14 @@ function RadioGroup({ children, defaultValue, value, onChange = () => {}, disabl
           return null;
         }
 
-        return cloneElement(element, {
-          size,
-          disabled,
-          checked: element.props.value === currentValue,
-          onChange:(val: any, e: any) => {
-            setCurrentValue(val);
-            onChange(val, e);
-          },
-        });
+        return cloneElement(
+          element,
+          Object.assign({}, element.props, {
+            onChange: handleChange,
+            model: currentValue,
+            size: size,
+          }),
+        );
       })}
     </div>
   );

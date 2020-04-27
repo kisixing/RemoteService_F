@@ -1,8 +1,8 @@
 import Radio from './radio';
-import Group from './group';
+import RadioGroup from './radioGroup';
 
 // Radio.Button = Button;
-Radio.Group = Group;
+Radio.Group = RadioGroup;
 
-export { Group };
+export { RadioGroup };
 export default Radio;

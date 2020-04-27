@@ -1407,6 +1407,7 @@ const TOOLS = [
     label: '其他',
     icon: 'i008.png',
     route: '/example',
+    hide: true
   },
 ];
 

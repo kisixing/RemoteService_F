@@ -15,6 +15,7 @@ declare module 'react-pdf/dist/entry.webpack';
 declare module 'chart.js';
 declare module 'numeral';
 declare module 'uuid'
+declare module 'xss'
 
 declare module "*.json" {
   const content: object;
