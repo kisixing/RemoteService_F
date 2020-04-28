@@ -26,28 +26,28 @@ interface LabelProps {
 }
 
 export const MAPS: LabelProps[] = [
-         {
-           title: '基本信息',
-           name: 'basic',
-           icon: 'icon_wc_jiben',
-           finished: 'false',
-           route: '/perinatal/basic-info',
-         },
-         {
-           title: '本孕信息',
-           name: 'pregnancy',
-           icon: 'icon_wc_benyun',
-           finished: 'false',
-           route: '/perinatal/current-pregnancy',
-         },
-         {
-           title: '孕产史信息',
-           name: 'history',
-           icon: 'icon_wc_changshi',
-           finished: 'none',
-           route: '/perinatal/pregnancy-history',
-         },
-       ];
+  {
+    title: '基本信息',
+    name: 'basic',
+    icon: 'icon_wc_jiben',
+    finished: 'false',
+    route: '/perinatal/basic-info',
+  },
+  {
+    title: '本孕信息',
+    name: 'pregnancy',
+    icon: 'icon_wc_benyun',
+    finished: 'false',
+    route: '/perinatal/current-pregnancy',
+  },
+  {
+    title: '孕产史信息',
+    name: 'history',
+    icon: 'icon_wc_changshi',
+    finished: 'none',
+    route: '/perinatal/pregnancy-history',
+  },
+];
 
 interface P extends ConnectProps {
 
