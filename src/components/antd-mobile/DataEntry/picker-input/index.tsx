@@ -13,14 +13,14 @@ import TextInput from '../text-input';
 // 数据说明
 // label --> label1&label2 value --> { smoke: true, smokeote: 12 }
 interface IProps {
-  id: string
+  name: string
   children: string;
   value?: object;
   onChange?: (value: object) => void;
   props?: any[]
 }
 
-function PickerInput({ id, children, value = {}, props = [], onChange = () => {} }: IProps, ref: any) {
+function PickerInput({ name, children, value = {}, props = [], onChange = () => {} }: IProps, ref: any) {
   // 拆分label，分布赋值给picker和input
   const labels = props.map((e: any) => e.label);
   const ids = props.map((e: any) => e.id);
@@ -42,12 +42,18 @@ function PickerInput({ id, children, value = {}, props = [], onChange = () => {}
   return (
     <span>
       {props[0]['type'] === 'radio' ? (
-        <RadioPicker {...props[0]} value={value[ids[0]]} onChange={handlePicker}>
+        <RadioPicker
+          {...props[0]}
+          name={props[0]['id']}
+          value={value[ids[0]]}
+          onChange={handlePicker}
+        >
           {labels[0]}
         </RadioPicker>
       ) : props[0]['type'] === 'mix-picker' ? (
         <MixPicker
           {...props[0]}
+          name={props[0]['id']}
           placeholder={props[0]['placeholder'] || `请选择${labels[0]}`}
           value={value[ids[0]]}
           onChange={handlePicker}
@@ -57,6 +63,7 @@ function PickerInput({ id, children, value = {}, props = [], onChange = () => {}
       ) : (
         <Picker
           {...props[0]}
+          name={props[0]['id']}
           placeholder={props[0]['placeholder'] || `请选择${labels[0]}`}
           value={value[ids[0]]}
           onChange={handlePicker}
@@ -67,6 +74,7 @@ function PickerInput({ id, children, value = {}, props = [], onChange = () => {}
       {visible ? (
         <TextInput
           {...props[1]}
+          name={props[1]['id']}
           placeholder={props[1]['placeholder'] || `请输入${labels[1]}`}
           value={value[ids[1]]}
           onChange={handleText}

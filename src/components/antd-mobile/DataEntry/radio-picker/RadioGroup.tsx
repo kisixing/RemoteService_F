@@ -1,9 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import styles from './RadioGroup.less';
-import common from '../index.less'
 
-function RadioGroup({ id, options, value, onChange = () => {}, error }: any) {
+function RadioGroup({ options, value, onChange = () => {}, error }: any) {
   const handleChange = (e: any) => {
     let flag = e.target.value;
     const checked = options.filter((e: any) => e.value.toString() === flag)[0];

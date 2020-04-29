@@ -14,7 +14,7 @@ export default (props: IProps) => {
   return (
     <div className={styles.notification}>
       <div className={styles.left}>
-        <IconFont type="tongzhi" /> 提醒
+        <IconFont type="tongzhi" size="0.36rem" /> 提醒
       </div>
       <div className={styles.right}>
         <marquee>有您的消息...</marquee>

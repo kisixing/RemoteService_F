@@ -39,20 +39,17 @@ const concatLabels = (values: any) => {
   return text;
 };
 
-const CustomItem = ({ arrow, children, extra, value, onClick, options, disabled, error }: any) => {
+const CustomItem = ({ name, arrow, children, extra, value, onClick, options, disabled, error }: any) => {
   // value值约定格式
   // [{ label: '高血压', value: 'hypertension' }, ..., { label: '其他', value: 'other', note: '其他说明' }]
   const text = concatLabels(value);
   const color = text ? '#000' : error ? '#f50' : '#bbb';
   return (
     <List.Item
+      name={name}
       className={styles.customList}
       arrow={arrow}
-      extra={
-        <span style={{ fontSize: '0.3rem', color }}>
-          {text ? text : extra}
-        </span>
-      }
+      extra={<span style={{ fontSize: '0.3rem', color }}>{text ? text : extra}</span>}
       onClick={() => (disabled ? null : onClick(true))}
     >
       {children}
@@ -159,6 +156,7 @@ function MultiplePicker(
       okText="确定"
     >
       <CustomItem
+        name={name}
         arrow="horizontal"
         onClick={setVisible}
         extra={placeholder}

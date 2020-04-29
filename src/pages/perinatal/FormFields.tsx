@@ -79,6 +79,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
         })(
           <InputItem
             key={id}
+            name={id}
             required={required}
             type={charactertype}
             placeholder={placeholder}
@@ -99,6 +100,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
         })(
           <TextareaItem
             key={id}
+            name={id}
             required={required}
             placeholder={placeholder}
             maxLength={maxLength}
@@ -115,6 +117,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
         })(
           <StepperInput
             key={id}
+            name={id}
             required={required}
             max={max}
             min={min}
@@ -141,6 +144,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
         })(
           <Radio
             key={id}
+            name={id}
             required={required}
             charactertype={charactertype}
             error={getFieldError(id)}
@@ -156,6 +160,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
         })(
           <Picker
             key={id}
+            name={id}
             required={required}
             placeholder={placeholder}
             error={getFieldError(id)}
@@ -171,6 +176,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
         })(
           <DatePicker
             key={id}
+            name={id}
             required={required}
             placeholder={placeholder}
             error={getFieldError(id)}
@@ -187,6 +193,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
         })(
           <MixPicker
             key={id}
+            name={id}
             required={required}
             placeholder={placeholder}
             error={getFieldError(id)}
@@ -211,6 +218,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
         })(
           <MultiplePicker
             key={id}
+            name={id}
             required={required}
             placeholder={placeholder}
             error={getFieldError(id)}
@@ -224,7 +232,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <AddressPicker key={id} required={required} placeholder={placeholder} {...rest}>
+          <AddressPicker key={id} name={id} required={required} placeholder={placeholder} {...rest}>
             {label}
           </AddressPicker>,
         );
@@ -233,7 +241,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <RadioInput key={id} id={id} {...rest}>
+          <RadioInput key={id} name={id} {...rest}>
             {label}
           </RadioInput>,
         );
@@ -242,7 +250,7 @@ function FormFields({ form, onChange = () => {}, dataSource = [] }: IProps) {
           initialValue: value,
           rules: [{ required: required, message: `${placeholder}!` }],
         })(
-          <PickerInput key={id} id={id} {...rest}>
+          <PickerInput key={id} name={id} {...rest}>
             {label}
           </PickerInput>,
         );

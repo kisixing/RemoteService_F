@@ -18,10 +18,11 @@ interface IProps extends PickerPropsType {
   error?: any;
 }
 
-const CustomItem = ({ arrow, error, extra, onClick, children }: any) => {
+const CustomItem = ({ name, arrow, error, extra, onClick, children }: any) => {
   const color = extra && extra.includes('请') && !error ? '#bbb' : error ? '' : '#000';
   return (
     <List.Item
+      name={name}
       className={styles.customList}
       arrow={arrow}
       error={error}
@@ -45,6 +46,7 @@ function Picker(
     onChange = () => {},
     value,
     error,
+    className,
     ...rest
   }: IProps,
   ref: any,
@@ -98,7 +100,7 @@ function Picker(
       onOk={handleChange}
       {...rest}
     >
-      <CustomItem arrow="horizontal" error={error}>
+      <CustomItem arrow="horizontal" error={error} name={name}>
         {required ? <i className={styles.required}>*</i> : null}
         <span className={styles.label}>{children}</span>
       </CustomItem>

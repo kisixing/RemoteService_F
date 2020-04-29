@@ -11,7 +11,7 @@ import TextInput from '../text-input';
 // 数据说明
 // label --> label1&label2 value --> { smoke: true, smokeNote: 12 }
 interface IProps {
-  id: string
+  name: string
   children: string
   value?: object
   onChange?: (values: any) => void
@@ -19,7 +19,7 @@ interface IProps {
 }
 
 function RadioInput(
-  { id, children, value = {}, onChange = () => {}, props = [] }: IProps,
+  { name, children, value = {}, onChange = () => {}, props = [] }: IProps,
   ref: any,
 ) {
   const labels = props.map((e: any) => e.label);
@@ -43,6 +43,7 @@ function RadioInput(
     <span ref={ref}>
       <RadioPicker
         {...props[0]}
+        name={props[0]['id']}
         value={value[props[0]['id']]}
         onChange={handleRadio}
       >
@@ -51,6 +52,7 @@ function RadioInput(
       {visible ? (
         <TextInput
           {...props[1]}
+          name={props[1]['id']}
           placeholder={props[1]['placeholder'] || `请输入${labels[1]}`}
           value={value[props[1]['id']]}
           onChange={handleText}

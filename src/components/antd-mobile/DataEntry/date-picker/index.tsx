@@ -12,20 +12,18 @@ interface IProps extends PropsType  {
   valueFormat?: 'string' | 'date'
   error?: any
   format: string
+  name?: string
 }
 
-const CustomItem = ({ arrow, error, extra, onClick, children }: any) => {
+const CustomItem = ({ name, arrow, error, extra, onClick, children }: any) => {
   const color = extra && extra.includes('请') && !error ? '#bbb' : error ? '' : '#000';
   return (
     <List.Item
+      name={name}
       className={styles.customList}
       arrow={arrow}
       error={error}
-      extra={
-        <span style={{fontSize: '0.3rem', color }}>
-          {extra}
-        </span>
-      }
+      extra={<span style={{ fontSize: '0.3rem', color }}>{extra}</span>}
       onClick={onClick}
     >
       {children}
@@ -34,6 +32,7 @@ const CustomItem = ({ arrow, error, extra, onClick, children }: any) => {
 };
 
 function DatePicker({
+  name,
   required,
   children,
   placeholder,
@@ -79,7 +78,7 @@ function DatePicker({
       format={value => moment(value).format(format)}
       {...rest}
     >
-      <CustomItem arrow="horizontal" error={error}>
+      <CustomItem arrow="horizontal" error={error} name={name}>
         {required ? <i className={styles.required}>*</i> : null}
         <span className={styles.label}>{children}</span>
       </CustomItem>

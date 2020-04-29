@@ -6,19 +6,19 @@ import Touchable from './Touchable';
 import IconFont from './IconFont';
 import CountDown from './CountDown';
 import Tag from './Tag';
-import InputItem from './dataEntry/text-input';
-import TextareaItem from './dataEntry/textarea-input';
-import StepperInput from './dataEntry/stepper-input';
-import Picker from './dataEntry/picker';
-import DatePicker from './dataEntry/date-picker';
-import Switch from './dataEntry/switch';
-import Radio from './dataEntry/radio-picker';
-import LMRadio from './dataEntry/radio';
-import MixPicker from './dataEntry/mix-picker';
-import MultiplePicker from './dataEntry/multiple-picker';
-import AddressPicker from './dataEntry/address-picker';
-import RadioInput from './dataEntry/radio-input';
-import PickerInput from './dataEntry/picker-input';
+import InputItem from './DataEntry/text-input';
+import TextareaItem from './DataEntry/textarea-input';
+import StepperInput from './DataEntry/stepper-input';
+import Picker from './DataEntry/picker';
+import DatePicker from './DataEntry/date-picker';
+import Switch from './DataEntry/switch';
+import Radio from './DataEntry/radio-picker';
+import LMRadio from './DataEntry/radio';
+import MixPicker from './DataEntry/mix-picker';
+import MultiplePicker from './DataEntry/multiple-picker';
+import AddressPicker from './DataEntry/address-picker';
+import RadioInput from './DataEntry/radio-input';
+import PickerInput from './DataEntry/picker-input';
 
 export {
   Button,

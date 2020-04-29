@@ -1397,7 +1397,7 @@ const TOOLS = [
   },
   {
     key: '7',
-    label: '其他',
+    label: '我的二维码',
     icon: 'i006.png',
     route: '',
     hide: true,

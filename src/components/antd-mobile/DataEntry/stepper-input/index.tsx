@@ -11,7 +11,7 @@ interface IProps extends StepProps {
 }
 
 function StepperInput(
-  { value, required, children, onChange, error, ...rest }: IProps ,
+  { name, value, required, children, onChange, error, ...rest }: IProps ,
   ref: any,
 ) {
   return (
@@ -19,7 +19,7 @@ function StepperInput(
       className={styles.customList}
       error={error}
       extra={
-        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <div name={name} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
           <Stepper
             ref={ref}
             className={styles.stepperItem}
