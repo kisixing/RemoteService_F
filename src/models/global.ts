@@ -1,6 +1,5 @@
 import { Reducer } from 'redux';
 import { Effect } from './connect';
-// import { ConnectState } from './connect.d';
 import { mpauth, getPregnancy, updatePregnancy } from '@/services/user';
 
 
@@ -11,6 +10,7 @@ export interface GlobalModelState {
   access_token?: string;
   currentPregnancy?: {
     id?: string | number;
+    mpuid?: string
     [propName: string]: any;
   };
 }
