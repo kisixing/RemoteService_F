@@ -161,27 +161,28 @@ const basic = {
           placeholder: '请输入您的姓名',
         },
         {
-          id: 'mobile',
+          id: 'telephone', // mobile
           label: '手机号码',
           type: 'text-input',
-          charactertype: 'phone',
+          charactertype: 'text',
+          maxLength: 11,
           required: true,
         },
-        {
-          id: 'telephone',
-          label: '固话',
-          type: 'text-input',
-          charactertype: 'tel',
-          // TODO 暂时弃用
-          // rules: [
-          //   { required: true, message: '请输入固定电话号码' },
-          //   { pattern: /(^0\d{2,3}\-\d{7,8}$)/, meaasge: '请输入符合规范的固定电话格式，如020-88889999' }
-          // ],
-          pattern: /(^0\d{2,3}\-\d{7,8}$)/,
-          patternMessage: '请输入符合规范的固定电话格式，如020-88889999',
-          maxLength: 12, // 大陆地区固话长度020-88889999
-          required: true,
-        },
+        // {
+        //   id: 'telephone',
+        //   label: '固话',
+        //   type: 'text-input',
+        //   charactertype: 'tel',
+        //   // TODO 暂时弃用
+        //   // rules: [
+        //   //   { required: true, message: '请输入固定电话号码' },
+        //   //   { pattern: /(^0\d{2,3}\-\d{7,8}$)/, meaasge: '请输入符合规范的固定电话格式，如020-88889999' }
+        //   // ],
+        //   pattern: /(^0\d{2,3}\-\d{7,8}$)/,
+        //   patternMessage: '请输入符合规范的固定电话格式，如020-88889999',
+        //   maxLength: 12, // 大陆地区固话长度020-88889999
+        //   required: true,
+        // },
         {
           id: 'cardNO',
           label: '就诊卡号',
@@ -1413,7 +1414,7 @@ const TOOLS = [
 
 window.configuration = {
   // 后台服务地址
-  url: 'http://transfer.lian-med.com',
+  url: 'http://transfer.lian-med.com:9987',
   basic: basic,
   pregnancy: pregnancy,
   history: history,

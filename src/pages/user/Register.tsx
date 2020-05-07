@@ -17,6 +17,7 @@ import zhCN from 'antd-mobile/lib/date-picker/locale/zh_CN';
 import { Button, List } from '@/components/antd-mobile';
 import Footer from '@/components/Footer';
 import styles from './Register.less';
+import { getValueKeys } from '../perinatal/utils';
 
 const nameRes = /(^(?:[\u4e00-\u9fa5·]{2,16})$)|(^[a-zA-Z]{1}[a-zA-Z\s]{0,20}[a-zA-Z]{1}$)/;
 const nowTimeStamp = Date.now();
@@ -71,6 +72,7 @@ class Register extends Component<P, S> {
       const data = {
         ...value,
         mpuid,
+        telephone: value.mobile,
         lmp: moment(value.LMP).format('YYYY-MM-DD'),
         idType: Number(query.idType),
         // TODO 可考虑计算出预产期进行提交，

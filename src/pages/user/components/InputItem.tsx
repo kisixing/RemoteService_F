@@ -50,12 +50,12 @@ export default class InputItem extends React.Component<IProps, IState> {
     if (value) {
       value.trim()
     }
-    if (type === 'phone') {
-      value = phoneSeparated(value);
-      if (value.length > 13) {
-        return;
-      }
-    }
+    // if (type === 'phone') {
+    //   value = phoneSeparated(value);
+    //   if (value.length > 13) {
+    //     return;
+    //   }
+    // }
     onChange(value)
   }
   render () {
