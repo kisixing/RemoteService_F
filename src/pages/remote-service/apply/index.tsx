@@ -17,10 +17,10 @@ import styles from './index.less';
 
 // 初始化值为一个对象时
 interface IState {
-  id: any
+  id: any;
   pregnancy: any;
   device: any;
-  servicepackage: any
+  servicepackage: any;
   [propName: string]: any;
 }
 
@@ -49,7 +49,7 @@ function Apply(props: any) {
     const params = {
       'pregnancyId.equals': p1,
       'deviceId.specified': true,
-      'state.equals': 2
+      'state.equals': 2,
     };
     getPackageOrders(params).then(res => {
       if (res && res.length) {
@@ -76,7 +76,7 @@ function Apply(props: any) {
         setPrices(res);
       }
     });
-  }
+  };
 
   const onClick = (p1: number, p2: number, p3?: number) => {
     if (checked.id) {
@@ -137,8 +137,9 @@ function Apply(props: any) {
             <div
               className={styles.stamp}
               style={{
-                backgroundImage: `url(${constant.aliyuncs}/icons/overprint_${service1amount ===
-                  0 ? '3' : '6'}@3x.png)`,
+                backgroundImage: `url(${constant.aliyuncs}/icons/overprint_${
+                  service1amount === 0 ? '3' : '6'
+                }@3x.png)`,
               }}
             >
               <span>{service1amount === 0 ? '' : service1amount}</span>

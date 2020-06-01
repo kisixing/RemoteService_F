@@ -4,7 +4,7 @@
  */
 import { extend } from 'umi-request';
 import Router from 'umi/router';
-import { notification } from 'antd';
+import { Toast } from 'antd-mobile';
 
 const base_url = process.env.NODE_ENV === 'development' ? '' : window.configuration.url;
 
@@ -36,20 +36,14 @@ const errorHandler = (error: { response: Response }): Response => {
     const { status, url } = response;
 
     if (status === 401) {
-      notification.error({
-        message: '未登录或登录已过期，请重新登录。',
-      });
+      Toast.info('未登录或登录已过期，请重新登录。')
       // @HACK
       /* eslint-disable no-underscore-dangle */
       window.g_app._store.dispatch({
         type: 'global/logout',
       });
     }
-
-    notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
+    console.log(`请求错误 ${status}: ${url}, ${errorText}`)
     // environment should not be used
     if (status === 403) {
       // Router.push('/exception/403');
@@ -61,10 +55,7 @@ const errorHandler = (error: { response: Response }): Response => {
       // Router.push('/exception/404');
     }
   } else if (!response) {
-    notification.error({
-      description: '您的网络发生异常，无法连接服务器',
-      message: '网络异常',
-    });
+    console.log('您的网络发生异常，无法连接服务器')
   }
   return response;
 };

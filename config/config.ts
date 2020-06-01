@@ -76,7 +76,7 @@ const config: IConfig = {
   ],
   proxy: {
     '/api': {
-      target: 'http://transfer.lian-med.com:9988/',
+      target: 'http://transfer.lian-med.com:9987/',
       changeOrigin: false,
       // pathRewrite: { '^/api': '/api' },
     },

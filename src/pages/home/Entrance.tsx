@@ -4,12 +4,12 @@ import constant from '@/utils/constants';
 import styles from './Entrance.less';
 
 interface IProps {
-  dataSource: any[],
+  dataSource: any[];
 }
 export default ({ dataSource = [] }: IProps) => {
   // 计算所有盒子需要的宽度，hide隐藏的盒子不计算
   const showData = dataSource.filter(e => !e.hide);
-  const width = `${1.62 * showData.length - 0.06}rem`;
+  const width = `${1.62 * showData.length - 0.05}rem`;
 
   return (
     <div className={styles.entrance}>

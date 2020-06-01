@@ -72,6 +72,7 @@ class Register extends Component<P, S> {
       const data = {
         ...value,
         mpuid,
+        mobile: value.mobile,
         telephone: value.mobile,
         lmp: moment(value.LMP).format('YYYY-MM-DD'),
         idType: Number(query.idType),

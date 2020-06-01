@@ -105,7 +105,7 @@ class Login extends Component<P, S> {
       // 校验通过，进行数据提交
       dispatch({
         type: 'user/bindUser',
-        payload: { telephone: mobile, captcha, idType, idNo },
+        payload: { mobile, captcha, idType, idNo },
       }).then((res: any) => {
         if (res && res.id) {
           // 有绑定信息，返回最近的一个档案
