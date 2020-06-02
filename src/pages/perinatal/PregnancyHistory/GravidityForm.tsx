@@ -13,9 +13,9 @@ import FetusesComponent from './FetusesComponent';
 import { getFormKeys, getRealData, assignmentData, submittedData } from '../utils';
 
 // 读取配置文件
-const { history } = window.configuration;
-const dataSource = history.data;
-const formFields = history.data[0]['children'];
+const { pregnancyHistory } = window.configuration;
+const dataSource = pregnancyHistory.data;
+const formFields = pregnancyHistory.data[0]['children'];
 
 // 获取需要进行value取值转换的key
 export function getSpecialKeys(data = []) {
@@ -29,20 +29,20 @@ export function getSpecialKeys(data = []) {
 
 interface P {
   loading?: boolean;
-  form: any
-  id: string
+  form: any;
+  id: string;
   values: {
     id?: string | number | undefined;
     [propName: string]: any;
-  }
-  index?: number
+  };
+  index?: number;
 }
 
 interface S {
-  visible: boolean
-  number?: number
+  visible: boolean;
+  number?: number;
   id?: string | number | undefined;
-};
+}
 
 class GravidityForm extends PureComponent<P, S> {
   constructor(props) {
@@ -50,8 +50,8 @@ class GravidityForm extends PureComponent<P, S> {
     this.state = {
       visible: false,
       number: 0,
-      id: ''
-    }
+      id: '',
+    };
   }
 
   componentDidMount() {
@@ -59,10 +59,7 @@ class GravidityForm extends PureComponent<P, S> {
   }
 
   componentWillReceiveProps() {
-    const values = this.props.form.getFieldsValue([
-      'isBirth',
-      'fetalcount',
-    ]);
+    const values = this.props.form.getFieldsValue(['isBirth', 'fetalcount']);
     // console.log('是否分娩', values);
     //////////////////////////////////////////////////////////////
     //////////////// 分娩情况下的表单 ///////////////////////////////
@@ -128,16 +125,16 @@ class GravidityForm extends PureComponent<P, S> {
 
     // 根据是否有胎数fetalcount显示新生儿情况表单
     if (values.isBirth) {
-      this.setState({ visible: true, number: values.fetalcount })
+      this.setState({ visible: true, number: values.fetalcount });
     } else {
-      this.setState({ visible: false })
+      this.setState({ visible: false });
     }
   }
 
   initValue = () => {
     const { form, values } = this.props;
     // 保存id，便于取值时拿回已经保存的孕产id
-    this.setState({ id: values.id })
+    this.setState({ id: values.id });
     // 初始化values
     const val = assignmentData(values, dataSource);
 
@@ -155,7 +152,7 @@ class GravidityForm extends PureComponent<P, S> {
     setTimeout(() => {
       form.setFieldsValue({ ...val });
     }, 100);
-  }
+  };
 
   setValues = (values: any) => {
     // 特殊取值的属性
@@ -176,23 +173,26 @@ class GravidityForm extends PureComponent<P, S> {
       result[id] = filtered;
     }
     return result;
-  }
+  };
 
   getValues = () => {
-    const { form: { validateFieldsAndScroll }, index } = this.props;
+    const {
+      form: { validateFieldsAndScroll },
+      index,
+    } = this.props;
     let result: any = false;
     validateFieldsAndScroll((error: any[], values: any) => {
       if (error) {
-        Toast.info(`孕册记录${index}未填写完整`, 2)
-        return result = false;
+        Toast.info(`孕册记录${index}未填写完整`, 2);
+        return (result = false);
       }
-      return result = submittedData(values, dataSource);
-    })
+      return (result = submittedData(values, dataSource));
+    });
     if (!result) {
       return false;
     }
-    return {id: this.state.id, ...result};
-  }
+    return { id: this.state.id, ...result };
+  };
 
   // 确定key位置
   getKeyIndex = (key: string) => {

@@ -5,22 +5,26 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, Accordion, Checkbox, Toast } from 'antd-mobile';
 import moment from 'moment';
-import classnames from 'classnames';
+import Router from 'umi/router';
+// import classnames from 'classnames';
+import { ActivityIndicator, Modal, /* Accordion */ Checkbox, Toast } from 'antd-mobile';
+
 import { Button, Tag, IconFont, WhiteSpace } from '@/components/antd-mobile';
 import { CTGApply, getPackageOrders, getApplyPrice } from '@/services/remote-service';
 import { webpay } from '@/services/pay';
-import { router } from '@/utils';
 import constant from '@/utils/constants';
+
 import styles from './index.less';
+
+const alert = Modal.alert;
 
 // 初始化值为一个对象时
 interface IState {
-  id: any
+  id: any;
   pregnancy: any;
   device: any;
-  servicepackage: any
+  servicepackage: any;
   [propName: string]: any;
 }
 
@@ -49,7 +53,7 @@ function Apply(props: any) {
     const params = {
       'pregnancyId.equals': p1,
       'deviceId.specified': true,
-      'state.equals': 2
+      'state.equals': 2, // 从0开始对应 新订单0、已支付1、使用中2、完成3、关闭4、逾期5、取消6
     };
     getPackageOrders(params).then(res => {
       if (res && res.length) {
@@ -64,6 +68,17 @@ function Apply(props: any) {
             getPrice();
           }
         }
+      } else {
+        setIsReady(true);
+        alert('提示', '你当前没有可使用的套餐，请前往莲孕公众号购买...', [
+          {
+            text: '返回',
+            onPress: () => {
+              Router.goBack();
+              window.open('', '_self').close();
+            },
+          },
+        ]);
       }
     });
   };
@@ -76,7 +91,7 @@ function Apply(props: any) {
         setPrices(res);
       }
     });
-  }
+  };
 
   const onClick = (p1: number, p2: number, p3?: number) => {
     if (checked.id) {
@@ -93,7 +108,7 @@ function Apply(props: any) {
       CTGApply({ pregnancyid: p1, visitid: p2, packageorderid: p3, type: 'CTGAPPLY' })
         .then(res => {
           if (res && res.sn) {
-            router(`/apply/result?pregnancyId=${p1}`);
+            Router.push(`/apply/result?pregnancyId=${p1}`);
           } else {
             Toast.info('判图服务扣除失败，请稍后再试...');
           }
@@ -137,8 +152,9 @@ function Apply(props: any) {
             <div
               className={styles.stamp}
               style={{
-                backgroundImage: `url(${constant.aliyuncs}/icons/overprint_${service1amount ===
-                  0 ? '3' : '6'}@3x.png)`,
+                backgroundImage: `url(${constant.aliyuncs}/icons/overprint_${
+                  service1amount === 0 ? '3' : '6'
+                }@3x.png)`,
               }}
             >
               <span>{service1amount === 0 ? '' : service1amount}</span>

@@ -1,6 +1,5 @@
 import { Reducer } from 'redux';
 import { Effect } from './connect';
-// import { ConnectState } from './connect.d';
 import { mpauth, getPregnancy, updatePregnancy } from '@/services/user';
 
 
@@ -11,6 +10,7 @@ export interface GlobalModelState {
   access_token?: string;
   currentPregnancy?: {
     id?: string | number;
+    mpuid?: string
     [propName: string]: any;
   };
 }
@@ -40,8 +40,8 @@ const GlobalModel: GlobalModelType = {
     currentPregnancy: {},
     // mpuid: 'oONcg1d-i8OrskBrnOndjMpct0TM',
     // access_token:
-    //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFkLWk4T3Jza0Jybk9uZGpNcGN0MFRNIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU5MDQ3NzMzN30.tx3W8_xP30_ETPFD0sBkmvVnBEhIbdNmasSQA_wOd-DdkzXqZX9If1hBpUX0EeOY9nGSbAYZNydPS6FMWsAnSQ',
-    // currentPregnancy: { id: 4193 },
+    //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFkLWk4T3Jza0Jybk9uZGpNcGN0MFRNIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU5MzE0MjcyNX0.hhzN1sxAXM7ETk0mNZSnzUw2ExIBgQ7vYmuYNS6R7AzIm7abqUTIT4xuWHbrYBICq9BrCox5lWN6RiGIxq0wbQ',
+    // currentPregnancy: { id: 101 },
   },
 
   effects: {
@@ -54,7 +54,6 @@ const GlobalModel: GlobalModelType = {
         let token = response && response.headers.get('Authorization');
         if (token) {
           const access_token = token.replace(/captcha /, '');
-          // sessionStorage.setItem('access_token', access_token);
           yield put({
             type: 'updateState',
             payload: {

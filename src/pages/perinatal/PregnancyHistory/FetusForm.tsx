@@ -3,8 +3,10 @@ import { List } from 'antd-mobile';
 import { InputItem, DatePicker, Radio } from '@/components/antd-mobile';
 
 // 读取配置文件
-const { history } = window.configuration;
-const fields = history.data[0]['children'].filter((e: any) => e.id === 'children')[0]['data'];
+const { pregnancyHistory } = window.configuration;
+const fields = pregnancyHistory.data[0]['children'].filter((e: any) => e.id === 'children')[0][
+  'data'
+];
 
 function MapList({
   id,
@@ -71,13 +73,13 @@ const FetusForm = ({ value = {}, onChange = () => {} }: any) => {
       newData[i]['value'] = value[id];
     }
     return newData;
-  }
+  };
 
   const [data, setData] = useState(setValues(fields, value));
   useEffect(() => {
     const newData = formVisible('childLiving', value.childLiving);
     setData(newData);
-  }, [])
+  }, []);
 
   const handleChange = (val: any, id: string) => {
     let newValue = { ...value };
@@ -101,15 +103,16 @@ const FetusForm = ({ value = {}, onChange = () => {} }: any) => {
       newData[childDeathNoteIndex]['hide'] = val;
     }
     return newData;
-  }
+  };
 
   return (
     <List>
-      {data && data.map((item: any) => {
-        return <MapList key={item.id} onChange={handleChange} {...item} />;
-      })}
+      {data &&
+        data.map((item: any) => {
+          return <MapList key={item.id} onChange={handleChange} {...item} />;
+        })}
     </List>
-  )
+  );
 };
 
 export default FetusForm;

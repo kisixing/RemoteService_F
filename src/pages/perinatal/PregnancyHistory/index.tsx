@@ -17,33 +17,34 @@ import { ConnectState, ConnectProps } from '@/models/connect';
 import styles from '../styles.less';
 
 interface P {
-  loading?: boolean
-  dispatch: any,
-  form: any
-  currentPregnancy?: any
+  loading?: boolean;
+  dispatch: any;
+  form: any;
+  currentPregnancy?: any;
 }
 
 interface S {
-  dataSource?: any[]
-  activeKey?: any[]
-  values?: any[]
-};
+  dataSource?: any[];
+  activeKey?: any[];
+  values?: any[];
+}
 
 @connect(({ global, loading }: ConnectState) => ({
   currentPregnancy: global.currentPregnancy,
   loading: loading.effects['global/getPregnancy'],
 }))
 class PregnancyHistory extends React.PureComponent<P, S> {
-
   state = {
     dataSource: [],
     activeKey: [],
-    values: []
+    values: [],
   };
 
   componentDidMount() {
-    const { currentPregnancy: { id } } = this.props;
-    this.initValue(id)
+    const {
+      currentPregnancy: { id },
+    } = this.props;
+    this.initValue(id);
   }
 
   initValue = (id: string) => {
@@ -60,7 +61,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
         this.setState({
           values,
           dataSource,
-          activeKey: ids
+          activeKey: ids,
         });
       }
     });
@@ -76,7 +77,9 @@ class PregnancyHistory extends React.PureComponent<P, S> {
               key={item.id}
               header={
                 <div style={{ position: 'relative' }}>
-                  <span style={{ color: '#ff6084', fontSize: '0.3rem', fontWeight: 'bold' }}>{`孕次记录 ${i + 1}`}</span>
+                  <span
+                    style={{ color: '#ff6084', fontSize: '0.3rem', fontWeight: 'bold' }}
+                  >{`孕次记录 ${i + 1}`}</span>
                   <span
                     style={{
                       width: '0.88rem',
@@ -88,7 +91,10 @@ class PregnancyHistory extends React.PureComponent<P, S> {
                     }}
                     onClick={e => this.remove(e, item.id)}
                   >
-                    <img style={{ width: '0.36rem' }} src={require('../../../assets/icons/delete.png')} />
+                    <img
+                      style={{ width: '0.36rem' }}
+                      src={require('../../../assets/icons/delete.png')}
+                    />
                   </span>
                 </div>
               }
@@ -96,7 +102,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
               <GravidityForm
                 id={item.id}
                 index={i + 1}
-                wrappedComponentRef={(inst: any) => this[`formRef${item.id}`] = inst}
+                wrappedComponentRef={(inst: any) => (this[`formRef${item.id}`] = inst)}
                 values={this.state.values[i] || {}}
               />
             </Accordion.Panel>
@@ -107,30 +113,31 @@ class PregnancyHistory extends React.PureComponent<P, S> {
   };
 
   onAccordionChange = (key: string[]) => {
-    this.setState({ activeKey: key })
-  }
+    this.setState({ activeKey: key });
+  };
 
   add = () => {
     const { dataSource } = this.state;
     const newD = [...dataSource];
     newD.push({ id: `NEW${generateUUID(16)}` });
     const activeKey = newD.map((e: any) => e.id.toString());
-    this.setState({ dataSource: newD, activeKey  })
+    this.setState({ dataSource: newD, activeKey });
   };
 
   remove = (e: any, id: string) => {
     e.stopPropagation();
     Modal.alert('信息提示', `确定删除该孕次${id}信息？`, [
-      { text: '取消', onPress: () => { }, style: 'default' },
+      { text: '取消', onPress: () => {}, style: 'default' },
       {
-        text: '确定', onPress: () => {
+        text: '确定',
+        onPress: () => {
           const { dataSource } = this.state;
-          const newD = dataSource.filter(e => e.id !== id)
-          this.setState({ dataSource: newD })
-        }
+          const newD = dataSource.filter(e => e.id !== id);
+          this.setState({ dataSource: newD });
+        },
       },
     ]);
-  }
+  };
 
   getAllValues = () => {
     const { dataSource } = this.state;
@@ -143,17 +150,17 @@ class PregnancyHistory extends React.PureComponent<P, S> {
       successed = false;
       if (values) {
         successed = true;
-        result.push(values)
+        result.push(values);
       }
     });
     // 检测是否校验是否全部通过
     if (!successed) {
       console.log('get all values false!', result);
-      return false
+      return false;
     }
     console.log('get all values success!', result);
     return result;
-  }
+  };
 
   getValues = (inst: string, index: number) => {
     let result: object | boolean = {};
@@ -162,14 +169,14 @@ class PregnancyHistory extends React.PureComponent<P, S> {
     // CustomizedForm
     this[inst].props.form.validateFieldsAndScroll((error: any[], values: any) => {
       if (error) {
-        Toast.info(`孕册记录${index + 1}未填写完整`, 2)
-        return result = false;
+        Toast.info(`孕册记录${index + 1}未填写完整`, 2);
+        return (result = false);
       }
       console.log('孕产史信息', values);
-      return result = { ...values }
+      return (result = { ...values });
     });
     return result;
-  }
+  };
 
   onSubmit = () => {
     const { dispatch } = this.props;
@@ -179,16 +186,16 @@ class PregnancyHistory extends React.PureComponent<P, S> {
     }
     dispatch({
       type: 'global/updatePregnancy',
-      payload: { pregnancyHistories: values }
+      payload: { pregnancyHistories: values },
     }).then((res: any) => {
       if (res && res.id) {
         Modal.alert('提示', '孕产史信息保存成功！', [
-          { text: '取消', onPress: () => { }, style: 'default' },
+          { text: '取消', onPress: () => {}, style: 'default' },
           { text: '确定', onPress: () => Router.push('/perinatal') },
         ]);
       }
-    })
-  }
+    });
+  };
 
   render() {
     const { dataSource } = this.state;
@@ -214,7 +221,7 @@ class PregnancyHistory extends React.PureComponent<P, S> {
               保存
             </Button>
           ) : (
-            <Button onClick={() => Router.push('/perinatal')}>返回首页</Button>
+            <Button onClick={() => Router.push('/')}>返回首页</Button>
           )}
         </div>
       </div>

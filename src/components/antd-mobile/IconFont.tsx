@@ -5,7 +5,15 @@
  */
 import React from 'react';
 
-const IconFont = (props: any )=> {
+interface IProps {
+  type?: string
+  style?: React.CSSProperties
+  size?: string
+  color?: string
+  className?: string
+}
+
+const IconFont = (props: IProps) => {
   const { type, style, size = '.44rem', color, className } = props;
   // am-icon
   return (

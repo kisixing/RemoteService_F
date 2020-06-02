@@ -14,6 +14,10 @@ const config: IConfig = {
   publicPath: process.env.NODE_ENV === 'development' ? '/' : '/H5/',
   outputPath: './dist/H5',
   hash: true, // 开启 hash 文件后缀
+  targets: {
+    ie: 9,
+    ios: 9
+  },
   routes: routes,
   minimizer: 'terserjs',
   plugins: [
@@ -40,8 +44,8 @@ const config: IConfig = {
         },
         chunks: ['vendors', 'umi'],
         headScripts: [
-          { src: 'https://cdn.bootcss.com/react/16.12.0/umd/react.production.min.js' },
-          { src: 'https://cdn.bootcss.com/react-dom/16.12.0/umd/react-dom.production.min.js' },
+          // { src: 'https://cdn.bootcss.com/react/16.12.0/umd/react.production.min.js' },
+          // { src: 'https://cdn.bootcss.com/react-dom/16.12.0/umd/react-dom.production.min.js' },
           // 'https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js',
           { src: '<%= PUBLIC_PATH %>config.js' },
         ],
@@ -76,7 +80,7 @@ const config: IConfig = {
   ],
   proxy: {
     '/api': {
-      target: 'http://transfer.lian-med.com:9988/',
+      target: 'http://transfer.lian-med.com:9987/',
       changeOrigin: false,
       // pathRewrite: { '^/api': '/api' },
     },
@@ -96,14 +100,23 @@ const config: IConfig = {
     },
   ],
   externals: {
-    react: 'window.React',
-    'react-dom': 'window.ReactDOM',
+    // react: 'window.React',
+    // 'react-dom': 'window.ReactDOM',
     // moment: 'window.moment',
   },
   chainWebpack: process.env.NODE_ENV === 'development' ? undefined : webpackPlugin,
   uglifyJSOptions: {
     parallel: true,
   },
+  autoprefixer: {
+    flexbox: true
+  },
+  browserslist: [
+    '> 1%',
+    'last 2 versions',
+    'ie 9',
+    'ios 9'
+  ],
 };
 
 export default config;
