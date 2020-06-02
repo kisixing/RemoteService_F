@@ -7,6 +7,7 @@
 import { Toast, Modal } from 'antd-mobile';
 // import initWx from '@/utils/wx-config';
 // import debug from '@/utils/debug';
+import '@babel/polyfill';
 
 function isWeixn() {
   return /micromessenger/.test(navigator.userAgent.toLowerCase());

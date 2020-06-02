@@ -4,11 +4,11 @@
  * @Date: 2020-04-02 16:52:31
  */
 
-var nowTimeStamp = Date.now();
-var minDate = new Date(nowTimeStamp - 1000 * 60 * 60 * 24 * 365);
-var maxDate = new Date(nowTimeStamp + 1e7);
+const nowTimeStamp = Date.now();
+const minDate = new Date(nowTimeStamp - 1000 * 60 * 60 * 24 * 365);
+const maxDate = new Date(nowTimeStamp + 1e7);
 
-var areas = [
+let areas = [
   { code: '11', name: '北京市' },
   { code: '12', name: '天津市' },
   { code: '13', name: '河北省' },
@@ -45,15 +45,10 @@ var areas = [
   { code: '82', name: '澳门特别行政区' },
   { code: '91', name: '国外' },
 ];
-areas = areas.map(function (e) {
-  return {
-    label: e.name,
-    value: e.name
-  };
-});
+areas = areas.map(e => ({ label: e.name, value: e.name }));
 
 // 民族
-var ethnics = [
+const ethnics = [
   '汉族',
   '壮族',
   '回族',
@@ -111,15 +106,10 @@ var ethnics = [
   '珞巴族',
   '基诺族',
   '其他',
-].map(function (e) {
-  return {
-    label: e,
-    value: e
-  };
-});
+].map(e => ({ label: e, value: e }));
 
 // 职业种类
-var profession = [
+const profession = [
   '国家公务员',
   '专业技术人员',
   '企业管理人员',
@@ -132,15 +122,10 @@ var profession = [
   '学生',
   '退（离）休人员',
   '其他',
-].map(function (e) {
-  return {
-    label: e,
-    value: e
-  };
-});
+].map(e => ({ label: e, value: e }));
 
 // 婚姻状态
-var maritalstatus = [
+const maritalstatus = [
   { label: '已婚', value: 0 },
   { label: '未婚', value: 1 },
   { label: '离异', value: 2 },
@@ -149,7 +134,7 @@ var maritalstatus = [
 ];
 
 // 证件类型
-var IDType = [
+const IDType = [
   { label: '二代身份证', value: 0 },
   { label: '港澳台居民居住证', value: 1 },
   { label: '回乡证', value: 2 },
@@ -158,7 +143,7 @@ var IDType = [
   { label: '其他', value: 5 },
 ];
 
-var basic = {
+const basic = {
   description: '基本信息',
   data: [
     {
@@ -437,7 +422,7 @@ var basic = {
   ],
 };
 
-var pregnancy = {
+const pregnancy = {
   description: '本孕信息',
   data: [
     {
@@ -617,12 +602,7 @@ var pregnancy = {
           type: 'radio',
           charactertype: 'string',
           required: true,
-          options: ['多', '中', '少'].map(function (e) {
-            return {
-              label: e,
-              value: e
-            };
-          }),
+          options: ['多', '中', '少'].map(e => ({ label: e, value: e })),
         },
         {
           id: 'menstrualHistory.dysmenorrhea&dysmenorrheaNote',
@@ -956,12 +936,7 @@ var pregnancy = {
             '癫痫',
             '血友病',
             '高度近视',
-          ].map(function (e) {
-            return {
-              label: e,
-              value: e
-            };
-          }),
+          ].map(e => ({ label: e, value: e })),
         },
       ],
     },
@@ -1048,7 +1023,7 @@ var pregnancy = {
   ],
 };
 
-var pregnancyHistory = {
+const history = {
   description: '孕产史信息',
   data: [
     {
@@ -1088,12 +1063,7 @@ var pregnancyHistory = {
             '巨大儿',
             '妊娠期肝内胆汁淤积症',
             '不记得',
-          ].map(function (e) {
-            return {
-              label: e,
-              value: e
-            };
-          }),
+          ].map(e => ({ label: e, value: e })),
         },
         {
           id: 'isBirth',
@@ -1306,7 +1276,7 @@ var pregnancyHistory = {
   ],
 };
 
-var ENTRANCE = [
+const ENTRANCE = [
   {
     key: '1',
     label: '围产档案',
@@ -1381,7 +1351,7 @@ var ENTRANCE = [
   },
 ];
 
-var TOOLS = [
+const TOOLS = [
   {
     key: '0',
     label: '体征管理',
@@ -1447,7 +1417,7 @@ window.configuration = {
   url: 'http://transfer.lian-med.com:9987',
   basic: basic,
   pregnancy: pregnancy,
-  pregnancyHistory: pregnancyHistory,
+  history: history,
   // 主入口
   mains: ENTRANCE,
   // 工具栏入口
