@@ -7,7 +7,8 @@
 import React from 'react';
 import Router from 'umi/router';
 import { StickyContainer, Sticky } from 'react-sticky';
-import { NavBar, Tabs } from 'antd-mobile';
+import { NavBar, Tabs, Toast } from 'antd-mobile';
+import { isWeixin } from '@/utils';
 
 import MonitorListView from './Monitor/ListView';
 import ApplyListView from './Apply/ListView';
@@ -34,12 +35,12 @@ function renderTabBar(props: any) {
   );
 }
 
-interface IProps{
+interface IProps {
   location: {
     query: {
-      type: string
-    }
-  }
+      type: string;
+    };
+  };
 }
 
 function Oders(props: IProps) {
@@ -59,7 +60,7 @@ function Oders(props: IProps) {
 
   const renderListView = () => {
     if (currentKey === 'package') {
-      return <MonitorListView />
+      return <MonitorListView />;
     }
     if (currentKey === 'apply') {
       return <ApplyListView />;
@@ -67,10 +68,15 @@ function Oders(props: IProps) {
     if (currentKey === 'consult') {
       return <ConsultListView />;
     }
-    return null
-  }
+    return null;
+  };
 
-  const onClick = () => Router.push('/packages');
+  const onClick = () => {
+    if (!isWeixin()) {
+      return Toast.info('请前往莲孕微信公众号购买...');
+    }
+    return Router.push('/packages');
+  };
 
   return (
     <div className="page">
@@ -91,7 +97,7 @@ function Oders(props: IProps) {
             backgroundColor: '#FFCC4A',
           }}
         />
-          {renderListView()}
+        {renderListView()}
       </StickyContainer>
     </div>
   );

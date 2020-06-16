@@ -16,7 +16,8 @@ const config: IConfig = {
   hash: true, // 开启 hash 文件后缀
   targets: {
     ie: 9,
-    ios: 9
+    ios: 9,
+    safari: 9
   },
   routes: routes,
   minimizer: 'terserjs',
@@ -80,9 +81,9 @@ const config: IConfig = {
   ],
   proxy: {
     '/api': {
-      target: 'http://transfer.lian-med.com:9987/',
-      changeOrigin: false,
-      // pathRewrite: { '^/api': '/api' },
+      target: 'http://hdrm.lian-med.com:9989/', // 'http://transfer.lian-med.com:9987/',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '/api' },
     },
     '/mock/api': {
       target: 'http://localhost:3001/',
@@ -111,12 +112,12 @@ const config: IConfig = {
   autoprefixer: {
     flexbox: true
   },
-  browserslist: [
-    '> 1%',
-    'last 2 versions',
-    'ie 9',
-    'ios 9'
-  ],
+  // browserslist: [
+  //   '> 1%',
+  //   'last 2 versions',
+  //   'ie 9',
+  //   'ios 9'
+  // ],
 };
 
 export default config;

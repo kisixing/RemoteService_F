@@ -25,15 +25,15 @@ const mobileReg = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
 const idReg = /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/;
 
 interface P {
-  form: any
-  dispatch: any
-  mpuid?: string
+  form: any;
+  dispatch: any;
+  mpuid?: string;
 }
 
 interface S {
-  count: number
-  disabled: boolean
-};
+  count: number;
+  disabled: boolean;
+}
 
 @connect(({ loading, global }: ConnectState) => ({
   submitting: loading.effects['user/bindUser'],
@@ -46,7 +46,7 @@ class Login extends Component<P, S> {
   state = {
     count: 0,
     disabled: false,
-    visible: false
+    visible: false,
   };
 
   componentDidMount() {
@@ -107,15 +107,19 @@ class Login extends Component<P, S> {
         type: 'user/bindUser',
         payload: { mobile, captcha, idType, idNo },
       }).then((res: any) => {
+        console.log('登录验证', !res);
         if (res && res.id) {
           // 有绑定信息，返回最近的一个档案
           // 弹出alter提示框，1.新建、2.直接进入主页
-          return this.alter(res, { mobile, captcha, idType, idNo});
+          return this.alter(res, { mobile, captcha, idType, idNo });
         }
         if (res && res.status) {
           // 返回错误信息
           if (res.status === 400) {
             return Toast.info('验证码失效');
+          }
+          if (res.status === 504) {
+            return Toast.info('Gateway Timeout 网关超时');
           }
           return;
         }
@@ -196,16 +200,14 @@ class Login extends Component<P, S> {
         </div>
         <form className={styles.content}>
           {getFieldDecorator('mobile', {
-            rules: [
-              { required: true, message: '请输入手机号码' },
-            ],
+            rules: [{ required: true, message: '请输入手机号码' }],
           })(
             <InputItem
               icon={<IconFont type="mobile1" size="0.44rem" />}
               type="phone"
               pattern="[0-9]*"
               placeholder="请输入手机号"
-            />
+            />,
           )}
           {getFieldDecorator('captcha', {
             rules: [

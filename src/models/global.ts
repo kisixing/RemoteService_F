@@ -42,6 +42,9 @@ const GlobalModel: GlobalModelType = {
     // access_token:
     //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFkLWk4T3Jza0Jybk9uZGpNcGN0MFRNIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU5MzE0MjcyNX0.hhzN1sxAXM7ETk0mNZSnzUw2ExIBgQ7vYmuYNS6R7AzIm7abqUTIT4xuWHbrYBICq9BrCox5lWN6RiGIxq0wbQ',
     // currentPregnancy: { id: 101 },
+    // mpuid: 'oH2RO1T1RYbCtBeXqrTvcbSRdVEI',
+    // access_token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vSDJSTzFUMVJZYkN0QmVYcXJUdmNiU1JkVkVJIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU5NDE5MTI3MX0.8ILN_5fmT0QOQSmqfaAJ37YBx71YJL-uw8utQFjMQNpvvRVovAukXfUjNi99VcqOwXBrCZhqBAU6tO32lVSv_A',
+    // currentPregnancy: { id: 153 },
   },
 
   effects: {

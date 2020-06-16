@@ -499,7 +499,7 @@ var pregnancy = {
         },
         {
           id: 'gestationalWeek',
-          label: '孕周',
+          label: '建档孕周',
           type: 'text-input',
           charactertype: 'text',
           maxLength: 4,

@@ -42,7 +42,9 @@ function PackagePay(props: any) {
 
   const onSubmit = () => {
     // const query = getPageQuery();
-    const { location: { query } } = props;
+    const {
+      location: { query },
+    } = props;
     const { pregnancyId, packageId } = query;
     if (!pregnancyId || !packageId) {
       return Toast.info('请携带套餐信息...');
@@ -53,12 +55,19 @@ function PackagePay(props: any) {
     if (payment === 'alipay') {
       return alipay(packageId, pregnancyId);
     }
-  }
+  };
 
   const wxpay = (packageId: string | number, pregnancyId: string | number) => {
-    wechatPay({ servicepackage: { id: packageId }, pregnancy: { id: pregnancyId } }).then(
-      (response: any) => {
-        console.log('支付返回数据', response);
+    wechatPay({
+      servicepackage: { id: packageId },
+      pregnancy: { id: pregnancyId },
+    }).then((response: any) => {
+      console.log('支付返回数据', response);
+      if (!response || (response && !response.ok)) {
+        Modal.alert('提示', '支付异常，如有需要请联系商家。', [
+          { text: '确定', onPress: () => console.log('cancel'), style: 'default' },
+        ]);
+      } else {
         wx.config({
           appId: response.appId,
           timestamp: response.timeStamp,
@@ -88,8 +97,8 @@ function PackagePay(props: any) {
             }
           },
         });
-      },
-    );
+      }
+    });
   };
 
   const alipay = (packageId: string | number, pregnancyId: string | number) => {

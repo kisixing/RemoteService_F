@@ -23,31 +23,27 @@ const options = {
   cMapUrl: `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/cmaps/`, // '/pdfjs-dist/cmaps/',
   cMapPacked: true,
 };
-const SAMPLE = 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
+const SAMPLE = 'https://obcdn.oss-cn-shenzhen.aliyuncs.com/report/pdfs/eobbook.pdf'; // 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
 
 export default function Preview() {
-
   const [numPages, setNumPages] = React.useState(null);
   const [file, setFile] = React.useState();
 
   React.useEffect(() => {
     const file = getPageKeyValue('file');
     const pdf_url: any = file ? file : SAMPLE;
-    setFile(pdf_url)
-  }, [])
+    setFile(pdf_url);
+  }, []);
 
   const onDocumentLoadSuccess = ({ numPages }: any) => {
     setNumPages(numPages);
-  }
+  };
 
   const onDocumentLoadError = ({ message }: any) => {
-    Modal.alert(
-      '错误提示',
-      <div style={{ wordBreak: 'break-word' }}>{message}</div>,
-      [
-        { text: '确定', onPress: () => router.goBack() },
-      ])
-  }
+    Modal.alert('错误提示', <div style={{ wordBreak: 'break-word' }}>{message}</div>, [
+      { text: '确定', onPress: () => router.goBack() },
+    ]);
+  };
 
   return (
     <div className={styles.container}>
@@ -64,20 +60,10 @@ export default function Preview() {
         }
         error={<div style={{ marginTop: '2rem' }}>加载PDF文件失败。</div>}
       >
-      {
-        Array.from(
-          new Array(numPages),
-          (el, index) => (
-            <Page
-              key={`page_${index + 1}`}
-              pageNumber={index + 1}
-              className={styles.page}
-            />
-          ),
-        )
-      }
+        {Array.from(new Array(numPages), (el, index) => (
+          <Page key={`page_${index + 1}`} pageNumber={index + 1} className={styles.page} />
+        ))}
       </Document>
     </div>
-  )
+  );
 }
-

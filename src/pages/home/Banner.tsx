@@ -13,24 +13,24 @@ import constant from '@/utils/constants';
 import styles from './Banner.less';
 
 interface IProps {
-  dataSource: any
-  className?: string
+  dataSource: any;
+  className?: string;
 }
 export default (props: IProps) => {
   const {
-    dataSource: { name, hospital, adjustedEdd, edd, lmp, gestationalWeek },
+    dataSource: { name, hospital, adjustedEdd, edd, lmp },
   } = props;
   // 无法取到预产期时，ps:末次月经时间一定存在 ps: 修订预产期 || 孕产期 || 根据末次月经计算的孕产期
   let EDD = adjustedEdd || edd || KG.getEdd(lmp);
-  // 孕周 ps: 孕周 || 计算的孕周
-  const gesweek = gestationalWeek || KG.getGesweek(EDD);
+  // 孕周 ps: 每天的孕周需要重新计算
+  const gesweek = KG.getGesweek(EDD);
   // 距离预产期天数
   const days = KG.getGesdays(EDD);
   // banner背景图
-  const bannerbg = (gesweek: string) => {
+  const bannerbg = (gesweek: string | undefined) => {
     // gesweek的格式存在可能 1. ’20+1‘ 2. ’20周+1天‘
     if (!gesweek) {
-      return 'M0'
+      return 'M0';
     }
     let week: number = parseInt(gesweek);
     if (week < 0) return 'M0';
@@ -49,7 +49,7 @@ export default (props: IProps) => {
     if (week <= 38) return 'M9-1';
     if (week >= 39) return 'M10';
     return 'M0';
-  }
+  };
   return (
     <div className={styles.banner}>
       <div className={styles.innerBanner}>
@@ -67,4 +67,4 @@ export default (props: IProps) => {
       </div>
     </div>
   );
-}
+};

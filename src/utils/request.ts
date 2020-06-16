@@ -3,7 +3,7 @@
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
 import { extend } from 'umi-request';
-import Router from 'umi/router';
+// import Router from 'umi/router';
 import { Toast } from 'antd-mobile';
 
 const base_url = process.env.NODE_ENV === 'development' ? '' : window.configuration.url;
@@ -55,7 +55,7 @@ const errorHandler = (error: { response: Response }): Response => {
       // Router.push('/exception/404');
     }
   } else if (!response) {
-    console.log('您的网络发生异常，无法连接服务器')
+    Toast.info('您的网络发生异常，无法连接服务器')
   }
   return response;
 };

@@ -25,15 +25,15 @@ const dataSource = pregnancy.data;
 
 interface P {
   loading?: boolean;
-  form: any
-  currentPregnancy?: any
-  dispatch?: any
+  form: any;
+  currentPregnancy?: any;
+  dispatch?: any;
 }
 
 interface S {
-  values?: object
-  isLoading?: boolean
-};
+  values?: object;
+  isLoading?: boolean;
+}
 
 @connect(({ global, loading }: ConnectState) => ({
   currentPregnancy: global.currentPregnancy,
@@ -148,7 +148,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
     if (id === 'lmp') {
       const lmp = moment(value).format('YYYY-MM-DD');
       const EDD = KG.getEdd(lmp);
-      const GES = KG.getGesweek(lmp);
+      const GES = KG.getGesweek(EDD);
       const values = getFieldsValue(['gestationalWeek', 'edd', 'sureEdd']);
       // console.log('object', value, EDD, GES, values);
 
@@ -191,7 +191,7 @@ class CurrentPregnancy extends React.PureComponent<P, S> {
     // 肥胖 >= 28.0
     const result = weight / Math.pow(height / 100, 2);
     return Math.floor(result * 100) / 100;
-  }
+  };
 
   render() {
     const { form } = this.props;

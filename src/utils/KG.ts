@@ -4,6 +4,8 @@
  * @Description: 有关孕期各种计算
  */
 
+ import moment from 'moment';
+
 export default {
   getDate() {
     const nowTimeStamp = Date.now();
@@ -41,6 +43,12 @@ export default {
    * @returns
    */
   getGesdays(edd: string) {
+    // let dura = moment().format('x') - moment(edd).format('x');
+    // let di = moment().diff(moment(edd), 'day')
+    // let tempTime = moment.duration(dura);
+    // const d = tempTime.days()
+    // console.log('12345', d, di)
+
     const now = new Date();
     const remainingTime = new Date(edd).getTime() - now.getTime();
     let days = 0;
@@ -71,7 +79,6 @@ export default {
       m = '0' + m;
     }
     if (d < 10) {
-      // eslint-disable-next-line no-useless-concat
       d = '0' + d;
     }
     return y + '-' + m + '-' + d;
@@ -84,9 +91,6 @@ export default {
    * @returns {string}
    */
   getGesweek(edd: string) {
-    if (!edd) {
-      return;
-    }
     const remainingTime = new Date(edd).getTime() - new Date().getTime();
     let yunzh = '';
     if (remainingTime > 0) {
