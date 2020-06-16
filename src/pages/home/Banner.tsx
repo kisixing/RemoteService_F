@@ -13,15 +13,21 @@ import constant from '@/utils/constants';
 import styles from './Banner.less';
 
 interface IProps {
-  dataSource: any;
+  dataSource: {
+    name?: string;
+    hospital?: string;
+    sureEdd?: string;
+    edd?: string;
+    lmp?: string;
+  };
   className?: string;
 }
 export default (props: IProps) => {
   const {
-    dataSource: { name, hospital, adjustedEdd, edd, lmp },
+    dataSource: { name, hospital, sureEdd, edd, lmp },
   } = props;
   // 无法取到预产期时，ps:末次月经时间一定存在 ps: 修订预产期 || 孕产期 || 根据末次月经计算的孕产期
-  let EDD = adjustedEdd || edd || KG.getEdd(lmp);
+  let EDD = sureEdd || edd || KG.getEdd(lmp);
   // 孕周 ps: 每天的孕周需要重新计算
   const gesweek = KG.getGesweek(EDD);
   // 距离预产期天数

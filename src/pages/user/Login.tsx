@@ -76,6 +76,9 @@ class Login extends Component<P, S> {
         // 获取验证码成功，开启定时器
         this.countDown(60);
       }
+      if (res && res.status === 0) {
+        Toast.info('验证码获取失败，每天短信获取验证码校验最多5次');
+      }
     });
   };
 

@@ -22,18 +22,18 @@ const configuration = window.configuration;
 import styles from './index.less';
 
 interface IProps {
-  dispatch: any
-  loading: any
-  news: Array<any>
-  hospital: string,
+  dispatch: any;
+  loading: any;
+  news: Array<any>;
+  hospital: string;
   currentPregnancy: {
-    name: string
-    lmp: string
-    edd: string
-    gestationalWeek: string
-    hospital: string
-     [propName: string]: any;
-  }
+    name: string;
+    lmp: string;
+    edd: string;
+    gestationalWeek: string;
+    hospital: string;
+    [propName: string]: any;
+  };
 }
 
 function Home(props: IProps) {
@@ -43,16 +43,17 @@ function Home(props: IProps) {
     dispatch({
       type: 'news/getPersonNews',
       payload: {
-        gesweek: '22'
-      }
+        gesweek: '22',
+      },
     });
     return () => {};
-  }, [])
+  }, []);
 
   const bannerProps = {
     name: currentPregnancy.name,
     lmp: currentPregnancy.lmp,
     edd: currentPregnancy.edd,
+    sureEdd: currentPregnancy.sureEdd,
     gesweek: currentPregnancy.gestationalWeek,
     hospital: currentPregnancy.hospital || hospital,
   };

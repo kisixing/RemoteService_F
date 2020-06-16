@@ -1444,7 +1444,7 @@ var TOOLS = [
 
 window.configuration = {
   // 后台服务地址
-  url: 'http://transfer.lian-med.com:9987',
+  url: 'http://hdrm.lian-med.com:9989',
   basic: basic,
   pregnancy: pregnancy,
   pregnancyHistory: pregnancyHistory,

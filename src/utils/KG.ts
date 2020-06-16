@@ -4,7 +4,7 @@
  * @Description: 有关孕期各种计算
  */
 
- import moment from 'moment';
+//  import moment from 'moment';
 
 export default {
   getDate() {
@@ -42,18 +42,19 @@ export default {
    * @param {string} edd 预产期
    * @returns
    */
-  getGesdays(edd: string) {
+  getGesdays(edd: string | undefined) {
     // let dura = moment().format('x') - moment(edd).format('x');
     // let di = moment().diff(moment(edd), 'day')
     // let tempTime = moment.duration(dura);
     // const d = tempTime.days()
     // console.log('12345', d, di)
 
+    if (!edd) return
     const now = new Date();
     const remainingTime = new Date(edd).getTime() - now.getTime();
     let days = 0;
     if (remainingTime > 0) {
-      days = Math.floor(remainingTime / (24 * 3600 * 1000));
+      days = Math.round(remainingTime / (24 * 3600 * 1000));
     }
     return days;
   },
@@ -64,10 +65,8 @@ export default {
    * @param {string} lmp 末次月经日期
    * @returns {string}
    */
-  getEdd(lmp: string) {
-    if (!lmp) {
-      return;
-    }
+  getEdd(lmp: string | undefined) {
+    if (!lmp) return;
     let timeStamp = new Date(lmp).getTime();
     timeStamp = timeStamp + 280 * 24 * 60 * 60 * 1000;
     // 标准孕期时间
@@ -90,28 +89,29 @@ export default {
    * @param {string} edd 孕产期
    * @returns {string}
    */
-  getGesweek(edd: string) {
+  getGesweek(edd: string | undefined) {
+    if (!edd) return
     const remainingTime = new Date(edd).getTime() - new Date().getTime();
     let yunzh = '';
     if (remainingTime > 0) {
-      let days = 280 - Math.floor(remainingTime / (24 * 60 * 60 * 1000));
+      let days = 280 - Math.round(remainingTime / (24 * 60 * 60 * 1000));
       if (days > 0) {
         const week = Math.floor(days / 7);
-        let day: number | string = Math.floor(days % 7);
+        let day: number | string = Math.round(days % 7);
         if (day === 0) {
-          day = '周';
+          day = '';
         } else {
           day = '+' + day;
         }
         yunzh = week + day;
       }
     } else {
-      let days = Math.floor(Math.abs(remainingTime / (24 * 60 * 60 * 1000)));
+      let days = Math.round(Math.abs(remainingTime / (24 * 60 * 60 * 1000)));
       const week = Math.floor(days / 7);
       if (week >= 2) {
         yunzh = '42';
       } else {
-        let day: number | string = Math.floor(days % 7);
+        let day: number | string = Math.round(days % 7);
         if (day === 0) {
           day = '';
         }

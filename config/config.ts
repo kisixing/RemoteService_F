@@ -112,12 +112,12 @@ const config: IConfig = {
   autoprefixer: {
     flexbox: true
   },
-  // browserslist: [
-  //   '> 1%',
-  //   'last 2 versions',
-  //   'ie 9',
-  //   'ios 9'
-  // ],
+  browserslist: [
+    '> 1%',
+    'last 2 versions',
+    'ie 9',
+    'ios 9'
+  ],
 };
 
 export default config;

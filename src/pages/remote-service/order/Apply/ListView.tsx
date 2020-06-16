@@ -16,6 +16,7 @@ function ApplyListView({ currentPregnancy, p1, p2 }: any) {
   useEffect(() => {
     // const p2 = getPageKeyValue('p2');
     getServiceOrders({
+      // /api/serviceorders
       'pregnancyId.equals': currentPregnancy.id,
       'prenatalvisitId.equals': p2,
     }).then((res: any) => {
