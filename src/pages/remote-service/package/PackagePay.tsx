@@ -57,48 +57,47 @@ function PackagePay(props: any) {
     }
   };
 
-  const wxpay = (packageId: string | number, pregnancyId: string | number) => {
-    wechatPay({
+  const wxpay = async (packageId: string | number, pregnancyId: string | number) => {
+    const response = await wechatPay({
       servicepackage: { id: packageId },
       pregnancy: { id: pregnancyId },
-    }).then((response: any) => {
-      console.log('支付返回数据', response);
-      if (!response || (response && !response.ok)) {
-        Modal.alert('提示', '支付异常，如有需要请联系商家。', [
-          { text: '确定', onPress: () => console.log('cancel'), style: 'default' },
-        ]);
-      } else {
-        wx.config({
-          appId: response.appId,
-          timestamp: response.timeStamp,
-          nonceStr: response.nonceStr,
-          jsApiList: ['chooseWXPay'],
-        });
-        wx.chooseWXPay({
-          timestamp: response.timeStamp,
-          nonceStr: response.nonceStr,
-          package: response.packageValue,
-          signType: response.signType,
-          paySign: response.paySign,
-          success: function(res: any) {
-            // 支付成功后的回调函数
-            if (res.errMsg === 'chooseWXPay:ok') {
-              Router.push('/orders');
-            } else if (res.errMsg === 'chooseWXPay:fail') {
-              Toast.info('支付失败');
-            }
-          },
-          fail: function(res: any) {
-            Toast.fail('支付失败');
-          },
-          complete: function(res: any) {
-            if (res.errMsg == 'chooseWXPay:cancel') {
-              Toast.info('支付取消');
-            }
-          },
-        });
-      }
     });
+    console.log('支付返回数据', response);
+    if (response && response.appId) {
+      wx.config({
+        appId: response.appId,
+        timestamp: response.timeStamp,
+        nonceStr: response.nonceStr,
+        jsApiList: ['chooseWXPay'],
+      });
+      wx.chooseWXPay({
+        timestamp: response.timeStamp,
+        nonceStr: response.nonceStr,
+        package: response.packageValue,
+        signType: response.signType,
+        paySign: response.paySign,
+        success: function(res: any) {
+          // 支付成功后的回调函数
+          if (res.errMsg === 'chooseWXPay:ok') {
+            Router.push('/orders');
+          } else if (res.errMsg === 'chooseWXPay:fail') {
+            Toast.info('支付失败');
+          }
+        },
+        fail: function(res: any) {
+          Toast.fail('支付失败');
+        },
+        complete: function(res: any) {
+          if (res.errMsg == 'chooseWXPay:cancel') {
+            Toast.info('支付取消');
+          }
+        },
+      });
+    } else {
+      Modal.alert('提示', '支付异常，如有需要请联系商家。', [
+        { text: '确定', onPress: () => console.log('cancel'), style: 'default' },
+      ]);
+    }
   };
 
   const alipay = (packageId: string | number, pregnancyId: string | number) => {

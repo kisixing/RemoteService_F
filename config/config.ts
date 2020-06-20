@@ -14,11 +14,6 @@ const config: IConfig = {
   publicPath: process.env.NODE_ENV === 'development' ? '/' : '/H5/',
   outputPath: './dist/H5',
   hash: true, // 开启 hash 文件后缀
-  targets: {
-    ie: 9,
-    ios: 9,
-    safari: 9
-  },
   routes: routes,
   minimizer: 'terserjs',
   plugins: [
@@ -38,7 +33,7 @@ const config: IConfig = {
         hd: true,
         fastClick: true,
         title: '围产保健',
-        dll: false,
+        dll: true,
         locale: {
           enable: true,
           default: 'zh-CN',
@@ -47,7 +42,6 @@ const config: IConfig = {
         headScripts: [
           // { src: 'https://cdn.bootcss.com/react/16.12.0/umd/react.production.min.js' },
           // { src: 'https://cdn.bootcss.com/react-dom/16.12.0/umd/react-dom.production.min.js' },
-          // 'https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js',
           { src: '<%= PUBLIC_PATH %>config.js' },
         ],
         // scripts: [{ src: '<%= PUBLIC_PATH %>config.js' }],
@@ -111,6 +105,11 @@ const config: IConfig = {
   },
   autoprefixer: {
     flexbox: true
+  },
+  targets: {
+    ie: 9,
+    ios: 9,
+    safari: 9
   },
   browserslist: [
     '> 1%',

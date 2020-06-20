@@ -55,7 +55,8 @@ const errorHandler = (error: { response: Response }): Response => {
       // Router.push('/exception/404');
     }
   } else if (!response) {
-    Toast.info('您的网络发生异常，无法连接服务器');
+    // Toast.info('您的网络发生异常，无法连接服务器');
+    console.log('您的网络发生异常，无法连接服务器')
   }
   return response;
 };
