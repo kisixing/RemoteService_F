@@ -5,17 +5,17 @@
  */
 
 import React from 'react';
-import { Rate } from 'antd';
+// import { Rate } from 'antd';
 import pic from '../../../assets/icons/boy.png';
 import styles from './CommentItem.less';
 
 interface IProps {
-  name?: string
-  thumbnail?: string
-  comment?: string
-  time?: string
-  rate?: number
-};
+  name?: string;
+  thumbnail?: string;
+  comment?: string;
+  time?: string;
+  rate?: number;
+}
 export default function CommentItem({
   name = 'user name',
   thumbnail,
@@ -31,7 +31,7 @@ export default function CommentItem({
       <div className={styles.content}>
         <div className={styles.header}>
           <span className={styles.name}>{name}</span>
-          <Rate allowHalf value={rate} />
+          {/* <Rate allowHalf value={rate} /> */}
         </div>
         <div className={styles.comment}>{comment}</div>
         <div className={styles.time}>{time}</div>

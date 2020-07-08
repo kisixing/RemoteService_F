@@ -114,8 +114,7 @@ const config: IConfig = {
   browserslist: [
     '> 1%',
     'last 2 versions',
-    'ie 9',
-    'ios 9'
+    'ios 8'
   ],
 };
 

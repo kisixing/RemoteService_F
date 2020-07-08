@@ -1325,7 +1325,7 @@ var ENTRANCE = [
   {
     key: '3',
     label: '远程监护',
-    icon: 'i8.png',
+    icon: 'i9.png',
     route: '/packages',
     color: 'linear-gradient(-45deg, #3BF7FF 0%, #00B9FF 100%)',
   },
@@ -1385,7 +1385,7 @@ var TOOLS = [
   {
     key: '0',
     label: '体征管理',
-    icon: 'i000.png',
+    icon: 'tool_tz@2x.png',
     route: '/signs',
   },
   {
