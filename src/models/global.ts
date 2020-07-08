@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 import { Effect } from './connect';
-import { mpauth, getPregnancy, updatePregnancy } from '@/services/user';
+import { mpauth, mlogin, getPregnancy, updatePregnancy } from '@/services/user';
 
 
 export interface GlobalModelState {

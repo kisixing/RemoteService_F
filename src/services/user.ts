@@ -34,6 +34,17 @@ export async function mpauth(params: authParamsType) {
   });
 }
 
+export async function mlogin(params: { mobile: string; captcha: string }) {
+  return request('/api/mlogin', {
+    method: 'POST',
+    headers: {
+      Authorization: '',
+    },
+    getResponse: true,
+    data: params,
+  });
+}
+
 export interface bindParamsType {
   mobile: string | number
   captcha: string | number

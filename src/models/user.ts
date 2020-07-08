@@ -8,7 +8,7 @@ import { Reducer } from 'redux';
 // import { stringify } from 'querystring';
 // import { router } from 'umi';
 import { Effect } from './connect';
-import { testApi, bindUser, bindUserMp, newPregnancy, getCaptcha } from '@/services/user';
+import { testApi, bindUser, mlogin, bindUserMp, newPregnancy, getCaptcha } from '@/services/user';
 // import { getPageQuery } from "@/utils/getPageQuery";
 
 export interface StateType {}
@@ -22,6 +22,7 @@ export interface LoginModelType {
     bindUserMp: Effect;
     getCaptcha: Effect;
     newPregnancy: Effect;
+    mlogin: Effect;
   };
   reducers: {
     updateState: Reducer<StateType>;
@@ -59,6 +60,36 @@ const Model: LoginModelType = {
       //   });
       // }
       return response;
+    },
+    *mlogin({ payload }, { call, put}) {
+      try {
+        const { response, data } = yield call(mlogin, payload);
+        //  已在request封装处理
+        // 在响应体获取token，保存到session storage
+        let token = response && response.headers.get('Authorization');
+        if (token) {
+          const access_token = token.replace(/captcha /, '');
+          yield put({
+            type: 'global/updateState',
+            payload: {
+              access_token,
+            },
+          });
+        }
+        if (data && data.mpuid) {
+          yield put({
+            type: 'global/updateState',
+            payload: {
+              currentPregnancy: data,
+              mpuid: data.mpuid || response.openId,
+              hospital: data && data.organization && data.organization.name,
+            },
+          });
+          return data;
+        }
+      } catch (e) {
+        console.log('mlogin', e);
+      }
     },
     *bindUserMp({ payload }, { call, put }) {
       const response = yield call(bindUserMp, payload);

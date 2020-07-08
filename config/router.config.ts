@@ -6,6 +6,7 @@ export default [
     routes: [
       { path: '/user', redirect: '/user/login' },
       { path: '/user/login', name: 'login', title: '登录', component: './user/Login' },
+      { path: '/user/loginWithMobile', name: 'login with mobile', title: '手机登录', component: './user/LoginByMobile' },
       { path: '/user/register', name: 'register', title: '用户建档', component: './user/Register' },
       { component: './404' },
     ],
