@@ -82,6 +82,7 @@ export default [
     ],
   },
   { path: '/example', title: '组件示例', component: './example' },
+  { path: '/alipay', title: '支付宝支付', component: './remote-service/package/alipay' },
   // user securit verification
   {
     path: '/',

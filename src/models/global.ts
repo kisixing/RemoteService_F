@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 import { Effect } from './connect';
-import { mpauth, mlogin, getPregnancy, updatePregnancy } from '@/services/user';
+import { mpauth, getPregnancy, updatePregnancy } from '@/services/user';
 
 
 export interface GlobalModelState {
@@ -35,16 +35,16 @@ const GlobalModel: GlobalModelType = {
   state: {
     locale: 'cn', // cn/en
     hospital: '',
-    mpuid: '',
-    access_token: '',
-    currentPregnancy: {},
+    // mpuid: '',
+    // access_token: '',
+    // currentPregnancy: {},
     // mpuid: 'oONcg1d-i8OrskBrnOndjMpct0TM',
     // access_token:
     //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vT05jZzFkLWk4T3Jza0Jybk9uZGpNcGN0MFRNIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU5MzE0MjcyNX0.hhzN1sxAXM7ETk0mNZSnzUw2ExIBgQ7vYmuYNS6R7AzIm7abqUTIT4xuWHbrYBICq9BrCox5lWN6RiGIxq0wbQ',
     // currentPregnancy: { id: 101 },
-    // mpuid: 'oH2RO1T1RYbCtBeXqrTvcbSRdVEI',
-    // access_token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vSDJSTzFUMVJZYkN0QmVYcXJUdmNiU1JkVkVJIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU5NDE5MTI3MX0.8ILN_5fmT0QOQSmqfaAJ37YBx71YJL-uw8utQFjMQNpvvRVovAukXfUjNi99VcqOwXBrCZhqBAU6tO32lVSv_A',
-    // currentPregnancy: { id: 153 },
+    mpuid: 'oH2RO1T1RYbCtBeXqrTvcbSRdVEI',
+    access_token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbG9naW5fcHJlZ19vSDJSTzFUMVJZYkN0QmVYcXJUdmNiU1JkVkVJIiwiYXV0aCI6IlJPTEVfUFJFRyIsImV4cCI6MTU5NjkzOTk0MH0.DTeTNOG49bCL5Fya1yb2XlJjNRL1bG3Jai30USk5sNUk0ddXZSk4fGuMYsdEFQhugMmDgtT8la5HjJyNvtN58w',
+    currentPregnancy: { id: 153 },
   },
 
   effects: {

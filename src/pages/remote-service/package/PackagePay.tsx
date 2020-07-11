@@ -12,6 +12,7 @@ import wx from 'weixin-js-sdk';
 import { IconFont, Button } from '@/components/antd-mobile';
 import Card from '../order/Monitor/Card';
 import { wechatPay } from '@/services/remote-service';
+import { alipay } from '@/services/pay';
 import { isWeixin, getPageQuery } from '@/utils';
 import { ConnectState } from '@/models/connect';
 import styles from './PackagePay.less';
@@ -44,20 +45,29 @@ function PackagePay(props: any) {
     // const query = getPageQuery();
     const {
       location: { query },
+      token,
     } = props;
     const { pregnancyId, packageId } = query;
     if (!pregnancyId || !packageId) {
       return Toast.info('请携带套餐信息...');
     }
     if (payment === 'wechat') {
-      return wxpay(packageId, pregnancyId);
+      return wxPay(packageId, pregnancyId);
     }
     if (payment === 'alipay') {
-      return alipay(packageId, pregnancyId);
+      // return aliPay(packageId, pregnancyId);
+      return Router.push({
+        pathname: '/alipay',
+        query: {
+          packageId,
+          pregnancyId,
+          access_token: token,
+        },
+      });
     }
   };
 
-  const wxpay = async (packageId: string | number, pregnancyId: string | number) => {
+  const wxPay = async (packageId: string | number, pregnancyId: string | number) => {
     const response = await wechatPay({
       servicepackage: { id: packageId },
       pregnancy: { id: pregnancyId },
@@ -100,8 +110,41 @@ function PackagePay(props: any) {
     }
   };
 
-  const alipay = (packageId: string | number, pregnancyId: string | number) => {
-    Toast.info('暂时不支持支付宝！！！');
+  const aliPay = async (packageId: string | number, pregnancyId: string | number) => {
+    // Toast.info('暂时不支持支付宝！！！');
+    const response = await alipay({
+      servicepackage: { id: packageId },
+      pregnancy: { id: pregnancyId },
+    });
+    if (response) {
+      const div = document.createElement('div');
+      div.innerHTML = response;
+      document.body.appendChild(div);
+      document.forms[0].submit();
+    } else {
+      Modal.alert('提示', '支付异常，如有需要请联系商家。', [
+        { text: '确定', onPress: () => console.log('cancel'), style: 'default' },
+      ]);
+    }
+  };
+
+  const goAlipay = () => {
+    const {
+      location: { query },
+      token,
+    } = props;
+    const { pregnancyId, packageId } = query;
+
+    if (isWeixn) {
+      Router.push({
+        pathname: '/alipay',
+        query: {
+          packageId,
+          pregnancyId,
+          access_token: token,
+        },
+      });
+    }
   };
 
   return (
@@ -129,20 +172,34 @@ function PackagePay(props: any) {
         className={styles.payment}
         renderHeader={() => <span style={{ fontSize: '0.24rem' }}>支付方式</span>}
       >
-        <RadioItem id="wechat" name="wechat" checked={payment === 'wechat'} onChange={onChange}>
-          <div className={styles.label}>
-            <img alt="wechat" src={require('../../../assets/icons/wechat-pay-fill.svg')} />
-            微信
-          </div>
-        </RadioItem>
-        {isWeixn ? null : (
+        {isWeixn ? (
+          <RadioItem id="wechat" name="wechat" checked={payment === 'wechat'} onChange={onChange}>
+            <div className={styles.label}>
+              <img alt="wechat" src={require('../../../assets/icons/wechat-pay-fill.svg')} />
+              微信
+            </div>
+          </RadioItem>
+        ) : null}
+        {/* {isWeixn ? null : (
           <RadioItem id="alipay" name="alipay" checked={payment === 'alipay'} onChange={onChange}>
             <div className={styles.label}>
               <img alt="alipay" src={require('../../../assets/icons/alipay-fill.svg')} />
               支付宝
             </div>
           </RadioItem>
-        )}
+        )} */}
+        <RadioItem
+          id="alipay"
+          name="alipay"
+          checked={payment === 'alipay'}
+          onChange={onChange}
+          onClick={goAlipay}
+        >
+          <div className={styles.label}>
+            <img alt="alipay" src={require('../../../assets/icons/alipay-fill.svg')} />
+            支付宝
+          </div>
+        </RadioItem>
       </List>
       <WingBlank className={styles.agreeItem}>
         <Modal
@@ -159,7 +216,7 @@ function PackagePay(props: any) {
           />
         </Modal>
         <Checkbox checked={agree} onChange={(e: any) => setAgree(e.target.checked)}>
-          <span style={{ marginLeft: '0.16rem' }}>我同意</span>
+          <span style={{ marginLeft: '0.08rem' }}>我同意</span>
         </Checkbox>
         <a onClick={onAgreement}>《购买协议》</a>
       </WingBlank>
@@ -173,6 +230,7 @@ function PackagePay(props: any) {
 }
 
 export default connect(({ global, remoteService }: ConnectState) => ({
+  token: global.access_token,
   currentPackage: remoteService.currentPackage,
   hospital: global.hospital,
 }))(PackagePay);
