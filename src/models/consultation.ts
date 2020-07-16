@@ -37,6 +37,7 @@ const ConsultationModel: NewsModelType = {
           doctors: response ? response.data : [],
         },
       });
+      return response.data || []
     },
     *getComments({ payload }, { call, put }) {
       const response = yield call(getComments, payload);

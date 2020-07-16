@@ -105,7 +105,7 @@ function DoctorDetail({ dispatch, comments, match, currentPregnancy }: any) {
 
       <div className={styles.footer}>
         <div className={styles.price}>
-          ￥<span>{'30'}</span>
+          ￥<span>{'0.01'}</span>
           元/次
         </div>
         <Button inline type="primary" onClick={onClick}>

@@ -15,6 +15,34 @@ import { router } from '@/utils';
 import styles from './List.less';
 
 const HOSPITALS = ['复旦大学附属妇产科医院', '暨南大学附属第一医院', '中山大学附属第一医院'].map(e => ({ label: e, value: e }));
+const d = [
+  {
+    id: '8787',
+    name: '李医生',
+    position: '主治医师', // , '副主任医师', '主任医师', '住院医师'],
+    answerRate: '90%',
+    favorableRate: '98%',
+    inquiries: '90%',
+    content: '擅长高危终端',
+    thumbnail: '',
+    time: '2019-09',
+    price: 0.01,
+    replytime: '2',
+  },
+  {
+    id: '879987',
+    name: '田医生',
+    position: '副主任医师', // , '副主任医师', '主任医师', '住院医师'],
+    answerRate: '90%',
+    favorableRate: '98%',
+    inquiries: '90%',
+    content: '擅长疑难杂症',
+    thumbnail: '',
+    time: '2019-12',
+    price: 0.01,
+    replytime: '1',
+  }
+]
 
 const CustomChildren = (props: any) => (
   <div onClick={props.onClick} style={{ paddingLeft: 15 }}>
@@ -24,10 +52,11 @@ const CustomChildren = (props: any) => (
 
 function DoctorList({ dispatch, doctors }: any) {
   const [hospital, setHospital] = useState('复旦大学附属妇产科医院');
+  const [doctor, setDoctor] = useState([]);
 
   useEffect(() => {
-    dispatch({ type: 'consultation/getDoctors' });
-
+    // dispatch({ type: 'consultation/getDoctors' });
+    setDoctor(d)
   }, []);
 
   // 医院设置
@@ -71,9 +100,9 @@ function DoctorList({ dispatch, doctors }: any) {
           <div className={styles.subTitle}>快速匹配医生，第一时间解答</div>
         </div>
         <div style={{ lineHeight: 1, marginBottom: '0.3rem', color: '#25265e' }}>在线医生</div>
-        {doctors &&
-          doctors.length > 0 &&
-            doctors.map((e: any) => (
+        {doctor &&
+          doctor.length > 0 &&
+            doctor.map((e: any) => (
               <DoctorItem
                 key={e.id}
                 id={e.id}
