@@ -31,7 +31,8 @@ function Card({ data, onClick, hidePaytype, hideDoctor, textOver }: any) {
           <IconFont type="order" size="0.36rem" />
           <span className={styles.name}>{typeName(data.type)}</span>
           <span className={styles.right}>
-            {data.prenatalvisit && moment(data.prenatalvisit.visitTime).format('YYYY-MM-DD HH:mm:ss')}
+            {data.prenatalvisit &&
+              moment(data.prenatalvisit.visitTime).format('YYYY-MM-DD HH:mm:ss')}
           </span>
         </div>
         <div className={styles.div}>
@@ -47,11 +48,25 @@ function Card({ data, onClick, hidePaytype, hideDoctor, textOver }: any) {
         {!hideDoctor ? (
           <div className={styles.div}>
             <span className={styles.label}>判图医生：</span>
-            <span>{diagnosis.wave}</span>
+            <span>{data.user && data.user.firstName}</span>
           </div>
         ) : null}
+        <div className={styles.div}>
+          <span className={styles.label}>结&emsp;&emsp;果：</span>
+          <span className={styles.result}>
+            {diagnosis.NST === '有反应'
+              ? 'NST正常'
+              : diagnosis.NST === '无反应'
+              ? 'NST异常'
+              : diagnosis.NST === '可疑'
+              ? 'NST可疑'
+              : diagnosis.NST === '不满意'
+              ? 'NST无法判读'
+              : ''}
+          </span>
+        </div>
         <div className={classnames([styles.div], { [styles.textOver]: !!textOver })}>
-          结&emsp;&emsp;果：
+          <span className={styles.label}>意&emsp;&emsp;见：</span>
           <span className={styles.time}>{diagnosis.diagnosistxt || '待回复'}</span>
         </div>
       </div>

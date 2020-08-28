@@ -29,10 +29,10 @@ export default function ApplyDetail({ id }: any) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.status}>
+      {/* <div className={styles.status}>
         <IconFont type="date" />
         {data.state ? <span>{ORDER_STATE[data.state]}</span> : <span>暂无订单状态</span>}
-      </div>
+      </div> */}
       <div className={styles.main}>
         <Card data={data} />
       </div>

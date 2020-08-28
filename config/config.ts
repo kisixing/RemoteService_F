@@ -42,7 +42,7 @@ const config: IConfig = {
         headScripts: [
           // { src: 'https://cdn.bootcss.com/react/16.12.0/umd/react.production.min.js' },
           // { src: 'https://cdn.bootcss.com/react-dom/16.12.0/umd/react-dom.production.min.js' },
-          { src: '<%= PUBLIC_PATH %>config.js' },
+          { src: `<%= PUBLIC_PATH %>config.js?timestamp=${new Date().getTime()}` },
         ],
         // scripts: [{ src: '<%= PUBLIC_PATH %>config.js' }],
         links: [
